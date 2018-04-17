@@ -1,0 +1,72 @@
+{
+  "name": "suitest-js-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:SuitestAutomation/suitest-js-api.git",
+  "author": "Suitest <hello@suite.st>",
+  "description" : "Suitest is a test automation and device manipulation tool for living room devices and web browsers.",
+  "keywords" : [
+    "test automation",
+    "operate device",
+    "operate remote device",
+    "HbbTV testing",
+    "Freeview Play testing",
+    "Tizen testing",
+    "Orsay testing",
+    "webOS testing",
+    "Xbox One testing",
+    "Smart TV test automation",
+    "Fire TV test automation"
+  ],
+  "homepage" : "https://suite.st/",
+  "license" : "MIT",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "bin": {
+    "suitest": "lib/testLauncher/index.js"
+  },
+  "scripts": {
+    "test": "mocha",
+    "test-watch": "yarn test -- -w",
+    "coverage": "nyc yarn test",
+    "lint": "eslint lib/ test/ --quiet"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "lines": 95,
+    "statements": 95,
+    "functions": 95,
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "include": [
+      "lib/**/*.js"
+    ],
+    "all": true
+  },
+  "typings": "index.d.ts",
+  "devDependencies": {
+    "eslint": "^4.17.0",
+    "express": "^4.16.2",
+    "mocha": "^5.0.0",
+    "nock": "^9.1.6",
+    "nyc": "^11.4.1",
+    "sinon": "^4.2.2"
+  },
+  "dependencies": {
+    "ajv": "^6.1.1",
+    "colors": "^1.1.2",
+    "cosmiconfig": "^4.0.0",
+    "node-fetch": "^2.0.0",
+    "ramda": "^0.25.0",
+    "raven": "^2.4.1",
+    "read": "^1.0.7",
+    "stack-trace": "^0.0.10",
+    "uuid": "^3.2.1",
+    "ws": "^4.0.0",
+    "yargs": "^11.0.0",
+    "yargs-parser": "^9.0.2"
+  }
+}

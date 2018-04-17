@@ -1,0 +1,12 @@
+{
+  "name": "suitest-js-api-demo",
+  "version": "1.0.0",
+  "description": "Demo set up for Suitest JS API",
+  "private": true,
+  "dependencies": {
+    "mocha": "^5.0.4"
+  },
+  "scripts": {
+    "test": "mocha --no-timeouts"
+  }
+}

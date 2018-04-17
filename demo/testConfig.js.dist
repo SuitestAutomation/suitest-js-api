@@ -1,0 +1,18 @@
+/*
+ * This file contains configuration for test runner
+ */
+module.exports = {
+	username: 'email',
+	password: 'password',
+	orgId: 'UUID',
+
+	appId: 'UUID',
+	configId: 'UUID',
+
+	deviceId: 'UUID',
+
+	automatedSession: 'Boolean. If true, test session will be executed in automated mode'
+	testPackId: 'test pack id',
+	accessTokenKey: 'token id',
+	accessTokenPassword: 'token password,
+};
