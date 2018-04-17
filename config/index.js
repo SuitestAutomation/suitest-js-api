@@ -3,10 +3,10 @@ const logLevels = require('../lib/constants/logLevels');
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
 
 const main = {
-	apiUrl: 'https://staging.suite.st/api/public/v2',
+	apiUrl: 'https://the.suite.st/api/public/v2',
 	sentryDsn,
 	useSentry: true,
-	wsUrl: 'wss://staging.suite.st/api/public/v2/socket',
+	wsUrl: 'wss://the.suite.st/api/public/v2/socket',
 	logLevel: logLevels.normal,
 };
 
