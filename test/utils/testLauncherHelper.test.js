@@ -9,6 +9,8 @@ const {launcherLogger} = require('../../lib/testLauncher/launcherLogger');
 const testLauncherHelper = require('../../lib/utils/testLauncherHelper');
 
 describe('testLauncherHelper util', () => {
+	const rcFilePath = path.resolve(process.cwd(), '.suitestrc');
+
 	beforeEach(() => {
 		sinon.stub(process, 'exit');
 		sinon.stub(launcherLogger, '_err');
@@ -50,25 +52,30 @@ describe('testLauncherHelper util', () => {
 	});
 
 	it('should find and read rc file', () => {
-		// add test rc file
-		fs.writeFileSync(path.resolve(process.cwd(), '.suitestrc'), '{"test": "test"}');
-		assert.deepEqual(testLauncherHelper.readLauncherConfig(), {test: 'test'}, 'correct rc');
-		// remove test rc file
-		fs.unlinkSync(path.resolve(process.cwd(), '.suitestrc'));
+		fs.writeFileSync(rcFilePath, '{"test": "test"}');
 
-		// add test js file
-		fs.writeFileSync(path.resolve(process.cwd(), 'suitestrc.js'), 'module.exports = {test: \'test\'};');
-		assert.deepEqual(testLauncherHelper.readLauncherConfig(), {test: 'test'}, 'correct js');
-		// remove test js file
-		fs.unlinkSync(path.resolve(process.cwd(), 'suitestrc.js'));
+		const config = testLauncherHelper.readLauncherConfig();
+
+		assert.deepEqual(config, {
+			test: 'test',
+			configs: [rcFilePath],
+			config: rcFilePath,
+		}, 'correct json');
+		assert.strictEqual('_' in config, false, 'cli arges not included');
+
+		fs.writeFileSync(rcFilePath, 'test = test');
+		assert.strictEqual(testLauncherHelper.readLauncherConfig().test, 'test', 'correct ini');
+
+		// remove test file
+		fs.unlinkSync(rcFilePath);
 	});
 
 	it('should throw error in case of invalid rc json', () => {
 		// add test rc file
-		fs.writeFileSync(path.resolve(process.cwd(), '.suitestrc'), 'invalid something');
+		fs.writeFileSync(rcFilePath, '{invalid: undefined}');
 		assert.throws(() => testLauncherHelper.readLauncherConfig(), /Error/);
 		// remove test rc file
-		fs.unlinkSync(path.resolve(process.cwd(), '.suitestrc'));
+		fs.unlinkSync(rcFilePath);
 	});
 
 	it('should merge two configs correctly', () => {
