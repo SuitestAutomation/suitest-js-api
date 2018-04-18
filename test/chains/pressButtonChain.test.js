@@ -1,4 +1,5 @@
 const assert = require('assert');
+const assertThrowsAsync = require('../../lib/utils/assertThrowsAsync');
 const {
 	pressButton,
 	pressButtonAssert,
@@ -53,21 +54,15 @@ describe('Press button chain', () => {
 	});
 
 	it('should throw error in case of invalid input', async() => {
-		try {
-			await pressButton();
-			assert.ok(false, 'no error');
-		} catch (error) {
-			assert.ok(error, 'error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
+		await assertThrowsAsync(pressButton.bind(null, undefined), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if undefined');
 
-		try {
-			await pressButton(['Up', 'Down']);
-			assert.ok(false, 'no error');
-		} catch (error) {
-			assert.ok(error, 'error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
+		await assertThrowsAsync(pressButton.bind(null, ['Up', 'Down']), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if ["Up", "Down"]');
 	});
 
 	it('should generate correct socket message based on data', () => {

@@ -76,9 +76,18 @@ describe('Sleep chain', () => {
 		assert.ok('abandon' in chain);
 	});
 
-	it('should validate input parameter', () => {
-		assert.throws(() => sleep(), SuitestError);
-		assert.throws(() => sleep('text'), SuitestError);
-		assert.throws(() => sleep(-1), SuitestError);
+	it('should throw error in case of invalid input', () => {
+		assert.throws(sleep.bind(null, undefined), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if 1');
+		assert.throws(sleep.bind(null, 'text'), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if "text"');
+		assert.throws(sleep.bind(null, -1), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if -1');
 	});
 });

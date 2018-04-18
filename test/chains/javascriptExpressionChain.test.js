@@ -1,4 +1,5 @@
 const assert = require('assert');
+const assertThrowsAsync = require('../../lib/utils/assertThrowsAsync');
 const {
 	jsExpression,
 	jsExpressionAssert,
@@ -189,29 +190,21 @@ describe('Location chain', () => {
 		});
 		assert.ok(true, 'no error');
 
-		try {
-			await jsExpression();
-			assert.ok(false, 'no error');
-		} catch (error) {
-			assert.ok(error, 'undefined argument error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
+		await assertThrowsAsync(jsExpression.bind(null, undefined), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if undefined');
 
-		try {
-			await jsExpression(1);
-			assert.ok(true, 'no error');
-		} catch (error) {
-			assert.ok(error, 'undefined argument error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
+		await assertThrowsAsync(jsExpression.bind(null, 1), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if 1');
 
-		try {
-			await jsExpression('');
-			assert.ok(true, 'no error');
-		} catch (error) {
-			assert.ok(error, 'undefined argument error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
+		await assertThrowsAsync(jsExpression.bind(null, ''), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if ""');
+
 	});
 
 	it('should define assert function', () => {

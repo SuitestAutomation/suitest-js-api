@@ -1,4 +1,5 @@
 const assert = require('assert');
+const SuitestError = require('../../lib/utils/SuitestError');
 const {
 	application,
 	applicationAssert,
@@ -141,8 +142,11 @@ describe('Application chain', () => {
 		}, 'testLine without timeout');
 	});
 
-	it('should throw if awaited without .hasExited part', () => {
-		assert.throws(() => toJSON({}));
+	it('should throw error in case of invalid input', () => {
+		assert.throws(toJSON.bind(null, {}), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if ""');
 	});
 
 	it('should define assert function', () => {

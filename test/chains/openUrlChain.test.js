@@ -1,4 +1,5 @@
 const assert = require('assert');
+const assertThrowsAsync = require('../../lib/utils/assertThrowsAsync');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {
 	openUrl,
@@ -78,29 +79,20 @@ describe('Open URL chain', () => {
 	});
 
 	it('should throw error in case of invalid input', async() => {
-		try {
-			await openUrl();
-			assert.ok(false, 'no error');
-		} catch (error) {
-			assert.ok(error, 'error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
+		await assertThrowsAsync(openUrl.bind(null, undefined), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if undefined');
 
-		try {
-			await openUrl(1);
-			assert.ok(false, 'no error');
-		} catch (error) {
-			assert.ok(error, 'error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
+		await assertThrowsAsync(openUrl.bind(null, 1), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if 1');
 
-		try {
-			await openUrl('');
-			assert.ok(false, 'no error');
-		} catch (error) {
-			assert.ok(error, 'error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
+		await assertThrowsAsync(openUrl.bind(null, ''), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if ""');
 	});
 
 	it('should define assert function', () => {

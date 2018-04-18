@@ -1,4 +1,5 @@
 const assert = require('assert');
+const SuitestError = require('../../lib/utils/SuitestError');
 const {
 	networkRequest,
 	networkRequestAssert,
@@ -266,15 +267,28 @@ describe('Network request chain', () => {
 				},
 			},
 		});
+	});
 
-		assert.throws(() => toJSON({}), 'Throw if no comparator and strategy defined');
-		assert.throws(() => toJSON({wasMade: true}), 'Throw if no comparator defined');
-		assert.throws(() => toJSON({
+	it('should throw error in case of invalid input', async() => {
+		assert.throws(toJSON.bind(null, {}), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if {}');
+
+		assert.throws(toJSON.bind(null, {wasMade: true}), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if {wasMade: true}');
+
+		assert.throws(toJSON.bind(null, {
 			comparator: {
 				type: SUBJ_COMPARATOR.EQUAL,
 				val: 'test',
 			},
-		}), 'Throw if no strategy defined');
+		}), {
+			type: 'SuitestError',
+			code: SuitestError.INVALID_INPUT,
+		}, 'invalid error if no strategy defined');
 	});
 
 	it('should define assert function', () => {
