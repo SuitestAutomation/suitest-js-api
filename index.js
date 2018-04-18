@@ -36,6 +36,7 @@ const VISIBILITY_STATE = require('./lib/constants/visibilityState');
 const VRC = require('./lib/constants/vrc');
 const KEY = require('./lib/constants/keys');
 const {NETWORK_PROP, NETWORK_METHOD} = require('./lib/constants/networkRequest');
+const envVars = require('./lib/constants/enviroment');
 
 // For testing
 const webSockets = require('./lib/api/webSockets');
@@ -43,8 +44,7 @@ const webSockets = require('./lib/api/webSockets');
 // Contexts
 const {authContext, appContext, pairedDeviceContext, testContext} = require('./lib/context');
 
-// Env helper
-const envHelper = require('./lib/utils/envHelper');
+// Helpers
 const {warnUnusedLeaves} = require('./lib/utils/unusedExpressionWatchers');
 
 // Publicly available API goes here
@@ -116,7 +116,9 @@ class SUITEST_API {
 }
 
 // Start session, pair device, set app config based on env vars
-envHelper.handleUserEnvVar();
+if (Object.keys(envVars).some(key => process.env[envVars[key]])) {
+	require('./lib/utils/envHelper').handleUserEnvVar();
+}
 
 // Export public API
 module.exports = new SUITEST_API();

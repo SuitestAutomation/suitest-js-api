@@ -85,4 +85,20 @@ describe('envHelper.js', () => {
 		process.exit.restore();
 		console.log.restore();
 	});
+
+	it('should exit process correctly', async() => {
+		sinon.stub(process, 'exit');
+		sinon.stub(console, 'error');
+		sinon.stub(webSockets, 'disconnect');
+
+		envHelper.exit();
+
+		assert(process.exit.calledWith(1));
+		assert(console.error.called);
+		assert(webSockets.disconnect.called);
+
+		process.exit.restore();
+		console.error.restore();
+		webSockets.disconnect.restore();
+	});
 });
