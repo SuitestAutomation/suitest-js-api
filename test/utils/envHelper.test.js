@@ -86,7 +86,7 @@ describe('envHelper.js', () => {
 		console.log.restore();
 	});
 
-	it('should exit process correctly', async() => {
+	it('should exit process correctly', () => {
 		sinon.stub(process, 'exit');
 		sinon.stub(console, 'error');
 		sinon.stub(webSockets, 'disconnect');
