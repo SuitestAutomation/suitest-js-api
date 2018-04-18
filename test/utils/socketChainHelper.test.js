@@ -1,4 +1,5 @@
 const assert = require('assert');
+const {EOL} = require('os');
 const helpers = require('../../lib/utils/socketChainHelper');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {PROP_COMPARATOR, SUBJ_COMPARATOR, ELEMENT_PROP} = require('../../lib/mappings');
@@ -94,6 +95,73 @@ describe('socket chain helpers', () => {
 				isAssert: true,
 			}),
 			err => err instanceof assert.AssertionError
+		);
+
+		assert.throws(
+			() => helpers.processServerResponse(emptyString)(
+				{
+					result: 'fail',
+					errorType: 'queryFailed',
+					actualValue: 'http://bxdpm12o-0-staging.suitest.net/sampleapp_staging/index-hbbtv.html',
+					expectedValue: 'test',
+					contentType: 'testLine',
+				},
+				{},
+			),
+			err => err instanceof assert.AssertionError &&
+				err.actual === 'http://bxdpm12o-0-staging.suitest.net/sampleapp_staging/index-hbbtv.html' &&
+				err.expected === 'test',
+		);
+
+		assert.throws(
+			() => helpers.processServerResponse(emptyString)(
+				{
+					result: 'fail',
+					expression: [
+						{
+							result: 'fail',
+							errorType: 'queryFailed',
+							actualValue: 720,
+							expectedValue: 100,
+						},
+						{
+							result: 'fail',
+							errorType: 'queryFailed',
+							actualValue: 1282,
+							expectedValue: 200,
+						},
+					],
+					errorType: 'queryFailed',
+					contentType: 'testLine',
+				},
+				{
+					type: 'element',
+					selector: {css: 'body'},
+					comparator:
+						{
+							type: SUBJ_COMPARATOR['has'],
+							props:
+								[
+									{
+										name: ELEMENT_PROP['height'],
+										val: 100,
+										type: PROP_COMPARATOR['='],
+										deviation: undefined,
+									},
+									{
+										name: ELEMENT_PROP['width'],
+										val: 200,
+										type: PROP_COMPARATOR['='],
+										deviation: undefined,
+									},
+								],
+						},
+					isAssert: true,
+				},
+			),
+			err => err instanceof assert.AssertionError &&
+				err.actual === `height: 720${EOL}width: 1282` &&
+				err.expected === `height: 100${EOL}width: 200`
 		);
 	});
 });
