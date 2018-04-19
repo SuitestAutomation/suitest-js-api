@@ -8,7 +8,7 @@ const texts = require('../../lib/texts');
 const testLauncherTest = path.resolve(__dirname, '../../lib/utils/testHelpers/testLauncherTest.js');
 const spawn = require('child_process').spawn;
 
-describe('suitest test launcher', function() {
+describe.skip('suitest test launcher', function() {
 	this.timeout(5000); // increase timeout limit for current test suite
 
 	before(async() => {

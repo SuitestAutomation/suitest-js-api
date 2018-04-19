@@ -98,6 +98,20 @@ describe('Window chain', () => {
 			window().sendText('text').repeat(3).interval(4000).toString(),
 			'Send text \'text\' to window 3 times every 4000ms'
 		);
+		assert.equal(
+			window().sendText('text').repeat(3).interval(4000).until({
+				toJSON: () => ({
+					request: {
+						condition: {
+							subject: {
+								type: 'location',
+							},
+						},
+					},
+				}),
+			}).toString(),
+			'Send text \'text\' to window 3 times every 4000ms'
+		);
 		assert.equal(window().refresh('').toString(), 'Refresh browser page');
 		assert.equal(window().goBack('').toString(), 'Navigate back with browser history');
 		assert.equal(window().goForward('').toString(), 'Navigate forward with browser history');
