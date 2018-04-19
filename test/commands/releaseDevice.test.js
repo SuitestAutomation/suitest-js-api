@@ -8,12 +8,9 @@ const SuitestError = require('../../lib/utils/SuitestError');
 const webSockets = require('../../lib/api/webSockets');
 
 describe('releaseDevice', () => {
-	before(async() => {
-		await testServer.start();
+	beforeEach(async() => {
+		await testServer.restart();
 		await webSockets.connect();
-	});
-
-	beforeEach(() => {
 		pairedDeviceContext.clear();
 		authContext.clear();
 	});
