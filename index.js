@@ -36,7 +36,6 @@ const VISIBILITY_STATE = require('./lib/constants/visibilityState');
 const VRC = require('./lib/constants/vrc');
 const KEY = require('./lib/constants/keys');
 const {NETWORK_PROP, NETWORK_METHOD} = require('./lib/constants/networkRequest');
-const envVars = require('./lib/constants/enviroment');
 
 // For testing
 const webSockets = require('./lib/api/webSockets');
@@ -44,7 +43,8 @@ const webSockets = require('./lib/api/webSockets');
 // Contexts
 const {authContext, appContext, pairedDeviceContext, testContext} = require('./lib/context');
 
-// Helpers
+// Env helper
+const envHelper = require('./lib/utils/envHelper');
 const {warnUnusedLeaves} = require('./lib/utils/unusedExpressionWatchers');
 
 // Publicly available API goes here
@@ -116,9 +116,7 @@ class SUITEST_API {
 }
 
 // Start session, pair device, set app config based on env vars
-if (Object.keys(envVars).some(key => process.env[envVars[key]])) {
-	require('./lib/utils/envHelper').handleUserEnvVar();
-}
+envHelper.handleUserEnvVar();
 
 // Export public API
 module.exports = new SUITEST_API();
@@ -136,3 +134,14 @@ process.once('SIGHUP', shutDown);
 process.once('SIGBREAK', shutDown);
 process.once('SIGQUIT', shutDown);
 process.once('SIGTERM', shutDown);
+
+// Exit process with code 1 on uncaughtException or unhandledRejection
+// Required for proper termination of test launcher child processes
+const exit = err => {
+	webSockets.disconnect();
+	console.error(err);
+	process.exit(1);
+};
+
+process.once('uncaughtException', exit);
+process.once('unhandledRejection', exit);
