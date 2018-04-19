@@ -5,8 +5,8 @@ const webSockets = require('../../lib/api/webSockets');
 const SuitestError = require('../../lib/utils/SuitestError');
 
 describe('webSockets', () => {
-	beforeEach(async() => {
-		await testServer.restart();
+	before(async() => {
+		await testServer.start();
 	});
 
 	after(async() => {
