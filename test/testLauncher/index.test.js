@@ -15,10 +15,6 @@ function processExecPath(execPath) {
 describe('suitest test launcher', function() {
 	this.timeout(5000); // increase timeout limit for current test suite
 
-	before(async() => {
-		await testServer.start();
-	});
-
 	beforeEach(async() => {
 		await testServer.restart();
 		authContext.clear();
@@ -79,7 +75,7 @@ describe('suitest test launcher', function() {
 			processExecPath(process.execPath),
 			[
 				testLauncherTest, 'interactive', '-u', 'userEmail', '-p', 'userPass',
-				'-o', 'orgId', '-C', 'configId', '-d', 'deviceId', 'npm', '--version',
+				'-o', 'orgId', '-c', 'configId', '-d', 'deviceId', 'npm', '--version',
 			],
 			{shell: true}
 		).once('exit', (exitCode) => {

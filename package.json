@@ -1,11 +1,11 @@
 {
   "name": "suitest-js-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "repository": "git@github.com:SuitestAutomation/suitest-js-api.git",
   "author": "Suitest <hello@suite.st>",
-  "description" : "Suitest is a test automation and device manipulation tool for living room devices and web browsers.",
-  "keywords" : [
+  "description": "Suitest is a test automation and device manipulation tool for living room devices and web browsers.",
+  "keywords": [
     "test automation",
     "operate device",
     "operate remote device",
@@ -18,8 +18,8 @@
     "Smart TV test automation",
     "Fire TV test automation"
   ],
-  "homepage" : "https://suite.st/",
-  "license" : "MIT",
+  "homepage": "https://suite.st/",
+  "license": "MIT",
   "engines": {
     "node": ">=8.0.0"
   },
@@ -58,10 +58,10 @@
   "dependencies": {
     "ajv": "^6.1.1",
     "colors": "^1.1.2",
-    "cosmiconfig": "^4.0.0",
     "node-fetch": "^2.0.0",
     "ramda": "^0.25.0",
     "raven": "^2.4.1",
+    "rc": "^1.2.6",
     "read": "^1.0.7",
     "stack-trace": "^0.0.10",
     "uuid": "^3.2.1",

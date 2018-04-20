@@ -32,10 +32,10 @@ describe('envHelper.js', () => {
 		appContext.clear();
 		testContext.clear();
 
-		process.env[envVars.SUITEST_SESSION_TYPE] = undefined;
-		process.env[envVars.SUITEST_SESSION_TOKEN] = undefined;
-		process.env[envVars.SUITEST_DEVICE_ID] = undefined;
-		process.env[envVars.SUITEST_APP_CONFIG_ID] = undefined;
+		delete process.env[envVars.SUITEST_SESSION_TYPE];
+		delete process.env[envVars.SUITEST_SESSION_TOKEN];
+		delete process.env[envVars.SUITEST_DEVICE_ID];
+		delete process.env[envVars.SUITEST_APP_CONFIG_ID];
 	});
 
 	it('should read data from env, launch automated session and pair to device', async() => {
