@@ -134,3 +134,14 @@ process.once('SIGHUP', shutDown);
 process.once('SIGBREAK', shutDown);
 process.once('SIGQUIT', shutDown);
 process.once('SIGTERM', shutDown);
+
+// Exit process with code 1 on uncaughtException or unhandledRejection
+// Required for proper termination of test launcher child processes
+const exit = err => {
+	webSockets.disconnect();
+	console.error(err);
+	process.exit(1);
+};
+
+process.once('uncaughtException', exit);
+process.once('unhandledRejection', exit);
