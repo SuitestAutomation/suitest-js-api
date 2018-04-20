@@ -5,8 +5,12 @@ const {authContext} = require('../../lib/context');
 const testServer = require('../../lib/utils/testServer');
 const texts = require('../../lib/texts');
 
-const testLauncherTest = path.resolve(__dirname, '../../lib/utils/testHelpers/testLauncherTest.js');
+const testLauncherTest = processExecPath(path.resolve(__dirname, '../../lib/utils/testHelpers/testLauncherTest.js'));
 const spawn = require('child_process').spawn;
+
+function processExecPath(execPath) {
+	return /\s+/.test(execPath) ? `"${execPath}"` : execPath;
+}
 
 describe('suitest test launcher', function() {
 	this.timeout(5000); // increase timeout limit for current test suite
@@ -28,7 +32,7 @@ describe('suitest test launcher', function() {
 
 	it('"automated" command should exit with exitCode 0', (done) => {
 		spawn(
-			process.execPath,
+			processExecPath(process.execPath),
 			[testLauncherTest, 'automated', '-p', 'a', '-k', 'a', '--testPackId', '10', 'npm', '--version'],
 			{shell: true}
 		).once('exit', (exitCode) => {
@@ -39,7 +43,7 @@ describe('suitest test launcher', function() {
 
 	it('"automated" command should exit with exitCode 1 if required args not provided', (done) => {
 		spawn(
-			process.execPath,
+			processExecPath(process.execPath),
 			[testLauncherTest, 'automated'],
 			{shell: true}
 		).once('exit', (exitCode) => {
@@ -50,7 +54,7 @@ describe('suitest test launcher', function() {
 
 	it('"automated" command should exit with exitCode 0 if --version option provided', (done) => {
 		spawn(
-			process.execPath,
+			processExecPath(process.execPath),
 			[testLauncherTest, 'automated', '--version'],
 			{shell: true}
 		).once('exit', (exitCode) => {
@@ -61,7 +65,7 @@ describe('suitest test launcher', function() {
 
 	it('"automated" command should exit with exitCode 1 if no devices in response', (done) => {
 		spawn(
-			process.execPath,
+			processExecPath(process.execPath),
 			[testLauncherTest, 'automated', '-p', 'a', '-k', 'a', '--testPackId', '20', 'npm', '--version'],
 			{shell: true}
 		).once('exit', (exitCode) => {
@@ -72,7 +76,7 @@ describe('suitest test launcher', function() {
 
 	it('"interactive" command should exit with exitCode 0', (done) => {
 		spawn(
-			process.execPath,
+			processExecPath(process.execPath),
 			[
 				testLauncherTest, 'interactive', '-u', 'userEmail', '-p', 'userPass',
 				'-o', 'orgId', '-C', 'configId', '-d', 'deviceId', 'npm', '--version',
@@ -86,7 +90,7 @@ describe('suitest test launcher', function() {
 
 	it('"interactive" command should exit with exitCode 1 if required args not provided', (done) => {
 		spawn(
-			process.execPath,
+			processExecPath(process.execPath),
 			[testLauncherTest, 'interactive', '-p', 'pass'],
 			{shell: true}
 		).once('exit', (exitCode) => {
@@ -98,7 +102,7 @@ describe('suitest test launcher', function() {
 	it('"interactive" command should ask for user password if not provided', (done) => {
 		let passProvided = false;
 		const child = spawn(
-			process.execPath,
+			processExecPath(process.execPath),
 			[testLauncherTest, 'interactive'],
 			{shell: true}
 		).once('exit', (exitCode) => {
@@ -123,7 +127,7 @@ describe('suitest test launcher', function() {
 		let passProvided = false;
 
 		const child = spawn(
-			process.execPath,
+			processExecPath(process.execPath),
 			[testLauncherTest, 'interactive'],
 			{shell: true}
 		).once('exit', (exitCode) => {
@@ -152,7 +156,7 @@ describe('suitest test launcher', function() {
 		let passProvided = false;
 
 		const child = spawn(
-			process.execPath,
+			processExecPath(process.execPath),
 			[testLauncherTest, 'interactive'],
 			{shell: true}
 		).once('exit', (exitCode) => {
@@ -174,7 +178,7 @@ describe('suitest test launcher', function() {
 
 	it('"interactive" command should exit with exitCode 0 if calle with --help option', (done) => {
 		spawn(
-			process.execPath,
+			processExecPath(process.execPath),
 			[testLauncherTest, 'interactive', '-h'],
 			{shell: true}
 		).once('exit', (exitCode) => {
