@@ -8,6 +8,7 @@ const {openSession} = require('../../lib/commands/openSession');
 const endpoints = require('../../lib/api/endpoints');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {config} = require('../../config');
+const testInputError = require('../../lib/utils/testHelpers/testInputError');
 
 describe('openSession', () => {
 	before(async() => {
@@ -24,15 +25,8 @@ describe('openSession', () => {
 		await testServer.stop();
 	});
 
-	it('should throw correct error on invalid json schema', async() => {
-		try {
-			await openSession({invalid: true});
-
-			assert.ok(false, 'open session success');
-		} catch (error) {
-			assert.ok(error, 'open session error');
-			assert.equal(error.code, SuitestError.INVALID_INPUT, 'error type');
-		}
+	it('should throw correct error on invalid input', async() => {
+		await testInputError(openSession, [{invalid: true}]);
 	});
 
 	it('should set access token context when token credentials provided', async() => {

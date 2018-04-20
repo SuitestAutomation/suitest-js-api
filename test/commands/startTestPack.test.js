@@ -9,6 +9,7 @@ const endpoints = require('../../lib/api/endpoints');
 const SuitestError = require('../../lib/utils/SuitestError');
 const makeUrlFromArray = require('../../lib/utils/makeUrlFromArray');
 const {config} = require('../../config');
+const testInputError = require('../../lib/utils/testHelpers/testInputError');
 
 describe('startTestPack', () => {
 	before(async() => {
@@ -25,15 +26,8 @@ describe('startTestPack', () => {
 		await testServer.stop();
 	});
 
-	it('should throw correct error on invalid json schema', async() => {
-		try {
-			await startTestPack({invalid: true});
-
-			assert.ok(false, 'open session success');
-		} catch (error) {
-			assert.ok(error, 'open session error');
-			assert.equal(error.code, SuitestError.INVALID_INPUT, 'error type');
-		}
+	it('should throw correct error on invalid', async() => {
+		await testInputError(startTestPack, [{invalid: true}]);
 	});
 
 	it('should not be authorized in access token context', async() => {
