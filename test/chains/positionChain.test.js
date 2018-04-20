@@ -70,6 +70,22 @@ describe('Position chain', () => {
 			'Click on 1, 1 position 10 times every 2000ms'
 		);
 		assert.equal(
+			position(1, 1).click()
+				.until({
+					toJSON: () => ({
+						request: {
+							condition: {
+								subject: {
+									type: 'location',
+								},
+							},
+						},
+					}),
+				})
+				.repeat(10).interval(2000).toString(),
+			'Click on 1, 1 position 10 times every 2000ms'
+		);
+		assert.equal(
 			position(1, 1).moveTo().toString(),
 			'Move cursor to 1, 1 position'
 		);
