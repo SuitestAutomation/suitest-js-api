@@ -13,7 +13,7 @@ describe('releaseDevice', () => {
 		await webSockets.connect();
 	});
 
-	beforeEach(() => {
+	beforeEach(async() => {
 		pairedDeviceContext.clear();
 		authContext.clear();
 	});

@@ -11,26 +11,29 @@ const config = require('../../config').config;
 const {launcherLogger, snippets} = require('../../lib/testLauncher/launcherLogger');
 
 describe('SuitestLauncher', () => {
-	beforeEach(async() => {
-		authContext.clear();
+	before(async() => {
 		sinon.stub(process, 'exit');
 		sinon.stub(launcherLogger, '_err');
 		sinon.stub(launcherLogger, '_');
 		sinon.stub(snippets, 'finalAutomated');
+	});
+
+	beforeEach(async() => {
+		authContext.clear();
 		await testServer.restart();
 	});
 
 	afterEach(() => {
 		authContext.clear();
 		nock.cleanAll();
-		process.exit.restore();
-		launcherLogger._err.restore();
-		launcherLogger._.restore();
-		snippets.finalAutomated.restore();
 	});
 
 	after(async() => {
 		await testServer.stop();
+		process.exit.restore();
+		launcherLogger._err.restore();
+		launcherLogger._.restore();
+		snippets.finalAutomated.restore();
 	});
 
 	it('should throw correct error on lack of arguments', async() => {
@@ -115,6 +118,7 @@ describe('SuitestLauncher', () => {
 				deviceAccessToken: 'deviceAccessToken',
 				testPack: {devices: [{deviceId: 'device1'}]},
 			});
+		const sessionCloseNock = nock(config.apiUrl).post(endpoints.sessionClose).reply(200, {});
 		const suitestLauncher = new TestLauncher({
 			tokenKey: '1',
 			tokenPassword: '1',
@@ -125,7 +129,7 @@ describe('SuitestLauncher', () => {
 		await suitestLauncher.runAautomatedSession();
 
 		assert.ok(testNock.isDone(), 'request');
-		assert.ok(process.exit.calledWith(0));
+		assert.ok(sessionCloseNock.isDone(), 'close session');
 		assert.strictEqual(snippets.finalAutomated.called, true);
 	});
 
@@ -166,6 +170,7 @@ describe('SuitestLauncher', () => {
 		const testNock = nock(config.apiUrl).post(endpoints.session).reply(200, {
 			deviceAccessToken: 'deviceAccessToken',
 		});
+		const sessionCloseNock = nock(config.apiUrl).post(endpoints.sessionClose).reply(200, {});
 		const suitestLauncher = new TestLauncher({
 			username: 'username',
 			password: 'password',
@@ -176,6 +181,7 @@ describe('SuitestLauncher', () => {
 
 		await suitestLauncher.runInteractiveSession();
 		assert.ok(testNock.isDone(), 'request');
+		assert.ok(sessionCloseNock.isDone(), 'request');
 		assert(process.exit.calledWith(1));
 		assert(launcherLogger._err.called);
 	});
