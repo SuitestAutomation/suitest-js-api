@@ -1,8 +1,8 @@
 const assert = require('assert');
 const testServer = require('../../lib/utils/testServer');
-
 const webSockets = require('../../lib/api/webSockets');
 const SuitestError = require('../../lib/utils/SuitestError');
+const assertThrowsAsync = require('../../lib/utils/assertThrowsAsync');
 
 describe('webSockets', () => {
 	beforeEach(async() => {
@@ -85,5 +85,23 @@ describe('webSockets', () => {
 
 		assert.ok(err);
 		assert.strictEqual(webSockets.isConnected(), false, 'connected');
+	});
+
+	it('should handle ws response without error message', async() => {
+		await webSockets.connect();
+
+		testServer.respondWithContent({
+			result: 'fail',
+			error: 'something went wrong',
+		});
+
+		await assertThrowsAsync(
+			webSockets.send.bind(webSockets, {test: 'test'}),
+			err => err instanceof SuitestError &&
+				err.code === SuitestError.WS_ERROR &&
+				err.message.endsWith('something went wrong.'),
+		);
+
+		testServer.respondWithContent(undefined);
 	});
 });

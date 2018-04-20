@@ -63,4 +63,19 @@ describe('request', () => {
 			assert.ok(false, 'error');
 		}
 	});
+
+	it('should send request with correct Content-Type in headers', async() => {
+		const testNock = nock(/.*/).post('/test').reply(200, {});
+
+		const res = await request('/test', {
+			method: 'POST',
+			body: {
+				data: 'data',
+			},
+			headers: {'Content-Type': 'application/json'},
+		});
+
+		assert.ok(testNock.isDone(), 'request');
+		assert.ok(res, 'response');
+	});
 });
