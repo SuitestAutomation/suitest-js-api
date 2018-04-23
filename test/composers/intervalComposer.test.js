@@ -2,6 +2,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {intervalComposer} = require('../../lib/composers');
+const testInputError = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Interval Composer', () => {
 	it('should provide .interval method', () => {
@@ -32,22 +33,18 @@ describe('Interval Composer', () => {
 		assert.deepStrictEqual(makeChain.firstCall.args[0], {interval: 3000});
 	});
 
-	it('should throw exception with invalid input', () => {
-		const assertInputValidate = val => assert.throws(
-			() => chain.interval(val),
-			err => err instanceof SuitestError && err.code === SuitestError.INVALID_INPUT
-		);
+	it('should throw exception with invalid input', async() => {
 		const data = {};
 		const chain = {};
 		const makeChain = sinon.spy();
 
 		Object.defineProperties(chain, intervalComposer(data, chain, makeChain));
 
-		assertInputValidate(-3);
-		assertInputValidate(null);
-		assertInputValidate('string');
-		assertInputValidate('1');
-		assertInputValidate({});
-		assertInputValidate();
+		await testInputError(chain.interval, [-3]);
+		await testInputError(chain.interval, [null]);
+		await testInputError(chain.interval, ['string']);
+		await testInputError(chain.interval, ['1']);
+		await testInputError(chain.interval, [{}]);
+		await testInputError(chain.interval, []);
 	});
 });

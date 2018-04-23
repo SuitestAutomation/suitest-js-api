@@ -2,6 +2,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {repeatComposer} = require('../../lib/composers');
+const testInputError = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Repeat Composer', () => {
 	it('should provide .repeat method', () => {
@@ -32,22 +33,18 @@ describe('Repeat Composer', () => {
 		assert.deepStrictEqual(makeChain.firstCall.args[0], {repeat: 10});
 	});
 
-	it('should throw exception with invalid input', () => {
-		const assertInputValidate = val => assert.throws(
-			() => chain.repeat(val),
-			err => err instanceof SuitestError && err.code === SuitestError.INVALID_INPUT
-		);
+	it('should throw exception with invalid input', async() => {
 		const data = {};
 		const chain = {};
 		const makeChain = sinon.spy();
 
 		Object.defineProperties(chain, repeatComposer(data, chain, makeChain));
 
-		assertInputValidate(-3);
-		assertInputValidate(null);
-		assertInputValidate('string');
-		assertInputValidate('1');
-		assertInputValidate({});
-		assertInputValidate();
+		await testInputError(chain.repeat, [-3]);
+		await testInputError(chain.repeat, [null]);
+		await testInputError(chain.repeat, ['string']);
+		await testInputError(chain.repeat, ['1']);
+		await testInputError(chain.repeat, [{}]);
+		await testInputError(chain.repeat, []);
 	});
 });

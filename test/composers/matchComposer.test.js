@@ -1,6 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {matchComposer} = require('../../lib/composers');
+const testInputError = require('../../lib/utils/testHelpers/testInputError');
 const {
 	ELEMENT_PROP,
 	VALUE,
@@ -100,24 +101,29 @@ describe('Match Composer', () => {
 			},
 		});
 
-		// Invalid
-		assert.throws(() => chain.match('height'), 'Property is not a Symbol');
-		assert.throws(() => chain.match(Symbol('height')), 'Property is unknown Symbol');
-		assert.throws(() => chain.match(ELEMENT_PROP.LEFT, 500, '>'), 'Comparator is not a Symbol');
-		assert.throws(() => chain.match(ELEMENT_PROP.LEFT, 500, Symbol('>')), 'Comparator is unknown Symbol');
-		assert.throws(
-			() => chain.match(ELEMENT_PROP.LEFT, 500, PROP_COMPARATOR.APPROX, '20'),
-			'Accuracy is not a number'
-		);
-		assert.throws(() => chain.match(ELEMENT_PROP.LEFT, '10'), 'Value is of invalid type String');
-		assert.throws(() => chain.match(ELEMENT_PROP.BG_COLOR, 10), 'Value is of invalid type Number');
-
 		// Valid
 		assert.strictEqual(chain.match(ELEMENT_PROP.TOP, 10), undefined, 'integer');
 		assert.strictEqual(chain.match(ELEMENT_PROP.IS_CHECKED, true), undefined, 'boolean');
 		assert.strictEqual(chain.match(ELEMENT_PROP.PIVOT_X, 0.5), undefined, 'number');
 		assert.strictEqual(chain.match(ELEMENT_PROP.BG_COLOR, '#fff'), undefined, 'string');
 		assert.strictEqual(chain.match(ELEMENT_PROP.TEXT_SIZE, VALUE.REPO), undefined, 'constant');
+	});
+
+	it('should throw error in case of invalid input', async() => {
+		const data = {};
+		const chain = {};
+		const makeChain = sinon.spy();
+
+		Object.defineProperties(chain, matchComposer(data, chain, makeChain));
+
+		await testInputError(chain.match, ['height']);
+		await testInputError(chain.match, [Symbol('height')]);
+		await testInputError(chain.match, [ELEMENT_PROP.LEFT, 500, '>']);
+		await testInputError(chain.match, [ELEMENT_PROP.LEFT, 500, Symbol('>')]);
+		await testInputError(chain.match, ['Content-Type', 500]);
+		await testInputError(chain.match, [ELEMENT_PROP.LEFT, 500, PROP_COMPARATOR.APPROX, '20']);
+		await testInputError(chain.match, [ELEMENT_PROP.LEFT, '10']);
+		await testInputError(chain.match, [ELEMENT_PROP.BG_COLOR, 10]);
 	});
 
 	it('should accept object with single property as object', () => {

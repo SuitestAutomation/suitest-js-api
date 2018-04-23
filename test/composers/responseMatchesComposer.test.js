@@ -1,6 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {responseMatchesComposer} = require('../../lib/composers');
+const testInputError = require('../../lib/utils/testHelpers/testInputError');
 const {NETWORK_PROP} = require('../../lib/constants/networkRequest');
 const {
 	SUBJ_COMPARATOR,
@@ -78,24 +79,6 @@ describe('Network Request Match Composer', () => {
 				],
 			},
 		});
-
-		// Invalid
-		assert.throws(() => chain.responseMatch('Content-Type'), 'No value to compare to');
-		assert.throws(() => chain.responseMatch(Symbol('unknown'), 'test'), 'Property is unknown Symbol');
-		assert.throws(
-			() => chain.responseMatch(NETWORK_PROP.STATUS, 200, '='),
-			'Comparator is not a Symbol'
-		);
-		assert.throws(
-			() => chain.responseMatch(NETWORK_PROP.STATUS, 200, Symbol('=')),
-			'Comparator is unknown Symbol'
-		);
-		assert.throws(
-			() => chain.responseMatch('Content-Type', 500),
-			'Header is not a string'
-		);
-		assert.throws(() => chain.responseMatch(NETWORK_PROP.STATUS, '200'), 'Status value is not a number');
-		assert.throws(() => chain.responseMatch(NETWORK_PROP.BODY, 123), 'Body is not a string');
 	});
 
 	it('should accept object with single property as object', () => {
@@ -139,6 +122,23 @@ describe('Network Request Match Composer', () => {
 				],
 			},
 		});
+	});
+
+	it('should throw error in case of invalid input', async() => {
+		const data = {};
+		const chain = {};
+		const makeChain = sinon.spy();
+
+		Object.defineProperties(chain, responseMatchesComposer(data, chain, makeChain));
+
+		await testInputError(chain.responseMatch, [NETWORK_PROP.BODY, 123]);
+		await testInputError(chain.responseMatch, ['Content-Type']);
+		await testInputError(chain.responseMatch, [Symbol('unknown'), 'test']);
+		await testInputError(chain.responseMatch, [NETWORK_PROP.STATUS, 200, '=']);
+		await testInputError(chain.responseMatch, [NETWORK_PROP.STATUS, 200, '=']);
+		await testInputError(chain.responseMatch, [NETWORK_PROP.STATUS, 200, Symbol('=')]);
+		await testInputError(chain.responseMatch, ['Content-Type', 500]);
+		await testInputError(chain.responseMatch, [NETWORK_PROP.STATUS, '200']);
 	});
 
 	it('should accept array of property definitions as a shortcut', () => {

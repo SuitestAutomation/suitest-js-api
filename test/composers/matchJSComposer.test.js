@@ -2,7 +2,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 const {matchJSComposer} = require('../../lib/composers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
-const SuitestError = require('../../lib/utils/SuitestError');
+const testInputError = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Match JS Composer', () => {
 	it('should provide .matchJS and .matchesJS methods', () => {
@@ -27,7 +27,7 @@ describe('Match JS Composer', () => {
 		assert.strictEqual(matchesJSDescriptor.configurable, false);
 	});
 
-	it('should generate a new chain with comparator defined', () => {
+	it('should generate a new chain with comparator defined', async() => {
 		const data = {};
 		const chain = {};
 		const makeChain = sinon.spy();
@@ -43,9 +43,6 @@ describe('Match JS Composer', () => {
 			},
 		});
 
-		assert.throws(
-			() => chain.matchJS(123),
-			err => err.code === SuitestError.INVALID_INPUT && (err instanceof SuitestError)
-		);
+		await testInputError(chain.matchJS, [123]);
 	});
 });

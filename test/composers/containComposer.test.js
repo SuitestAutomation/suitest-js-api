@@ -2,7 +2,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 const {containComposer} = require('../../lib/composers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
-const SuitestError = require('../../lib/utils/SuitestError');
+const testInputError = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Contain Composer', () => {
 	it('should provide .contain and .contains methods', () => {
@@ -44,15 +44,15 @@ describe('Contain Composer', () => {
 		});
 	});
 
-	it('throw error if value is invalid', () => {
+	it('throw error if value is invalid', async() => {
 		const data = {};
 		const chain = {};
 		const makeChain = sinon.spy();
 
 		Object.defineProperties(chain, containComposer(data, chain, makeChain));
 
-		assert.throws(() => chain.contain(1), SuitestError);
-		assert.throws(() => chain.contain(undefined), SuitestError);
-		assert.throws(() => chain.contain(null), SuitestError);
+		await testInputError(chain.contain, [1]);
+		await testInputError(chain.contain, []);
+		await testInputError(chain.contain, [null]);
 	});
 });

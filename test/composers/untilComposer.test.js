@@ -1,7 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {untilComposer} = require('../../lib/composers');
-const SuitestError = require('../../lib/utils/SuitestError');
+const testInputError = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Until Composer', () => {
 	it('should provide .until method', () => {
@@ -41,35 +41,21 @@ describe('Until Composer', () => {
 		assert.deepStrictEqual(makeChain.firstCall.args[0], {until: {subject: {type: 'application'}}});
 	});
 
-	it('should throw invalid input error in case not allowed chains are provided', () => {
+	it('should throw invalid input error in case not allowed chains are provided', async() => {
 		const data = {};
 		const chain = {};
 		const makeChain = sinon.spy();
 
 		Object.defineProperties(chain, untilComposer(data, chain, makeChain));
 
-		assert.throws(() => chain.until({}), err => {
-			return err instanceof SuitestError
-				&& err.code === SuitestError.INVALID_INPUT
-				&& err.message.includes('Until condition expects a chain as an input parameter');
-		}, 'Until condition expects a chain as an input parameter');
-		assert.throws(() => chain.until({
+		await testInputError(chain.until, [], {message: 'Until condition expects a chain as an input parameter'});
+		await testInputError(chain.until, [{
 			toJSON: () => ({request: {condition: {subject: {type: 'invalid'}}}}),
-		}), err => {
-			return err instanceof SuitestError
-				&& err.code === SuitestError.INVALID_INPUT
-				&& err.message.includes(
-					'Until condition chain requires valid modifier and should be one of the following types'
-				);
-		}, 'illegal condition chain type');
-		assert.throws(() => chain.until({
+		}], {message: 'Invalid input Until condition chain requires valid modifier and should be one of the following types:\n' +
+			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video()'});
+		await testInputError(chain.until, [{
 			toJSON: () => ({request: {}}),
-		}), err => {
-			return err instanceof SuitestError
-				&& err.code === SuitestError.INVALID_INPUT
-				&& err.message.includes(
-					'Until condition chain requires valid modifier and should be one of the following types'
-				);
-		}, 'no condition chain modifier');
+		}], {message: 'Invalid input Until condition chain requires valid modifier and should be one of the following types:\n' +
+			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video()'});
 	});
 });
