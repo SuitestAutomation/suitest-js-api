@@ -1,6 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {matchRepoComposer} = require('../../lib/composers');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	ELEMENT_PROP,
 	VALUE,
@@ -84,20 +85,22 @@ describe('Match Repo Composer', () => {
 				],
 			},
 		});
-
-		// Invalid
-		assert.throws(() => chain.matchRepo('height'), 'Property is not a Symbol');
-		assert.throws(() => chain.matchRepo(Symbol('height')), 'Property is unknown Symbol');
-		assert.throws(() => chain.matchRepo(ELEMENT_PROP.HEIGHT, 500), 'Value provided for repo');
-		assert.throws(() => chain.matchRepo(ELEMENT_PROP.LEFT, '>'), 'Comparator is not a Symbol');
-		assert.throws(() => chain.matchRepo(ELEMENT_PROP.LEFT, Symbol('>')), 'Comparator is unknown Symbol');
-		assert.throws(
-			() => chain.matchRepo(ELEMENT_PROP.LEFT, PROP_COMPARATOR.APPROX, '20'),
-			'Accuracy is not a number'
-		);
 	});
 
+	it('should throw exception with invalid input', () => {
+		const data = {};
+		const chain = {};
+		const makeChain = sinon.spy();
 
+		Object.defineProperties(chain, matchRepoComposer(data, chain, makeChain));
+
+		testInputErrorSync(chain.matchRepo, ['height']);
+		testInputErrorSync(chain.matchRepo, [Symbol('height')]);
+		testInputErrorSync(chain.matchRepo, [ELEMENT_PROP.HEIGHT, 500]);
+		testInputErrorSync(chain.matchRepo, [ELEMENT_PROP.LEFT, '>']);
+		testInputErrorSync(chain.matchRepo, [ELEMENT_PROP.LEFT, Symbol('>')]);
+		testInputErrorSync(chain.matchRepo, [ELEMENT_PROP.LEFT, PROP_COMPARATOR.APPROX, '20']);
+	});
 
 	it('should accept object with single property as object', () => {
 		const data = {};

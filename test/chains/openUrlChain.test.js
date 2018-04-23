@@ -1,5 +1,5 @@
 const assert = require('assert');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	openUrl,
 	openUrlAssert,
@@ -77,10 +77,10 @@ describe('Open URL chain', () => {
 		}, 'assert');
 	});
 
-	it('should throw error in case of invalid input', async() => {
-		await testInputError(openUrl, []);
-		await testInputError(openUrl, [1]);
-		await testInputError(openUrl, ['']);
+	it('should throw error in case of invalid input', () => {
+		testInputErrorSync(openUrl, []);
+		testInputErrorSync(openUrl, [1]);
+		testInputErrorSync(openUrl, ['']);
 	});
 
 	it('should define assert function', () => {

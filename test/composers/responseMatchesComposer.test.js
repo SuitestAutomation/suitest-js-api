@@ -1,7 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {responseMatchesComposer} = require('../../lib/composers');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {NETWORK_PROP} = require('../../lib/constants/networkRequest');
 const {
 	SUBJ_COMPARATOR,
@@ -124,21 +124,21 @@ describe('Network Request Match Composer', () => {
 		});
 	});
 
-	it('should throw error in case of invalid input', async() => {
+	it('should throw error in case of invalid input', () => {
 		const data = {};
 		const chain = {};
 		const makeChain = sinon.spy();
 
 		Object.defineProperties(chain, responseMatchesComposer(data, chain, makeChain));
 
-		await testInputError(chain.responseMatch, [NETWORK_PROP.BODY, 123]);
-		await testInputError(chain.responseMatch, ['Content-Type']);
-		await testInputError(chain.responseMatch, [Symbol('unknown'), 'test']);
-		await testInputError(chain.responseMatch, [NETWORK_PROP.STATUS, 200, '=']);
-		await testInputError(chain.responseMatch, [NETWORK_PROP.STATUS, 200, '=']);
-		await testInputError(chain.responseMatch, [NETWORK_PROP.STATUS, 200, Symbol('=')]);
-		await testInputError(chain.responseMatch, ['Content-Type', 500]);
-		await testInputError(chain.responseMatch, [NETWORK_PROP.STATUS, '200']);
+		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.BODY, 123]);
+		testInputErrorSync(chain.responseMatch, ['Content-Type']);
+		testInputErrorSync(chain.responseMatch, [Symbol('unknown'), 'test']);
+		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.STATUS, 200, '=']);
+		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.STATUS, 200, '=']);
+		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.STATUS, 200, Symbol('=')]);
+		testInputErrorSync(chain.responseMatch, ['Content-Type', 500]);
+		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.STATUS, '200']);
 	});
 
 	it('should accept array of property definitions as a shortcut', () => {

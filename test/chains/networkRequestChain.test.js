@@ -1,5 +1,5 @@
 const assert = require('assert');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	networkRequest,
 	networkRequestAssert,
@@ -269,10 +269,10 @@ describe('Network request chain', () => {
 		});
 	});
 
-	it('should throw error in case of invalid input', async() => {
-		await testInputError(toJSON, [{}]);
-		await testInputError(toJSON, [{wasMade: true}]);
-		await testInputError(toJSON, [{
+	it('should throw error in case of invalid input', () => {
+		testInputErrorSync(toJSON, [{}]);
+		testInputErrorSync(toJSON, [{wasMade: true}]);
+		testInputErrorSync(toJSON, [{
 			comparator: {
 				type: SUBJ_COMPARATOR.EQUAL,
 				val: 'test',

@@ -9,7 +9,7 @@ const endpoints = require('../../lib/api/endpoints');
 const SuitestError = require('../../lib/utils/SuitestError');
 const makeUrlFromArray = require('../../lib/utils/makeUrlFromArray');
 const {config} = require('../../config');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('startTestPack', () => {
 	before(async() => {
@@ -27,7 +27,7 @@ describe('startTestPack', () => {
 	});
 
 	it('should throw correct error on invalid', async() => {
-		await testInputError(startTestPack, [{invalid: true}]);
+		await testInputErrorAsync(startTestPack, [{invalid: true}]);
 	});
 
 	it('should not be authorized in access token context', async() => {

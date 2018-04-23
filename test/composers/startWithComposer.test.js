@@ -2,7 +2,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 const {startWithComposer} = require('../../lib/composers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Start With Composer', () => {
 	it('should provide .startWith and .startsWith methods', () => {
@@ -44,15 +44,15 @@ describe('Start With Composer', () => {
 		});
 	});
 
-	it('throw error if value is invalid', async() => {
+	it('throw error if value is invalid', () => {
 		const data = {};
 		const chain = {};
 		const makeChain = sinon.spy();
 
 		Object.defineProperties(chain, startWithComposer(data, chain, makeChain));
 
-		await testInputError(chain.startsWith, [1]);
-		await testInputError(chain.startsWith, []);
-		await testInputError(chain.startsWith, [null]);
+		testInputErrorSync(chain.startsWith, [1]);
+		testInputErrorSync(chain.startsWith, []);
+		testInputErrorSync(chain.startsWith, [null]);
 	});
 });

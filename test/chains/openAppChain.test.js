@@ -1,5 +1,5 @@
 const assert = require('assert');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	openApp,
 	openAppAssert,
@@ -81,9 +81,9 @@ describe('Open app chain', () => {
 		}, 'assert');
 	});
 
-	it('should throw error in case of invalid input', async() => {
-		await testInputError(openApp, [1]);
-		await testInputError(openApp, ['']);
+	it('should throw error in case of invalid input', () => {
+		testInputErrorSync(openApp, [1]);
+		testInputErrorSync(openApp, ['']);
 	});
 
 	it('should define assert function', () => {

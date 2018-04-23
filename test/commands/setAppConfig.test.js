@@ -7,7 +7,7 @@ const sessionConstants = require('../../lib/constants/session');
 const {setAppConfig} = require('../../lib/commands/setAppConfig');
 const SuitestError = require('../../lib/utils/SuitestError');
 const webSockets = require('../../lib/api/webSockets');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('setAppConfig', () => {
 	before(async() => {
@@ -26,10 +26,10 @@ describe('setAppConfig', () => {
 	});
 
 	it('should throw correct error on invalid input', async() => {
-		await testInputError(setAppConfig);
-		await testInputError(setAppConfig, ['']);
-		await testInputError(setAppConfig, ['configId', '']);
-		await testInputError(setAppConfig, ['configId', 1]);
+		await testInputErrorAsync(setAppConfig);
+		await testInputErrorAsync(setAppConfig, ['']);
+		await testInputErrorAsync(setAppConfig, ['configId', '']);
+		await testInputErrorAsync(setAppConfig, ['configId', 1]);
 	});
 
 	it('should not be allowed in GUEST context', async() => {

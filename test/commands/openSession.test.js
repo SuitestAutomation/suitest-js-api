@@ -8,7 +8,7 @@ const {openSession} = require('../../lib/commands/openSession');
 const endpoints = require('../../lib/api/endpoints');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {config} = require('../../config');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('openSession', () => {
 	before(async() => {
@@ -26,7 +26,7 @@ describe('openSession', () => {
 	});
 
 	it('should throw correct error on invalid input', async() => {
-		await testInputError(openSession, [{invalid: true}]);
+		await testInputErrorAsync(openSession, [{invalid: true}]);
 	});
 
 	it('should set access token context when token credentials provided', async() => {

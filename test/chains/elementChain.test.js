@@ -1,5 +1,5 @@
 const assert = require('assert');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	element,
 	elementAssert,
@@ -415,9 +415,9 @@ describe('Element chain', () => {
 		}, 'element has props js testLine');
 	});
 
-	it('should throw error in case of invalid input', async() => {
-		await testInputError(element, ['']);
-		await testInputError(element, [{'noRequiredSelector': true}]);
+	it('should throw error in case of invalid input', () => {
+		testInputErrorSync(element, ['']);
+		testInputErrorSync(element, [{'noRequiredSelector': true}]);
 	});
 
 	it('should define assert function', () => {

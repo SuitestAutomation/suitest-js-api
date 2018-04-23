@@ -1,5 +1,5 @@
 const assert = require('assert');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	cookie,
 	cookieAssert,
@@ -186,9 +186,9 @@ describe('Cookie chain', () => {
 		}, 'chain eval');
 	});
 
-	it('should throw error in case of invalid input', async() => {
-		await testInputError(cookie, [undefined]);
-		await testInputError(cookie, [1]);
+	it('should throw error in case of invalid input', () => {
+		testInputErrorSync(cookie, []);
+		testInputErrorSync(cookie, [1]);
 	});
 
 	it('should define assert function', () => {

@@ -1,5 +1,5 @@
 const assert = require('assert');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	jsExpression,
 	jsExpressionAssert,
@@ -189,16 +189,15 @@ describe('Location chain', () => {
 		}, 'chain eval');
 	});
 
-	it('should throw error in case of invalid input', async() => {
+	it('should throw error in case of invalid input', () => {
 		jsExpression(function() {
 			return 1 + 1;
 		});
 		assert.ok(true, 'no error');
 
-		await testInputError(jsExpression, []);
-		await testInputError(jsExpression, [1]);
-		await testInputError(jsExpression, ['']);
-
+		testInputErrorSync(jsExpression, []);
+		testInputErrorSync(jsExpression, [1]);
+		testInputErrorSync(jsExpression, ['']);
 	});
 
 	it('should define assert function', () => {

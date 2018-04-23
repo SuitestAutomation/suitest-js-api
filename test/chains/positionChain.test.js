@@ -1,5 +1,5 @@
 const assert = require('assert');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	position,
 	positionAssert,
@@ -92,10 +92,10 @@ describe('Position chain', () => {
 		);
 	});
 
-	it('should throw error in case of invalid input', async() => {
-		await testInputError(position, [1]);
-		await testInputError(position, [null, 1]);
-		await testInputError(position, ['string', 1]);
+	it('should throw error in case of invalid input', () => {
+		testInputErrorSync(position, [1]);
+		testInputErrorSync(position, [null, 1]);
+		testInputErrorSync(position, ['string', 1]);
 	});
 
 	it('should generate correct socket message based on data', () => {

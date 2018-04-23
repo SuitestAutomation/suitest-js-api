@@ -1,5 +1,5 @@
 const assert = require('assert');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	pressButton,
 	pressButtonAssert,
@@ -68,9 +68,9 @@ describe('Press button chain', () => {
 		assert.deepStrictEqual(await pressButton(buttonTypes.BLUE), 'press');
 	});
 
-	it('should throw error in case of invalid input', async() => {
-		await testInputError(pressButton, []);
-		await testInputError(pressButton, [['Up', 'Down']]);
+	it('should throw error in case of invalid input', () => {
+		testInputErrorSync(pressButton, []);
+		testInputErrorSync(pressButton, [['Up', 'Down']]);
 	});
 
 	it('should generate correct socket message based on data', () => {

@@ -1,5 +1,5 @@
 const assert = require('assert');
-const SuitestError = require('../../lib/utils/SuitestError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	application,
 	applicationAssert,
@@ -143,10 +143,7 @@ describe('Application chain', () => {
 	});
 
 	it('should throw error in case of invalid input', () => {
-		assert.throws(toJSON.bind(null, {}), {
-			type: 'SuitestError',
-			code: SuitestError.INVALID_INPUT,
-		}, 'invalid error if ""');
+		testInputErrorSync(toJSON, [{}]);
 	});
 
 	it('should define assert function', () => {

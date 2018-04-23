@@ -1,7 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {untilComposer} = require('../../lib/composers');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Until Composer', () => {
 	it('should provide .until method', () => {
@@ -41,19 +41,19 @@ describe('Until Composer', () => {
 		assert.deepStrictEqual(makeChain.firstCall.args[0], {until: {subject: {type: 'application'}}});
 	});
 
-	it('should throw invalid input error in case not allowed chains are provided', async() => {
+	it('should throw invalid input error in case not allowed chains are provided', () => {
 		const data = {};
 		const chain = {};
 		const makeChain = sinon.spy();
 
 		Object.defineProperties(chain, untilComposer(data, chain, makeChain));
 
-		await testInputError(chain.until, [], {message: 'Until condition expects a chain as an input parameter'});
-		await testInputError(chain.until, [{
+		testInputErrorSync(chain.until, [], {message: 'Until condition expects a chain as an input parameter'});
+		testInputErrorSync(chain.until, [{
 			toJSON: () => ({request: {condition: {subject: {type: 'invalid'}}}}),
 		}], {message: 'Invalid input Until condition chain requires valid modifier and should be one of the following types:\n' +
 			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video()'});
-		await testInputError(chain.until, [{
+		testInputErrorSync(chain.until, [{
 			toJSON: () => ({request: {}}),
 		}], {message: 'Invalid input Until condition chain requires valid modifier and should be one of the following types:\n' +
 			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video()'});

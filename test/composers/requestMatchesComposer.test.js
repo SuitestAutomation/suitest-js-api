@@ -1,7 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {requestMatchesComposer} = require('../../lib/composers');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {NETWORK_PROP, NETWORK_METHOD} = require('../../lib/constants/networkRequest');
 const {
 	SUBJ_COMPARATOR,
@@ -81,21 +81,21 @@ describe('Network Request Match Composer', () => {
 		});
 	});
 
-	it('should throw error in case of invalid input', async() => {
+	it('should throw error in case of invalid input', () => {
 		const data = {};
 		const chain = {};
 		const makeChain = sinon.spy();
 
 		Object.defineProperties(chain, requestMatchesComposer(data, chain, makeChain));
 
-		await testInputError(chain.requestMatch, ['Content-Type']);
-		await testInputError(chain.requestMatch, [Symbol('unknown'), 'test']);
-		await testInputError(chain.requestMatch, [NETWORK_PROP.METHOD, NETWORK_METHOD.GET, '=']);
-		await testInputError(chain.requestMatch, [NETWORK_PROP.METHOD, NETWORK_METHOD.GET, Symbol('=')]);
-		await testInputError(chain.requestMatch, ['Content-Type', 500]);
-		await testInputError(chain.requestMatch, [NETWORK_PROP.METHOD, 'GET']);
-		await testInputError(chain.requestMatch, [NETWORK_PROP.METHOD, Symbol('GET')]);
-		await testInputError(chain.requestMatch, [NETWORK_PROP.BODY, 123]);
+		testInputErrorSync(chain.requestMatch, ['Content-Type']);
+		testInputErrorSync(chain.requestMatch, [Symbol('unknown'), 'test']);
+		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.METHOD, NETWORK_METHOD.GET, '=']);
+		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.METHOD, NETWORK_METHOD.GET, Symbol('=')]);
+		testInputErrorSync(chain.requestMatch, ['Content-Type', 500]);
+		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.METHOD, 'GET']);
+		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.METHOD, Symbol('GET')]);
+		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.BODY, 123]);
 	});
 
 	it('should accept object with single property as object', () => {

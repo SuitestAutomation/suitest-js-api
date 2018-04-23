@@ -1,7 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {acceptModalComposer} = require('../../lib/composers');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Accept Modal Composer', () => {
 	it('should provide .acceptModal method', () => {
@@ -50,13 +50,13 @@ describe('Accept Modal Composer', () => {
 		});
 	});
 
-	it('throw error if value is invalid', async() => {
+	it('throw error if value is invalid', () => {
 		const data = {};
 		const chain = {};
 		const makeChain = sinon.spy();
 
 		Object.defineProperties(chain, acceptModalComposer(data, chain, makeChain));
 
-		await testInputError(chain.acceptModal, [1]);
+		testInputErrorSync(chain.acceptModal, [1]);
 	});
 });

@@ -1,5 +1,5 @@
 const assert = require('assert');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	executeCommand,
 	executeCommandAssert,
@@ -40,15 +40,15 @@ describe('Execute command chain', () => {
 		assert.strictEqual(await executeCommand('1+1'), 'executeCommand');
 	});
 
-	it('should throw error in case of invalid input', async() => {
+	it('should throw error in case of invalid input', () => {
 		executeCommand(function() {
 			return 1 + 1;
 		});
 		assert.ok(true, 'no error');
 
-		await testInputError(executeCommand, []);
-		await testInputError(executeCommand, [1]);
-		await testInputError(executeCommand, ['']);
+		testInputErrorSync(executeCommand, []);
+		testInputErrorSync(executeCommand, [1]);
+		testInputErrorSync(executeCommand, ['']);
 	});
 
 	it('should generate correct socket message based on data', () => {

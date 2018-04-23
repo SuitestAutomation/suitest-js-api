@@ -2,7 +2,7 @@ const assert = require('assert');
 
 const configure = require('../../lib/commands/configure');
 const {config, override} = require('../../config');
-const testInputError = require('../../lib/utils/testHelpers/testInputError');
+const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('confugure', () => {
 	beforeEach(() => {
@@ -14,12 +14,12 @@ describe('confugure', () => {
 	});
 
 	it('should throw correct error on invalid input', async() => {
-		await testInputError(configure, [{invalid: true}]);
-		await testInputError(configure, [{
+		await testInputErrorAsync(configure, [{invalid: true}]);
+		await testInputErrorAsync(configure, [{
 			useSentry: true,
 			additionalProp: true,
 		}]);
-		await testInputError(configure, [{
+		await testInputErrorAsync(configure, [{
 			logLevel: 'unknownLevel',
 		}]);
 	});
