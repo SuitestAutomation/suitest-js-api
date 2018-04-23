@@ -47,6 +47,22 @@ describe('Press button chain', () => {
 			pressButton(buttonTypes.BLUE).repeat(10).interval(2000).toString(),
 			'Press button BLUE 10 times every 2000ms'
 		);
+		assert.equal(
+			pressButton(buttonTypes.BLUE)
+				.until({
+					toJSON: () => ({
+						request: {
+							condition: {
+								subject: {
+									type: 'location',
+								},
+							},
+						},
+					}),
+				})
+				.repeat(10).interval(2000).toString(),
+			'Press button BLUE 10 times every 2000ms'
+		);
 	});
 
 	it.skip('should engage execution on "then"', async() => {

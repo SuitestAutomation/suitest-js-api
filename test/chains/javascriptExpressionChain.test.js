@@ -96,6 +96,12 @@ describe('Location chain', () => {
 		assert.strictEqual(typeof chain.then, 'function');
 	});
 
+	it('abandon method should not be allowed after calling it', () => {
+		const chain = jsExpression('1 + 1').abandon();
+
+		assert.strictEqual(typeof chain.abandon, 'undefined');
+	});
+
 	it('should convert to string with meaningful message', () => {
 		assert.equal(jsExpression('1+1').toString(), 'Get result of JavaScript expression');
 		assert.equal(jsExpression('1+1').equal('test').toString(), 'Check if JavaScript expression equals test');

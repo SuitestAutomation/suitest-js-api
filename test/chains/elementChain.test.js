@@ -155,6 +155,21 @@ describe('Element chain', () => {
 			'Click on element element 10 times every 2000ms'
 		);
 		assert.equal(
+			element('element').click().repeat(10).interval(2000).until({
+				toJSON: () => ({
+					request: {
+						condition: {
+							subject: {
+								type: 'location',
+							},
+						},
+					},
+				}),
+			})
+				.toString(),
+			'Click on element element 10 times every 2000ms'
+		);
+		assert.equal(
 			element('element').moveTo().toString(),
 			'Move cursor to element element'
 		);
