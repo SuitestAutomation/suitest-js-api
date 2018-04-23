@@ -1,11 +1,10 @@
 const assert = require('assert');
-const assertThrowsAsync = require('../../lib/utils/assertThrowsAsync');
+const testInputError = require('../../lib/utils/testHelpers/testInputError');
 const {
 	jsExpression,
 	jsExpressionAssert,
 	toJSON,
 } = require('../../lib/chains/javascriptExpressionChain');
-const SuitestError = require('../../lib/utils/SuitestError');
 const {SUBJ_COMPARATOR} = require('../../lib/mappings');
 const comparatorTypes = require('../../lib/constants/comparator');
 
@@ -196,20 +195,9 @@ describe('Location chain', () => {
 		});
 		assert.ok(true, 'no error');
 
-		await assertThrowsAsync(jsExpression.bind(null, undefined), {
-			type: 'SuitestError',
-			code: SuitestError.INVALID_INPUT,
-		}, 'invalid error if undefined');
-
-		await assertThrowsAsync(jsExpression.bind(null, 1), {
-			type: 'SuitestError',
-			code: SuitestError.INVALID_INPUT,
-		}, 'invalid error if 1');
-
-		await assertThrowsAsync(jsExpression.bind(null, ''), {
-			type: 'SuitestError',
-			code: SuitestError.INVALID_INPUT,
-		}, 'invalid error if ""');
+		await testInputError(jsExpression, []);
+		await testInputError(jsExpression, [1]);
+		await testInputError(jsExpression, ['']);
 
 	});
 

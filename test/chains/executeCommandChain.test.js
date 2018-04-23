@@ -1,11 +1,10 @@
 const assert = require('assert');
-const assertThrowsAsync = require('../../lib/utils/assertThrowsAsync');
+const testInputError = require('../../lib/utils/testHelpers/testInputError');
 const {
 	executeCommand,
 	executeCommandAssert,
 	toJSON,
 } = require('../../lib/chains/executeCommandChain');
-const SuitestError = require('../../lib/utils/SuitestError');
 
 /**
  * This test is sort of high level, more like integration test
@@ -47,20 +46,9 @@ describe('Execute command chain', () => {
 		});
 		assert.ok(true, 'no error');
 
-		await assertThrowsAsync(executeCommand, {
-			type: 'SuitestError',
-			code: SuitestError.INVALID_INPUT,
-		}, 'invalid error if undefined');
-
-		await assertThrowsAsync(executeCommand.bind(null, 1), {
-			type: 'SuitestError',
-			code: SuitestError.INVALID_INPUT,
-		}, 'invalid error if 1');
-
-		await assertThrowsAsync(executeCommand.bind(null, ''), {
-			type: 'SuitestError',
-			code: SuitestError.INVALID_INPUT,
-		}, 'invalid error if ""');
+		await testInputError(executeCommand, []);
+		await testInputError(executeCommand, [1]);
+		await testInputError(executeCommand, ['']);
 	});
 
 	it('should generate correct socket message based on data', () => {

@@ -1,6 +1,5 @@
 const assert = require('assert');
-const assertThrowsAsync = require('../../lib/utils/assertThrowsAsync');
-const SuitestError = require('../../lib/utils/SuitestError');
+const testInputError = require('../../lib/utils/testHelpers/testInputError');
 const {
 	cookie,
 	cookieAssert,
@@ -188,15 +187,8 @@ describe('Cookie chain', () => {
 	});
 
 	it('should throw error in case of invalid input', async() => {
-		await assertThrowsAsync(cookie.bind(null, undefined), {
-			type: 'SuitestError',
-			code: SuitestError.INVALID_INPUT,
-		}, 'invalid error if undefined');
-
-		await assertThrowsAsync(cookie.bind(null, 1), {
-			type: 'SuitestError',
-			code: SuitestError.INVALID_INPUT,
-		}, 'invalid error if 1');
+		await testInputError(cookie, [undefined]);
+		await testInputError(cookie, [1]);
 	});
 
 	it('should define assert function', () => {

@@ -1,5 +1,5 @@
 const assert = require('assert');
-const SuitestError = require('../../lib/utils/SuitestError');
+const testInputError = require('../../lib/utils/testHelpers/testInputError');
 const {
 	position,
 	positionAssert,
@@ -92,19 +92,10 @@ describe('Position chain', () => {
 		);
 	});
 
-	it('should throw error in case of invalid input', () => {
-		assert.throws(position.bind(null, 1), {
-			type: 'SuitestError',
-			code: SuitestError.INVALID_INPUT,
-		}, 'invalid error if 1');
-		assert.throws(position.bind(null, null, 1), {
-			type: 'SuitestError',
-			code: SuitestError.INVALID_INPUT,
-		}, 'invalid error if null, 1');
-		assert.throws(position.bind(null, 'string', 1), {
-			type: 'SuitestError',
-			code: SuitestError.INVALID_INPUT,
-		}, 'invalid error if "string", 1');
+	it('should throw error in case of invalid input', async() => {
+		await testInputError(position, [1]);
+		await testInputError(position, [null, 1]);
+		await testInputError(position, ['string', 1]);
 	});
 
 	it('should generate correct socket message based on data', () => {

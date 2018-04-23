@@ -1,6 +1,5 @@
 const assert = require('assert');
-const assertThrowsAsync = require('../../lib/utils/assertThrowsAsync');
-const SuitestError = require('../../lib/utils/SuitestError');
+const testInputError = require('../../lib/utils/testHelpers/testInputError');
 const {
 	element,
 	elementAssert,
@@ -417,18 +416,8 @@ describe('Element chain', () => {
 	});
 
 	it('should throw error in case of invalid input', async() => {
-
-		await assertThrowsAsync(element.bind(null, ''), {
-			type: 'SuitestError',
-			code: SuitestError.INVALID_INPUT,
-		}, 'invalid error if ""');
-
-
-		await assertThrowsAsync(element.bind(null, {'noRequiredSelector': true}), {
-			type: 'SuitestError',
-			code: SuitestError.INVALID_INPUT,
-		}, 'invalid error if noRequiredSelector = true');
-
+		await testInputError(element, ['']);
+		await testInputError(element, [{'noRequiredSelector': true}]);
 	});
 
 	it('should define assert function', () => {
