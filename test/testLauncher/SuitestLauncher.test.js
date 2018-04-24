@@ -118,7 +118,6 @@ describe('SuitestLauncher', () => {
 				deviceAccessToken: 'deviceAccessToken',
 				testPack: {devices: [{deviceId: 'device1'}]},
 			});
-		const sessionCloseNock = nock(config.apiUrl).post(endpoints.sessionClose).reply(200, {});
 		const suitestLauncher = new TestLauncher({
 			tokenKey: '1',
 			tokenPassword: '1',
@@ -129,7 +128,6 @@ describe('SuitestLauncher', () => {
 		await suitestLauncher.runAautomatedSession();
 
 		assert.ok(testNock.isDone(), 'request');
-		assert.ok(sessionCloseNock.isDone(), 'close session');
 		assert.strictEqual(snippets.finalAutomated.called, true);
 	});
 
