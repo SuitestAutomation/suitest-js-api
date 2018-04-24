@@ -1,4 +1,4 @@
-const suitest = global.suitest;
+const suitest = require('suitest-js-api');
 const {assert} = suitest;
 
 describe('My super cool test', () => {
@@ -24,8 +24,10 @@ describe('My super cool test', () => {
 		await assert.cookie('name').doesNot().exist();
 
 		// test element
-		await assert.element({css: 'div',
-			index: 1}).exist();
+		await assert.element({
+			css: 'div',
+			index: 1,
+		}).exist();
 	});
 
 	after(async() => {

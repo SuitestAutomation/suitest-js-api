@@ -4,11 +4,11 @@
   "description": "Demo set up for Suitest JS API",
   "private": true,
   "dependencies": {
-    "mocha": "5.0.4",
-    "suitest": "git+https://github.com/SuitestAutomation/suitest-js-api.git"
+    "mocha": "^5.0.4",
+    "suitest-js-api": "^1.1.0"
   },
   "scripts": {
-    "interactive": "suitest interactive mocha --no-timeouts --exit -r ./testHelpers.js",
-    "automated": "suitest automated mocha --no-timeouts --exit -r ./testHelpers.js"
+    "interactive": "suitest interactive mocha --no-timeouts --exit",
+    "automated": "suitest automated mocha --no-timeouts --exit"
   }
 }

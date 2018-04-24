@@ -1,1 +1,0 @@
-global.suitest = require('suitest');
