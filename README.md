@@ -1,5 +1,6 @@
 # Suitest JavaScript API
----
+
+![ci-status](https://circleci.com/gh/SuitestAutomation/suitest-js-api.svg?style=shield&circle-token=4aced774267b69829bea6d617c873c40010b1a8b)
 
 [Suitest](https://suite.st) is a test automation and device manipulation tool
 for living room devices and web browsers. 
