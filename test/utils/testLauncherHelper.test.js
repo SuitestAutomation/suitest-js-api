@@ -93,7 +93,7 @@ describe('testLauncherHelper util', () => {
 		});
 		const child = spawn('node', ['--version'], {shell: true});
 
-		testLauncherHelper.followChildProccess(child, childSpy);
+		testLauncherHelper.followChildProcess(child, childSpy);
 
 		child.stdout.on('data', () => {
 			assert.strictEqual(childSpy.called, true);

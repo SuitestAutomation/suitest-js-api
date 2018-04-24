@@ -40,8 +40,8 @@ describe('SuitestLauncher', () => {
 		const suitestLauncher = new TestLauncher();
 
 		try {
-			await suitestLauncher.runAautomatedSession();
-			assert.ok(false, 'call runAautomatedSession success');
+			await suitestLauncher.runAutomatedSession();
+			assert.ok(false, 'call runAutomatedSession success');
 		} catch (error) {
 			assert(process.exit.calledWith(1));
 			assert(launcherLogger._err.called);
@@ -64,8 +64,8 @@ describe('SuitestLauncher', () => {
 		});
 
 		try {
-			await suitestAotomatedLauncher.runAautomatedSession();
-			assert.ok(false, 'call runAautomatedSession success');
+			await suitestAotomatedLauncher.runAutomatedSession();
+			assert.ok(false, 'call runAutomatedSession success');
 		} catch (error) {
 			assert(process.exit.calledWith(1));
 			assert(launcherLogger._err.called);
@@ -102,7 +102,7 @@ describe('SuitestLauncher', () => {
 		}, ['npm', '--version']);
 
 		try {
-			await suitestLauncher.runAautomatedSession();
+			await suitestLauncher.runAutomatedSession();
 			assert.ok(false, 'call runAutomatedSession success');
 		} catch (error) {
 			assert.ok(error, 'error');
@@ -126,7 +126,7 @@ describe('SuitestLauncher', () => {
 			concurrency: 1,
 		}, ['npm', '--version']);
 
-		await suitestLauncher.runAautomatedSession();
+		await suitestLauncher.runAutomatedSession();
 
 		assert.ok(testNock.isDone(), 'request');
 		assert.ok(sessionCloseNock.isDone(), 'close session');
@@ -144,7 +144,7 @@ describe('SuitestLauncher', () => {
 			concurrency: 1,
 		}, ['npm', '--version']);
 
-		await suitestLauncher.runAautomatedSession();
+		await suitestLauncher.runAutomatedSession();
 		assert.ok(testNock.isDone(), 'request');
 		assert(process.exit.calledWith(1));
 		assert(launcherLogger._err.called);
