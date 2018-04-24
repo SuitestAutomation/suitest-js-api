@@ -1,4 +1,5 @@
 const assert = require('assert');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	openApp,
 	openAppAssert,
@@ -7,7 +8,6 @@ const {
 	toJSON,
 } = require('../../lib/chains/openAppChain');
 const composers = require('../../lib/constants/composer');
-const SuitestError = require('../../lib/utils/SuitestError');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 
 describe('Open app chain', () => {
@@ -81,22 +81,9 @@ describe('Open app chain', () => {
 		}, 'assert');
 	});
 
-	it('should throw error in case of invalid input', async() => {
-		try {
-			await openApp(1);
-			assert.ok(false, 'no error');
-		} catch (error) {
-			assert.ok(error, 'error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
-
-		try {
-			await openApp('');
-			assert.ok(false, 'no error');
-		} catch (error) {
-			assert.ok(error, 'error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
+	it('should throw error in case of invalid input', () => {
+		testInputErrorSync(openApp, [1]);
+		testInputErrorSync(openApp, ['']);
 	});
 
 	it('should define assert function', () => {

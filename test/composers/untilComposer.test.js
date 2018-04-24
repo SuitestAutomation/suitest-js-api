@@ -1,7 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {untilComposer} = require('../../lib/composers');
-const SuitestError = require('../../lib/utils/SuitestError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Until Composer', () => {
 	it('should provide .until method', () => {
@@ -48,28 +48,14 @@ describe('Until Composer', () => {
 
 		Object.defineProperties(chain, untilComposer(data, chain, makeChain));
 
-		assert.throws(() => chain.until({}), err => {
-			return err instanceof SuitestError
-				&& err.code === SuitestError.INVALID_INPUT
-				&& err.message.includes('Until condition expects a chain as an input parameter');
-		}, 'Until condition expects a chain as an input parameter');
-		assert.throws(() => chain.until({
+		testInputErrorSync(chain.until, [], {message: 'Until condition expects a chain as an input parameter'});
+		testInputErrorSync(chain.until, [{
 			toJSON: () => ({request: {condition: {subject: {type: 'invalid'}}}}),
-		}), err => {
-			return err instanceof SuitestError
-				&& err.code === SuitestError.INVALID_INPUT
-				&& err.message.includes(
-					'Until condition chain requires valid modifier and should be one of the following types'
-				);
-		}, 'illegal condition chain type');
-		assert.throws(() => chain.until({
+		}], {message: 'Invalid input Until condition chain requires valid modifier and should be one of the following types:\n' +
+			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video()'});
+		testInputErrorSync(chain.until, [{
 			toJSON: () => ({request: {}}),
-		}), err => {
-			return err instanceof SuitestError
-				&& err.code === SuitestError.INVALID_INPUT
-				&& err.message.includes(
-					'Until condition chain requires valid modifier and should be one of the following types'
-				);
-		}, 'no condition chain modifier');
+		}], {message: 'Invalid input Until condition chain requires valid modifier and should be one of the following types:\n' +
+			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video()'});
 	});
 });

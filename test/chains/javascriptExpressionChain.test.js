@@ -1,10 +1,10 @@
 const assert = require('assert');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	jsExpression,
 	jsExpressionAssert,
 	toJSON,
 } = require('../../lib/chains/javascriptExpressionChain');
-const SuitestError = require('../../lib/utils/SuitestError');
 const {SUBJ_COMPARATOR} = require('../../lib/mappings');
 const comparatorTypes = require('../../lib/constants/comparator');
 
@@ -189,35 +189,15 @@ describe('Location chain', () => {
 		}, 'chain eval');
 	});
 
-	it('should throw error in case of invalid input', async() => {
+	it('should throw error in case of invalid input', () => {
 		jsExpression(function() {
 			return 1 + 1;
 		});
 		assert.ok(true, 'no error');
 
-		try {
-			await jsExpression();
-			assert.ok(false, 'no error');
-		} catch (error) {
-			assert.ok(error, 'undefined argument error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
-
-		try {
-			await jsExpression(1);
-			assert.ok(true, 'no error');
-		} catch (error) {
-			assert.ok(error, 'undefined argument error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
-
-		try {
-			await jsExpression('');
-			assert.ok(true, 'no error');
-		} catch (error) {
-			assert.ok(error, 'undefined argument error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
+		testInputErrorSync(jsExpression, []);
+		testInputErrorSync(jsExpression, [1]);
+		testInputErrorSync(jsExpression, ['']);
 	});
 
 	it('should define assert function', () => {

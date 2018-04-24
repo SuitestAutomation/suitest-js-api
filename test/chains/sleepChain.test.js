@@ -8,7 +8,7 @@ const {
 } = require('../../lib/chains/sleepChain');
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
-const SuitestError = require('../../lib/utils/SuitestError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Sleep chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -76,9 +76,9 @@ describe('Sleep chain', () => {
 		assert.ok('abandon' in chain);
 	});
 
-	it('should validate input parameter', () => {
-		assert.throws(() => sleep(), SuitestError);
-		assert.throws(() => sleep('text'), SuitestError);
-		assert.throws(() => sleep(-1), SuitestError);
+	it('should throw error in case of invalid input', () => {
+		testInputErrorSync(sleep, []);
+		testInputErrorSync(sleep, ['text']);
+		testInputErrorSync(sleep, [-1]);
 	});
 });

@@ -2,7 +2,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 const {endWithComposer} = require('../../lib/composers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
-const SuitestError = require('../../lib/utils/SuitestError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('End With Composer', () => {
 	it('should provide .endWith and .endsWith methods', () => {
@@ -51,8 +51,8 @@ describe('End With Composer', () => {
 
 		Object.defineProperties(chain, endWithComposer(data, chain, makeChain));
 
-		assert.throws(() => chain.endsWith(1), SuitestError);
-		assert.throws(() => chain.endsWith(undefined), SuitestError);
-		assert.throws(() => chain.endsWith(null), SuitestError);
+		testInputErrorSync(chain.endsWith, [1]);
+		testInputErrorSync(chain.endsWith, []);
+		testInputErrorSync(chain.endsWith, [null]);
 	});
 });

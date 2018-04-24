@@ -1,4 +1,5 @@
 const assert = require('assert');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	networkRequest,
 	networkRequestAssert,
@@ -266,15 +267,17 @@ describe('Network request chain', () => {
 				},
 			},
 		});
+	});
 
-		assert.throws(() => toJSON({}), 'Throw if no comparator and strategy defined');
-		assert.throws(() => toJSON({wasMade: true}), 'Throw if no comparator defined');
-		assert.throws(() => toJSON({
+	it('should throw error in case of invalid input', () => {
+		testInputErrorSync(toJSON, [{}]);
+		testInputErrorSync(toJSON, [{wasMade: true}]);
+		testInputErrorSync(toJSON, [{
 			comparator: {
 				type: SUBJ_COMPARATOR.EQUAL,
 				val: 'test',
 			},
-		}), 'Throw if no strategy defined');
+		}], {}, 'invalid error if no strategy defined');
 	});
 
 	it('should define assert function', () => {

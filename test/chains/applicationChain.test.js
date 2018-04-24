@@ -1,4 +1,5 @@
 const assert = require('assert');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	application,
 	applicationAssert,
@@ -141,8 +142,8 @@ describe('Application chain', () => {
 		}, 'testLine without timeout');
 	});
 
-	it('should throw if awaited without .hasExited part', () => {
-		assert.throws(() => toJSON({}));
+	it('should throw error in case of invalid input', () => {
+		testInputErrorSync(toJSON, [{}]);
 	});
 
 	it('should define assert function', () => {

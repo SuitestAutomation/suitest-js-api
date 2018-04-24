@@ -7,6 +7,7 @@ const {pairDevice} = require('../../lib/commands/pairDevice');
 const SuitestError = require('../../lib/utils/SuitestError');
 const webSockets = require('../../lib/api/webSockets');
 const uuid = require('uuid/v1');
+const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('pairDevice', () => {
 	before(async() => {
@@ -26,13 +27,8 @@ describe('pairDevice', () => {
 		webSockets.disconnect();
 	});
 
-	it('should not allow pairDevice with invalid deviceId', async() => {
-		try {
-			await pairDevice('nonUuidForamt', {});
-		} catch (error) {
-			assert.ok(error, 'error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'error code');
-		}
+	it('should throw correct error on invalid input', async() => {
+		await testInputErrorAsync(pairDevice, ['nonUuidForamt', {}]);
 	});
 
 	it('should not allow pairDevice command in guest, access token contexts', async() => {

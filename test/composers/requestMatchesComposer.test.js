@@ -1,6 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {requestMatchesComposer} = require('../../lib/composers');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {NETWORK_PROP, NETWORK_METHOD} = require('../../lib/constants/networkRequest');
 const {
 	SUBJ_COMPARATOR,
@@ -78,25 +79,23 @@ describe('Network Request Match Composer', () => {
 				],
 			},
 		});
+	});
 
-		// Invalid
-		assert.throws(() => chain.requestMatch('Content-Type'), 'No value to compare to');
-		assert.throws(() => chain.requestMatch(Symbol('unknown'), 'test'), 'Property is unknown Symbol');
-		assert.throws(
-			() => chain.requestMatch(NETWORK_PROP.METHOD, NETWORK_METHOD.GET, '='),
-			'Comparator is not a Symbol'
-		);
-		assert.throws(
-			() => chain.requestMatch(NETWORK_PROP.METHOD, NETWORK_METHOD.GET, Symbol('=')),
-			'Comparator is unknown Symbol'
-		);
-		assert.throws(
-			() => chain.requestMatch('Content-Type', 500),
-			'Header is not a string'
-		);
-		assert.throws(() => chain.requestMatch(NETWORK_PROP.METHOD, 'GET'), 'Method value is not a symbol');
-		assert.throws(() => chain.requestMatch(NETWORK_PROP.METHOD, Symbol('GET')), 'Method value is unknown');
-		assert.throws(() => chain.requestMatch(NETWORK_PROP.BODY, 123), 'Body is not a string');
+	it('should throw error in case of invalid input', () => {
+		const data = {};
+		const chain = {};
+		const makeChain = sinon.spy();
+
+		Object.defineProperties(chain, requestMatchesComposer(data, chain, makeChain));
+
+		testInputErrorSync(chain.requestMatch, ['Content-Type']);
+		testInputErrorSync(chain.requestMatch, [Symbol('unknown'), 'test']);
+		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.METHOD, NETWORK_METHOD.GET, '=']);
+		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.METHOD, NETWORK_METHOD.GET, Symbol('=')]);
+		testInputErrorSync(chain.requestMatch, ['Content-Type', 500]);
+		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.METHOD, 'GET']);
+		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.METHOD, Symbol('GET')]);
+		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.BODY, 123]);
 	});
 
 	it('should accept object with single property as object', () => {

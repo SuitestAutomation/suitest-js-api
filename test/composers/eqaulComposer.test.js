@@ -2,7 +2,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 const {equalComposer} = require('../../lib/composers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
-const SuitestError = require('../../lib/utils/SuitestError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Equal Composer', () => {
 	it('should provide .equal and .equals methods', () => {
@@ -51,8 +51,8 @@ describe('Equal Composer', () => {
 
 		Object.defineProperties(chain, equalComposer(data, chain, makeChain));
 
-		assert.throws(() => chain.equals(1), SuitestError);
-		assert.throws(() => chain.equals(undefined), SuitestError);
-		assert.throws(() => chain.equals(null), SuitestError);
+		testInputErrorSync(chain.equals, [1]);
+		testInputErrorSync(chain.equals, []);
+		testInputErrorSync(chain.equals, [null]);
 	});
 });

@@ -1,6 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {setSizeComposer} = require('../../lib/composers');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Set Size Composer', () => {
 	it('should provide .setSize method', () => {
@@ -42,8 +43,8 @@ describe('Set Size Composer', () => {
 
 		Object.defineProperties(chain, setSizeComposer(data, chain, makeChain));
 
-		assert.throws(() => chain.setSize('string', 10), /Error/);
-		assert.throws(() => chain.setSize(10), /Error/);
-		assert.throws(() => chain.setSize(null, 10), /Error/);
+		testInputErrorSync(chain.setSize, ['string', 10]);
+		testInputErrorSync(chain.setSize, [10]);
+		testInputErrorSync(chain.setSize, [null, 10]);
 	});
 });
