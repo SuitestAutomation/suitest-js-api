@@ -1,11 +1,11 @@
 {
-  "username": "user@mineus.net",
-  "password": "pass",
-  "orgId": "f103cea2-b56a-49dc-81cc-5044f060610d",
-  "deviceId": "3169eb33-719d-4e92-8499-f1f3416cd7e4",
-  "appConfigId": "b6ca56f2-6e60-404b-a6d0-6388533c431a",
+  "username": "",
+  "password": "",
+  "orgId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "deviceId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "appConfigId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 
-  "tokenKey": "51Mz8G1RbW",
-  "tokenPassword": "9abb6b26a53c401520b2d0da838a01fe550a087b44379fdc2157303be28f7c49",
-  "testPackId": 3344
+  "tokenKey": "xxxxxxxxxx",
+  "tokenPassword": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "testPackId": 1111
 }
