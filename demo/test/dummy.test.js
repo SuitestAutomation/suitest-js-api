@@ -1,5 +1,5 @@
-const suitest = require('../../index.js');
-const {assert, PROP, COMP} = suitest;
+const suitest = global.suitest;
+const {assert} = suitest;
 
 describe('My super cool test', () => {
 	before(async() => {
@@ -8,10 +8,6 @@ describe('My super cool test', () => {
 			await suitest.startTest('My super cool test');
 		} catch (e) {
 			console.error(e);
-			console.error(`
-		Failed to start automated sessione test.
-		Check you credentials and network status and try again.
-	`);
 			// Mocha wouldn't stop if just throw an error here
 			process.exit(1);
 		}
@@ -28,11 +24,8 @@ describe('My super cool test', () => {
 		await assert.cookie('name').doesNot().exist();
 
 		// test element
-		await assert.element({css: 'div'}).matches({
-			name: PROP.LEFT,
-			type: COMP.LESSER,
-			val: 400,
-		});
+		await assert.element({css: 'div',
+			index: 1}).exist();
 	});
 
 	after(async() => {
