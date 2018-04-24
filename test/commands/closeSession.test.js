@@ -102,7 +102,7 @@ describe('closeSession', () => {
 		} catch (error) {
 			assert.ok(testNock.isDone(), 'close session request');
 			assert.ok(error, 'close session error');
-			assert.equal(error.code, SuitestError.SERVER_ERROR, 'close session error code');
+			assert.equal(error.code, SuitestError.AUTH_NOT_ALLOWED, 'close session error code');
 		}
 	});
 

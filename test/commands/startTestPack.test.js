@@ -36,7 +36,7 @@ describe('startTestPack', () => {
 			assert.ok(false, 'success');
 		} catch (error) {
 			assert.ok(error, 'error');
-			assert.equal(error.code, SuitestError.AUTH_NOT_ALLOWED, 'error type');
+			assert.equal(error.code, SuitestError.AUTH_FAILED, 'error type');
 		}
 	});
 
@@ -49,7 +49,7 @@ describe('startTestPack', () => {
 			assert.ok(false, 'success');
 		} catch (error) {
 			assert.ok(error, 'error');
-			assert.equal(error.code, SuitestError.AUTH_NOT_ALLOWED, 'error type');
+			assert.equal(error.code, SuitestError.AUTH_FAILED, 'error type');
 		}
 	});
 
@@ -126,7 +126,7 @@ describe('startTestPack', () => {
 			assert.ok(false, 'success');
 		} catch (error) {
 			assert.ok(error, 'error');
-			assert.equal(error.code, SuitestError.SERVER_ERROR, 'error code');
+			assert.equal(error.code, SuitestError.AUTH_FAILED, 'error code');
 		}
 	});
 });

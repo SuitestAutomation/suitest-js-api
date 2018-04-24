@@ -33,7 +33,7 @@ describe('request', () => {
 		const testNock = nock(/.*/).get('/test').reply(401, {});
 
 		try {
-			await request('/test', {method: 'GET'}, 'testFetcher');
+			await request('/test', {method: 'GET'});
 			assert.ok(false);
 		} catch (error) {
 			assert.ok(testNock.isDone(), 'request');
@@ -41,7 +41,7 @@ describe('request', () => {
 			assert.strictEqual(error.code, SuitestError.SERVER_ERROR, 'error code');
 			assert.strictEqual(
 				error.message,
-				'Server error occurred while executing .testFetcher function. 401 - Unauthorized',
+				'Server error occurred while executing .request function. 401 - Unauthorized',
 				'error message'
 			);
 		}

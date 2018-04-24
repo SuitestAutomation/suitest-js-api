@@ -134,7 +134,7 @@ describe('openSession', () => {
 		} catch (error) {
 			assert.ok(!sessionInfo, 'open session response');
 			assert.ok(error, 'open session error');
-			assert.equal(error.code, SuitestError.SERVER_ERROR, 'open session error code');
+			assert.equal(error.code, SuitestError.AUTH_FAILED, 'open session error code');
 		}
 	});
 });
