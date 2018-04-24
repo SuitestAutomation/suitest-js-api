@@ -1,7 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
-const SuitestError = require('../../lib/utils/SuitestError');
 const {repeatComposer} = require('../../lib/composers');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Repeat Composer', () => {
 	it('should provide .repeat method', () => {
@@ -33,21 +33,17 @@ describe('Repeat Composer', () => {
 	});
 
 	it('should throw exception with invalid input', () => {
-		const assertInputValidate = val => assert.throws(
-			() => chain.repeat(val),
-			err => err instanceof SuitestError && err.code === SuitestError.INVALID_INPUT
-		);
 		const data = {};
 		const chain = {};
 		const makeChain = sinon.spy();
 
 		Object.defineProperties(chain, repeatComposer(data, chain, makeChain));
 
-		assertInputValidate(-3);
-		assertInputValidate(null);
-		assertInputValidate('string');
-		assertInputValidate('1');
-		assertInputValidate({});
-		assertInputValidate();
+		testInputErrorSync(chain.repeat, [-3]);
+		testInputErrorSync(chain.repeat, [null]);
+		testInputErrorSync(chain.repeat, ['string']);
+		testInputErrorSync(chain.repeat, ['1']);
+		testInputErrorSync(chain.repeat, [{}]);
+		testInputErrorSync(chain.repeat, []);
 	});
 });

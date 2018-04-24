@@ -1,9 +1,8 @@
 const assert = require('assert');
 
 const configure = require('../../lib/commands/configure');
-const SuitestError = require('../../lib/utils/SuitestError');
 const {config, override} = require('../../config');
-const assertThrowsAsync = require('../../lib/utils/assertThrowsAsync');
+const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('confugure', () => {
 	beforeEach(() => {
@@ -14,24 +13,15 @@ describe('confugure', () => {
 		override({});
 	});
 
-	it('should throw correct error on invalid json schema', async() => {
-		await assertThrowsAsync(
-			async() => await configure({invalid: true}),
-			err => err instanceof SuitestError && err.code === SuitestError.INVALID_INPUT,
-		);
-		await assertThrowsAsync(
-			async() => await configure({
-				useSentry: true,
-				additionalProp: true,
-			}),
-			err => err instanceof SuitestError && err.code === SuitestError.INVALID_INPUT,
-		);
-		await assertThrowsAsync(
-			async() => await configure({
-				logLevel: 'unknownLevel',
-			}),
-			err => err instanceof SuitestError && err.code === SuitestError.INVALID_INPUT,
-		);
+	it('should throw correct error on invalid input', async() => {
+		await testInputErrorAsync(configure, [{invalid: true}]);
+		await testInputErrorAsync(configure, [{
+			useSentry: true,
+			additionalProp: true,
+		}]);
+		await testInputErrorAsync(configure, [{
+			logLevel: 'unknownLevel',
+		}]);
 	});
 
 	it('should set config ovverride', async() => {

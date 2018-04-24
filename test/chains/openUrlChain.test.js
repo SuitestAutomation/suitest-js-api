@@ -1,5 +1,5 @@
 const assert = require('assert');
-const SuitestError = require('../../lib/utils/SuitestError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	openUrl,
 	openUrlAssert,
@@ -77,30 +77,10 @@ describe('Open URL chain', () => {
 		}, 'assert');
 	});
 
-	it('should throw error in case of invalid input', async() => {
-		try {
-			await openUrl();
-			assert.ok(false, 'no error');
-		} catch (error) {
-			assert.ok(error, 'error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
-
-		try {
-			await openUrl(1);
-			assert.ok(false, 'no error');
-		} catch (error) {
-			assert.ok(error, 'error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
-
-		try {
-			await openUrl('');
-			assert.ok(false, 'no error');
-		} catch (error) {
-			assert.ok(error, 'error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
+	it('should throw error in case of invalid input', () => {
+		testInputErrorSync(openUrl, []);
+		testInputErrorSync(openUrl, [1]);
+		testInputErrorSync(openUrl, ['']);
 	});
 
 	it('should define assert function', () => {

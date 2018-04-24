@@ -1,11 +1,11 @@
 const assert = require('assert');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	pressButton,
 	pressButtonAssert,
 	toJSON,
 } = require('../../lib/chains/pressButtonChain');
 const buttonTypes = require('../../lib/constants/vrc');
-const SuitestError = require('../../lib/utils/SuitestError');
 const {VRC} = require('../../lib/mappings');
 
 describe('Press button chain', () => {
@@ -68,22 +68,9 @@ describe('Press button chain', () => {
 		assert.deepStrictEqual(await pressButton(buttonTypes.BLUE), 'press');
 	});
 
-	it('should throw error in case of invalid input', async() => {
-		try {
-			await pressButton();
-			assert.ok(false, 'no error');
-		} catch (error) {
-			assert.ok(error, 'error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
-
-		try {
-			await pressButton(['Up', 'Down']);
-			assert.ok(false, 'no error');
-		} catch (error) {
-			assert.ok(error, 'error');
-			assert.strictEqual(error.code, SuitestError.INVALID_INPUT, 'code');
-		}
+	it('should throw error in case of invalid input', () => {
+		testInputErrorSync(pressButton, []);
+		testInputErrorSync(pressButton, [['Up', 'Down']]);
 	});
 
 	it('should generate correct socket message based on data', () => {

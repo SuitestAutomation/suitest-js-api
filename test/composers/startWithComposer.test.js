@@ -2,7 +2,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 const {startWithComposer} = require('../../lib/composers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
-const SuitestError = require('../../lib/utils/SuitestError');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Start With Composer', () => {
 	it('should provide .startWith and .startsWith methods', () => {
@@ -51,8 +51,8 @@ describe('Start With Composer', () => {
 
 		Object.defineProperties(chain, startWithComposer(data, chain, makeChain));
 
-		assert.throws(() => chain.startsWith(1), SuitestError);
-		assert.throws(() => chain.startsWith(undefined), SuitestError);
-		assert.throws(() => chain.startsWith(null), SuitestError);
+		testInputErrorSync(chain.startsWith, [1]);
+		testInputErrorSync(chain.startsWith, []);
+		testInputErrorSync(chain.startsWith, [null]);
 	});
 });
