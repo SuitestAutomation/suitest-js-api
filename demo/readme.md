@@ -15,6 +15,26 @@ Create `Node.js` configuration where
 2. _JavaScript file_ `./node_modules/.bin/suitest`.
 3. _Application parameters_ `interactive --debug-brk=[available port for debugger] ./node_modules/.bin/_mocha --no-timeouts --exit`.
 
+**VS code**
+Debug config can be like:
+```
+{
+    "type": "node",
+    "request": "launch",
+    "name": "Any config name",
+    "program": "${workspaceFolder}/demo/node_modules/.bin/suitest",
+    "args": [
+         "interactive",
+         "--debug-brk=9121",
+         "./node_modules/.bin/_mocha",
+         "--no-timeouts",
+         "--exit"
+    ],
+    "cwd": "${workspaceFolder}/demo",
+    "autoAttachChildProcesses": true
+}
+```
+
 # Debugging test with chrome devtools
 
 1. Run `npm run debug`.
