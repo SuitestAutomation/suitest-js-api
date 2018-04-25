@@ -37,6 +37,7 @@ declare namespace suitest {
 		releaseDevice(): Promise<void|SuitestError>;
 		startTest(name: string, options?: StartTestOptions): Promise<void|SuitestError>;
 		endTest(): Promise<void|SuitestError>;
+		configure(config: ConfigureOptions): Promise<void|SuitestError>;
 
 		// subjects
 		location(): LocationChain;
@@ -188,8 +189,13 @@ declare namespace suitest {
 	}
 
 	interface StartTestOptions {
-		clientTestId?: string
+		clientTestId?: string;
 		description?: string;
+	}
+
+	interface ConfigureOptions {
+		logLevel?: 'silent'|'normal'|'verbose'|'debug';
+		useSentry?: boolean;
 	}
 
 	interface ResponseError {
