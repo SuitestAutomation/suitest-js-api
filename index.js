@@ -9,6 +9,7 @@ const releaseDevice = require('./lib/commands/releaseDevice');
 const {setAppConfig} = require('./lib/commands/setAppConfig');
 const startTest = require('./lib/commands/startTest');
 const endTest = require('./lib/commands/endTest');
+const configure = require('./lib/commands/configure');
 
 // Chains
 const {openApp, openAppAssert} = require('./lib/chains/openAppChain');
@@ -58,6 +59,7 @@ class SUITEST_API {
 		this.pairDevice = pairDevice;
 		this.releaseDevice = releaseDevice;
 		this.setAppConfig = setAppConfig;
+		this.configure = configure;
 
 		this.openApp = openApp;
 		this.openUrl = openUrl;
