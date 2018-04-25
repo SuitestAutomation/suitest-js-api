@@ -9,6 +9,7 @@
   },
   "scripts": {
     "interactive": "suitest interactive mocha --no-timeouts --exit",
+    "debug": "suitest interactive --debug-brk=9121 ./node_modules/.bin/_mocha --no-timeouts --exit",
     "automated": "suitest automated mocha --no-timeouts --exit"
   }
 }
