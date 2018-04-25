@@ -11,7 +11,7 @@ with your values according to [documentation](https://suite.st/docs/suitest-api/
 
 **Webstorm**
 Create `Node.js` configuration where
-1. _Working directory_ `~/projects/suitest-js-api-github/demo`.
+1. _Working directory_ path to `/demo` folder.
 2. _JavaScript file_ `./node_modules/.bin/suitest`.
 3. _Application parameters_ `interactive --debug-brk=[available port for debugger] ./node_modules/.bin/_mocha --no-timeouts --exit`.
 
