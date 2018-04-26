@@ -13,7 +13,7 @@ with your values according to [documentation](https://suite.st/docs/suitest-api/
 Create `Node.js` configuration where
 1. _Working directory_ path to `/demo` folder.
 2. _JavaScript file_ `./node_modules/.bin/suitest`.
-3. _Application parameters_ `interactive --debug-brk=[available port for debugger] ./node_modules/.bin/_mocha --no-timeouts --exit`.
+3. _Application parameters_ `interactive --inspect-brk=[available port for debugger] ./node_modules/.bin/_mocha --no-timeouts --exit`.
 
 **VS code**
 Debug config can be like:
@@ -25,7 +25,7 @@ Debug config can be like:
     "program": "${workspaceFolder}/demo/node_modules/.bin/suitest",
     "args": [
          "interactive",
-         "--debug-brk=9121",
+         "--inspect-brk=9121",
          "./node_modules/.bin/_mocha",
          "--no-timeouts",
          "--exit"
