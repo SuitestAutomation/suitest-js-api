@@ -1,0 +1,15 @@
+export type ContentMode = {
+	SCALE_TO_FILL: symbol,
+	SCALE_ASPECT_FIT: symbol,
+	SCALE_ASPECT_FILL: symbol,
+	REDRAW: symbol,
+	CENTER: symbol,
+	TOP: symbol,
+	BOTTOM: symbol,
+	BOTTOM_LEFT: symbol,
+	BOTTOM_RIGHT: symbol,
+	LEFT: symbol,
+	RIGHT: symbol,
+	TOP_LEFT: symbol,
+	TOP_RIGHT: symbol,
+};

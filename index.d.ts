@@ -20,6 +20,10 @@ import {VideoState} from './typeDefinition/constants/VideoState';
 import {VisibilityState} from './typeDefinition/constants/VisibilityState';
 import {Keys} from './typeDefinition/constants/Keys';
 import {NetworkMethod, NetworkProp} from './typeDefinition/constants/NetworkRequest';
+import {ContentMode} from './typeDefinition/constants/ContentMode';
+import {State} from './typeDefinition/constants/State';
+import {TextAlignment} from './typeDefinition/constants/TextAlignment';
+import {BorderStyle} from './typeDefinition/constants/BorderStyle';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -67,6 +71,10 @@ declare namespace suitest {
 		VRC: VrcConstants;
 		VIDEO_STATE: VideoState;
 		VISIBILITY_STATE: VisibilityState;
+		CONTENT_MODE: ContentMode;
+		STATE: State;
+		TEXT_ALIGNMENT: TextAlignment;
+		BORDER_STYLE: BorderStyle;
 		KEY: Keys;
 		NETWORK_PROP: NetworkProp;
 		NETWORK_METHOD: NetworkMethod;
