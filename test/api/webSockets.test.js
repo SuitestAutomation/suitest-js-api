@@ -55,7 +55,7 @@ describe('webSockets', () => {
 		}
 
 		assert.ok(err, 'error');
-		assert.strictEqual(err.code, SuitestError.WS_ERROR, 'error code');
+		assert.strictEqual(err.code, SuitestError.UNKNOWN_ERROR, 'error code');
 	});
 
 	it('should throw error when send is called but ws is not connected', async() => {
@@ -98,8 +98,8 @@ describe('webSockets', () => {
 		await assertThrowsAsync(
 			webSockets.send.bind(webSockets, {test: 'test'}),
 			err => err instanceof SuitestError &&
-				err.code === SuitestError.WS_ERROR &&
-				err.message.endsWith('something went wrong.'),
+				err.code === SuitestError.UNKNOWN_ERROR &&
+				err.message.endsWith('something went wrong'),
 		);
 
 		testServer.respondWithContent(undefined);
