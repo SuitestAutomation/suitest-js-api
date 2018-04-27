@@ -34,7 +34,7 @@ const {ELEMENT_PROP, VALUE} = require('./lib/constants/element');
 const {PROP_COMPARATOR} = require('./lib/constants/comparator');
 const VIDEO_STATE = require('./lib/constants/videoState');
 const CONTENT_MODE = require('./lib/constants/contentMode');
-const STATE = require('./lib/constants/state');
+const ELEMENT_STATE = require('./lib/constants/elementState');
 const TEXT_ALIGNMENT = require('./lib/constants/textAlignment');
 const BORDER_STYLE = require('./lib/constants/borderStyle');
 const VISIBILITY_STATE = require('./lib/constants/visibilityState');
@@ -88,7 +88,7 @@ class SUITEST_API {
 		this.VIDEO_STATE = VIDEO_STATE;
 		this.VISIBILITY_STATE = VISIBILITY_STATE;
 		this.CONTENT_MODE = CONTENT_MODE;
-		this.STATE = STATE;
+		this.ELEMENT_STATE = ELEMENT_STATE;
 		this.TEXT_ALIGNMENT = TEXT_ALIGNMENT;
 		this.BORDER_STYLE = BORDER_STYLE;
 		this.VRC = VRC;

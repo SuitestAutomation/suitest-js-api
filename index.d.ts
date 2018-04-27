@@ -21,7 +21,7 @@ import {VisibilityState} from './typeDefinition/constants/VisibilityState';
 import {Keys} from './typeDefinition/constants/Keys';
 import {NetworkMethod, NetworkProp} from './typeDefinition/constants/NetworkRequest';
 import {ContentMode} from './typeDefinition/constants/ContentMode';
-import {State} from './typeDefinition/constants/State';
+import {ElementState} from './typeDefinition/constants/State';
 import {TextAlignment} from './typeDefinition/constants/TextAlignment';
 import {BorderStyle} from './typeDefinition/constants/BorderStyle';
 
@@ -72,7 +72,7 @@ declare namespace suitest {
 		VIDEO_STATE: VideoState;
 		VISIBILITY_STATE: VisibilityState;
 		CONTENT_MODE: ContentMode;
-		STATE: State;
+		ELEMENT_STATE: ElementState;
 		TEXT_ALIGNMENT: TextAlignment;
 		BORDER_STYLE: BorderStyle;
 		KEY: Keys;
