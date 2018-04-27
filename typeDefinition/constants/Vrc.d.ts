@@ -68,4 +68,5 @@ export type VrcConstants = {
 	DPAD_UP                 : symbol,
 	VIEW                    : symbol,
 	HOME                    : symbol,
+	SELECT                  : symbol,
 };
