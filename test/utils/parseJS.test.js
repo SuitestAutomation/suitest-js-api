@@ -7,11 +7,11 @@ describe('parseJS util', () => {
 	});
 
 	it('should accept function and return it`s stringified version', () => {
-		const func = function(arg) {
+		const func = function (arg) {
 			return arg;
 		};
 
-		assert.strictEqual(parseJS(func), `(function(arg) {
+		assert.strictEqual(parseJS(func), `(function (arg) {
 			return arg;
 		})()`);
 
