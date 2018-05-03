@@ -1,4 +1,4 @@
-export type State = {
+export type ElementState = {
 	SELECTED: symbol,
 	HIGHLIGHTED: symbol,
 	DISABLED: symbol,

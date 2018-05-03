@@ -63,7 +63,7 @@ export type ElementPropTypes = {
 	BADGE_VALUE:                symbol,
 	BAR_TINT_COLOR:             symbol,
 	CONTENT_MODE:               symbol,
-	DATA_SIZE:                  symbol,
+	IMAGE_HASH:                  symbol,
 	FONT_NAME:                  symbol,
 	HAS_META_DATA:              symbol,
 	HAS_NAV_MARKERS:            symbol,
