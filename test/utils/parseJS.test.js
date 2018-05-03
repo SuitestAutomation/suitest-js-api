@@ -11,7 +11,7 @@ describe('parseJS util', () => {
 			return arg;
 		};
 
-		assert.strictEqual(parseJS(func), `(function (arg) {
+		assert.strictEqual(parseJS(func), `(function(arg) {
 			return arg;
 		})()`);
 
