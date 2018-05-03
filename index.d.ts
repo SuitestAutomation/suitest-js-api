@@ -35,7 +35,7 @@ declare namespace suitest {
 		setAppConfig(options: SetAppContextOptions): Promise<void|SuitestError>;
 		pairDevice(deviceId: string): Promise<DeviceData|SuitestError>;
 		releaseDevice(): Promise<void|SuitestError>;
-		startTest(name: string, options?: StartTestOptions): Promise<void|SuitestError>;
+		startTest(clientTestId: string, options?: StartTestOptions): Promise<void|SuitestError>;
 		endTest(): Promise<void|SuitestError>;
 		configure(config: ConfigureOptions): Promise<void|SuitestError>;
 
@@ -189,7 +189,7 @@ declare namespace suitest {
 	}
 
 	interface StartTestOptions {
-		clientTestId?: string;
+		name?: string;
 		description?: string;
 	}
 

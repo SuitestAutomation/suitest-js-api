@@ -88,6 +88,17 @@ describe('authContext', () => {
 		assert.ok(!authedReqObject, 'authed');
 	});
 
+	it('should throw exception in guest session context', async() => {
+		authContext.setContext(sessionConstants.GUEST, 'tokenId');
+
+		try {
+			await authContext.authorizeWsConnection({});
+			assert.ok(false, 'Exception should be thrown');
+		} catch (e) {
+			assert.ok(true, 'error');
+		}
+	});
+
 	after(() => {
 		authContext.setContext(sessionConstants.GUEST);
 	});
