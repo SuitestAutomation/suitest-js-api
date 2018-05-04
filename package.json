@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "ajv": "^6.1.1",
+    "ansi-regex": "^3.0.0",
     "colors": "^1.1.2",
     "node-fetch": "^2.0.0",
     "ramda": "^0.25.0",
