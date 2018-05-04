@@ -21,7 +21,7 @@ import {VisibilityState} from './typeDefinition/constants/VisibilityState';
 import {Keys} from './typeDefinition/constants/Keys';
 import {NetworkMethod, NetworkProp} from './typeDefinition/constants/NetworkRequest';
 import {ContentMode} from './typeDefinition/constants/ContentMode';
-import {ElementState} from './typeDefinition/constants/State';
+import {ElementState} from './typeDefinition/constants/ElementState';
 import {TextAlignment} from './typeDefinition/constants/TextAlignment';
 import {BorderStyle} from './typeDefinition/constants/BorderStyle';
 
