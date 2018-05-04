@@ -5,7 +5,11 @@ const {validate, validators} = require('../lib/validataion');
 const {invalidConfigObj} = require('../lib/texts');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
-const overridableFields = ['logLevel', 'useSentry'];
+const overridableFields = [
+	'logLevel', 'useSentry',
+	'tokenKey', 'tokenPassword', 'testPackId',
+	'username', 'password', 'orgId', 'deviceId', 'appConfigId',
+];
 
 const main = {
 	apiUrl: 'https://the.suite.st/api/public/v2',
