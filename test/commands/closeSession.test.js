@@ -3,7 +3,7 @@ const nock = require('nock');
 
 const {authContext, appContext} = require('../../lib/context');
 const sessionConstants = require('../../lib/constants/session');
-const closeSession = require('../../lib/commands/closeSession');
+const {closeSession} = require('../../lib/commands/closeSession');
 const endpoints = require('../../lib/api/endpoints');
 const SuitestError = require('../../lib/utils/SuitestError');
 const envVars = require('../../lib/constants/enviroment');

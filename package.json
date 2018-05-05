@@ -1,6 +1,6 @@
 {
   "name": "suitest-js-api",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "main": "index.js",
   "repository": "git@github.com:SuitestAutomation/suitest-js-api.git",
   "author": "Suitest <hello@suite.st>",
@@ -59,6 +59,7 @@
   },
   "dependencies": {
     "ajv": "^6.1.1",
+    "ansi-regex": "^3.0.0",
     "colors": "^1.1.2",
     "node-fetch": "^2.0.0",
     "ramda": "^0.25.0",
