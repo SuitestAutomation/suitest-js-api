@@ -1,6 +1,8 @@
 # Suitest JavaScript API
 
-![ci-status](https://circleci.com/gh/SuitestAutomation/suitest-js-api.svg?style=shield&circle-token=4aced774267b69829bea6d617c873c40010b1a8b)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/SuitestAutomation/suitest-js-api/blob/latest/LICENSE)
+[![npm version](https://img.shields.io/npm/v/suitest-js-api.svg?style=flat)](https://www.npmjs.com/package/suitest-js-api)
+[![CircleCI](https://circleci.com/gh/SuitestAutomation/suitest-js-api/tree/latest.svg?style=shield)](https://circleci.com/gh/SuitestAutomation/suitest-js-api/tree/latest)
 
 [Suitest](https://suite.st) is a test automation and device manipulation tool
 for living room devices and web browsers. 

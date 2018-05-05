@@ -2,8 +2,8 @@ require('./lib/utils/sentry/Raven');
 
 // Commands
 const {openSession} = require('./lib/commands/openSession');
-const closeSession = require('./lib/commands/closeSession');
-const startTestPack = require('./lib/commands/startTestPack');
+const {closeSession} = require('./lib/commands/closeSession');
+const {startTestPack} = require('./lib/commands/startTestPack');
 const {pairDevice} = require('./lib/commands/pairDevice');
 const releaseDevice = require('./lib/commands/releaseDevice');
 const {setAppConfig} = require('./lib/commands/setAppConfig');

@@ -18,6 +18,34 @@ describe('launcherLoggerHelper', () => {
 		sep.restore();
 	});
 
+	it('should call mkdirSync and throw conrrect errors', () => {
+		const mkDir = sinon.stub(fs, 'mkdirSync').callsFake((p) => {
+			const err = new Error('');
+
+			if (p.includes('protectedPath1')) {
+				err.code = 'EACCES';
+				throw err;
+			} else if (p.includes('protectedPath2')) {
+				err.code = 'ANY';
+				throw err;
+			}
+		});
+		const sep = sinon.stub(path, 'sep').value('/');
+
+		mkDirByPathSync('./path1/path2');
+
+		assert.throws(mkDirByPathSync.bind(null, './protectedPath2'), (err) => {
+			return err.type === 'SuitestError'
+				&& err.message.includes('Unknown error');
+		}, 'error handler handle error');
+		assert.throws(mkDirByPathSync.bind(null, './protectedPath1'), (err) => {
+			return err.type === 'SuitestError'
+				&& err.message.includes('Permission');
+		}, 'error handler handle permission error');
+		fs.mkdirSync.restore();
+		sep.restore();
+	});
+
 	it('should call unlinkSync', () => {
 		sinon.stub(fs, 'existsSync').callsFake((path) => {
 			return path.startsWith('path1/path2');
@@ -50,6 +78,40 @@ describe('launcherLoggerHelper', () => {
 		createWriteStream('path1/path2', '1');
 
 		assert.ok(unlinkSync.called === false, 'unlinkSync called 0 time');
+		fs.existsSync.restore();
+		fs.unlinkSync.restore();
+		fs.createWriteStream.restore();
+	});
+
+	it('should throw correct error if EACCES', () => {
+		sinon.stub(fs, 'existsSync').callsFake(() => {
+			return false;
+		});
+		const unlinkSync = sinon.stub(fs, 'unlinkSync');
+		let errHandler = null;
+		let streamEvent = null;
+
+		sinon.stub(fs, 'createWriteStream').callsFake(() => {
+			return {on: (event, handler) => {
+				streamEvent = event;
+				errHandler = handler;
+			}};
+		});
+
+		createWriteStream('path1/path2', '1');
+
+		assert.ok(unlinkSync.called === false, 'unlinkSync called 0 time');
+		assert.equal(streamEvent, 'error', 'error handler attached');
+		assert.equal(typeof errHandler, 'function', 'error handler is function');
+		assert.throws(errHandler.bind(null, {code: 'EACCES'}), (err) => {
+			return err.type === 'SuitestError'
+				&& err.message.includes('path1/path2')
+				&& err.message.includes('Permission');
+		}, 'error handler handle EACCES');
+		assert.throws(errHandler.bind(null, {code: 'ANY'}), (err) => {
+			return err.type === 'SuitestError'
+				&& err.message.includes('Unknown error');
+		}, 'error handler handle error');
 		fs.existsSync.restore();
 		fs.unlinkSync.restore();
 		fs.createWriteStream.restore();

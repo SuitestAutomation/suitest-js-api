@@ -5,7 +5,7 @@ describe('My super cool test', () => {
 	before(async() => {
 		try {
 			// Start test
-			await suitest.startTest('My super cool test');
+			await suitest.startTest('my-super-cool-test');
 		} catch (e) {
 			console.error(e);
 			// Mocha wouldn't stop if just throw an error here

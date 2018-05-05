@@ -26,19 +26,21 @@ describe('startTest', () => {
 	});
 
 	it('should not allow startTest with invalid input', async() => {
-		await testInputErrorAsync(startTest, [1, {}]);
+		await testInputErrorAsync(startTest, []);
+		await testInputErrorAsync(startTest, [1]);
+		await testInputErrorAsync(startTest, [null, {}]);
 	});
 
 	it('should not allow startTest command in guest, access token contexts', async() => {
 		try {
-			await startTest('testName', {});
+			await startTest('clientTestId');
 		} catch (error) {
 			assert.ok(error, 'error');
 			assert.strictEqual(error.code, SuitestError.AUTH_NOT_ALLOWED, 'error code');
 		}
 		authContext.setContext(sessionConstants.ACCESS_TOKEN, 'tokenId', 'tokenPass');
 		try {
-			await startTest('testName', {});
+			await startTest('clientTestId');
 		} catch (error) {
 			assert.ok(error, 'error');
 			assert.strictEqual(error.code, SuitestError.AUTH_NOT_ALLOWED, 'error code');
@@ -47,8 +49,9 @@ describe('startTest', () => {
 
 	it('should allow startTest in automated session context, set correct test context', async() => {
 		const newTest = {
-			name: 'testName',
 			clientTestId: 'clientTestId',
+			name: 'name',
+			description: 'description',
 		};
 
 		authContext.setContext(sessionConstants.AUTOMATED, 'tokenId');
@@ -58,10 +61,10 @@ describe('startTest', () => {
 		await webSockets.connect(authedWsConnect);
 
 		try {
-			const res = await startTest(newTest.name, {clientTestId: newTest.clientTestId});
+			const res = await startTest(newTest.clientTestId, newTest);
 
 			assert.ok(!res, 'response void');
-			assert.deepEqual(newTest, testContext.context, 'response void');
+			assert.deepEqual(newTest, testContext.context, 'testContext');
 		} catch (error) {
 			assert.ok(!error, 'error');
 		}
@@ -69,23 +72,12 @@ describe('startTest', () => {
 		authContext.setContext(sessionConstants.INTERACTIVE, 'tokenId');
 
 		try {
-			const res = await startTest(newTest.name, {clientTestId: newTest.clientTestId});
+			const res = await startTest(newTest.clientTestId, newTest);
 
 			assert.ok(!res, 'response void');
-			assert.deepEqual(newTest, testContext.context, 'response void');
+			assert.deepEqual(newTest, testContext.context, 'testContext');
 		} catch (error) {
 			assert.ok(!error, 'error');
-		}
-	});
-
-	it('Exception should be thrown in guest session context', async() => {
-		authContext.setContext(sessionConstants.GUEST, 'tokenId');
-
-		try {
-			await authContext.authorizeWsConnection({});
-			assert.ok(false, 'Exception should be thrown');
-		} catch (e) {
-			assert.ok(true, 'error');
 		}
 	});
 });
