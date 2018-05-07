@@ -5,10 +5,12 @@ const {validate, validators} = require('../lib/validataion');
 const {invalidConfigObj} = require('../lib/texts');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
-const overridableFields = [
-	'logLevel', 'useSentry',
-	'tokenKey', 'tokenPassword', 'testPackId',
-	'username', 'password', 'orgId', 'deviceId', 'appConfigId',
+
+const overridableConfigFields = ['logLevel', 'useSentry'];
+const overridableLauncherFields = [
+	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
+	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
+	'logDir', // launcher common
 ];
 
 const main = {
@@ -30,24 +32,29 @@ const test = {
 Object.freeze(main);
 Object.freeze(test);
 
-const config = {...(global._suitestTesting ? test : main)};
+const rcConfig = readRcConfig();
+
+const config = {
+	...(global._suitestTesting ? test : main),
+	...validate(validators.CONFIGURE, pick(overridableConfigFields, rcConfig), invalidConfigObj()),
+};
+
+const launcherParams = pick(overridableLauncherFields, rcConfig);
 
 /**
  * Override config object
  * @param {Object} overrideObj
  */
 function override(overrideObj = {}) {
-	const _overrideObj = pick(overridableFields, overrideObj);
+	const _overrideObj = pick(overridableConfigFields, overrideObj);
 
 	validate(validators.CONFIGURE, _overrideObj, invalidConfigObj());
 
 	Object.assign(config, _overrideObj);
 }
 
-// override lib config with user config from .suitestrc
-override(readRcConfig());
-
 module.exports = {
 	config,
+	launcherParams,
 	override,
 };
