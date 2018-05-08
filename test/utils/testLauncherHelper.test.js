@@ -3,10 +3,12 @@ const sinon = require('sinon');
 const path = require('path');
 const fs = require('fs');
 const spawn = require('child_process').spawn;
+const validation = require('../../lib/validataion');
 
 const SuitestError = require('../../lib/utils/SuitestError');
-const {launcherLogger} = require('../../lib/testLauncher/launcherLogger');
+const {snippets: log, launcherLogger} = require('../../lib/testLauncher/launcherLogger');
 const testLauncherHelper = require('../../lib/utils/testLauncherHelper');
+const launcherLoggerHelper = require('../../lib/utils/launcherLoggerHelper');
 
 describe('testLauncherHelper util', () => {
 	const rcFilePath = path.resolve(process.cwd(), '.suitestrc');
@@ -103,5 +105,50 @@ describe('testLauncherHelper util', () => {
 		child.stderr.on('data', err => {
 			assert.strictEqual(err.toString(), 'testError');
 		});
+	});
+
+	it('should validateInput correctly', () => {
+		const validate = sinon.stub(validation, 'validate');
+		const argsValidationError = sinon.stub(log, 'argsValidationError');
+
+		testLauncherHelper.validateInput('AUTOMATED', {});
+		assert.equal(validation.validate.firstCall.args[0], validation.validators.TEST_LAUNCHER_AUTOMATED);
+		assert.deepEqual(validation.validate.firstCall.args[1], {});
+		assert.equal(validation.validate.firstCall.args[2], 'provided for \'suitest automated\' command. It');
+		assert.ok(!process.exit.called, 'exit not called');
+		validate.restore();
+		testLauncherHelper.validateInput('AUTOMATED', {});
+		assert.ok(argsValidationError.firstCall.args[0].message.includes('Invalid input'));
+		assert.ok(process.exit.calledWith(1), 'exit called with 1');
+		argsValidationError.restore();
+	});
+
+	it('should writeLogs create dir and stream correctly', () => {
+		const createWriteStream = sinon.stub(launcherLoggerHelper, 'createWriteStream').callsFake((path, id) => {
+			if (id === '2') {
+				throw new SuitestError('err');
+			} else if (id === '3') {
+				throw new Error('err');
+			}
+		});
+		const mkDirByPathSync = sinon.stub(launcherLoggerHelper, 'mkDirByPathSync');
+		const _ = sinon.stub(launcherLogger, '_');
+
+		testLauncherHelper.writeLogs('1', ['a', 'red'], './fake/path');
+
+		assert.deepEqual(createWriteStream.firstCall.args, ['./fake/path', '1'], 'createWriteStream called with right args');
+		assert.equal(mkDirByPathSync.firstCall.args[0], './fake/path', 'mkDirByPathSync called with right args');
+		assert.ok(_.called, 'log called');
+
+		testLauncherHelper.writeLogs('2', ['a', 'red'], './fake/path');
+		assert.ok(process.exit.calledWith(1), 'proccess exit called with 1');
+
+		testLauncherHelper.writeLogs('3', ['a', 'red'], './fake/path');
+		assert.ok(process.exit.calledWith(1), 'proccess exit called with 1');
+		assert.equal(launcherLogger._err.secondCall.args[1], '3', '_err called with right deviceId');
+		_.restore();
+
+		createWriteStream.restore();
+		mkDirByPathSync.restore();
 	});
 });
