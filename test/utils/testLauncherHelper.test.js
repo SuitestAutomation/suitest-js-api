@@ -50,13 +50,13 @@ describe('testLauncherHelper util', () => {
 	});
 
 	it('should return empty object if config file not found', () => {
-		assert.deepEqual(testLauncherHelper.readLauncherConfig(), {}, 'empty object');
+		assert.deepEqual(testLauncherHelper.readRcConfig(), {}, 'empty object');
 	});
 
 	it('should find and read rc file', () => {
 		fs.writeFileSync(rcFilePath, '{"test": "test"}');
 
-		const config = testLauncherHelper.readLauncherConfig();
+		const config = testLauncherHelper.readRcConfig();
 
 		assert.deepEqual(config, {
 			test: 'test',
@@ -66,7 +66,7 @@ describe('testLauncherHelper util', () => {
 		assert.strictEqual('_' in config, false, 'cli arges not included');
 
 		fs.writeFileSync(rcFilePath, 'test = test');
-		assert.strictEqual(testLauncherHelper.readLauncherConfig().test, 'test', 'correct ini');
+		assert.strictEqual(testLauncherHelper.readRcConfig().test, 'test', 'correct ini');
 
 		// remove test file
 		fs.unlinkSync(rcFilePath);
@@ -75,7 +75,7 @@ describe('testLauncherHelper util', () => {
 	it('should throw error in case of invalid rc json', () => {
 		// add test rc file
 		fs.writeFileSync(rcFilePath, '{invalid: undefined}');
-		assert.throws(() => testLauncherHelper.readLauncherConfig(), /Error/);
+		assert.throws(() => testLauncherHelper.readRcConfig(), /Error/);
 		// remove test rc file
 		fs.unlinkSync(rcFilePath);
 	});

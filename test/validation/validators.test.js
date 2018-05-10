@@ -4,8 +4,8 @@ const {
 	validateNonEmptyStringOrUndefined,
 	validateArrayOfSymbols,
 } = require('../../lib/validataion/validators');
-const {ELEMENT_PROP} = require('../../lib/constants/element');
 const {validate, validators} = require('../../lib/validataion');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('validators', () => {
 	it('should validate positive number', () => {
@@ -38,5 +38,11 @@ describe('validators', () => {
 		assert.ok(validateArrayOfSymbols([Symbol(1), Symbol(2)]));
 		assert.throws(() => validateArrayOfSymbols(Symbol(1)), /Error/);
 		assert.throws(() => validateArrayOfSymbols([1, 2]), /Error/);
+	});
+
+	it('should throw correct error message', () => {
+		testInputErrorSync(validate, [validators.CONFIGURE, {useSentry: 'false'}], {
+			message: 'Invalid input \'useSentry\' should be boolean.',
+		}, 'invalid configuration object');
 	});
 });
