@@ -19,7 +19,7 @@ describe('SuitestError', () => {
 	it('should have suitest identifier', () => {
 		const err = new SuitestError('test', SuitestError.AUTH_NOT_ALLOWED);
 
-		assert.strictEqual(err.type, 'SuitestError', 'suitest error type');
+		assert.strictEqual(err.name, SuitestError.name, 'suitest error type');
 	});
 
 	it('should have source prop', () => {

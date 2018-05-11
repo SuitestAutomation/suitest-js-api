@@ -3,6 +3,7 @@ const sinon = require('sinon');
 const {mkDirByPathSync, createWriteStream} = require('../../lib/utils/launcherLoggerHelper');
 const fs = require('fs');
 const path = require('path');
+const SuitestError = require('../../lib/utils/SuitestError');
 
 describe('launcherLoggerHelper', () => {
 	it('should call mkdirSync with proper arg', () => {
@@ -35,11 +36,11 @@ describe('launcherLoggerHelper', () => {
 		mkDirByPathSync('./path1/path2');
 
 		assert.throws(mkDirByPathSync.bind(null, './protectedPath2'), (err) => {
-			return err.type === 'SuitestError'
+			return err.name === SuitestError.name
 				&& err.message.includes('Unknown error');
 		}, 'error handler handle error');
 		assert.throws(mkDirByPathSync.bind(null, './protectedPath1'), (err) => {
-			return err.type === 'SuitestError'
+			return err.name === SuitestError.name
 				&& err.message.includes('Permission');
 		}, 'error handler handle permission error');
 		fs.mkdirSync.restore();
@@ -104,12 +105,12 @@ describe('launcherLoggerHelper', () => {
 		assert.equal(streamEvent, 'error', 'error handler attached');
 		assert.equal(typeof errHandler, 'function', 'error handler is function');
 		assert.throws(errHandler.bind(null, {code: 'EACCES'}), (err) => {
-			return err.type === 'SuitestError'
+			return err.name === SuitestError.name
 				&& err.message.includes('path1/path2')
 				&& err.message.includes('Permission');
 		}, 'error handler handle EACCES');
 		assert.throws(errHandler.bind(null, {code: 'ANY'}), (err) => {
-			return err.type === 'SuitestError'
+			return err.name === SuitestError.name
 				&& err.message.includes('Unknown error');
 		}, 'error handler handle error');
 		fs.existsSync.restore();
