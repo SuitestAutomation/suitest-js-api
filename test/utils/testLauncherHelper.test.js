@@ -9,14 +9,9 @@ const SuitestError = require('../../lib/utils/SuitestError');
 const {snippets: log, launcherLogger} = require('../../lib/testLauncher/launcherLogger');
 const testLauncherHelper = require('../../lib/utils/testLauncherHelper');
 const launcherLoggerHelper = require('../../lib/utils/launcherLoggerHelper');
-const raven = require('../../lib/utils/sentry/Raven');
 
 describe('testLauncherHelper util', () => {
 	const rcFilePath = path.resolve(process.cwd(), '.suitestrc');
-
-	before(() => {
-		sinon.stub(raven, 'captureException').resolves();
-	});
 
 	beforeEach(() => {
 		sinon.stub(process, 'exit');
@@ -28,22 +23,18 @@ describe('testLauncherHelper util', () => {
 		launcherLogger._err.restore();
 	});
 
-	after(() => {
-		raven.captureException.restore();
-	});
-
-	it('should handle launcher error', async() => {
+	it('should handle launcher error', () => {
 		const err = new Error();
 
-		await testLauncherHelper.handleLauncherError(err);
+		testLauncherHelper.handleLauncherError(err);
 		assert(process.exit.calledWith(1));
 		assert(launcherLogger._err.called);
 	});
 
-	it('should handle launcher SuitestError', async() => {
+	it('should handle launcher SuitestError', () => {
 		const err = new SuitestError();
 
-		await testLauncherHelper.handleLauncherError(err);
+		testLauncherHelper.handleLauncherError(err);
 		assert(process.exit.calledWith(1));
 		assert(launcherLogger._err.called);
 	});

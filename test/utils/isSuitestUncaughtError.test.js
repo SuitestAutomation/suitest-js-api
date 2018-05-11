@@ -1,12 +1,12 @@
 const assert = require('assert');
 const isSuitestUncaughtError = require('../../lib/utils/sentry/isSuitestUncaughtError');
-const {API_CONSTRUCTOR_NAME, API_LIB_PATH_IDENTIFIERS} = require('../../lib/constants');
+const {API_CONSTRUCTOR_NAME, API_LIB_PATH_IDENTIFIERS, ASSERTION_ERROR_TYPE} = require('../../lib/constants');
 const SuitestError = require('../../lib/utils/SuitestError');
 
 describe('isSuitestUncaughtError util', () => {
 	it('should check non SuitestError with no footprints in stacktrace', () => {
 		assert.strictEqual(isSuitestUncaughtError({
-			name: 'TypeError',
+			type: 'TypeError',
 			stacktrace: {
 				frames: [{filename: 'someFunctionName'}],
 			},
@@ -15,13 +15,13 @@ describe('isSuitestUncaughtError util', () => {
 
 	it('should check non SuitestError with some footprints in stacktrace', () => {
 		assert.strictEqual(isSuitestUncaughtError({
-			name: 'TypeError',
+			type: 'TypeError',
 			stacktrace: {
 				frames: [{filename: API_CONSTRUCTOR_NAME + '.openSession'}],
 			},
 		}), true, 'true');
 		assert.strictEqual(isSuitestUncaughtError({
-			name: 'TypeError',
+			type: 'TypeError',
 			stacktrace: {
 				frames: [{filename: API_LIB_PATH_IDENTIFIERS[2]}],
 			},
@@ -30,7 +30,7 @@ describe('isSuitestUncaughtError util', () => {
 
 	it('should check SuitestError', () => {
 		assert.strictEqual(isSuitestUncaughtError({
-			name: SuitestError.name,
+			type: SuitestError.type,
 			stacktrace: {
 				frames: [],
 			},
@@ -39,7 +39,7 @@ describe('isSuitestUncaughtError util', () => {
 
 	it('should check AssertionError', () => {
 		assert.strictEqual(isSuitestUncaughtError({
-			name: assert.AssertionError.name,
+			type: ASSERTION_ERROR_TYPE,
 			stacktrace: {
 				frames: [],
 			},
