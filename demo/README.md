@@ -35,7 +35,13 @@ Debug config can be like:
 }
 ```
 
-# Debugging test with chrome devtools
+*In case of windows `node_modules/.bin` folder contains executable files
+ that are not javaScript programs so they cannot be launched with `node`
+ interpreter instead one can use direct path to javaScript file, e.g. 
+ `node_modules/suitest-js-api/lib/testLauncher/index.js` and in case of 
+ `mocha` `node_modules/mocha/bin/_mocha`  
+
+# Debugging tests with chrome devtools
 
 1. Run `npm run debug`.
 2. Open `http://localhost:[port]/json/list`.
