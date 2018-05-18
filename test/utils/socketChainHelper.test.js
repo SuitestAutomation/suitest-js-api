@@ -47,7 +47,7 @@ describe('socket chain helpers', () => {
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
 			contentType: 'eval',
 			result: 'fail',
-			errorType: 'queryFailed_condition',
+			errorType: 'queryFailed',
 		}), false, 'eval fail');
 		// test line
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
@@ -62,7 +62,7 @@ describe('socket chain helpers', () => {
 		assert.throws(() => helpers.processServerResponse(emptyString)({
 			contentType: 'testLine',
 			result: 'fail',
-			errorType: 'queryFailed_condition',
+			errorType: 'queryFailed',
 			errors: {},
 		}), assert.AssertionError, 'testLine fail');
 		// all other
