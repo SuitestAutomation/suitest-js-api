@@ -100,6 +100,10 @@ describe('Match Repo Composer', () => {
 		testInputErrorSync(chain.matchRepo, [ELEMENT_PROP.LEFT, '>']);
 		testInputErrorSync(chain.matchRepo, [ELEMENT_PROP.LEFT, Symbol('>')]);
 		testInputErrorSync(chain.matchRepo, [ELEMENT_PROP.LEFT, PROP_COMPARATOR.APPROX, '20']);
+		testInputErrorSync(chain.matchRepo, [{
+			name: ELEMENT_PROP.LEFT,
+			val: 123,
+		}]);
 	});
 
 	it('should accept object with single property as object', () => {

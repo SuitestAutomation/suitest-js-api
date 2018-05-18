@@ -32,7 +32,7 @@ describe('Video chain', () => {
 	});
 
 	it('should have only allowed modifiers after match is applied', () => {
-		const chain = video().match(ELEMENT_PROP.ID);
+		const chain = video().match(ELEMENT_PROP.ID, 'someId');
 
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
@@ -65,7 +65,7 @@ describe('Video chain', () => {
 			'Check if video element matches JavaScript expression'
 		);
 		assert.equal(
-			video().matches(ELEMENT_PROP.ID).toString(),
+			video().matches(ELEMENT_PROP.ID, 'someId').toString(),
 			'Check if video element has defined properties'
 		);
 	});
