@@ -164,4 +164,25 @@ describe('socket chain helpers', () => {
 				err.expected === `height: 100${EOL}width: 200`
 		);
 	});
+
+	it('getGeneralErrorMessage should return proper error message', () => {
+		assert.equal(helpers.getGeneralErrorMessage({
+			result: {
+				errorType: 'deviceError',
+				message: {
+					info: {
+						reason: {
+							code: 'videoAdapterInvalidOutput',
+							message: 'message',
+						},
+					},
+				},
+			},
+		}), 'Video adapter error: message', 'video adapter error');
+		assert.equal(helpers.getGeneralErrorMessage({
+			errorType: 'errorType',
+			error: 'error',
+		}), 'errorType', 'errorType');
+		assert.equal(helpers.getGeneralErrorMessage({error: 'error'}), 'error', 'error');
+	});
 });
