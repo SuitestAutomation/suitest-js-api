@@ -138,7 +138,7 @@ export declare namespace WindowModifiers {
 
 export type PropertyValue = string | number | symbol;
 export type PropertyObjectDefinition = {
-	name: symbol | string,
+	name: PropNameType,
 	val?: PropertyValue,
 	type?: symbol,
 	deviation?: number
@@ -150,7 +150,7 @@ export type PropertyRepoObjectDefinition = {
 };
 
 type PropertyDefinitionType = Array<symbol | string | PropertyObjectDefinition>;
-type PropNameType = symbol | string;
+type PropNameType = symbol;
 
 
 export interface ElementMatchModifiers<T> {
