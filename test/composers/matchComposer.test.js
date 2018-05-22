@@ -35,14 +35,15 @@ describe('Match Composer', () => {
 	});
 
 	it('should accept single property spread to arguments', () => {
-		const data = {};
+		// suitest.element('some name')
+		const data = {selector: {apiId: 'some name'}};
 		const chain = {};
 		const makeChain = sinon.spy();
 
 		Object.defineProperties(chain, matchComposer(data, chain, makeChain));
 
 		chain.match(ELEMENT_PROP.WIDTH);
-		assert.deepStrictEqual(makeChain.lastCall.args[0], {
+		assert.deepEqual(makeChain.lastCall.args[0], {
 			comparator: {
 				type: SUBJ_COMPARATOR.MATCH,
 				props: [
@@ -54,6 +55,7 @@ describe('Match Composer', () => {
 					},
 				],
 			},
+			selector: {apiId: 'some name'},
 		});
 
 		chain.match(ELEMENT_PROP.HEIGHT, 500);
@@ -69,6 +71,7 @@ describe('Match Composer', () => {
 					},
 				],
 			},
+			selector: {apiId: 'some name'},
 		});
 
 		chain.match(ELEMENT_PROP.TOP, 500, PROP_COMPARATOR.GREATER);
@@ -84,6 +87,7 @@ describe('Match Composer', () => {
 					},
 				],
 			},
+			selector: {apiId: 'some name'},
 		});
 
 		chain.match(ELEMENT_PROP.LEFT, 500, PROP_COMPARATOR.APPROX, 20);
@@ -99,6 +103,7 @@ describe('Match Composer', () => {
 					},
 				],
 			},
+			selector: {apiId: 'some name'},
 		});
 
 		// Valid
@@ -124,6 +129,12 @@ describe('Match Composer', () => {
 		testInputErrorSync(chain.match, [ELEMENT_PROP.LEFT, 500, PROP_COMPARATOR.APPROX, '20']);
 		testInputErrorSync(chain.match, [ELEMENT_PROP.LEFT, '10']);
 		testInputErrorSync(chain.match, [ELEMENT_PROP.BG_COLOR, 10]);
+		testInputErrorSync(chain.match, [ELEMENT_PROP.BG_COLOR, VALUE.REPO]);
+		testInputErrorSync(chain.match, [ELEMENT_PROP.BG_COLOR, VALUE.REPO]);
+		testInputErrorSync(chain.match, [{
+			name: ELEMENT_PROP.BG_COLOR,
+			val: VALUE.REPO,
+		}]);
 	});
 
 	it('should accept object with single property as object', () => {
@@ -194,7 +205,7 @@ describe('Match Composer', () => {
 	});
 
 	it('should accept array of property definitions as a shortcut', () => {
-		const data = {};
+		const data = {selector: {apiId: 'some name'}};
 		const chain = {};
 		const makeChain = sinon.spy();
 
@@ -249,6 +260,7 @@ describe('Match Composer', () => {
 					},
 				],
 			},
+			selector: {apiId: 'some name'},
 		});
 	});
 });
