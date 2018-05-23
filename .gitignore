@@ -56,7 +56,5 @@ typings/
 # dotenv environment variables file
 .env
 
-demo/
-
 .idea
 .DS_Store
