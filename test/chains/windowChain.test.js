@@ -3,6 +3,7 @@ const {
 	window,
 	windowAssert,
 	toJSON,
+	methodToString,
 } = require('../../lib/chains/windowChain');
 
 function testAllowedModifiers(chain) {
@@ -119,6 +120,10 @@ describe('Window chain', () => {
 		assert.equal(window().acceptModal().toString(), 'Accept modal dialog');
 		assert.equal(window().acceptModal('text').toString(), 'Accept modal dialog with \'text\' message');
 		assert.equal(window().setSize(10, 20).toString(), 'Set browser window size to 10, 20');
+	});
+
+	it('should have methodToString', () => {
+		assert.ok(methodToString(), 'methodToString exists');
 	});
 
 	it('should generate correct socket message based on data', () => {

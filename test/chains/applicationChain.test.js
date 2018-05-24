@@ -6,6 +6,7 @@ const {
 	getComposers,
 	toString,
 	toJSON,
+	methodToString,
 } = require('../../lib/chains/applicationChain');
 const composers = require('../../lib/constants/composer');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
@@ -87,6 +88,10 @@ describe('Application chain', () => {
 
 	it('should convert to string with meaningful message', () => {
 		assert.equal(toString(), 'Application has exited');
+	});
+
+	it('should have methodToString', () => {
+		assert.ok(methodToString(), 'methodToString exists');
 	});
 
 	it('should generate correct socket message based on data', () => {

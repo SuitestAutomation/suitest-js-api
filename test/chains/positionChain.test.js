@@ -4,6 +4,7 @@ const {
 	position,
 	positionAssert,
 	toJSON,
+	methodToString,
 } = require('../../lib/chains/positionChain');
 
 describe('Position chain', () => {
@@ -90,6 +91,13 @@ describe('Position chain', () => {
 			position(1, 1).moveTo().toString(),
 			'Move cursor to 1, 1 position'
 		);
+	});
+
+	it('should have methodToString', () => {
+		assert.ok(methodToString({coordinates: {
+			x: 10,
+			y: 20,
+		}}), 'methodToString exists');
 	});
 
 	it('should throw error in case of invalid input', () => {

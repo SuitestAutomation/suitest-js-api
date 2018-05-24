@@ -5,6 +5,7 @@ const {
 	networkRequestAssert,
 	toJSON,
 	getComposers,
+	methodToString,
 } = require('../../lib/chains/networkRequestChain');
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
@@ -92,6 +93,10 @@ describe('Network request chain', () => {
 			}).willBeMade().toString(),
 			'Check if request matching defined parameters containing test in URL will be made during next 2000ms'
 		);
+	});
+
+	it('should have methodToString', () => {
+		assert.ok(methodToString(), 'methodToString exists');
 	});
 
 	it('should generate correct socket message based on data', () => {

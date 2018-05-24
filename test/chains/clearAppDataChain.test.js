@@ -5,6 +5,7 @@ const {
 	getComposers,
 	toString,
 	toJSON,
+	methodToString,
 } = require('../../lib/chains/clearAppDataChain');
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
@@ -51,6 +52,10 @@ describe('Clear app data chain', () => {
 
 	it('should convert to string with meaningful message', () => {
 		assert.equal(toString(), 'Clear app data');
+	});
+
+	it('should have methodToString', () => {
+		assert.ok(methodToString(), 'methodToString exists');
 	});
 
 	it('should define assert function', () => {

@@ -6,6 +6,7 @@ const {
 	getComposers,
 	toString,
 	toJSON,
+	methodToString,
 } = require('../../lib/chains/openAppChain');
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
@@ -55,6 +56,10 @@ describe('Open app chain', () => {
 	it('should convert to string with meaningful message', () => {
 		assert.equal(toString({}), 'Open app');
 		assert.equal(toString({relativeURL: '/test'}), 'Open app at /test');
+	});
+
+	it('should have methodToString', () => {
+		assert.ok(methodToString({}), 'methodToString exists');
 	});
 
 	it('should generate correct socket message based on data', () => {

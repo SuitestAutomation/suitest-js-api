@@ -4,6 +4,7 @@ const {
 	pressButton,
 	pressButtonAssert,
 	toJSON,
+	methodToString,
 } = require('../../lib/chains/pressButtonChain');
 const buttonTypes = require('../../lib/constants/vrc');
 const {VRC} = require('../../lib/mappings');
@@ -62,6 +63,10 @@ describe('Press button chain', () => {
 				.repeat(10).interval(2000).toString(),
 			'Press button BLUE 10 times every 2000ms'
 		);
+	});
+
+	it('should have methodToString', () => {
+		assert.ok(methodToString({ids: ['Up']}), 'methodToString exists');
 	});
 
 	it.skip('should engage execution on "then"', async() => {

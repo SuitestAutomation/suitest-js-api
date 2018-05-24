@@ -4,6 +4,7 @@ const {
 	element,
 	elementAssert,
 	toJSON,
+	methodToString,
 } = require('../../lib/chains/elementChain');
 const {VALUE, ELEMENT_PROP} = require('../../lib/constants/element');
 const {PROP_COMPARATOR, SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
@@ -180,6 +181,10 @@ describe('Element chain', () => {
 			element('element').sendText('text').repeat(10).interval(2000).toString(),
 			'Send text \'text\' to element element 10 times every 2000ms'
 		);
+	});
+
+	it('should have methodToString', () => {
+		assert.ok(methodToString(), 'methodToString exists');
 	});
 
 	it('should generate correct socket message based on data', () => {

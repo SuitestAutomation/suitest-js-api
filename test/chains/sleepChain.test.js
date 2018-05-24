@@ -5,6 +5,7 @@ const {
 	getComposers,
 	toString,
 	toJSON,
+	methodToString,
 } = require('../../lib/chains/sleepChain');
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
@@ -43,6 +44,10 @@ describe('Sleep chain', () => {
 
 	it('should convert to string with meaningful message', () => {
 		assert.equal(toString({milliseconds: 10}), 'Sleep for 10ms');
+	});
+
+	it('should have methodToString', () => {
+		assert.ok(methodToString({milliseconds: 10}), 'methodToString exists');
 	});
 
 	it('should generate correct socket message based on data', () => {

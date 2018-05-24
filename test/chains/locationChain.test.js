@@ -3,6 +3,7 @@ const {
 	location,
 	locationAssert,
 	toJSON,
+	methodToString,
 } = require('../../lib/chains/locationChain');
 const comparatorTypes = require('../../lib/constants/comparator');
 const {SUBJ_COMPARATOR} = require('../../lib/mappings');
@@ -121,6 +122,10 @@ describe('Location chain', () => {
 	it('should convert to string with meaningful message', () => {
 		assert.equal(location().toString(), 'Get current location');
 		assert.equal(location().equal('test').toString(), 'Check if current location equals test');
+	});
+
+	it('should have methodToString', () => {
+		assert.ok(methodToString(), 'methodToString exists');
 	});
 
 	it('should generate correct socket message based on data', () => {

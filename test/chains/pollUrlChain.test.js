@@ -5,6 +5,7 @@ const {
 	getComposers,
 	toString,
 	toJSON,
+	methodToString,
 } = require('../../lib/chains/pollUrlChain');
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
@@ -45,6 +46,10 @@ describe('Poll URL chain', () => {
 			url: 'url',
 			response: true,
 		}), 'Poll URL "url" every 500ms until response equals true');
+	});
+
+	it('should have methodToString', () => {
+		assert.ok(methodToString({url: ''}), 'methodToString exists');
 	});
 
 	it('should generate correct socket message based on data', () => {

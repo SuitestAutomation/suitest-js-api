@@ -4,6 +4,7 @@ const {
 	executeCommand,
 	executeCommandAssert,
 	toJSON,
+	methodToString,
 } = require('../../lib/chains/executeCommandChain');
 
 /**
@@ -34,6 +35,10 @@ describe('Execute command chain', () => {
 
 	it('should convert to string with meaningful message', () => {
 		assert.equal(executeCommand('1+1').toString(), 'Execute command');
+	});
+
+	it('should have methodToString', () => {
+		assert.ok(methodToString('1+1'), 'methodToString exists');
 	});
 
 	it.skip('should engage execution on "then"', async() => {

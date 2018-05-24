@@ -4,6 +4,7 @@ const {
 	jsExpression,
 	jsExpressionAssert,
 	toJSON,
+	methodToString,
 } = require('../../lib/chains/javascriptExpressionChain');
 const {SUBJ_COMPARATOR} = require('../../lib/mappings');
 const comparatorTypes = require('../../lib/constants/comparator');
@@ -108,6 +109,10 @@ describe('Location chain', () => {
 			jsExpression('1+1').doesNot().startWith('test').toString(),
 			'Check if JavaScript expression does not start with test'
 		);
+	});
+
+	it('should have methodToString', () => {
+		assert.ok(methodToString('1+1'), 'methodToString exists');
 	});
 
 	it('should generate correct socket message based on data', () => {
