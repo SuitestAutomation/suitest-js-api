@@ -4,7 +4,7 @@ const {
 	pressButton,
 	pressButtonAssert,
 	toJSON,
-	methodToString,
+	beforeSendMsg,
 } = require('../../lib/chains/pressButtonChain');
 const buttonTypes = require('../../lib/constants/vrc');
 const {VRC} = require('../../lib/mappings');
@@ -65,8 +65,8 @@ describe('Press button chain', () => {
 		);
 	});
 
-	it('should have methodToString', () => {
-		assert.ok(methodToString({ids: ['Up']}), 'methodToString exists');
+	it('should have beforeSendMsg', () => {
+		assert.ok(beforeSendMsg({ids: ['Up']}), 'beforeSendMsg exists');
 	});
 
 	it.skip('should engage execution on "then"', async() => {

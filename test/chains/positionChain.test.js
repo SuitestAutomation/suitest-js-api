@@ -4,7 +4,7 @@ const {
 	position,
 	positionAssert,
 	toJSON,
-	methodToString,
+	beforeSendMsg,
 } = require('../../lib/chains/positionChain');
 
 describe('Position chain', () => {
@@ -93,11 +93,11 @@ describe('Position chain', () => {
 		);
 	});
 
-	it('should have methodToString', () => {
-		assert.ok(methodToString({coordinates: {
+	it('should have beforeSendMsg', () => {
+		assert.ok(beforeSendMsg({coordinates: {
 			x: 10,
 			y: 20,
-		}}), 'methodToString exists');
+		}}), 'beforeSendMsg exists');
 	});
 
 	it('should throw error in case of invalid input', () => {

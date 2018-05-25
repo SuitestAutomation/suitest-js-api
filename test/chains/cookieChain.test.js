@@ -6,7 +6,7 @@ const {
 	getComposers,
 	toString,
 	toJSON,
-	methodToString,
+	beforeSendMsg,
 } = require('../../lib/chains/cookieChain');
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
@@ -102,8 +102,8 @@ describe('Cookie chain', () => {
 		}), 'Check if cookieName cookie equals test');
 	});
 
-	it('should have methodToString', () => {
-		assert.ok(methodToString({cookieName: 'cookieName'}), 'methodToString exists');
+	it('should have beforeSendMsg', () => {
+		assert.ok(beforeSendMsg({cookieName: 'cookieName'}), 'beforeSendMsg exists');
 	});
 
 	it('should generate correct socket message based on data', () => {

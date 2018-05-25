@@ -4,7 +4,7 @@ const {
 	jsExpression,
 	jsExpressionAssert,
 	toJSON,
-	methodToString,
+	beforeSendMsg,
 } = require('../../lib/chains/javascriptExpressionChain');
 const {SUBJ_COMPARATOR} = require('../../lib/mappings');
 const comparatorTypes = require('../../lib/constants/comparator');
@@ -111,8 +111,8 @@ describe('Location chain', () => {
 		);
 	});
 
-	it('should have methodToString', () => {
-		assert.ok(methodToString('1+1'), 'methodToString exists');
+	it('should have beforeSendMsg', () => {
+		assert.ok(beforeSendMsg('1+1'), 'beforeSendMsg exists');
 	});
 
 	it('should generate correct socket message based on data', () => {

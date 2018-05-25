@@ -4,7 +4,7 @@ const {
 	executeCommand,
 	executeCommandAssert,
 	toJSON,
-	methodToString,
+	beforeSendMsg,
 } = require('../../lib/chains/executeCommandChain');
 
 /**
@@ -37,8 +37,8 @@ describe('Execute command chain', () => {
 		assert.equal(executeCommand('1+1').toString(), 'Execute command');
 	});
 
-	it('should have methodToString', () => {
-		assert.ok(methodToString('1+1'), 'methodToString exists');
+	it('should have beforeSendMsg', () => {
+		assert.ok(beforeSendMsg('1+1'), 'beforeSendMsg exists');
 	});
 
 	it.skip('should engage execution on "then"', async() => {

@@ -4,7 +4,7 @@ const {
 	element,
 	elementAssert,
 	toJSON,
-	methodToString,
+	beforeSendMsg,
 } = require('../../lib/chains/elementChain');
 const {VALUE, ELEMENT_PROP} = require('../../lib/constants/element');
 const {PROP_COMPARATOR, SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
@@ -183,8 +183,8 @@ describe('Element chain', () => {
 		);
 	});
 
-	it('should have methodToString', () => {
-		assert.ok(methodToString(), 'methodToString exists');
+	it('should have beforeSendMsg', () => {
+		assert.ok(beforeSendMsg({selector: {}}), 'beforeSendMsg exists');
 	});
 
 	it('should generate correct socket message based on data', () => {

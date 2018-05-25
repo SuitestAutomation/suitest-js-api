@@ -3,7 +3,7 @@ const {
 	window,
 	windowAssert,
 	toJSON,
-	methodToString,
+	beforeSendMsg,
 } = require('../../lib/chains/windowChain');
 
 function testAllowedModifiers(chain) {
@@ -122,8 +122,8 @@ describe('Window chain', () => {
 		assert.equal(window().setSize(10, 20).toString(), 'Set browser window size to 10, 20');
 	});
 
-	it('should have methodToString', () => {
-		assert.ok(methodToString(), 'methodToString exists');
+	it('should have beforeSendMsg', () => {
+		assert.ok(beforeSendMsg({sendText: 'text'}), 'beforeSendMsg exists');
 	});
 
 	it('should generate correct socket message based on data', () => {

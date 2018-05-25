@@ -6,7 +6,7 @@ const {
 	getComposers,
 	toString,
 	toJSON,
-	methodToString,
+	beforeSendMsg,
 } = require('../../lib/chains/openUrlChain');
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
@@ -57,8 +57,8 @@ describe('Open URL chain', () => {
 		assert.equal(toString({absoluteURL: '/test'}), 'Open URL /test');
 	});
 
-	it('should have methodToString', () => {
-		assert.ok(methodToString({absoluteURL: '/'}), 'methodToString exists');
+	it('should have beforeSendMsg', () => {
+		assert.ok(beforeSendMsg({absoluteURL: '/'}), 'beforeSendMsg exists');
 	});
 
 	it('should generate correct socket message based on data', () => {
