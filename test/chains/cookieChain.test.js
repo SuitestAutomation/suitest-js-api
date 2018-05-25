@@ -72,7 +72,7 @@ describe('Cookie chain', () => {
 			isNegated: true,
 		})), [
 			...allCookieComposers.filter(c => c !== composers.NOT),
-		].sort(bySymbol), 'negated (not/doesNot) chain');
+		].sort(bySymbol), 'negated (not/doesNot/isNot) chain');
 
 		const chain = cookie('cookie');
 
