@@ -14,6 +14,7 @@ describe('Location chain', () => {
 
 		assert.strictEqual(typeof chain.not, 'function');
 		assert.strictEqual(typeof chain.doesNot, 'function');
+		assert.strictEqual(typeof chain.isNot, 'function');
 		assert.strictEqual(typeof chain.timeout, 'function');
 		assert.strictEqual(typeof chain.equal, 'function');
 		assert.strictEqual(typeof chain.equals, 'function');
@@ -40,6 +41,7 @@ describe('Location chain', () => {
 
 		assert.strictEqual(typeof chain.not, 'function');
 		assert.strictEqual(typeof chain.doesNot, 'function');
+		assert.strictEqual(typeof chain.isNot, 'function');
 		assert.strictEqual(typeof chain.timeout, 'function');
 		assert.strictEqual(typeof chain.equal, 'undefined');
 		assert.strictEqual(typeof chain.equals, 'undefined');
@@ -60,6 +62,7 @@ describe('Location chain', () => {
 
 		assert.strictEqual(typeof chain.not, 'function');
 		assert.strictEqual(typeof chain.doesNot, 'function');
+		assert.strictEqual(typeof chain.isNot, 'function');
 		assert.strictEqual(typeof chain.timeout, 'undefined');
 		assert.strictEqual(typeof chain.equal, 'function');
 		assert.strictEqual(typeof chain.equals, 'function');
@@ -80,6 +83,7 @@ describe('Location chain', () => {
 
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
 		assert.strictEqual(typeof chain.timeout, 'function');
 		assert.strictEqual(typeof chain.equal, 'function');
 		assert.strictEqual(typeof chain.equals, 'function');
