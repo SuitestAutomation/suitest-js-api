@@ -62,7 +62,6 @@
     "ansi-regex": "^3.0.0",
     "colors": "^1.1.2",
     "node-fetch": "^2.0.0",
-    "pluralize": "^7.0.0",
     "ramda": "^0.25.0",
     "raven": "^2.4.1",
     "rc": "^1.2.6",
