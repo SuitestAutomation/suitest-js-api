@@ -88,10 +88,7 @@ describe('Poll URL chain', () => {
 	});
 
 	it('should define assert function', () => {
-		const chain = pollUrlAssert({
-			url: 'url',
-			response: true,
-		});
+		const chain = pollUrlAssert('url', true);
 
 		assert.ok('toString' in chain);
 		assert.ok('then' in chain);
