@@ -11,6 +11,7 @@ const {
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
+const sinon = require('sinon');
 
 const allCookieComposers = [
 	composers.TO_STRING,
@@ -103,7 +104,11 @@ describe('Cookie chain', () => {
 	});
 
 	it('should have beforeSendMsg', () => {
-		assert.ok(beforeSendMsg({cookieName: 'cookieName'}), 'beforeSendMsg exists');
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg({cookieName: 'cookieName'});
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

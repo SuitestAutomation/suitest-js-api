@@ -9,6 +9,7 @@ const {
 } = require('../../lib/chains/clearAppDataChain');
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
+const sinon = require('sinon');
 
 describe('Clear app data chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -55,7 +56,11 @@ describe('Clear app data chain', () => {
 	});
 
 	it('should have beforeSendMsg', () => {
-		assert.ok(beforeSendMsg(), 'beforeSendMsg exists');
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg();
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should define assert function', () => {

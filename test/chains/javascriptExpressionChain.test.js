@@ -8,6 +8,7 @@ const {
 } = require('../../lib/chains/javascriptExpressionChain');
 const {SUBJ_COMPARATOR} = require('../../lib/mappings');
 const comparatorTypes = require('../../lib/constants/comparator');
+const sinon = require('sinon');
 
 describe('Location chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -112,7 +113,11 @@ describe('Location chain', () => {
 	});
 
 	it('should have beforeSendMsg', () => {
-		assert.ok(beforeSendMsg('1+1'), 'beforeSendMsg exists');
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg('1+1');
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

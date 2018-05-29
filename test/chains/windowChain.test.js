@@ -5,6 +5,7 @@ const {
 	toJSON,
 	beforeSendMsg,
 } = require('../../lib/chains/windowChain');
+const sinon = require('sinon');
 
 function testAllowedModifiers(chain) {
 	// general
@@ -123,7 +124,11 @@ describe('Window chain', () => {
 	});
 
 	it('should have beforeSendMsg', () => {
-		assert.ok(beforeSendMsg({sendText: 'text'}), 'beforeSendMsg exists');
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg({sendText: 'text'});
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

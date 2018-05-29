@@ -8,6 +8,7 @@ const {
 } = require('../../lib/chains/elementChain');
 const {VALUE, ELEMENT_PROP} = require('../../lib/constants/element');
 const {PROP_COMPARATOR, SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
+const sinon = require('sinon');
 
 describe('Element chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -184,7 +185,11 @@ describe('Element chain', () => {
 	});
 
 	it('should have beforeSendMsg', () => {
-		assert.ok(beforeSendMsg({selector: {}}), 'beforeSendMsg exists');
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg({selector: {}});
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

@@ -8,6 +8,7 @@ const {
 } = require('../../lib/chains/pressButtonChain');
 const buttonTypes = require('../../lib/constants/vrc');
 const {VRC} = require('../../lib/mappings');
+const sinon = require('sinon');
 
 describe('Press button chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -66,7 +67,11 @@ describe('Press button chain', () => {
 	});
 
 	it('should have beforeSendMsg', () => {
-		assert.ok(beforeSendMsg({ids: ['Up']}), 'beforeSendMsg exists');
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg({ids: ['Up']});
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it.skip('should engage execution on "then"', async() => {

@@ -6,6 +6,7 @@ const {
 	toJSON,
 	beforeSendMsg,
 } = require('../../lib/chains/positionChain');
+const sinon = require('sinon');
 
 describe('Position chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -94,10 +95,14 @@ describe('Position chain', () => {
 	});
 
 	it('should have beforeSendMsg', () => {
-		assert.ok(beforeSendMsg({coordinates: {
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg({coordinates: {
 			x: 10,
 			y: 20,
-		}}), 'beforeSendMsg exists');
+		}});
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should throw error in case of invalid input', () => {
