@@ -88,7 +88,7 @@ describe('Socket error messages', () => {
 		[
 			[basePayload('failedStart'), 'Chain description'],
 			[basePayload('missingApp'), 'Application is not installed on the device.'],
-			[basePayload('initPlatformFailed'), 'Failed to initialize device (Suitest base application). Chain description'],
+			[basePayload('initPlatformFailed'), 'Failed to start Suitest bootstrap application on this device.'],
 			[basePayload('packageNotFound'), 'There is nothing to test, because the selected configuration does not contain an app package. Upload a package on your app\'s configuration page before continuing.'],
 			[basePayload('missingPackage'), 'There is nothing to test, because the selected configuration does not contain an app package. Upload a package on your app\'s configuration page before continuing.'],
 			[basePayload('internalError'), 'Internal error occurred. Chain description'],
@@ -115,7 +115,7 @@ describe('Socket error messages', () => {
 			[basePayload('deviceError', 'unsupportedSelector', 'xpathNotSupported'), 'The element cannot be found, because this device does not support XPath.'],
 			[basePayload('deviceError', 'deviceFailure', 'cssSelectorInvalid'), 'The element cannot be found, the identifying property css selector is invalid.'],
 			[basePayload('wrongApp'), 'Wrong app ID detected'],
-			[basePayload('driverException'), 'Device failed'],
+			[basePayload('driverException'), 'Unexpected exception occurred on connected device. Please, contact support@suite.st if you see this often.'],
 			[basePayload('illegalButton'), 'Specified buttons are not supported on this device. Chain description'],
 			[basePayload('unsupportedButton'), 'Specified buttons are not supported on this device. Chain description'],
 			[basePayload('aborted'), 'Test execution was aborted. Chain description'],
@@ -139,7 +139,7 @@ describe('Socket error messages', () => {
 				},
 				'App loaded actualUrl instead of the expected expectedUrl. Consider updating the app URL in settings.',
 			],
-			[basePayload('queryFailed', 'applicationError'), 'Application error occurred while executes command "Chain description".'],
+			[basePayload('queryFailed', 'applicationError'), 'Application thrown unexpected error while executing command "Chain description".'],
 			[basePayload('queryFailed', 'exprException'), 'JavaScript error: .'],
 			[
 				set(
@@ -152,7 +152,6 @@ describe('Socket error messages', () => {
 			[basePayload('queryFailed', 'orderErr'), 'Suitest instrumentation library should be placed as the first script in your HTML file. Loading the instrumentation library dynamically or after other scripts have loaded may cause many unusual errors.'],
 			[basePayload('queryFailed', 'updateAlert'), 'Suitest instrumentation library is outdated. Please download and install the newest version.'],
 			[basePayload('queryFailed', 'notFunction'), 'Specified code is not a function. Chain description'],
-			[basePayload('exit'), 'Application testing was exited.'],
 			[basePayload('networkError'), 'Chain description'],
 			[basePayload('noHasLines'), 'No assertion properties defined. Chain description'],
 			[basePayload('appCrashed'), 'App seems to have crashed. Chain description'],
@@ -210,7 +209,7 @@ describe('Socket error messages', () => {
 				'This element does not support property someProp.',
 			],
 			[basePayload('invalidRepositoryReference', 'notExistingPlatform'), 'Element is not defined for selected platform. Chain description'],
-			[basePayload('openAppOverrideFailed'), 'Open app override failed.'],
+			[basePayload('openAppOverrideFailed'), 'An error occurred while executing the "Open app override test".'],
 			[basePayload('Success'), 'Command executed successfully.'],
 			[basePayload('NoSuchElement'), 'An element could not be located on the page using the given search parameters. Chain description'],
 			[basePayload('NoSuchFrame'), 'A request to switch to a frame could not be satisfied because the frame could not be found. Chain description'],
