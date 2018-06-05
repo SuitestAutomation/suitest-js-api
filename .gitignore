@@ -56,7 +56,5 @@ typings/
 # dotenv environment variables file
 .env
 
-demo/testConfig.js
-
 .idea
 .DS_Store

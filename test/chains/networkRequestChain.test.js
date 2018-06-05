@@ -27,6 +27,7 @@ describe('Network request chain', () => {
 			composers.WILL_BE_MADE,
 			composers.CONTAIN,
 			composers.EQUAL,
+			composers.NOT,
 			composers.TO_JSON,
 		].sort(bySymbol), 'clear state');
 
@@ -44,6 +45,7 @@ describe('Network request chain', () => {
 			composers.CLONE,
 			composers.GETTERS,
 			composers.TO_JSON,
+			composers.NOT,
 		].sort(bySymbol), 'filled in state');
 	});
 
@@ -53,8 +55,16 @@ describe('Network request chain', () => {
 			'Check if request to http://suite.st/test was made'
 		);
 		assert.equal(
+			networkRequest().equals('http://suite.st/test').not().wasMade().toString(),
+			'Check if request to http://suite.st/test was not made'
+		);
+		assert.equal(
 			networkRequest().contains('test').wasMade().toString(),
 			'Check if request containing test in URL was made'
+		);
+		assert.equal(
+			networkRequest().contains('test').not().wasMade().toString(),
+			'Check if request containing test in URL was not made'
 		);
 		assert.equal(
 			networkRequest().equals('http://suite.st/test').requestMatches({
@@ -64,6 +74,13 @@ describe('Network request chain', () => {
 			'Check if request matching defined parameters to http://suite.st/test was made'
 		);
 		assert.equal(
+			networkRequest().equals('http://suite.st/test').requestMatches({
+				name: 'test',
+				val: 'test',
+			}).not().wasMade().toString(),
+			'Check if request matching defined parameters to http://suite.st/test was not made'
+		);
+		assert.equal(
 			networkRequest().contains('test').requestMatches({
 				name: 'test',
 				val: 'test',
@@ -71,12 +88,27 @@ describe('Network request chain', () => {
 			'Check if request matching defined parameters containing test in URL was made'
 		);
 		assert.equal(
+			networkRequest().contains('test').requestMatches({
+				name: 'test',
+				val: 'test',
+			}).not().wasMade().toString(),
+			'Check if request matching defined parameters containing test in URL was not made'
+		);
+		assert.equal(
 			networkRequest().equals('http://suite.st/test').willBeMade().toString(),
 			'Check if request to http://suite.st/test will be made during next 2000ms'
 		);
 		assert.equal(
+			networkRequest().equals('http://suite.st/test').not().willBeMade().toString(),
+			'Check if request to http://suite.st/test will be not made during next 2000ms'
+		);
+		assert.equal(
 			networkRequest().contains('test').willBeMade().toString(),
 			'Check if request containing test in URL will be made during next 2000ms'
+		);
+		assert.equal(
+			networkRequest().contains('test').not().willBeMade().toString(),
+			'Check if request containing test in URL will be not made during next 2000ms'
 		);
 		assert.equal(
 			networkRequest().equals('http://suite.st/test').requestMatches({
@@ -86,11 +118,25 @@ describe('Network request chain', () => {
 			'Check if request matching defined parameters to http://suite.st/test will be made during next 2000ms'
 		);
 		assert.equal(
+			networkRequest().equals('http://suite.st/test').requestMatches({
+				name: 'test',
+				val: 'test',
+			}).not().willBeMade().toString(),
+			'Check if request matching defined parameters to http://suite.st/test will be not made during next 2000ms'
+		);
+		assert.equal(
 			networkRequest().contains('test').requestMatches({
 				name: 'test',
 				val: 'test',
 			}).willBeMade().toString(),
 			'Check if request matching defined parameters containing test in URL will be made during next 2000ms'
+		);
+		assert.equal(
+			networkRequest().contains('test').requestMatches({
+				name: 'test',
+				val: 'test',
+			}).not().willBeMade().toString(),
+			'Check if request matching defined parameters containing test in URL will be not made during next 2000ms'
 		);
 	});
 
@@ -119,11 +165,36 @@ describe('Network request chain', () => {
 				},
 			},
 		});
+		assert.deepStrictEqual(toJSON({
+			comparator: {
+				type: SUBJ_COMPARATOR.EQUAL,
+				val: 'test',
+			},
+			wasMade: true,
+			isNegated: true,
+		}), {
+			type: 'eval',
+			request: {
+				type: 'wait',
+				timeout: 2000,
+				condition: {
+					subject: {
+						type: 'network',
+						requestInfo: [],
+						responseInfo: [],
+						compare: '=',
+						val: 'test',
+					},
+					type: '!made',
+					searchStrategy: 'all',
+				},
+			},
+		});
 
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
 			comparator: {
-				type: SUBJ_COMPARATOR.EQUAL,
+				type: SUBJ_COMPARATOR.CONTAIN,
 				val: 'test',
 			},
 			wasMade: true,
@@ -137,7 +208,7 @@ describe('Network request chain', () => {
 						type: 'network',
 						requestInfo: [],
 						responseInfo: [],
-						compare: '=',
+						compare: '~',
 						val: 'test',
 					},
 					type: 'made',

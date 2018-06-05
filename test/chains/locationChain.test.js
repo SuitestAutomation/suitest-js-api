@@ -121,6 +121,16 @@ describe('Location chain', () => {
 	it('should convert to string with meaningful message', () => {
 		assert.equal(location().toString(), 'Get current location');
 		assert.equal(location().equal('test').toString(), 'Check if current location equals test');
+		assert.equal(location().not().equal('test').toString(), 'Check if current location does not equal test');
+		assert.equal(location().contains('test').toString(), 'Check if current location contains test');
+		assert.equal(location().not().contains('test').toString(), 'Check if current location does not contain test');
+		assert.equal(location().startWith('test').toString(), 'Check if current location starts with test');
+		assert.equal(
+			location().not().startWith('test').toString(),
+			'Check if current location does not start with test'
+		);
+		assert.equal(location().endWith('test').toString(), 'Check if current location ends with test');
+		assert.equal(location().not().endWith('test').toString(), 'Check if current location does not end with test');
 	});
 
 	it('should generate correct socket message based on data', () => {
