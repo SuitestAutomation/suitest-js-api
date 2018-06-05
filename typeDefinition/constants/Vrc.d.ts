@@ -2,7 +2,6 @@ export type VrcConstants = {
 	// Default VRC
 	ENTER       : symbol,
 	OK          : symbol,
-
 	UP          : symbol,
 	DOWN        : symbol,
 	LEFT        : symbol,
@@ -62,10 +61,10 @@ export type VrcConstants = {
 	RIGHT_THUMBSTICK_UP     : symbol,
 	RIGHT_THUMBSTICK_DOWN   : symbol,
 	RIGHT_THUMBSTICK_BUTTON : symbol,
-	DPAD_RIGHT              : symbol,
-	DPAD_LEFT               : symbol,
-	DPAD_DOWN               : symbol,
-	DPAD_UP                 : symbol,
+	D_PAD_RIGHT             : symbol,
+	D_PAD_LEFT              : symbol,
+	D_PAD_DOWN              : symbol,
+	D_PAD_UP                : symbol,
 	VIEW                    : symbol,
 	HOME                    : symbol,
 	SELECT                  : symbol,
