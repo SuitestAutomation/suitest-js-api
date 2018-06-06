@@ -170,15 +170,13 @@ describe('socket chain helpers', () => {
 			result: {
 				errorType: 'deviceError',
 				message: {
+					code: 'videoAdapterInvalidOutput',
 					info: {
-						reason: {
-							code: 'videoAdapterInvalidOutput',
-							message: 'message',
-						},
+						reason: 'reason',
 					},
 				},
 			},
-		}), 'Video adapter error: message', 'video adapter error');
+		}), 'Video adapter error: reason', 'video adapter error');
 		assert.equal(helpers.getGeneralErrorMessage({
 			errorType: 'errorType',
 			error: 'error',
