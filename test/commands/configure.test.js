@@ -13,15 +13,15 @@ describe('confugure', () => {
 	});
 
 	it('should set config ovverride', async() => {
-		const defaultSentryUse = config.useSentry;
+		const defaultSentryUse = config.disallowCrashReports;
 
 		await configure({
-			useSentry: !defaultSentryUse,
+			disallowCrashReports: !defaultSentryUse,
 			logLevel: 'verbose',
 		});
 		assert.deepEqual(config, {
 			...config,
-			useSentry: !defaultSentryUse,
+			disallowCrashReports: !defaultSentryUse,
 			logLevel: 'verbose',
 		}, 'config updated');
 	});
