@@ -1,10 +1,24 @@
 const {pick} = require('ramda');
 const logLevels = require('../lib/constants/logLevels');
-const {readRcConfig} = require('../lib/utils/testLauncherHelper');
+const rc = require('rc');
 const {validate, validators} = require('../lib/validataion');
 const {invalidConfigObj} = require('../lib/texts');
+const {SUITEST_LAUNCHER_PROCESS} = require('../lib/constants/enviroment');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
+
+let suitestPath = module.parent;
+
+while (suitestPath && !/suitest$/.test(suitestPath.filename)) {
+	suitestPath = suitestPath.parent;
+}
+if (process.env[SUITEST_LAUNCHER_PROCESS] !== 'child') {
+	if (suitestPath) {
+		process.env[SUITEST_LAUNCHER_PROCESS] = 'main';
+	} else {
+		process.env[SUITEST_LAUNCHER_PROCESS] = 'lib';
+	}
+}
 
 const rcConfigFields = ['logLevel', 'useSentry'];
 const rcLauncherFields = [
@@ -53,8 +67,20 @@ function override(overrideObj = {}) {
 	Object.assign(config, _overrideObj);
 }
 
+/**
+ * Read `.suitestrc` launcher config file.
+ * If file not found, return empty object.
+ * Supports json and ini formats.
+ * cli arguments are not parsed.
+ * If file found, but json ivalid, throw error.
+ */
+function readRcConfig() {
+	return rc('suitest', {}, () => ({}));
+}
+
 module.exports = {
 	config,
 	launcherParams,
 	override,
+	readRcConfig,
 };

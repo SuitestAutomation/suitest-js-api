@@ -6,21 +6,22 @@ const spawn = require('child_process').spawn;
 const validation = require('../../lib/validataion');
 
 const SuitestError = require('../../lib/utils/SuitestError');
-const {snippets: log, launcherLogger} = require('../../lib/testLauncher/launcherLogger');
+const {snippets: log} = require('../../lib/testLauncher/launcherLogger');
+const launcherLogger = require('../../lib/utils/logger');
 const testLauncherHelper = require('../../lib/utils/testLauncherHelper');
 const launcherLoggerHelper = require('../../lib/utils/launcherLoggerHelper');
 
 describe('testLauncherHelper util', () => {
-	const rcFilePath = path.resolve(process.cwd(), '.suitestrc');
-
 	beforeEach(() => {
 		sinon.stub(process, 'exit');
-		sinon.stub(launcherLogger, '_err');
+		sinon.stub(console, 'error');
+		sinon.stub(launcherLogger, 'error');
 	});
 
 	afterEach(() => {
 		process.exit.restore();
-		launcherLogger._err.restore();
+		console.error.restore();
+		launcherLogger.error.restore();
 	});
 
 	it('should handle launcher error', () => {
@@ -28,7 +29,7 @@ describe('testLauncherHelper util', () => {
 
 		testLauncherHelper.handleLauncherError(err);
 		assert(process.exit.calledWith(1));
-		assert(launcherLogger._err.called);
+		assert(launcherLogger.error.called);
 	});
 
 	it('should handle launcher SuitestError', () => {
@@ -36,7 +37,7 @@ describe('testLauncherHelper util', () => {
 
 		testLauncherHelper.handleLauncherError(err);
 		assert(process.exit.calledWith(1));
-		assert(launcherLogger._err.called);
+		assert(console.error.called);
 	});
 
 	it('should handle launcher child successful result', () => {
@@ -47,37 +48,6 @@ describe('testLauncherHelper util', () => {
 	it('should handle launcher child result without errors', () => {
 		testLauncherHelper.handleChildResult(false);
 		assert(process.exit.calledWith(0));
-	});
-
-	it('should return empty object if config file not found', () => {
-		assert.deepEqual(testLauncherHelper.readRcConfig(), {}, 'empty object');
-	});
-
-	it('should find and read rc file', () => {
-		fs.writeFileSync(rcFilePath, '{"test": "test"}');
-
-		const config = testLauncherHelper.readRcConfig();
-
-		assert.deepEqual(config, {
-			test: 'test',
-			configs: [rcFilePath],
-			config: rcFilePath,
-		}, 'correct json');
-		assert.strictEqual('_' in config, false, 'cli arges not included');
-
-		fs.writeFileSync(rcFilePath, 'test = test');
-		assert.strictEqual(testLauncherHelper.readRcConfig().test, 'test', 'correct ini');
-
-		// remove test file
-		fs.unlinkSync(rcFilePath);
-	});
-
-	it('should throw error in case of invalid rc json', () => {
-		// add test rc file
-		fs.writeFileSync(rcFilePath, '{invalid: undefined}');
-		assert.throws(() => testLauncherHelper.readRcConfig(), /Error/);
-		// remove test rc file
-		fs.unlinkSync(rcFilePath);
 	});
 
 	it('should merge two configs correctly', () => {
@@ -132,12 +102,12 @@ describe('testLauncherHelper util', () => {
 			}
 		});
 		const mkDirByPathSync = sinon.stub(launcherLoggerHelper, 'mkDirByPathSync');
-		const _ = sinon.stub(launcherLogger, '_');
+		const _ = sinon.stub(launcherLogger, 'log');
 
 		testLauncherHelper.writeLogs('1', ['a', 'red'], './fake/path');
 
-		assert.deepEqual(createWriteStream.firstCall.args, ['./fake/path', '1'], 'createWriteStream called with right args');
-		assert.equal(mkDirByPathSync.firstCall.args[0], './fake/path', 'mkDirByPathSync called with right args');
+		assert.deepEqual(createWriteStream.args[0], ['./fake/path', '1'], 'createWriteStream called with right args');
+		assert.equal(mkDirByPathSync.args[0], './fake/path', 'mkDirByPathSync called with right args');
 		assert.ok(_.called, 'log called');
 
 		testLauncherHelper.writeLogs('2', ['a', 'red'], './fake/path');
@@ -145,7 +115,7 @@ describe('testLauncherHelper util', () => {
 
 		testLauncherHelper.writeLogs('3', ['a', 'red'], './fake/path');
 		assert.ok(process.exit.calledWith(1), 'proccess exit called with 1');
-		assert.equal(launcherLogger._err.secondCall.args[1], '3', '_err called with right deviceId');
+		assert.equal(launcherLogger.error.firstCall.args[1], '3', 'error called with right deviceId');
 		_.restore();
 
 		createWriteStream.restore();
