@@ -67,6 +67,6 @@ describe('SuitestError', () => {
 		const err = new SuitestError();
 
 		assert.equal(err.code, SuitestError.UNKNOWN_ERROR);
-		assert.equal(err.message, 'Unknown Suitest error occurred. Our developers are notified if sentry option is turned on. If Error repeats, please contact us via support@suite.st.');
+		assert.equal(err.message, 'Unknown Suitest error occurred. Our developers are notified if suitest allowed to submit automatic crash reports. If Error repeats, please contact us via support@suite.st.');
 	});
 });
