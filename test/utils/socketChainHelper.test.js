@@ -48,7 +48,7 @@ describe('socket chain helpers', () => {
 			contentType: 'eval',
 			result: 'fail',
 			errorType: 'queryFailed',
-		}), false, 'eval fail');
+		}, {}), false, 'eval fail');
 		// test line
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
 			contentType: 'testLine',
@@ -58,13 +58,13 @@ describe('socket chain helpers', () => {
 			contentType: 'testLine',
 			result: 'fail',
 			errorType: 'queryFailed',
-		}), assert.AssertionError, 'testLine fail');
+		}, {}), assert.AssertionError, 'testLine fail');
 		assert.throws(() => helpers.processServerResponse(emptyString)({
 			contentType: 'testLine',
 			result: 'fail',
 			errorType: 'queryFailed',
 			errors: {},
-		}), assert.AssertionError, 'testLine fail');
+		}, {}), assert.AssertionError, 'testLine fail');
 		// all other
 		assert.throws(() => helpers.processServerResponse(emptyString)({
 			result: 'fatal',
@@ -163,24 +163,5 @@ describe('socket chain helpers', () => {
 				err.actual === `height: 720${EOL}width: 1282` &&
 				err.expected === `height: 100${EOL}width: 200`
 		);
-	});
-
-	it('getGeneralErrorMessage should return proper error message', () => {
-		assert.equal(helpers.getGeneralErrorMessage({
-			result: {
-				errorType: 'deviceError',
-				message: {
-					code: 'videoAdapterInvalidOutput',
-					info: {
-						reason: 'reason',
-					},
-				},
-			},
-		}), 'Video adapter error: reason', 'video adapter error');
-		assert.equal(helpers.getGeneralErrorMessage({
-			errorType: 'errorType',
-			error: 'error',
-		}), 'errorType', 'errorType');
-		assert.equal(helpers.getGeneralErrorMessage({error: 'error'}), 'error', 'error');
 	});
 });
