@@ -41,8 +41,8 @@ describe('validators', () => {
 	});
 
 	it('should throw correct error message', () => {
-		testInputErrorSync(validate, [validators.CONFIGURE, {useSentry: 'false'}], {
-			message: 'Invalid input \'useSentry\' should be boolean.',
+		testInputErrorSync(validate, [validators.CONFIGURE, {disallowCrashReports: 'false'}], {
+			message: 'Invalid input \'disallowCrashReports\' should be boolean.',
 		}, 'invalid configuration object');
 	});
 });
