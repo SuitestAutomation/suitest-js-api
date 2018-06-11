@@ -41,7 +41,7 @@ etc.
 - TV's and set-top boxes running Android TV 4.4 and later
 - Microsoft Xbox One console
 - Locally installed Chrome, Firefox and Edge
-- Apple TV (coming soon)
+- Apple TV
 
 Suitest supports automating end-to-end testing of:
 
@@ -50,7 +50,7 @@ Suitest supports automating end-to-end testing of:
 - LG NetCast and webOS apps 
 - HTML apps for other TV's or set-top boxes
 - Android TV apps
-- tvOS apps (coming soon)
+- tvOS apps
 - Xbox One apps
 - Traditional websites and web apps for desktop browsers.
 

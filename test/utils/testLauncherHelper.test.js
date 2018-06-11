@@ -136,7 +136,7 @@ describe('testLauncherHelper util', () => {
 
 		testLauncherHelper.writeLogs('1', ['a', 'red'], './fake/path');
 
-		assert.deepEqual(createWriteStream.firstCall.args, ['./fake/path', '1'], 'createWriteStream called with right args');
+		assert.deepEqual(createWriteStream.firstCall.args, ['./fake/path', '1', undefined], 'createWriteStream called with right args');
 		assert.equal(mkDirByPathSync.firstCall.args[0], './fake/path', 'mkDirByPathSync called with right args');
 		assert.ok(_.called, 'log called');
 
