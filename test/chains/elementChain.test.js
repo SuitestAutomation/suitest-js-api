@@ -20,6 +20,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.then, 'function');
 		assert.strictEqual(typeof chain.not, 'function');
 		assert.strictEqual(typeof chain.doesNot, 'function');
+		assert.strictEqual(typeof chain.isNot, 'function');
 		assert.strictEqual(typeof chain.exist, 'function');
 		assert.strictEqual(typeof chain.exists, 'function');
 		assert.strictEqual(typeof chain.match, 'function');
@@ -57,6 +58,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.sendText, 'undefined');
 		assert.strictEqual(typeof chain.not, 'function');
 		assert.strictEqual(typeof chain.doesNot, 'function');
+		assert.strictEqual(typeof chain.isNot, 'function');
 	});
 
 	it('should have only allowed modifiers after click is applied', () => {
@@ -77,6 +79,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.sendText, 'undefined');
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
 	});
 
 	it('should have only allowed modifiers after moveTo is applied', () => {
@@ -97,6 +100,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.sendText, 'undefined');
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
 	});
 
 	it('should have only allowed modifiers after sendText is applied', () => {
@@ -117,6 +121,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.sendText, 'undefined');
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
 	});
 
 	it('should have only allowed modifiers after matchJS is applied', () => {
@@ -130,6 +135,7 @@ describe('Element chain', () => {
 
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
 	});
 
 	it('should convert to string with meaningful message', () => {

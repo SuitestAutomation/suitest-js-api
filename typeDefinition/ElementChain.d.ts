@@ -16,7 +16,7 @@ import {
 
 export interface ElementChain extends
 	ElementBaseQueryChain<ElementChain>,
-	Negatable<ElementWithoutNegation>, // not, doesNot
+	Negatable<ElementWithoutNegation>, // not, doesNot, isNot
 	Timeout<ElementWithoutTimeout>, // timeout
 	ElementEvalModifiers<ElementWithoutEvalChain>,
 	SendTextModifier<ElementRepeatIntervalChain>, // sendText

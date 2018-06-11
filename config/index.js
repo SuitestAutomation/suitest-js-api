@@ -20,7 +20,7 @@ if (process.env[SUITEST_LAUNCHER_PROCESS] !== 'child') {
 	}
 }
 
-const rcConfigFields = ['logLevel', 'useSentry'];
+const rcConfigFields = ['logLevel', 'disallowCrashReports'];
 const rcLauncherFields = [
 	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
@@ -30,7 +30,7 @@ const rcLauncherFields = [
 const main = {
 	apiUrl: 'https://the.suite.st/api/public/v2',
 	sentryDsn,
-	useSentry: true,
+	disallowCrashReports: false,
 	wsUrl: 'wss://the.suite.st/api/public/v2/socket',
 	logLevel: logLevels.normal,
 };
@@ -38,7 +38,7 @@ const main = {
 const test = {
 	apiUrl: 'https://localhost',
 	sentryDsn,
-	useSentry: true,
+	disallowCrashReports: false,
 	wsUrl: 'ws://localhost:3000/',
 	logLevel: logLevels.debug,
 };

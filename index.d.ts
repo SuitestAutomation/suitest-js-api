@@ -203,7 +203,7 @@ declare namespace suitest {
 
 	interface ConfigureOptions {
 		logLevel?: 'silent'|'normal'|'verbose'|'debug';
-		useSentry?: boolean;
+		disallowCrashReports?: boolean;
 	}
 
 	interface ResponseError {
