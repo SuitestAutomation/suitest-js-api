@@ -1,6 +1,5 @@
 const assert = require('assert');
 const sinon = require('sinon');
-const logger = require('../../lib/utils/logger');
 const texts = require('../../lib/texts');
 const {getProgressExplanation, handleProgress} = require('../../lib/utils/interactiveProgressHanlder');
 
@@ -24,15 +23,15 @@ describe('interactiveProgressHanlder util', () => {
 	});
 
 	it('should handleProgress', () => {
-		sinon.stub(logger, 'log');
+		sinon.stub(console, 'log');
 
 		try {
 			handleProgress('');
-			assert(!logger.log.called);
+			assert(!console.log.called);
 			handleProgress('recoveringID');
-			assert(logger.log.called);
+			assert(console.log.called);
 		} finally {
-			logger.log.restore();
+			console.log.restore();
 		}
 	});
 });
