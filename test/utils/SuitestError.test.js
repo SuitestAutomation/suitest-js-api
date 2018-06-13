@@ -66,6 +66,6 @@ describe('SuitestError', () => {
 		const err = new SuitestError();
 
 		assert.equal(err.code, SuitestError.UNKNOWN_ERROR);
-		assert.equal(err.message, 'Unknown Suitest error occurred. Our developers are notified if sentry option is turned on. If Error repeats, please contact us via support@suite.st.');
+		assert.equal(err.message, 'Unknown error occurred. If you keep getting this error please get in touch with support@suite.st. If you haven\'t turned off automatic error reporting (the sentry option in config) we are already working hard to fix it.');
 	});
 });
