@@ -3,11 +3,11 @@ const assert = require('assert');
 const configure = require('../../lib/commands/configure');
 const {config, override} = require('../../config');
 
-const chachedConfig = {...config};
+const cachedConfig = {...config};
 
 describe('confugure', () => {
 	after(async() => {
-		override(chachedConfig);
+		override(cachedConfig);
 	});
 
 	it('should set config ovverride', async() => {
