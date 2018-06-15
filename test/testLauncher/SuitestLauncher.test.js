@@ -119,6 +119,10 @@ describe('SuitestLauncher', () => {
 				deviceAccessToken: 'deviceAccessToken',
 				testPack: {devices: [{deviceId: 'device1'}]},
 			});
+		const devicesDetailsNock = nock(config.apiUrl).get(makeUrlFromArray([endpoints.devices, null, {limit: 100}]))
+			.reply(200, {
+				values: [{deviceId: 'device1'}],
+			});
 		const sessionCloseNock = nock(config.apiUrl).post(endpoints.sessionClose).reply(200, {});
 		const suitestLauncher = new TestLauncher({
 			tokenKey: '1',
@@ -131,6 +135,7 @@ describe('SuitestLauncher', () => {
 
 		assert.ok(testNock.isDone(), 'request');
 		assert.ok(sessionCloseNock.isDone(), 'request');
+		assert.ok(devicesDetailsNock.isDone(), 'request');
 		assert.strictEqual(snippets.finalAutomated.called, true);
 	});
 

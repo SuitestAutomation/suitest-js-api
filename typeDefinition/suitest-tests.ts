@@ -253,7 +253,7 @@ function testCookieChain() {
 
 async function elementTest() {
 	await suitest.element({css: '#repo-id'})
-		.match('width', '100px')
+		.match(suitest.PROP.WIDTH, 100)
 		.timeout(10)
 		.not();
 
@@ -366,7 +366,7 @@ async function videoTest() {
 	video().timeout(10);
 
 	await video()
-		.match('width', '100px')
+		.match(suitest.PROP.WIDTH, 100)
 		.timeout(10)
 		.not();
 

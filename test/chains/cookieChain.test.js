@@ -92,8 +92,18 @@ describe('Cookie chain', () => {
 		}), 'Check if cookieName cookie exists');
 		assert.equal(toString({
 			cookieName: 'cookieName',
+			isNegated: true,
+			comparator: {type: SUBJ_COMPARATOR.EXIST},
+		}), 'Check if cookieName cookie does not exist');
+		assert.equal(toString({
+			cookieName: 'cookieName',
 			comparator: {type: SUBJ_COMPARATOR.MATCH_JS},
 		}), 'Check if cookieName cookie matches JavaScript expression');
+		assert.equal(toString({
+			cookieName: 'cookieName',
+			isNegated: true,
+			comparator: {type: SUBJ_COMPARATOR.MATCH_JS},
+		}), 'Check if cookieName cookie does not match JavaScript expression');
 		assert.equal(toString({
 			cookieName: 'cookieName',
 			comparator: {
@@ -101,6 +111,14 @@ describe('Cookie chain', () => {
 				value: 'test',
 			},
 		}), 'Check if cookieName cookie equals test');
+		assert.equal(toString({
+			cookieName: 'cookieName',
+			isNegated: true,
+			comparator: {
+				type: SUBJ_COMPARATOR.EQUAL,
+				value: 'test',
+			},
+		}), 'Check if cookieName cookie does not equal test');
 	});
 
 	it('should have beforeSendMsg', () => {

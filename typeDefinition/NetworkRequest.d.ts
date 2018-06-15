@@ -2,6 +2,7 @@ import {
 	AbstractChain,
 	Timeout,
 	Equalable,
+	Negatable,
 	BaseChain,
 	WasMadeModifier,
 	WillMadeModifier,
@@ -10,20 +11,11 @@ import {
 } from './modifiers';
 
 export interface NetworkRequestChain extends
-	NetworkRequestEvalChain<NetworkRequestChain>,
-	Equalable<NetworkRequestMadeChain>,
-	NetworkRequestMadeModifiers<NetworkRequestEqualChain>,
-	Timeout<NetworkRequestEmptyChain>
-{}
-
-interface NetworkRequestEqualChain extends
-	NetworkRequestEvalChain<NetworkRequestMadeChain>,
-	Equalable<NetworkRequestEmptyChain>
-{}
-
-interface NetworkRequestMadeChain extends
-	NetworkRequestEvalChain<NetworkRequestMadeChain>,
-	NetworkRequestMadeModifiers<NetworkRequestEmptyChain>
+	Timeout<NetworkRequestChain>,
+	Negatable<NetworkRequestChain>,
+	Equalable<NetworkRequestChain>,
+	NetworkRequestMadeModifiers<NetworkRequestChain>,
+	NetworkRequestEvalChain<NetworkRequestChain>
 {}
 
 interface NetworkRequestMadeModifiers<T> extends
@@ -34,10 +26,6 @@ interface NetworkRequestEvalChain<T> extends
 	BaseChain<T, NetworkRequestEvalResult, NetworkRequestAbandonedChain>,
 	ResponseMatchesModifier<T>,
 	RequestMatchesModifier<T>
-{}
-
-interface NetworkRequestEmptyChain extends
-	BaseChain<NetworkRequestEmptyChain, NetworkRequestEvalResult, NetworkRequestAbandonedChain>
 {}
 
 interface NetworkRequestAbandonedChain extends AbstractChain {}

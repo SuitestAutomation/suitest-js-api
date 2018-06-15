@@ -2,7 +2,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 const SuitestError = require('../../lib/utils/SuitestError');
 const suitest = require('../../index');
-const {API_CONSTRUCTOR_NAME, API_LIB_PATH} = require('../../lib/constants');
+const {API_CONSTRUCTOR_NAME, API_LIB_PATH_IDENTIFIERS} = require('../../lib/constants');
 
 describe('SuitestError', () => {
 	it('should extend Error', () => {
@@ -19,7 +19,7 @@ describe('SuitestError', () => {
 	it('should have suitest identifier', () => {
 		const err = new SuitestError('test', SuitestError.AUTH_NOT_ALLOWED);
 
-		assert.strictEqual(err.type, 'SuitestError', 'suitest error type');
+		assert.strictEqual(err.type, SuitestError.type, 'suitest error type');
 	});
 
 	it('should have source prop', () => {
@@ -35,10 +35,9 @@ describe('SuitestError', () => {
 		} catch (err) {
 			assert.ok(err, 'error');
 			assert.ok(err.stack, 'stack');
-			assert.strictEqual(
-				err.stack.split('\n').some(l => l.includes(API_CONSTRUCTOR_NAME) || l.includes(API_LIB_PATH)),
-				false,
-			);
+			assert.strictEqual(err.stack.split('\n').some(l => {
+				return l.includes(API_CONSTRUCTOR_NAME) || l.includes(API_LIB_PATH_IDENTIFIERS[0]);
+			}), false);
 		}
 	});
 
@@ -67,6 +66,6 @@ describe('SuitestError', () => {
 		const err = new SuitestError();
 
 		assert.equal(err.code, SuitestError.UNKNOWN_ERROR);
-		assert.equal(err.message, 'Unknown Suitest error occurred. Our developers are notified if suitest allowed to submit automatic crash reports. If Error repeats, please contact us via support@suite.st.');
+		assert.equal(err.message, 'Unknown error occurred. If you keep getting this error please get in touch with support@suite.st. If you haven\'t turned off automatic error reporting (the sentry option in config) we are already working hard to fix the issue.');
 	});
 });

@@ -4,6 +4,7 @@ const helpers = require('../../lib/utils/socketChainHelper');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {PROP_COMPARATOR, SUBJ_COMPARATOR, ELEMENT_PROP} = require('../../lib/mappings');
 const {toString: elementToString} = require('../../lib/chains/elementChain');
+const sinon = require('sinon');
 
 describe('socket chain helpers', () => {
 	it('should provide a method to get user defined or default timeout out of data', () => {
@@ -47,8 +48,8 @@ describe('socket chain helpers', () => {
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
 			contentType: 'eval',
 			result: 'fail',
-			errorType: 'queryFailed_condition',
-		}), false, 'eval fail');
+			errorType: 'queryFailed',
+		}, {}), false, 'eval fail');
 		// test line
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
 			contentType: 'testLine',
@@ -58,16 +59,16 @@ describe('socket chain helpers', () => {
 			contentType: 'testLine',
 			result: 'fail',
 			errorType: 'queryFailed',
-		}), assert.AssertionError, 'testLine fail');
+		}, {}), assert.AssertionError, 'testLine fail');
 		assert.throws(() => helpers.processServerResponse(emptyString)({
 			contentType: 'testLine',
 			result: 'fail',
-			errorType: 'queryFailed_condition',
+			errorType: 'queryFailed',
 			errors: {},
-		}), assert.AssertionError, 'testLine fail');
+		}, {}), assert.AssertionError, 'testLine fail');
 		// all other
 		assert.throws(() => helpers.processServerResponse(emptyString)({
-			result: 'fatal',
+			result: 'fail',
 		}), Error, 'testLine fail');
 		assert.throws(() => helpers.processServerResponse(emptyString)({
 			result: 'error',
@@ -163,5 +164,20 @@ describe('socket chain helpers', () => {
 				err.actual === `height: 720${EOL}width: 1282` &&
 				err.expected === `height: 100${EOL}width: 200`
 		);
+	});
+
+	it('should exit process when response result is fatal', () => {
+		sinon.stub(console, 'error');
+		sinon.stub(process, 'exit');
+
+		try {
+			helpers.processServerResponse(() => '')({result: 'fatal'}, {}),
+			assert(console.error.called);
+			assert(process.exit.calledWith(1));
+			assert(process.exit.called);
+		} finally {
+			console.error.restore();
+			process.exit.restore();
+		}
 	});
 });

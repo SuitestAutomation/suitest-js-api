@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {API_CONSTRUCTOR_NAME} = require('../../lib/constants');
+const {API_CONSTRUCTOR_NAME, API_LIB_PATH_IDENTIFIERS} = require('../../lib/constants');
 const isSuitestMethod = require('../../lib/utils/isSuitestMethod');
 
 describe('isSuitestMethod util', () => {
@@ -9,5 +9,7 @@ describe('isSuitestMethod util', () => {
 		assert.strictEqual(isSuitestMethod(API_CONSTRUCTOR_NAME), true);
 		assert.strictEqual(isSuitestMethod(API_CONSTRUCTOR_NAME + '.'), true);
 		assert.strictEqual(isSuitestMethod('123' + API_CONSTRUCTOR_NAME + '456'), true);
+		assert.strictEqual(isSuitestMethod('/path/' + API_LIB_PATH_IDENTIFIERS[0]), true);
+		assert.strictEqual(isSuitestMethod('/path/' + API_LIB_PATH_IDENTIFIERS[1]), true);
 	});
 });
