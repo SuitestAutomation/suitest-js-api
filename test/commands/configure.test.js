@@ -3,25 +3,23 @@ const assert = require('assert');
 const configure = require('../../lib/commands/configure');
 const {config, override} = require('../../config');
 
-describe('confugure', () => {
-	beforeEach(() => {
-		override({});
-	});
+const cachedConfig = {...config};
 
+describe('confugure', () => {
 	after(async() => {
-		override({});
+		override(cachedConfig);
 	});
 
 	it('should set config ovverride', async() => {
-		const defaultSentryUse = config.disallowCrashReports;
-
 		await configure({
-			disallowCrashReports: !defaultSentryUse,
+			disallowCrashReports: true,
+			dieOnFatalError: false,
 			logLevel: 'verbose',
 		});
 		assert.deepEqual(config, {
 			...config,
-			disallowCrashReports: !defaultSentryUse,
+			disallowCrashReports: true,
+			dieOnFatalError: false,
 			logLevel: 'verbose',
 		}, 'config updated');
 	});
