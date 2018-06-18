@@ -1,13 +1,13 @@
 const {pick} = require('ramda');
 const logLevels = require('../lib/constants/logLevels');
-const {readRcConfig} = require('../lib/utils/testLauncherHelper');
+const {readRcConfig, pickConfigFieldsFromEnvVars} = require('../lib/utils/testLauncherHelper');
 const {validate, validators} = require('../lib/validataion');
 const {invalidConfigObj} = require('../lib/texts');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
 
-const rcConfigFields = ['logLevel', 'disallowCrashReports', 'dieOnFatalError'];
-const rcLauncherFields = [
+const configFields = ['logLevel', 'disallowCrashReports', 'dieOnFatalError'];
+const launcherFields = [
 	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
 	'logDir', // launcher common
@@ -35,20 +35,22 @@ Object.freeze(main);
 Object.freeze(test);
 
 const rcConfig = readRcConfig();
+const envConfig = pickConfigFieldsFromEnvVars(configFields);
 
 const config = {
 	...(global._suitestTesting ? test : main),
-	...validate(validators.CONFIGURE, pick(rcConfigFields, rcConfig), invalidConfigObj()),
+	...validate(validators.CONFIGURE, pick(configFields, rcConfig), invalidConfigObj()), // extend with rc file
+	...envConfig, // extend with env vars
 };
 
-const launcherParams = pick(rcLauncherFields, rcConfig);
+const launcherParams = pick(launcherFields, rcConfig);
 
 /**
  * Override config object
  * @param {Object} overrideObj
  */
 function override(overrideObj = {}) {
-	const _overrideObj = pick(rcConfigFields, overrideObj);
+	const _overrideObj = pick(configFields, overrideObj);
 
 	validate(validators.CONFIGURE, _overrideObj, invalidConfigObj());
 
