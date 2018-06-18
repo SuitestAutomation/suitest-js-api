@@ -204,7 +204,7 @@ declare namespace suitest {
 	interface ConfigureOptions {
 		logLevel?: 'silent'|'normal'|'verbose'|'debug';
 		disallowCrashReports?: boolean;
-		dieOnFatalError?: boolean;
+		continueOnFatalError?: boolean;
 	}
 
 	interface ResponseError {
