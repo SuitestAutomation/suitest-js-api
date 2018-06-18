@@ -13,13 +13,13 @@ describe('confugure', () => {
 	it('should set config ovverride', async() => {
 		await configure({
 			disallowCrashReports: true,
-			dieOnFatalError: false,
+			continueOnFatalError: true,
 			logLevel: 'verbose',
 		});
 		assert.deepEqual(config, {
 			...config,
 			disallowCrashReports: true,
-			dieOnFatalError: false,
+			continueOnFatalError: true,
 			logLevel: 'verbose',
 		}, 'config updated');
 	});
