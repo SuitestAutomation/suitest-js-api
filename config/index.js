@@ -1,5 +1,6 @@
 const {pick} = require('ramda');
 const logLevels = require('../lib/constants/logLevels');
+const {pickConfigFieldsFromEnvVars} = require('../lib/utils/testLauncherHelper');
 const rc = require('rc');
 const {validate, validators} = require('../lib/validataion');
 const {invalidConfigObj} = require('../lib/texts');
@@ -20,8 +21,8 @@ if (process.env[SUITEST_LAUNCHER_PROCESS] !== 'child') {
 	}
 }
 
-const rcConfigFields = ['logLevel', 'disallowCrashReports', 'dieOnFatalError'];
-const rcLauncherFields = [
+const configFields = ['logLevel', 'disallowCrashReports', 'continueOnFatalError'];
+const launcherFields = [
 	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
 	'logDir', // launcher common
@@ -29,7 +30,7 @@ const rcLauncherFields = [
 
 const main = {
 	apiUrl: 'https://the.suite.st/api/public/v2',
-	dieOnFatalError: true,
+	continueOnFatalError: false,
 	disallowCrashReports: false,
 	logLevel: logLevels.normal,
 	sentryDsn,
@@ -38,7 +39,7 @@ const main = {
 
 const test = {
 	apiUrl: 'https://localhost',
-	dieOnFatalError: true,
+	continueOnFatalError: false,
 	disallowCrashReports: false,
 	logLevel: logLevels.debug,
 	sentryDsn,
@@ -49,20 +50,23 @@ Object.freeze(main);
 Object.freeze(test);
 
 const rcConfig = readRcConfig();
+const envConfig = pickConfigFieldsFromEnvVars(configFields);
 
 const config = {
 	...(global._suitestTesting ? test : main),
-	...validate(validators.CONFIGURE, pick(rcConfigFields, rcConfig), invalidConfigObj()),
+	...validate(validators.CONFIGURE, pick(configFields, rcConfig), invalidConfigObj()), // extend with rc file
+	...envConfig, // extend with env vars
 };
 
-const launcherParams = pick(rcLauncherFields, rcConfig);
+const launcherParams = pick(launcherFields, rcConfig);
 
 /**
  * Override config object
+ * Only used in .configure() command which is going to be depricated
  * @param {Object} overrideObj
  */
 function override(overrideObj = {}) {
-	const _overrideObj = pick(rcConfigFields, overrideObj);
+	const _overrideObj = pick(configFields, overrideObj);
 
 	validate(validators.CONFIGURE, _overrideObj, invalidConfigObj());
 
