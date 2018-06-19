@@ -1,7 +1,5 @@
 const assert = require('assert');
 const sinon = require('sinon');
-const path = require('path');
-const fs = require('fs');
 const spawn = require('child_process').spawn;
 const validation = require('../../lib/validataion');
 
@@ -10,7 +8,6 @@ const {snippets: log} = require('../../lib/testLauncher/launcherLogger');
 const launcherLogger = require('../../lib/utils/logger');
 const testLauncherHelper = require('../../lib/utils/testLauncherHelper');
 const launcherLoggerHelper = require('../../lib/utils/launcherLoggerHelper');
-const envVars = require('../../lib/constants/enviroment');
 
 describe('testLauncherHelper util', () => {
 	beforeEach(() => {
@@ -123,28 +120,5 @@ describe('testLauncherHelper util', () => {
 
 		createWriteStream.restore();
 		mkDirByPathSync.restore();
-	});
-
-	it('should not call http request to invalidate tokens in test launcher child process', async() => {
-		const logLevel = process.env[envVars.SUITEST_CONFIG_LOG_LEVEL];
-		const disallowCrashReports = process.env[envVars.SUITEST_CONFIG_DISALLOW_CRASH_REPORTS];
-		const continueOnFatalError = process.env[envVars.SUITEST_CONFIG_CONTINUE_ON_FATAL_ERROR];
-
-		process.env[envVars.SUITEST_CONFIG_LOG_LEVEL] = 'verbose';
-		process.env[envVars.SUITEST_CONFIG_DISALLOW_CRASH_REPORTS] = 'false';
-		process.env[envVars.SUITEST_CONFIG_CONTINUE_ON_FATAL_ERROR] = 'true';
-
-		const configFields = testLauncherHelper
-			.pickConfigFieldsFromEnvVars(['logLevel', 'disallowCrashReports', 'continueOnFatalError']);
-
-		assert.deepEqual(configFields, {
-			logLevel: 'verbose',
-			disallowCrashReports: false,
-			continueOnFatalError: true,
-		});
-
-		process.env[envVars.SUITEST_CONFIG_LOG_LEVEL] = logLevel;
-		process.env[envVars.SUITEST_CONFIG_DISALLOW_CRASH_REPORTS] = disallowCrashReports;
-		process.env[envVars.SUITEST_CONFIG_CONTINUE_ON_FATAL_ERROR] = continueOnFatalError;
 	});
 });

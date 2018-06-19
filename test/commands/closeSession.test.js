@@ -107,13 +107,13 @@ describe('closeSession', () => {
 	});
 
 	it('should not call http request to invalidate tokens in test launcher child process', async() => {
-		process.env[envVars.SUITEST_LAUNCHER_PROCESS] = 'child';
+		process.env[envVars.SUITEST_CLOSE_SESSION] = 'no';
 		authContext.setContext(sessionConstants.INTERACTIVE, 'tokenId');
 		const testNock = nock(/.*/).post(endpoints.sessionClose).reply(200);
 
 		await closeSession();
 		assert.strictEqual(testNock.isDone(), false, 'close session request not sent');
 
-		delete process.env[envVars.SUITEST_LAUNCHER_PROCESS];
+		delete process.env[envVars.SUITEST_CLOSE_SESSION];
 	});
 });

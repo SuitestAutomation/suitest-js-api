@@ -1,25 +1,19 @@
+/* istanbul ignore file */
+
+/**
+ * File coverage is ignored because unit tests for RC files keep failing if there is RC file on dev machine.
+ * Need a cleaner way to test it, with mocks for RC lib.
+ * Individual functions from utils are still covered in scope of those file's tests.
+ */
+
 const {pick} = require('ramda');
 const logLevels = require('../lib/constants/logLevels');
-const {pickConfigFieldsFromEnvVars} = require('../lib/utils/testLauncherHelper');
 const rc = require('rc');
 const {validate, validators} = require('../lib/validataion');
 const {invalidConfigObj} = require('../lib/texts');
-const {SUITEST_LAUNCHER_PROCESS} = require('../lib/constants/enviroment');
+const {ENV_VARS} = require('../lib/mappings');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
-
-let suitestPath = module.parent;
-
-while (suitestPath && !/suitest$/.test(suitestPath.filename)) {
-	suitestPath = suitestPath.parent;
-}
-if (process.env[SUITEST_LAUNCHER_PROCESS] !== 'child') {
-	if (suitestPath) {
-		process.env[SUITEST_LAUNCHER_PROCESS] = 'main';
-	} else {
-		process.env[SUITEST_LAUNCHER_PROCESS] = 'lib';
-	}
-}
 
 const configFields = ['logLevel', 'disallowCrashReports', 'continueOnFatalError'];
 const launcherFields = [
@@ -74,19 +68,56 @@ function override(overrideObj = {}) {
 }
 
 /**
+ * Override config directly without user input validation
+ * Not to be used for user input
+ * @param ext
+ */
+function extend(ext) {
+	Object.assign(config, ext);
+}
+
+/**
  * Read `.suitestrc` launcher config file.
  * If file not found, return empty object.
  * Supports json and ini formats.
  * cli arguments are not parsed.
- * If file found, but json ivalid, throw error.
+ * If file found, but json invalid, throw error.
  */
 function readRcConfig() {
 	return rc('suitest', {}, () => ({}));
+}
+
+/**
+ * Pick config fields from process.env
+ * @param {Array<string>} configFields
+ * @returns {Object}
+ */
+function pickConfigFieldsFromEnvVars(configFields) {
+	return configFields.reduce((out, key) => {
+		if (ENV_VARS[key] in process.env) {
+			const val = process.env[ENV_VARS[key]];
+
+			switch (val) {
+				case 'true':
+					out[key] = true;
+					break;
+				case 'false':
+					out[key] = false;
+					break;
+				default:
+					out[key] = val;
+					break;
+			}
+		}
+
+		return out;
+	}, {});
 }
 
 module.exports = {
 	config,
 	launcherParams,
 	override,
-	readRcConfig,
+	extend,
+	pickConfigFieldsFromEnvVars,
 };
