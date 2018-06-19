@@ -9,7 +9,7 @@ const makeUrlFromArray = require('../../lib/utils/makeUrlFromArray');
 const endpoints = require('../../lib/api/endpoints');
 const config = require('../../config').config;
 const {snippets} = require('../../lib/testLauncher/launcherLogger');
-const logger = require('../../lib/utils/logger').libLogger;
+const logger = require('../../lib/utils/logger');
 
 describe('SuitestLauncher', () => {
 	before(async() => {
