@@ -203,7 +203,7 @@ describe('SuitestLauncher', () => {
 			orgId: 'orgId',
 			deviceId: 'deviceId',
 			appConfigId: 'config',
-			inspect: '9121',
+			inspectBrk: '9121',
 		}, ['date']);
 		const cpForkStub = sinon.stub(cp, 'fork');
 
