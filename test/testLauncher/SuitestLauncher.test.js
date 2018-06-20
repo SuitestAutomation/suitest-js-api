@@ -1,6 +1,7 @@
 const assert = require('assert');
 const nock = require('nock');
 const sinon = require('sinon');
+const cp = require('child_process');
 
 const testServer = require('../../lib/utils/testServer');
 const {authContext} = require('../../lib/context');
@@ -9,6 +10,7 @@ const makeUrlFromArray = require('../../lib/utils/makeUrlFromArray');
 const endpoints = require('../../lib/api/endpoints');
 const config = require('../../config').config;
 const {launcherLogger, snippets} = require('../../lib/testLauncher/launcherLogger');
+const envVars = require('../../lib/constants/enviroment');
 
 describe('SuitestLauncher', () => {
 	before(async() => {
@@ -195,19 +197,21 @@ describe('SuitestLauncher', () => {
 		const testNock = nock(config.apiUrl).post(endpoints.session).reply(200, {
 			deviceAccessToken: 'deviceAccessToken',
 		});
-		const sessionCloseNock = nock(config.apiUrl).post(endpoints.sessionClose).reply(200, {});
 		const suitestLauncher = new TestLauncher({
 			username: 'username',
 			password: 'password',
 			orgId: 'orgId',
 			deviceId: 'deviceId',
 			appConfigId: 'config',
-			debugBrk: '9121',
+			inspect: '9121',
 		}, ['date']);
+		const cpForkStub = sinon.stub(cp, 'fork');
 
 		await suitestLauncher.runInteractiveSession();
+
 		assert.ok(testNock.isDone(), 'request');
-		assert.ok(sessionCloseNock.isDone(), 'request');
-		assert(process.exit.calledWith(0));
+		assert.equal(cpForkStub.getCall(0).args[2].env[envVars.SUITEST_DEBUG_MODE], 'yes');
+
+		cpForkStub.restore();
 	});
 });
