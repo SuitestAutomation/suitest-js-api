@@ -171,7 +171,7 @@ describe('SuitestLauncher', () => {
 		assert(launcherLogger._err.called);
 	});
 
-	it('should fun runInteractiveSession succesfully', async() => {
+	it('should exit runInteractiveSession when illegal command provided', async() => {
 		const testNock = nock(config.apiUrl).post(endpoints.session).reply(200, {
 			deviceAccessToken: 'deviceAccessToken',
 		});
@@ -189,5 +189,25 @@ describe('SuitestLauncher', () => {
 		assert.ok(sessionCloseNock.isDone(), 'request');
 		assert(process.exit.calledWith(1));
 		assert(launcherLogger._err.called);
+	});
+
+	it('should run runInteractiveSession in debug mode succesfully', async() => {
+		const testNock = nock(config.apiUrl).post(endpoints.session).reply(200, {
+			deviceAccessToken: 'deviceAccessToken',
+		});
+		const sessionCloseNock = nock(config.apiUrl).post(endpoints.sessionClose).reply(200, {});
+		const suitestLauncher = new TestLauncher({
+			username: 'username',
+			password: 'password',
+			orgId: 'orgId',
+			deviceId: 'deviceId',
+			appConfigId: 'config',
+			debugBrk: '9121',
+		}, ['date']);
+
+		await suitestLauncher.runInteractiveSession();
+		assert.ok(testNock.isDone(), 'request');
+		assert.ok(sessionCloseNock.isDone(), 'request');
+		assert(process.exit.calledWith(0));
 	});
 });
