@@ -77,7 +77,7 @@ describe('suitest test launcher', function() {
 				testLauncherTest, 'interactive', '-u', 'userEmail', '-p', 'userPass',
 				'-o', 'orgId', '-c', 'configId', '-d', 'deviceId', 'npm', '--version',
 			],
-			{shell: true}
+			{shell: true, stdio: 'inherit'}
 		).once('exit', (exitCode) => {
 			assert.equal(exitCode, 0, 'should exit without error');
 			done();

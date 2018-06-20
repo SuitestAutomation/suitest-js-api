@@ -3,9 +3,11 @@ const {
 	location,
 	locationAssert,
 	toJSON,
+	beforeSendMsg,
 } = require('../../lib/chains/locationChain');
 const comparatorTypes = require('../../lib/constants/comparator');
 const {SUBJ_COMPARATOR} = require('../../lib/mappings');
+const sinon = require('sinon');
 
 describe('Location chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -136,6 +138,14 @@ describe('Location chain', () => {
 		);
 		assert.equal(location().endWith('test').toString(), 'Check if current location ends with test');
 		assert.equal(location().not().endWith('test').toString(), 'Check if current location does not end with test');
+	});
+
+	it('should have beforeSendMsg', () => {
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg({});
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

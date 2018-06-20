@@ -6,9 +6,11 @@ const {
 	getComposers,
 	toString,
 	toJSON,
+	beforeSendMsg,
 } = require('../../lib/chains/openAppChain');
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
+const sinon = require('sinon');
 
 describe('Open app chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -55,6 +57,14 @@ describe('Open app chain', () => {
 	it('should convert to string with meaningful message', () => {
 		assert.equal(toString({}), 'Open app');
 		assert.equal(toString({relativeURL: '/test'}), 'Open app at /test');
+	});
+
+	it('should have beforeSendMsg', () => {
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg({});
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {
