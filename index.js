@@ -133,17 +133,34 @@ module.exports = new SUITEST_API();
 
 // Listen to process events to trigger websocket termination and dump warnings, if any
 const shutDown = () => {
+	// Make sure socket connection is done
 	webSockets.disconnect();
 
+	// Warn user about un-awaited chains
 	warnUnusedLeaves();
+
+	// Do not force process exit, because this will interfere with other libs (e.g. Mocha)
+	// that user might be using. Instead make sure there are no event listeners left on our side
+	// to keep process running
 };
 
-process.once('exit', shutDown);
-process.once('SIGINT', shutDown);
-process.once('SIGHUP', shutDown);
-process.once('SIGBREAK', shutDown);
-process.once('SIGQUIT', shutDown);
-process.once('SIGTERM', shutDown);
+[
+	// When event loop ends or process.exit() called
+	'exit',
+
+	// Ctrl+C in terminal
+	'SIGINT',
+	'SIGQUIT',
+
+	// Ctrl+/ in terminal
+	'SIGTERM',
+
+	// Console is closed on Windows
+	'SIGHUP',
+
+	// Ctrl+Break on Windows
+	'SIGBREAK',
+].forEach(term => process.on(term, shutDown));
 
 // Exit process with code 1 on uncaughtException or unhandledRejection
 // Required for proper termination of test launcher child processes
