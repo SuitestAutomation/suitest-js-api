@@ -23,15 +23,15 @@ describe('interactiveProgressHanlder util', () => {
 	});
 
 	it('should handleProgress', () => {
-		sinon.stub(console, 'info');
+		sinon.stub(console, 'log');
 
 		try {
 			handleProgress('');
-			assert(!console.info.called);
+			assert(!console.log.called);
 			handleProgress('recoveringID');
-			assert(console.info.called);
+			assert(console.log.called);
 		} finally {
-			console.info.restore();
+			console.log.restore();
 		}
 	});
 });
