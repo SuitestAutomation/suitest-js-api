@@ -210,7 +210,7 @@ describe('Window chain', () => {
 			},
 		}, 'type eval accept modal with message');
 		assert.deepStrictEqual(toJSON({
-			dismissModal: true,
+			isDismissModal: true,
 		}), {
 			type: 'eval',
 			request: {
