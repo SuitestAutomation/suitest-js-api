@@ -4,7 +4,9 @@ const {
 	executeCommand,
 	executeCommandAssert,
 	toJSON,
+	beforeSendMsg,
 } = require('../../lib/chains/executeCommandChain');
+const sinon = require('sinon');
 
 /**
  * This test is sort of high level, more like integration test
@@ -34,6 +36,14 @@ describe('Execute command chain', () => {
 
 	it('should convert to string with meaningful message', () => {
 		assert.equal(executeCommand('1+1').toString(), 'Execute command');
+	});
+
+	it('should have beforeSendMsg', () => {
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg('1+1');
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it.skip('should engage execution on "then"', async() => {

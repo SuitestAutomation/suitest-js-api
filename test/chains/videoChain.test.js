@@ -15,6 +15,7 @@ describe('Video chain', () => {
 		assert.strictEqual(typeof chain.then, 'function');
 		assert.strictEqual(typeof chain.not, 'function');
 		assert.strictEqual(typeof chain.doesNot, 'function');
+		assert.strictEqual(typeof chain.isNot, 'function');
 		assert.strictEqual(typeof chain.exist, 'function');
 		assert.strictEqual(typeof chain.exists, 'function');
 		assert.strictEqual(typeof chain.match, 'function');
@@ -55,6 +56,7 @@ describe('Video chain', () => {
 
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
 	});
 
 	it('should convert to string with meaningful message', () => {

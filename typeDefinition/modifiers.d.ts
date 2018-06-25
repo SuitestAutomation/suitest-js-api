@@ -27,6 +27,7 @@ export interface Assertable<T> {
 export interface Negatable<T> {
 	not(): T;
 	doesNot(): T;
+	isNot(): T;
 }
 
 export interface Clonable<T> {

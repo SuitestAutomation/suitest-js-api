@@ -6,10 +6,12 @@ const {
 	getComposers,
 	toString,
 	toJSON,
+	beforeSendMsg,
 } = require('../../lib/chains/applicationChain');
 const composers = require('../../lib/constants/composer');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
+const sinon = require('sinon');
 
 describe('Application chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -87,6 +89,14 @@ describe('Application chain', () => {
 
 	it('should convert to string with meaningful message', () => {
 		assert.equal(toString(), 'Application has exited');
+	});
+
+	it('should have beforeSendMsg', () => {
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg();
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

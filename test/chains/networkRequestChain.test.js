@@ -5,11 +5,13 @@ const {
 	networkRequestAssert,
 	toJSON,
 	getComposers,
+	beforeSendMsg,
 } = require('../../lib/chains/networkRequestChain');
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const {SUBJ_COMPARATOR, PROP_COMPARATOR} = require('../../lib/constants/comparator');
 const {NETWORK_PROP, NETWORK_METHOD} = require('../../lib/constants/networkRequest');
+const sinon = require('sinon');
 
 describe('Network request chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -138,6 +140,14 @@ describe('Network request chain', () => {
 			}).not().willBeMade().toString(),
 			'Check if request matching defined parameters containing test in URL will be not made during next 2000ms'
 		);
+	});
+
+	it('should have beforeSendMsg', () => {
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg({});
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

@@ -2,38 +2,24 @@ const assert = require('assert');
 
 const configure = require('../../lib/commands/configure');
 const {config, override} = require('../../config');
-const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
+
+const cachedConfig = {...config};
 
 describe('confugure', () => {
-	beforeEach(() => {
-		override({});
-	});
-
 	after(async() => {
-		override({});
-	});
-
-	it('should throw correct error on invalid input', async() => {
-		await testInputErrorAsync(configure, [{invalid: true}]);
-		await testInputErrorAsync(configure, [{
-			useSentry: true,
-			additionalProp: true,
-		}]);
-		await testInputErrorAsync(configure, [{
-			logLevel: 'unknownLevel',
-		}]);
+		override(cachedConfig);
 	});
 
 	it('should set config ovverride', async() => {
-		const defaultSentryUse = config.useSentry;
-
 		await configure({
-			useSentry: !defaultSentryUse,
+			disallowCrashReports: true,
+			continueOnFatalError: true,
 			logLevel: 'verbose',
 		});
 		assert.deepEqual(config, {
 			...config,
-			useSentry: !defaultSentryUse,
+			disallowCrashReports: true,
+			continueOnFatalError: true,
 			logLevel: 'verbose',
 		}, 'config updated');
 	});

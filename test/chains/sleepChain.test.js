@@ -5,10 +5,12 @@ const {
 	getComposers,
 	toString,
 	toJSON,
+	beforeSendMsg,
 } = require('../../lib/chains/sleepChain');
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
+const sinon = require('sinon');
 
 describe('Sleep chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -43,6 +45,14 @@ describe('Sleep chain', () => {
 
 	it('should convert to string with meaningful message', () => {
 		assert.equal(toString({milliseconds: 10}), 'Sleep for 10ms');
+	});
+
+	it('should have beforeSendMsg', () => {
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg({milliseconds: 10});
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

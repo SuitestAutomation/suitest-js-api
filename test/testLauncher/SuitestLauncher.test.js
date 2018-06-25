@@ -8,13 +8,14 @@ const TestLauncher = require('../../lib/testLauncher/SuitestLauncher');
 const makeUrlFromArray = require('../../lib/utils/makeUrlFromArray');
 const endpoints = require('../../lib/api/endpoints');
 const config = require('../../config').config;
-const {launcherLogger, snippets} = require('../../lib/testLauncher/launcherLogger');
+const {snippets} = require('../../lib/testLauncher/launcherLogger');
+const logger = require('../../lib/utils/logger');
 
 describe('SuitestLauncher', () => {
 	before(async() => {
 		sinon.stub(process, 'exit');
-		sinon.stub(launcherLogger, '_err');
-		sinon.stub(launcherLogger, '_');
+		sinon.stub(logger, 'error');
+		sinon.stub(logger, 'log');
 		sinon.stub(snippets, 'finalAutomated');
 	});
 
@@ -31,8 +32,8 @@ describe('SuitestLauncher', () => {
 	after(async() => {
 		await testServer.stop();
 		process.exit.restore();
-		launcherLogger._err.restore();
-		launcherLogger._.restore();
+		logger.error.restore();
+		logger.log.restore();
 		snippets.finalAutomated.restore();
 	});
 
@@ -44,7 +45,7 @@ describe('SuitestLauncher', () => {
 			assert.ok(false, 'call runAutomatedSession success');
 		} catch (error) {
 			assert(process.exit.calledWith(1));
-			assert(launcherLogger._err.called);
+			assert(logger.error.called);
 		}
 
 		try {
@@ -52,7 +53,7 @@ describe('SuitestLauncher', () => {
 			assert.ok(false, 'call runInteractiveSession success');
 		} catch (error) {
 			assert(process.exit.calledWith(1));
-			assert(launcherLogger._err.called);
+			assert(logger.error.called);
 		}
 	});
 
@@ -68,7 +69,7 @@ describe('SuitestLauncher', () => {
 			assert.ok(false, 'call runAutomatedSession success');
 		} catch (error) {
 			assert(process.exit.calledWith(1));
-			assert(launcherLogger._err.called);
+			assert(logger.error.called);
 		}
 
 		const suitestIntaractiveLauncher = new TestLauncher({
@@ -84,7 +85,7 @@ describe('SuitestLauncher', () => {
 			assert.ok(false, 'call runInteractiveSession success');
 		} catch (error) {
 			assert(process.exit.calledWith(1));
-			assert(launcherLogger._err.called);
+			assert(logger.error.called);
 		}
 	});
 
@@ -108,7 +109,7 @@ describe('SuitestLauncher', () => {
 			assert.ok(error, 'error');
 			assert.ok(testNock.isDone(), 'request');
 			assert(process.exit.calledWith(1));
-			assert(launcherLogger._err.called);
+			assert(logger.error.called);
 		}
 	});
 
@@ -152,7 +153,7 @@ describe('SuitestLauncher', () => {
 		await suitestLauncher.runAutomatedSession();
 		assert.ok(testNock.isDone(), 'request');
 		assert(process.exit.calledWith(1));
-		assert(launcherLogger._err.called);
+		assert(logger.error.called);
 	});
 
 	it('should exit runInteractiveSession if openSession fails', async() => {
@@ -168,7 +169,7 @@ describe('SuitestLauncher', () => {
 		await suitestLauncher.runInteractiveSession();
 		assert.ok(testNock.isDone(), 'request');
 		assert(process.exit.calledWith(1));
-		assert(launcherLogger._err.called);
+		assert(logger.error.called);
 	});
 
 	it('should fun runInteractiveSession succesfully', async() => {
@@ -188,6 +189,6 @@ describe('SuitestLauncher', () => {
 		assert.ok(testNock.isDone(), 'request');
 		assert.ok(sessionCloseNock.isDone(), 'request');
 		assert(process.exit.calledWith(1));
-		assert(launcherLogger._err.called);
+		assert(logger.error.called);
 	});
 });

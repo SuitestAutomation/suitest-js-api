@@ -5,9 +5,11 @@ const {
 	getComposers,
 	toString,
 	toJSON,
+	beforeSendMsg,
 } = require('../../lib/chains/pollUrlChain');
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
+const sinon = require('sinon');
 
 describe('Poll URL chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -32,7 +34,7 @@ describe('Poll URL chain', () => {
 			composers.TO_JSON,
 		].sort(bySymbol), 'abandoned chain');
 
-		const chain = pollUrl('url');
+		const chain = pollUrl('url', 'res');
 
 		assert.strictEqual(chain.with, chain);
 		assert.strictEqual(chain.it, chain);
@@ -45,6 +47,14 @@ describe('Poll URL chain', () => {
 			url: 'url',
 			response: true,
 		}), 'Poll URL "url" every 500ms until response equals true');
+	});
+
+	it('should have beforeSendMsg', () => {
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg({url: ''});
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {
@@ -83,10 +93,7 @@ describe('Poll URL chain', () => {
 	});
 
 	it('should define assert function', () => {
-		const chain = pollUrlAssert({
-			url: 'url',
-			response: true,
-		});
+		const chain = pollUrlAssert('url', 'true');
 
 		assert.ok('toString' in chain);
 		assert.ok('then' in chain);

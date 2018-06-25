@@ -3,7 +3,9 @@ const {
 	window,
 	windowAssert,
 	toJSON,
+	beforeSendMsg,
 } = require('../../lib/chains/windowChain');
+const sinon = require('sinon');
 
 function testAllowedModifiers(chain) {
 	// general
@@ -119,6 +121,14 @@ describe('Window chain', () => {
 		assert.equal(window().acceptModal().toString(), 'Accept modal dialog');
 		assert.equal(window().acceptModal('text').toString(), 'Accept modal dialog with \'text\' message');
 		assert.equal(window().setSize(10, 20).toString(), 'Set browser window size to 10, 20');
+	});
+
+	it('should have beforeSendMsg', () => {
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg({sendText: 'text'});
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {
