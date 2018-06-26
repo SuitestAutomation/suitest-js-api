@@ -13,10 +13,9 @@ import {
 	BaseChain,
 	UntilModifier,
 } from './modifiers';
-import {DomElementProps} from "./constants/DomElementProps";
+import {ElementProps} from "./constants/ElementProps";
 
 export interface ElementChain extends
-    DomElementProps,
 	ElementBaseQueryChain<ElementChain>,
 	Negatable<ElementWithoutNegation>, // not, doesNot, isNot
 	Timeout<ElementWithoutTimeout>, // timeout
@@ -97,7 +96,8 @@ interface ElementEvalModifiers<T> extends
 {}
 
 interface ElementBaseQueryChain<TSelf> extends
-	BaseChain<TSelf, ElementQueryResult, ElementAbandonedChain>
+	BaseChain<TSelf, ElementQueryResult, ElementAbandonedChain>,
+	ElementProps
 {}
 
 // base interface with then method

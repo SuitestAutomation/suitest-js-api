@@ -6,11 +6,9 @@
     "diagnostics": true,
     "target": "es6",
     "noImplicitAny": true,
-    "sourceMap": false,
     "types": [
       "../../index.d.ts"
     ],
-    "noStrictGenericChecks": false,
     "allowSyntheticDefaultImports": false,
     "moduleResolution": "node",
     "lib": [

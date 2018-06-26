@@ -1,4 +1,4 @@
-export type DomElementProps = {
+export type ElementProps = {
 	color: string,
 	opacity: number,
 	backgroundColor: string,
