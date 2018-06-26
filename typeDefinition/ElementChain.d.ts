@@ -96,8 +96,7 @@ interface ElementEvalModifiers<T> extends
 {}
 
 interface ElementBaseQueryChain<TSelf> extends
-	BaseChain<TSelf, ElementQueryResult, ElementAbandonedChain>,
-	ElementProps
+	BaseChain<TSelf, ElementQueryResult, ElementAbandonedChain>
 {}
 
 // base interface with then method
@@ -107,5 +106,5 @@ interface ElementBaseEvalChain<TSelf> extends
 
 interface ElementAbandonedChain extends AbstractChain {}
 
-type ElementQueryResult = string;
+type ElementQueryResult = ElementProps;
 type ElementEvalResult = void;

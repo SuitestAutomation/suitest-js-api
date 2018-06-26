@@ -9,7 +9,7 @@ el.moveTo();
 el.sendText('');
 el.timeout(1);
 el.exists();
-el.backgroundColor;
-el.text;
-el.id;
+el.then(e => e.backgroundColor);
+el.then(e => e.text);
+el.then(e => e.id);
 
