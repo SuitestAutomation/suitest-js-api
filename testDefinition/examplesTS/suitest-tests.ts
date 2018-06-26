@@ -1,4 +1,4 @@
-import * as suitest from '../index'
+import * as suitest from '../../index'
 
 function testLocationChain() {
 	const {location} = suitest;

@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "module": "system",
+    "maxNodeModuleJsDepth": 1000,
+    "preserveConstEnums": true,
+    "diagnostics": true,
+    "target": "es6",
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "types": [
+      "../../index.d.ts"
+    ],
+    "noStrictGenericChecks": false,
+    "allowSyntheticDefaultImports": false,
+    "moduleResolution": "node",
+    "lib": [
+      "dom",
+      "es2015",
+      "es7",
+      "es2018.promise",
+      "es2015.promise"
+    ]
+  },
+  "files": [
+    "elementChain.ts"
+  ]
+}

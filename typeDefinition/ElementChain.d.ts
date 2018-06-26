@@ -13,8 +13,10 @@ import {
 	BaseChain,
 	UntilModifier,
 } from './modifiers';
+import {DomElementProps} from "./constants/DomElementProps";
 
 export interface ElementChain extends
+    DomElementProps,
 	ElementBaseQueryChain<ElementChain>,
 	Negatable<ElementWithoutNegation>, // not, doesNot, isNot
 	Timeout<ElementWithoutTimeout>, // timeout
