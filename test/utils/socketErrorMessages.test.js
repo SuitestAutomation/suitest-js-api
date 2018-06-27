@@ -123,6 +123,16 @@ describe('Socket error messages', () => {
 			[basePayload('unsupportedButton'), 'Specified buttons are not supported on this device. Chain description'],
 			[basePayload('aborted'), 'Test execution was aborted. Chain description'],
 			[
+				{
+					...basePayload('aborted'),
+					response: {
+						...basePayload('aborted').response,
+						message: {info: {reason: 'manualActionRequired'}},
+					},
+				},
+				'Manual actions are not supported.',
+			],
+			[
 				set(lensPath(['chainData']), {
 					type: 'press',
 					repeat: 4,
