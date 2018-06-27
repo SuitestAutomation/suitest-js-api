@@ -18,61 +18,61 @@ describe('socket chain helpers', () => {
 		// query
 		assert.throws(() => helpers.processServerResponse(emptyString)({
 			contentType: 'query',
-		}), SuitestError, 'query fail');
+		}, {stack: ''}), SuitestError, 'query fail');
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
 			contentType: 'query',
 			cookieExists: true,
-		}), true, 'query cookie exists');
+		}, {stack: ''}), true, 'query cookie exists');
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
 			contentType: 'query',
 			cookieValue: 'cookie',
-		}), 'cookie', 'query cookie value');
+		}, {stack: ''}), 'cookie', 'query cookie value');
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
 			contentType: 'query',
 			elementProps: 'props',
-		}), 'props', 'query element props');
+		}, {stack: ''}), 'props', 'query element props');
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
 			contentType: 'query',
 			elementExists: false,
-		}), false, 'query element not found');
+		}, {stack: ''}), false, 'query element not found');
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
 			contentType: 'query',
 			execute: 'val',
-		}), 'val', 'query js expression');
+		}, {stack: ''}), 'val', 'query js expression');
 		// eval
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
 			contentType: 'eval',
 			result: 'success',
 			errorType: 'error',
-		}), true, 'evals success');
+		}, {stack: ''}), true, 'evals success');
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
 			contentType: 'eval',
 			result: 'fail',
 			errorType: 'queryFailed',
-		}, {}), false, 'eval fail');
+		}, {stack: ''}), false, 'eval fail');
 		// test line
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
 			contentType: 'testLine',
 			result: 'success',
-		}), undefined, 'testLine success');
+		}, {stack: ''}), undefined, 'testLine success');
 		assert.throws(() => helpers.processServerResponse(emptyString)({
 			contentType: 'testLine',
 			result: 'fail',
 			errorType: 'queryFailed',
-		}, {}), assert.AssertionError, 'testLine fail');
+		}, {stack: ''}), assert.AssertionError, 'testLine fail');
 		assert.throws(() => helpers.processServerResponse(emptyString)({
 			contentType: 'testLine',
 			result: 'fail',
 			errorType: 'queryFailed',
 			errors: {},
-		}, {}), assert.AssertionError, 'testLine fail');
+		}, {stack: ''}), assert.AssertionError, 'testLine fail');
 		// all other
 		assert.throws(() => helpers.processServerResponse(emptyString)({
 			result: 'fail',
-		}), Error, 'testLine fail');
+		}, {stack: ''}), Error, 'testLine fail');
 		assert.throws(() => helpers.processServerResponse(emptyString)({
 			result: 'error',
-		}), Error, 'testLine fail');
+		}, {stack: ''}), Error, 'testLine fail');
 
 		assert.throws(
 			() => helpers.processServerResponse(elementToString)({
@@ -94,6 +94,7 @@ describe('socket chain helpers', () => {
 					],
 				},
 				isAssert: true,
+				stack: '',
 			}),
 			err => err instanceof assert.AssertionError
 		);
@@ -107,7 +108,7 @@ describe('socket chain helpers', () => {
 					expectedValue: 'test',
 					contentType: 'testLine',
 				},
-				{},
+				{stack: ''},
 			),
 			err => err instanceof assert.AssertionError &&
 				err.actual === 'http://bxdpm12o-0-staging.suitest.net/sampleapp_staging/index-hbbtv.html' &&
@@ -158,26 +159,19 @@ describe('socket chain helpers', () => {
 								],
 						},
 					isAssert: true,
+					stack: '',
 				},
 			),
 			err => err instanceof assert.AssertionError &&
 				err.actual === `height: 720${EOL}width: 1282` &&
 				err.expected === `height: 100${EOL}width: 200`
 		);
-	});
 
-	it('should exit process when response result is fatal', () => {
-		sinon.stub(console, 'error');
-		sinon.stub(process, 'exit');
-
-		try {
-			helpers.processServerResponse(() => '')({result: 'fatal'}, {}),
-			assert(console.error.called);
-			assert(process.exit.calledWith(1));
-			assert(process.exit.called);
-		} finally {
-			console.error.restore();
-			process.exit.restore();
-		}
+		assert.throws(
+			() => helpers.processServerResponse(() => '')(
+				{result: 'fatal'}, {stack: ''}
+			), err => err.message.includes('Fatal'),
+			'Fatal error thrown correctly'
+		);
 	});
 });

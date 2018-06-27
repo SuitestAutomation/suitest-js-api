@@ -18,7 +18,10 @@ describe('makeChain util', () => {
 			return [];
 		}, {test: 0});
 
-		assert.deepStrictEqual(outputData, {test: 0});
+		assert.deepStrictEqual(outputData, {
+			test: 0,
+			stack: outputData.stack,
+		});
 	});
 
 	it('should provide composer with data, chain and function to create new chain', () => {
@@ -34,12 +37,15 @@ describe('makeChain util', () => {
 			data => ({getData: {value: () => data}}), // helper
 		]), {test: 0});
 
-		assert.deepStrictEqual(outputData, {test: 0});
+		assert.deepStrictEqual(outputData, {
+			test: 0,
+			stack: outputData.stack,
+		});
 		assert.strictEqual(outputChain, chain);
 		assert.strictEqual(typeof outputMakeChane, 'function');
 
 		const chain2 = chain.test();
 
-		assert.deepStrictEqual(chain2.getData(), {test: 1});
+		assert.strictEqual(chain2.getData().test, 1);
 	});
 });

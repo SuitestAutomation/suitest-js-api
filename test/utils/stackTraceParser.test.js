@@ -1,4 +1,5 @@
 const assert = require('assert');
+const {EOL} = require('os');
 const stackTraceParser = require('../../lib/utils/stackTraceParser');
 
 describe('stackTraceParser util', () => {
@@ -31,5 +32,24 @@ describe('stackTraceParser util', () => {
 		assert(parser(123123).length === 0);
 		assert(parser([]).length === 0);
 		assert(parser(() => { /**/ }).length === 0);
+	});
+
+	it('test prependStack', () => {
+		const error = {};
+		const stack = `title1${EOL}at test.test (test.js:1:1)${EOL}at test.test (test.js:2:2)`;
+
+		error.stack = stack;
+		assert.equal(
+			stackTraceParser.prependStack(error, `title2${EOL}at test.test (test.js:0:0)`).stack,
+			`title1${EOL}at test.test (test.js:0:0)${EOL}at test.test (test.js:1:1)${EOL}at test.test (test.js:2:2)`,
+			'prepended',
+		);
+
+		error.stack = stack;
+		assert.equal(
+			stackTraceParser.prependStack(error, `title2${EOL}at test.test (test.js:1:1)`).stack,
+			stack,
+			'not changed, lines duplicated',
+		);
 	});
 });
