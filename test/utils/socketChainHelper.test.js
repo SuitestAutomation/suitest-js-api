@@ -104,15 +104,15 @@ describe('socket chain helpers', () => {
 				{
 					result: 'fail',
 					errorType: 'queryFailed',
-					actualValue: 'http://bxdpm12o-0-staging.suitest.net/sampleapp_staging/index-hbbtv.html',
+					actualValue: 'http://url/index-hbbtv.html',
 					expectedValue: 'test',
 					contentType: 'testLine',
 				},
 				{stack: ''},
 			),
 			err => err instanceof assert.AssertionError &&
-				err.actual === 'http://bxdpm12o-0-staging.suitest.net/sampleapp_staging/index-hbbtv.html' &&
-				err.expected === 'test',
+				err.message.includes('× http://url/index-hbbtv.html (actual)') &&
+				err.message.includes('~ test (expected)')
 		);
 
 		assert.throws(
@@ -163,8 +163,44 @@ describe('socket chain helpers', () => {
 				},
 			),
 			err => err instanceof assert.AssertionError &&
-				err.actual === `height: 720${EOL}width: 1282` &&
-				err.expected === `height: 100${EOL}width: 200`
+				err.message.includes('× height: 720 (actual)') &&
+				err.message.includes('~ height: 100 (expected)') &&
+				err.message.includes('× width: 1282 (actual)') &&
+				err.message.includes('~ width: 200 (expected)')
+		);
+
+		assert.throws(
+			() => helpers.processServerResponse(emptyString)(
+				{
+					result: 'fail',
+					expression: [{
+						result: 'fail',
+						errorType: 'queryFailed',
+						actualValue: 200,
+						expectedValue: 100,
+					}],
+					errorType: 'queryFailed',
+					contentType: 'testLine',
+				},
+				{
+					type: 'element',
+					selector: {css: 'body'},
+					until: {
+						type: SUBJ_COMPARATOR['has'],
+						expression:
+							[
+								{
+									property: 'prop',
+									val: 100,
+								},
+							],
+					},
+					isAssert: true,
+				},
+			),
+			err => err instanceof assert.AssertionError &&
+				err.message.includes('× prop: 200 (actual)') &&
+				err.message.includes('~ prop: 100 (expected)'),
 		);
 
 		assert.throws(
