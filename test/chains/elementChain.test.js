@@ -141,6 +141,10 @@ describe('Element chain', () => {
 	it('should convert to string with meaningful message', () => {
 		assert.equal(element('element').toString(), 'Get element element properties');
 		assert.equal(element('element').exists().toString(), 'Check if element element exists');
+		assert.equal(element({
+			css: 'body',
+			index: 1,
+		}).exists().toString(), 'Check if {"css":"body","index":1} element exists');
 		assert.equal(
 			element('element').matchesJS('').toString(),
 			'Check if element element matches JavaScript expression'
