@@ -108,7 +108,7 @@ describe('Cookie chain', () => {
 			cookieName: 'cookieName',
 			comparator: {
 				type: SUBJ_COMPARATOR.EQUAL,
-				value: 'test',
+				val: 'test',
 			},
 		}), 'Check if cookieName cookie equals test');
 		assert.equal(toString({
@@ -116,7 +116,7 @@ describe('Cookie chain', () => {
 			isNegated: true,
 			comparator: {
 				type: SUBJ_COMPARATOR.EQUAL,
-				value: 'test',
+				val: 'test',
 			},
 		}), 'Check if cookieName cookie does not equal test');
 	});

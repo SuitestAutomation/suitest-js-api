@@ -3,6 +3,7 @@
 const assert = require('assert');
 const {set, lensPath} = require('ramda');
 const {EOL} = require('os');
+const {stripAnsiChars} = require('../../lib/utils/stringUtils');
 const {
 	errorMap,
 	getErrorMessage,
@@ -144,7 +145,8 @@ describe('Socket error messages', () => {
 						expectedValue: 'expectedUrl',
 					},
 				},
-				'App loaded actualUrl instead of the expected expectedUrl. Consider updating the app URL in settings.',
+				'App loaded actualUrl instead of the expected expectedUrl. Consider updating the app URL in settings. Failing checks:'
+					+ `${EOL}\t~ expectedUrl (expected)${EOL}\t× actualUrl (actual)${EOL}\t`,
 			],
 			[basePayload('queryFailed', 'applicationError'), 'Application thrown unexpected error while executing command "Chain description".'],
 			[basePayload('queryFailed', 'exprException'), 'JavaScript error: .'],
@@ -249,7 +251,7 @@ describe('Socket error messages', () => {
 				'We have waited for the requested activity to open, but instead the some.android.activity was started. Please check the configuration settings.',
 			],
 		].forEach(([payload, expectMessage]) => {
-			assert.equal(getErrorMessage(payload), expectMessage, JSON.stringify(payload, null, 4));
+			assert.equal(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
 	});
 });
