@@ -36,6 +36,7 @@ describe('envHelper.js', () => {
 		delete process.env[envVars.SUITEST_SESSION_TOKEN];
 		delete process.env[envVars.SUITEST_DEVICE_ID];
 		delete process.env[envVars.SUITEST_APP_CONFIG_ID];
+		delete process.env[envVars.SUITEST_DEBUG_MODE];
 	});
 
 	it('should read data from env, launch automated session and pair to device', async() => {
@@ -55,6 +56,23 @@ describe('envHelper.js', () => {
 		process.env[envVars.SUITEST_SESSION_TOKEN] = 'token';
 		process.env[envVars.SUITEST_DEVICE_ID] = deviceId;
 		process.env[envVars.SUITEST_APP_CONFIG_ID] = 'configId';
+
+		const res = await envHelper.handleUserEnvVar();
+
+		await assert.strictEqual(res, undefined);
+		await assert.strictEqual(authContext.context, sessionConstants.INTERACTIVE);
+		await assert.strictEqual(appContext.context.configId, 'configId');
+		await assert.strictEqual(pairedDeviceContext.context.deviceId, deviceId);
+	});
+
+	it('should launch interactive session in debug mode and send enableDebugMode ws request', async() => {
+		const deviceId = uuid();
+
+		process.env[envVars.SUITEST_SESSION_TYPE] = 'interactive';
+		process.env[envVars.SUITEST_SESSION_TOKEN] = 'token';
+		process.env[envVars.SUITEST_DEVICE_ID] = deviceId;
+		process.env[envVars.SUITEST_APP_CONFIG_ID] = 'configId';
+		process.env[envVars.SUITEST_DEBUG_MODE] = 'yes';
 
 		const res = await envHelper.handleUserEnvVar();
 
