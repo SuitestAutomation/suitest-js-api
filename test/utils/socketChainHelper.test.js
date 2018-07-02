@@ -1,10 +1,8 @@
 const assert = require('assert');
-const {EOL} = require('os');
 const helpers = require('../../lib/utils/socketChainHelper');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {PROP_COMPARATOR, SUBJ_COMPARATOR, ELEMENT_PROP} = require('../../lib/mappings');
 const {toString: elementToString} = require('../../lib/chains/elementChain');
-const sinon = require('sinon');
 
 describe('socket chain helpers', () => {
 	it('should provide a method to get user defined or default timeout out of data', () => {
@@ -196,6 +194,7 @@ describe('socket chain helpers', () => {
 							],
 					},
 					isAssert: true,
+					stack: '',
 				},
 			),
 			err => err instanceof assert.AssertionError &&
