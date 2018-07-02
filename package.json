@@ -1,6 +1,6 @@
 {
   "name": "suitest-js-api",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "main": "index.js",
   "repository": "git@github.com:SuitestAutomation/suitest-js-api.git",
   "author": "Suitest <hello@suite.st>",
@@ -24,7 +24,7 @@
     "node": ">=8.0.0"
   },
   "bin": {
-    "suitest": "lib/testLauncher/index.js"
+    "suitest": "bin/suitest"
   },
   "scripts": {
     "test": "mocha",
@@ -70,6 +70,6 @@
     "uuid": "^3.2.1",
     "ws": "^5.1.1",
     "yargs": "^11.0.0",
-    "yargs-parser": "^9.0.2"
+    "yargs-parser": "^10.0.0"
   }
 }

@@ -4,6 +4,7 @@ const helpers = require('../../lib/utils/socketChainHelper');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {PROP_COMPARATOR, SUBJ_COMPARATOR, ELEMENT_PROP} = require('../../lib/mappings');
 const {toString: elementToString} = require('../../lib/chains/elementChain');
+const sinon = require('sinon');
 
 describe('socket chain helpers', () => {
 	it('should provide a method to get user defined or default timeout out of data', () => {
@@ -67,7 +68,7 @@ describe('socket chain helpers', () => {
 		}, {}), assert.AssertionError, 'testLine fail');
 		// all other
 		assert.throws(() => helpers.processServerResponse(emptyString)({
-			result: 'fatal',
+			result: 'fail',
 		}), Error, 'testLine fail');
 		assert.throws(() => helpers.processServerResponse(emptyString)({
 			result: 'error',
@@ -102,15 +103,15 @@ describe('socket chain helpers', () => {
 				{
 					result: 'fail',
 					errorType: 'queryFailed',
-					actualValue: 'http://bxdpm12o-0-staging.suitest.net/sampleapp_staging/index-hbbtv.html',
+					actualValue: 'http://url/index-hbbtv.html',
 					expectedValue: 'test',
 					contentType: 'testLine',
 				},
 				{},
 			),
 			err => err instanceof assert.AssertionError &&
-				err.actual === 'http://bxdpm12o-0-staging.suitest.net/sampleapp_staging/index-hbbtv.html' &&
-				err.expected === 'test',
+				err.message.includes('× http://url/index-hbbtv.html (actual)') &&
+				err.message.includes('~ test (expected)')
 		);
 
 		assert.throws(
@@ -160,8 +161,59 @@ describe('socket chain helpers', () => {
 				},
 			),
 			err => err instanceof assert.AssertionError &&
-				err.actual === `height: 720${EOL}width: 1282` &&
-				err.expected === `height: 100${EOL}width: 200`
+				err.message.includes('× height: 720 (actual)') &&
+				err.message.includes('~ height: 100 (expected)') &&
+				err.message.includes('× width: 1282 (actual)') &&
+				err.message.includes('~ width: 200 (expected)')
 		);
+
+		assert.throws(
+			() => helpers.processServerResponse(emptyString)(
+				{
+					result: 'fail',
+					expression: [{
+						result: 'fail',
+						errorType: 'queryFailed',
+						actualValue: 200,
+						expectedValue: 100,
+					}],
+					errorType: 'queryFailed',
+					contentType: 'testLine',
+				},
+				{
+					type: 'element',
+					selector: {css: 'body'},
+					until: {
+						type: SUBJ_COMPARATOR['has'],
+						expression:
+							[
+								{
+									property: 'prop',
+									val: 100,
+								},
+							],
+					},
+					isAssert: true,
+				},
+			),
+			err => err instanceof assert.AssertionError &&
+				err.message.includes('× prop: 200 (actual)') &&
+				err.message.includes('~ prop: 100 (expected)'),
+		);
+	});
+
+	it('should exit process when response result is fatal', () => {
+		sinon.stub(console, 'error');
+		sinon.stub(process, 'exit');
+
+		try {
+			helpers.processServerResponse(() => '')({result: 'fatal'}, {}),
+			assert(console.error.called);
+			assert(process.exit.calledWith(1));
+			assert(process.exit.called);
+		} finally {
+			console.error.restore();
+			process.exit.restore();
+		}
 	});
 });

@@ -4,9 +4,11 @@ const {
 	element,
 	elementAssert,
 	toJSON,
+	beforeSendMsg,
 } = require('../../lib/chains/elementChain');
 const {VALUE, ELEMENT_PROP} = require('../../lib/constants/element');
 const {PROP_COMPARATOR, SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
+const sinon = require('sinon');
 
 describe('Element chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -18,6 +20,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.then, 'function');
 		assert.strictEqual(typeof chain.not, 'function');
 		assert.strictEqual(typeof chain.doesNot, 'function');
+		assert.strictEqual(typeof chain.isNot, 'function');
 		assert.strictEqual(typeof chain.exist, 'function');
 		assert.strictEqual(typeof chain.exists, 'function');
 		assert.strictEqual(typeof chain.match, 'function');
@@ -55,6 +58,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.sendText, 'undefined');
 		assert.strictEqual(typeof chain.not, 'function');
 		assert.strictEqual(typeof chain.doesNot, 'function');
+		assert.strictEqual(typeof chain.isNot, 'function');
 	});
 
 	it('should have only allowed modifiers after click is applied', () => {
@@ -75,6 +79,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.sendText, 'undefined');
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
 	});
 
 	it('should have only allowed modifiers after moveTo is applied', () => {
@@ -95,6 +100,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.sendText, 'undefined');
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
 	});
 
 	it('should have only allowed modifiers after sendText is applied', () => {
@@ -115,6 +121,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.sendText, 'undefined');
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
 	});
 
 	it('should have only allowed modifiers after matchJS is applied', () => {
@@ -128,6 +135,7 @@ describe('Element chain', () => {
 
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
 	});
 
 	it('should convert to string with meaningful message', () => {
@@ -185,6 +193,14 @@ describe('Element chain', () => {
 			element('element').sendText('text').repeat(10).interval(2000).toString(),
 			'Send text \'text\' to element element 10 times every 2000ms'
 		);
+	});
+
+	it('should have beforeSendMsg', () => {
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg({selector: {}});
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

@@ -8,6 +8,7 @@ function testLocationChain() {
 
 	baseLocation.not();
 	baseLocation.doesNot();
+	baseLocation.isNot();
 	baseLocation.timeout(10);
 	baseLocation.equal('');
 	baseLocation.equals('');
@@ -28,6 +29,7 @@ function testLocationChain() {
 
 	equalLoc.not();
 	equalLoc.doesNot();
+	equalLoc.isNot();
 	equalLoc.timeout(10);
 	baseLocation.clone();
 	baseLocation.abandon();
@@ -38,6 +40,7 @@ function testLocationChain() {
 
 	timeoutLoc.not();
 	timeoutLoc.doesNot();
+	timeoutLoc.isNot();
 	timeoutLoc.equal('');
 	timeoutLoc.equals('');
 	timeoutLoc.contain('');
@@ -156,6 +159,7 @@ function testCookieChain() {
 
 	baseCookie.not();
 	baseCookie.doesNot();
+	baseCookie.isNot();
 	baseCookie.exist();
 	baseCookie.exists();
 	baseCookie.matchJS('');
@@ -178,6 +182,7 @@ function testCookieChain() {
 
 	evalCookie.not();
 	evalCookie.doesNot();
+	evalCookie.isNot();
 	evalCookie.timeout(10);
 	evalCookie.clone();
 	evalCookie.abandon();
@@ -188,6 +193,7 @@ function testCookieChain() {
 
 	timeoutCookie.not();
 	timeoutCookie.doesNot();
+	timeoutCookie.isNot();
 	timeoutCookie.exist();
 	timeoutCookie.exists();
 	timeoutCookie.matchJS('');
@@ -320,6 +326,7 @@ async function elementTest() {
 	el.matchJS('() => true');
 	el.not();
 	el.doesNot();
+	el.isNot();
 	el.exist();
 	el.exists();
 	el.then();
@@ -352,6 +359,7 @@ async function videoTest() {
 	video().matchJS('() => true');
 	video().not();
 	video().doesNot();
+	video().isNot();
 	video().exist();
 	video().exists();
 	video().then();
@@ -468,6 +476,7 @@ async function jsExpressionTest() {
 
 	baseLocation.not();
 	baseLocation.doesNot();
+	baseLocation.isNot();
 	baseLocation.timeout(10);
 	baseLocation.equal('');
 	baseLocation.equals('');
@@ -486,6 +495,7 @@ async function jsExpressionTest() {
 
 	equalLoc.not();
 	equalLoc.doesNot();
+	equalLoc.isNot();
 	equalLoc.timeout(10);
 	baseLocation.clone();
 	baseLocation.abandon();
@@ -496,6 +506,7 @@ async function jsExpressionTest() {
 
 	timeoutLoc.not();
 	timeoutLoc.doesNot();
+	timeoutLoc.isNot();
 	timeoutLoc.equal('');
 	timeoutLoc.equals('');
 	timeoutLoc.contain('');

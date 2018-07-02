@@ -3,6 +3,7 @@
 const assert = require('assert');
 const {set, lensPath} = require('ramda');
 const {EOL} = require('os');
+const {stripAnsiChars} = require('../../lib/utils/stringUtils');
 const {
 	errorMap,
 	getErrorMessage,
@@ -114,11 +115,18 @@ describe('Socket error messages', () => {
 			[basePayload('deviceError', 'unsupportedSelector', ''), 'Internal error occurred. Chain description'],
 			[basePayload('deviceError', 'unsupportedSelector', 'xpathNotSupported'), 'The element cannot be found, because this device does not support XPath.'],
 			[basePayload('deviceError', 'deviceFailure', 'cssSelectorInvalid'), 'The element cannot be found, the identifying property css selector is invalid.'],
+			[basePayload('deviceError', 'videoAdapterInvalidOutput', 'some explanation from IL'), 'Video adapter error: some explanation from IL.'],
+			[basePayload('deviceError', 'videoAdapterNotFunction', 'some explanation from IL'), 'Video adapter error: some explanation from IL.'],
+			[basePayload('deviceError', 'videoAdapterThrownError', 'some explanation from IL'), 'Video adapter error: some explanation from IL.'],
 			[basePayload('wrongApp'), 'Wrong app ID detected'],
 			[basePayload('driverException'), 'Unexpected exception occurred on connected device. Please, contact support@suite.st if you see this often.'],
 			[basePayload('illegalButton'), 'Specified buttons are not supported on this device. Chain description'],
 			[basePayload('unsupportedButton'), 'Specified buttons are not supported on this device. Chain description'],
 			[basePayload('aborted'), 'Test execution was aborted. Chain description'],
+			[
+				set(lensPath(['response', 'message', 'info', 'reason']), 'manualActionRequired', basePayload('aborted')),
+				'Manual actions are not supported.',
+			],
 			[
 				set(lensPath(['chainData']), {
 					type: 'press',
@@ -137,7 +145,8 @@ describe('Socket error messages', () => {
 						expectedValue: 'expectedUrl',
 					},
 				},
-				'App loaded actualUrl instead of the expected expectedUrl. Consider updating the app URL in settings.',
+				'App loaded actualUrl instead of the expected expectedUrl. Consider updating the app URL in settings. Failing checks:'
+					+ `${EOL}\t~ expectedUrl (expected)${EOL}\t× actualUrl (actual)${EOL}\t`,
 			],
 			[basePayload('queryFailed', 'applicationError'), 'Application thrown unexpected error while executing command "Chain description".'],
 			[basePayload('queryFailed', 'exprException'), 'JavaScript error: .'],
@@ -242,7 +251,7 @@ describe('Socket error messages', () => {
 				'We have waited for the requested activity to open, but instead the some.android.activity was started. Please check the configuration settings.',
 			],
 		].forEach(([payload, expectMessage]) => {
-			assert.equal(getErrorMessage(payload), expectMessage, JSON.stringify(payload, null, 4));
+			assert.equal(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
 	});
 });

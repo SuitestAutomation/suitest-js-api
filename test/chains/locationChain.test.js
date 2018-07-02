@@ -3,9 +3,11 @@ const {
 	location,
 	locationAssert,
 	toJSON,
+	beforeSendMsg,
 } = require('../../lib/chains/locationChain');
 const comparatorTypes = require('../../lib/constants/comparator');
 const {SUBJ_COMPARATOR} = require('../../lib/mappings');
+const sinon = require('sinon');
 
 describe('Location chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -13,6 +15,7 @@ describe('Location chain', () => {
 
 		assert.strictEqual(typeof chain.not, 'function');
 		assert.strictEqual(typeof chain.doesNot, 'function');
+		assert.strictEqual(typeof chain.isNot, 'function');
 		assert.strictEqual(typeof chain.timeout, 'function');
 		assert.strictEqual(typeof chain.equal, 'function');
 		assert.strictEqual(typeof chain.equals, 'function');
@@ -39,6 +42,7 @@ describe('Location chain', () => {
 
 		assert.strictEqual(typeof chain.not, 'function');
 		assert.strictEqual(typeof chain.doesNot, 'function');
+		assert.strictEqual(typeof chain.isNot, 'function');
 		assert.strictEqual(typeof chain.timeout, 'function');
 		assert.strictEqual(typeof chain.equal, 'undefined');
 		assert.strictEqual(typeof chain.equals, 'undefined');
@@ -60,6 +64,7 @@ describe('Location chain', () => {
 
 		assert.strictEqual(typeof chain.not, 'function');
 		assert.strictEqual(typeof chain.doesNot, 'function');
+		assert.strictEqual(typeof chain.isNot, 'function');
 		assert.strictEqual(typeof chain.timeout, 'undefined');
 		assert.strictEqual(typeof chain.equal, 'function');
 		assert.strictEqual(typeof chain.equals, 'function');
@@ -81,6 +86,7 @@ describe('Location chain', () => {
 
 		assert.strictEqual(typeof chain.not, 'function');
 		assert.strictEqual(typeof chain.doesNot, 'function');
+		assert.strictEqual(typeof chain.isNot, 'function');
 		assert.strictEqual(typeof chain.timeout, 'function');
 		assert.strictEqual(typeof chain.equal, 'function');
 		assert.strictEqual(typeof chain.equals, 'function');
@@ -102,6 +108,7 @@ describe('Location chain', () => {
 
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
 		assert.strictEqual(typeof chain.timeout, 'function');
 		assert.strictEqual(typeof chain.equal, 'function');
 		assert.strictEqual(typeof chain.equals, 'function');
@@ -131,6 +138,14 @@ describe('Location chain', () => {
 		);
 		assert.equal(location().endWith('test').toString(), 'Check if current location ends with test');
 		assert.equal(location().not().endWith('test').toString(), 'Check if current location does not end with test');
+	});
+
+	it('should have beforeSendMsg', () => {
+		const info = sinon.stub(console, 'info');
+
+		beforeSendMsg({});
+		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
+		info.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {
