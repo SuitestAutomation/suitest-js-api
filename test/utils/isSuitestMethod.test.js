@@ -4,6 +4,7 @@ const isSuitestMethod = require('../../lib/utils/isSuitestMethod');
 
 describe('isSuitestMethod util', () => {
 	it('should check if method belongs of SUITEST_API class', () => {
+		assert.strictEqual(isSuitestMethod(null), false);
 		assert.strictEqual(isSuitestMethod('someFunction'), false);
 		assert.strictEqual(isSuitestMethod('SUITEST'), false);
 		assert.strictEqual(isSuitestMethod(API_CONSTRUCTOR_NAME), true);
