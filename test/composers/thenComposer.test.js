@@ -60,7 +60,7 @@ describe('Then composer', () => {
 		const executorSpy = sinon.spy(identity);
 		const callbackSpy = sinon.stub();
 		const fail = sinon.spy();
-		const rejection = {};
+		const rejection = new Error();
 
 		callbackSpy.rejects(rejection);
 
