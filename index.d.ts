@@ -213,20 +213,20 @@ declare namespace suitest {
 
 	interface Context {
 		context: symbol;
-		setContext(context: symbol);
-		clear();
+		setContext(context: symbol): void;
+		clear(): void;
 	}
 
 	interface AuthContext {
 		headers: object;
 		tokenKey: string;
 
-		setContext(newContext: symbol, tokenId: string|undefined, tokenPassword: string|undefined);
-		clear()
+		setContext(newContext: symbol, tokenId: string|undefined, tokenPassword: string|undefined): void;
+		clear(): void;
 		authorizeHttp(requestKey: string, requestObject: object, errorOptions: SuitestErrorOptions): Promise<SuitestError|object>;
 		authorizeWs(contentObject: object, commandName: string): Promise<SuitestError|object>;
 		authorizeWsConnection(connectObject: object, commandName: string): Promise<SuitestError|object>;
-		getToken();
+		getToken(): string;
 	}
 
 	interface SuitestErrorOptions {
