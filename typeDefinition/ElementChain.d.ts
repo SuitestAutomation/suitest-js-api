@@ -13,6 +13,7 @@ import {
 	BaseChain,
 	UntilModifier,
 } from './modifiers';
+import {ElementProps} from "./constants/ElementProps";
 
 export interface ElementChain extends
 	ElementBaseQueryChain<ElementChain>,
@@ -105,5 +106,5 @@ interface ElementBaseEvalChain<TSelf> extends
 
 interface ElementAbandonedChain extends AbstractChain {}
 
-type ElementQueryResult = string;
+type ElementQueryResult = ElementProps;
 type ElementEvalResult = void;

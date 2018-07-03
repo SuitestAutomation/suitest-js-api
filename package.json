@@ -28,6 +28,7 @@
   },
   "scripts": {
     "test": "mocha",
+    "test-definitions": "cd ./testDefinition && mocha definition.test.js",
     "test-watch": "yarn test -- -w",
     "coverage": "nyc yarn test",
     "lint": "eslint lib/ test/ --quiet"
@@ -55,7 +56,8 @@
     "mock-socket": "^7.1.0",
     "nock": "^9.1.6",
     "nyc": "^11.4.1",
-    "sinon": "^4.2.2"
+    "sinon": "^4.2.2",
+    "typescript": "^2.9.2"
   },
   "dependencies": {
     "ajv": "^6.1.1",
