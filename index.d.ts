@@ -222,7 +222,7 @@ declare namespace suitest {
 		tokenKey: string;
 
 		setContext(newContext: symbol, tokenId: string|undefined, tokenPassword: string|undefined): void;
-		clear(): void;
+		clear();
 		authorizeHttp(requestKey: string, requestObject: object, errorOptions: SuitestErrorOptions): Promise<SuitestError|object>;
 		authorizeWs(contentObject: object, commandName: string): Promise<SuitestError|object>;
 		authorizeWsConnection(connectObject: object, commandName: string): Promise<SuitestError|object>;
