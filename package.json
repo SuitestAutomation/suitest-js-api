@@ -28,7 +28,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "test-definitions": "cd ./testDefinition && mocha definition.test.js",
+    "test-definitions": "cd ./testDefinition && mocha --no-timeouts definition.test.js",
     "test-watch": "yarn test -- -w",
     "coverage": "nyc yarn test",
     "lint": "eslint lib/ test/ --quiet"
