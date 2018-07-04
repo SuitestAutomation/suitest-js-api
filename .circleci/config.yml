@@ -5,6 +5,8 @@
 version: 2
 jobs:
   build:
+    environment:
+      CC_TEST_REPORTER_ID: b8382b02e5d130520012123a7fcc97b478a6294991078cdabb721315bd2a9dd9
     docker:
       # specify the version you desire here
       - image: circleci/node:9.11
@@ -26,17 +28,33 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: yarn install
+      - run:
+        name: Install dependencies
+        command: |
+          yarn install
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      # install code climate
+      - run:
+        name: Setup Code Climate test-reporter
+        command: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+
       # run tests!
-      - run: yarn lint
-      - run: yarn coverage
-      - run: yarn test-definitions
+      - run:
+        name: Run Unit Tests
+        command: |
+          yarn lint
+          ./cc-test-reporter before-build
+          yarn coverage
+          ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
 
-
-
+      - run:
+        name: Check TypeScript definitions
+        command: |
+          yarn test-definitions
