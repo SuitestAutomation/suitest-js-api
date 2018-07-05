@@ -46,7 +46,7 @@ describe('Socket error messages', () => {
 
 	it('Error message getter should return default messages', () => {
 		const response = {errorType: 'unknownError'};
-		const toString = () => 'Chain description.';
+		const toString = () => 'Chain description';
 		const chainData = {};
 
 		assert.equal(getErrorMessage({
@@ -94,7 +94,7 @@ describe('Socket error messages', () => {
 			[basePayload('missingPackage'), 'There is nothing to test, because the selected configuration does not contain an app package. Upload a package on your app\'s configuration page before continuing.'],
 			[basePayload('internalError'), 'Internal error occurred. Chain description.'],
 			[basePayload('ILInternalError'), 'Internal error occurred. Chain description.'],
-			[basePayload('queryTimeout'), 'Application did not respond for 60 seconds. Chain description.'],
+			[basePayload('queryTimeout'), 'Application did not respond for 60 seconds. Executing "Chain description".'],
 			[basePayload('serverError'), 'Server error occurred. Chain description.'],
 			[basePayload('invalidCredentials'), 'Credentials for this device were changed.'],
 			[basePayload('syntaxError'), 'Test command received invalid input. Chain description.'],
