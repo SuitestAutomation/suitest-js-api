@@ -7,6 +7,7 @@ const {stripAnsiChars} = require('../../lib/utils/stringUtils');
 const {
 	errorMap,
 	getErrorMessage,
+	getInfoErrorMessage,
 	responseMessageCode,
 	responseMessageInfo,
 } = require('../../lib/utils/socketErrorMessages');
@@ -253,5 +254,24 @@ describe('Socket error messages', () => {
 		].forEach(([payload, expectMessage]) => {
 			assert.equal(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
+	});
+
+	it('should test getInfoErrorMessage', () => {
+		const msg1 = getInfoErrorMessage('message', 'prefix ', {
+			result: 'fatal',
+			error: 'test is not started',
+		}, 'stack\n\tat line1\n\tat line2');
+
+		assert.strictEqual(msg1, 'prefix message\n\tat line1', 'message 1');
+
+		const msg2 = getInfoErrorMessage('message', 'prefix ', {
+			result: 'fatal',
+		}, 'stack\n\tat line1\n\tat line2');
+
+		assert.strictEqual(msg2, 'prefix message Test session will now close and all remaining Suitest commands will fail. To allow execution of remaining Suitest commands call suitest.startTest() or fix this error.\n\tat line1', 'message 1');
+
+		const msg3 = getInfoErrorMessage('message', 'prefix ', {}, 'stack\n\tat line1\n\tat line2');
+
+		assert.strictEqual(msg3, 'prefix message\n\tat line1', 'message 3');
 	});
 });

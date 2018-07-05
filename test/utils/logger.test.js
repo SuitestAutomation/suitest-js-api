@@ -39,15 +39,4 @@ describe('logger util', () => {
 			console.log.restore();
 		}
 	});
-
-	it('should test logError', () => {
-		const info = sinon.stub(console, 'error');
-
-		logger.logError('message', 'stack\n\tat line1\n\tat line2', 'prefix ');
-		assert.strictEqual(info.called, true);
-		assert.strictEqual(info.firstCall.args[0].includes('prefix message'), true);
-		assert.strictEqual(info.firstCall.args[0].includes('at line1'), true);
-		assert.strictEqual(info.firstCall.args[0].includes('at line2'), false);
-		info.restore();
-	});
 });
