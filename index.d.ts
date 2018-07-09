@@ -36,7 +36,7 @@ declare namespace suitest {
 		startTestPack(options: StartTestPackOptions): Promise<StartTestPackResult|SuitestError>;
 		openSession(options: OpenSessionOptions): Promise<OpenSessionResult|SuitestError>;
 		closeSession(): Promise<object|SuitestError>;
-		setAppConfig(options: SetAppContextOptions): Promise<void|SuitestError>;
+		setAppConfig(configId: string, options: SetAppContextOptions): Promise<void|SuitestError>;
 		pairDevice(deviceId: string): Promise<DeviceData|SuitestError>;
 		releaseDevice(): Promise<void|SuitestError>;
 		startTest(clientTestId: string, options?: StartTestOptions): Promise<void|SuitestError>;
