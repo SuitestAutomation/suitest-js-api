@@ -115,6 +115,25 @@ describe('SuitestLauncher', () => {
 		}
 	});
 
+	it('should exit process if inspect arg provided in automated mode', async() => {
+		const suitestLauncher = new TestLauncher({
+			tokenKey: '1',
+			tokenPassword: '1',
+			testPackId: 10,
+			concurrency: 1,
+			inspectBrk: '9121',
+		}, ['npm', '--version']);
+
+		try {
+			await suitestLauncher.runAutomatedSession();
+			assert.ok(false, 'call runAutomatedSession success');
+		} catch (error) {
+			assert.ok(error, 'error');
+			assert(process.exit.calledWith(1));
+			assert(logger.error.called);
+		}
+	});
+
 	it('should log successfull result for child process', async() => {
 		const testNock = nock(config.apiUrl).post(makeUrlFromArray([endpoints.testPackGenTokens, {id: 10}]))
 			.reply(200, {
@@ -178,6 +197,10 @@ describe('SuitestLauncher', () => {
 		const testNock = nock(config.apiUrl).post(endpoints.session).reply(200, {
 			deviceAccessToken: 'deviceAccessToken',
 		});
+		const devicesDetailsNock = nock(config.apiUrl).get(makeUrlFromArray([endpoints.devices, null, {limit: 100}]))
+			.reply(200, {
+				values: [{deviceId: 'deviceId'}],
+			});
 		const sessionCloseNock = nock(config.apiUrl).post(endpoints.sessionClose).reply(200, {});
 		const suitestLauncher = new TestLauncher({
 			username: 'username',
@@ -188,6 +211,7 @@ describe('SuitestLauncher', () => {
 		}, ['illegalCommand', '--illegalCommand']);
 
 		await suitestLauncher.runInteractiveSession();
+		assert.ok(devicesDetailsNock.isDone(), 'device details request');
 		assert.ok(testNock.isDone(), 'request');
 		assert.ok(sessionCloseNock.isDone(), 'request');
 		assert(process.exit.calledWith(1));
@@ -198,6 +222,10 @@ describe('SuitestLauncher', () => {
 		const testNock = nock(config.apiUrl).post(endpoints.session).reply(200, {
 			deviceAccessToken: 'deviceAccessToken',
 		});
+		const devicesDetailsNock = nock(config.apiUrl).get(makeUrlFromArray([endpoints.devices, null, {limit: 100}]))
+			.reply(200, {
+				values: [{deviceId: 'deviceId'}],
+			});
 		const suitestLauncher = new TestLauncher({
 			username: 'username',
 			password: 'password',
@@ -210,7 +238,8 @@ describe('SuitestLauncher', () => {
 
 		await suitestLauncher.runInteractiveSession();
 
-		assert.ok(testNock.isDone(), 'request');
+		assert.ok(testNock.isDone(), 'open session request');
+		assert.ok(devicesDetailsNock.isDone(), 'device details request');
 		assert.equal(cpForkStub.getCall(0).args[2].env[envVars.SUITEST_DEBUG_MODE], 'yes');
 
 		cpForkStub.restore();
