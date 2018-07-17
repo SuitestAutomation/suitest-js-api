@@ -9,6 +9,7 @@ const {
 	getErrorMessage,
 	responseMessageCode,
 	responseMessageInfo,
+	getErrorType,
 } = require('../../lib/utils/socketErrorMessages');
 
 describe('Socket error messages', () => {
@@ -68,7 +69,7 @@ describe('Socket error messages', () => {
 	it('Error message should return specific messages', () => {
 		const toString = () => 'Chain description';
 		const chainData = {};
-		const basePayload = (errorType = '', code, reason) => {
+		const basePayload = (errorType, code, reason) => {
 			let payload = {
 				response: {errorType},
 				toString,
@@ -250,8 +251,34 @@ describe('Socket error messages', () => {
 				set(lensPath(['response', 'message', 'info', 'currentLandingActivity']), 'some.android.activity', basePayload('landingActivityTimeoutError')),
 				'We have waited for the requested activity to open, but instead the some.android.activity was started. Please check the configuration settings.',
 			],
+			[
+				set(lensPath(['response']), {
+					executeThrowException: true,
+					executeExceptionMessage: 'error',
+				}, basePayload()),
+				'JavaScript expression error: "error".',
+			],
+			[
+				set(lensPath(['response']), {
+					matchJSThrowException: true,
+					matchJSExceptionMessage: 'error',
+				}, basePayload()),
+				'JavaScript expression error: "error".',
+			],
 		].forEach(([payload, expectMessage]) => {
 			assert.equal(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
+	});
+
+	it('test gerErrorType', () => {
+		assert.strictEqual(getErrorType({}), '', 'default');
+		assert.strictEqual(getErrorType({errorType: ''}), '', 'empty string');
+		assert.strictEqual(getErrorType({errorType: 'errorType'}), 'errorType', 'errorType');
+		assert.strictEqual(getErrorType({executeThrowException: true}), 'executeThrowException', 'executeThrowException');
+		assert.strictEqual(getErrorType({matchJSThrowException: true}), 'matchJSThrowException', 'matchJSThrowException');
+		assert.strictEqual(getErrorType({
+			errorType: 'errorType',
+			executeThrowException: true,
+		}), 'errorType', 'errorType priority');
 	});
 });
