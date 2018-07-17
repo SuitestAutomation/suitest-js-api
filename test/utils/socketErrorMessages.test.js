@@ -9,7 +9,6 @@ const {
 	getErrorMessage,
 	responseMessageCode,
 	responseMessageInfo,
-	getErrorType,
 } = require('../../lib/utils/socketErrorMessages');
 
 describe('Socket error messages', () => {
@@ -253,6 +252,7 @@ describe('Socket error messages', () => {
 			],
 			[
 				set(lensPath(['response']), {
+					errorType: 'deviceError',
 					executeThrowException: true,
 					executeExceptionMessage: 'error',
 				}, basePayload()),
@@ -260,25 +260,14 @@ describe('Socket error messages', () => {
 			],
 			[
 				set(lensPath(['response']), {
+					errorType: 'deviceError',
 					matchJSThrowException: true,
 					matchJSExceptionMessage: 'error',
-				}, basePayload()),
+				}, basePayload('deviceError')),
 				'JavaScript expression error: "error".',
 			],
 		].forEach(([payload, expectMessage]) => {
 			assert.equal(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
-	});
-
-	it('test gerErrorType', () => {
-		assert.strictEqual(getErrorType({}), '', 'default');
-		assert.strictEqual(getErrorType({errorType: ''}), '', 'empty string');
-		assert.strictEqual(getErrorType({errorType: 'errorType'}), 'errorType', 'errorType');
-		assert.strictEqual(getErrorType({executeThrowException: true}), 'executeThrowException', 'executeThrowException');
-		assert.strictEqual(getErrorType({matchJSThrowException: true}), 'matchJSThrowException', 'matchJSThrowException');
-		assert.strictEqual(getErrorType({
-			errorType: 'errorType',
-			executeThrowException: true,
-		}), 'errorType', 'errorType priority');
 	});
 });
