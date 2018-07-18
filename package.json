@@ -1,6 +1,6 @@
 {
   "name": "suitest-js-api",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "main": "index.js",
   "repository": "git@github.com:SuitestAutomation/suitest-js-api.git",
   "author": "Suitest <hello@suite.st>",
@@ -31,7 +31,8 @@
     "test-definitions": "cd ./testDefinition && mocha --no-timeouts definition.test.js",
     "test-watch": "yarn test -- -w",
     "coverage": "nyc --reporter=lcov yarn test",
-    "lint": "eslint lib/ test/ --quiet"
+    "lint": "eslint lib/ test/ --quiet",
+    "postversion": "git branch -d latest && git push origin --delete latest && git branch latest && git push origin latest:latest"
   },
   "nyc": {
     "check-coverage": true,
@@ -66,7 +67,7 @@
     "node-fetch": "^2.0.0",
     "package-json": "^5.0.0",
     "ramda": "^0.25.0",
-    "raven": "^2.4.1",
+    "raven": "^2.6.2",
     "rc": "^1.2.6",
     "read": "^1.0.7",
     "semver": "^5.5.0",
