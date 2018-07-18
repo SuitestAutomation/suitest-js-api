@@ -37,7 +37,8 @@ describe('launcherLoggerHelper', () => {
 
 		assert.throws(mkDirByPathSync.bind(null, './protectedPath2'), (err) => {
 			return err.type === SuitestError.type
-				&& err.message.includes('Unknown error');
+				&& err.message.includes('ANY error')
+				&& err.message.includes('protectedPath2');
 		}, 'error handler handle error');
 		assert.throws(mkDirByPathSync.bind(null, './protectedPath1'), (err) => {
 			return err.type === SuitestError.type
@@ -111,7 +112,8 @@ describe('launcherLoggerHelper', () => {
 		}, 'error handler handle EACCES');
 		assert.throws(errHandler.bind(null, {code: 'ANY'}), (err) => {
 			return err.type === SuitestError.type
-				&& err.message.includes('Unknown error');
+				&& err.message.includes('ANY error')
+				&& err.message.includes('path1/path2');
 		}, 'error handler handle error');
 		fs.existsSync.restore();
 		fs.unlinkSync.restore();
