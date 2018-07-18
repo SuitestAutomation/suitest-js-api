@@ -68,7 +68,7 @@ describe('Socket error messages', () => {
 	it('Error message should return specific messages', () => {
 		const toString = () => 'Chain description';
 		const chainData = {};
-		const basePayload = (errorType = '', code, reason) => {
+		const basePayload = (errorType, code, reason) => {
 			let payload = {
 				response: {errorType},
 				toString,
@@ -249,6 +249,22 @@ describe('Socket error messages', () => {
 			[
 				set(lensPath(['response', 'message', 'info', 'currentLandingActivity']), 'some.android.activity', basePayload('landingActivityTimeoutError')),
 				'We have waited for the requested activity to open, but instead the some.android.activity was started. Please check the configuration settings.',
+			],
+			[
+				set(lensPath(['response']), {
+					errorType: 'deviceError',
+					executeThrowException: true,
+					executeExceptionMessage: 'error',
+				}, basePayload()),
+				'JavaScript expression error: "error".',
+			],
+			[
+				set(lensPath(['response']), {
+					errorType: 'deviceError',
+					matchJSThrowException: true,
+					matchJSExceptionMessage: 'error',
+				}, basePayload('deviceError')),
+				'JavaScript expression error: "error".',
 			],
 		].forEach(([payload, expectMessage]) => {
 			assert.equal(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
