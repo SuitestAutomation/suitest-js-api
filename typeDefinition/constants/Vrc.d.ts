@@ -69,7 +69,4 @@ export type VrcConstants = {
 	VIEW                    : symbol,
 	HOME                    : symbol,
 	SELECT                  : symbol,
-
-	// Roku
-	STAR                    : symbol,
 };
