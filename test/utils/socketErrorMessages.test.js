@@ -328,7 +328,6 @@ describe('Socket error messages', () => {
 			],
 			[
 				set(lensPath(['response']), {
-					errorType: 'deviceError',
 					executeThrowException: true,
 					executeExceptionMessage: 'error',
 				}, basePayload()),
@@ -336,10 +335,9 @@ describe('Socket error messages', () => {
 			],
 			[
 				set(lensPath(['response']), {
-					errorType: 'deviceError',
 					matchJSThrowException: true,
 					matchJSExceptionMessage: 'error',
-				}, basePayload('deviceError')),
+				}, basePayload()),
 				'JavaScript expression error: "error".',
 			],
 		].forEach(([payload, expectMessage]) => {
