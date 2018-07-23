@@ -11,6 +11,7 @@ const {
 	responseMessageCode,
 	responseMessageInfo,
 } = require('../../lib/utils/socketErrorMessages');
+const {NETWORK_PROP, NETWORK_METHOD} = require('../../lib/constants/networkRequest');
 
 describe('Socket error messages', () => {
 	it('test response message getters', () => {
@@ -69,7 +70,7 @@ describe('Socket error messages', () => {
 	it('Error message should return specific messages', () => {
 		const toString = () => 'Chain description';
 		const chainData = {};
-		const basePayload = (errorType = '', code, reason) => {
+		const basePayload = (errorType, code, reason) => {
 			let payload = {
 				response: {errorType},
 				toString,
@@ -146,8 +147,83 @@ describe('Socket error messages', () => {
 						expectedValue: 'expectedUrl',
 					},
 				},
-				'App loaded actualUrl instead of the expected expectedUrl. Consider updating the app URL in settings. Failing checks:'
-					+ `${EOL}\t~ expectedUrl (expected)${EOL}\t× actualUrl (actual)${EOL}\t`,
+				'App loaded actualUrl instead of the expected expectedUrl. Consider updating the app URL in settings.'
+					+ `${EOL}\tFailing checks:`
+					+ `${EOL}\t~ expectedUrl (expected)`
+					+ `${EOL}\t× actualUrl (actual)${EOL}\t`,
+			],
+			[
+				{
+					...basePayload('queryFailed'),
+					response: {
+						errorType: 'queryFailed',
+						errors: [{'type': 'noUriFound'}],
+					},
+					chainData: {
+						type: 'networkRequest',
+						comparator: {val: 'test'},
+					},
+				},
+				'queryFailed: "Chain description."'
+					+ `${EOL}\tFailing checks:`
+					+ `${EOL}\t~ url: test (expected)`
+					+ `${EOL}\t× url: request was not made (actual)`,
+			],
+			[
+				{
+					...basePayload('queryFailed'),
+					response: {
+						errorType: 'queryFailed',
+						errors: [{
+							type: 'header',
+							name: 'testHeader',
+							actualValue: 'testActualVal',
+							message: 'request',
+						}, {
+							type: 'method',
+							actualValue: 'POST',
+							message: 'request',
+						}, {
+							type: 'body',
+							reason: 'notFound',
+							message: 'response',
+						}, {
+							type: 'status',
+							message: 'response',
+						}, {
+							type: 'header',
+							message: 'response',
+							name: 'not in chain data, will be ignored',
+						}],
+					},
+					chainData: {
+						type: 'networkRequest',
+						request: {props: [{
+							name: 'testHeader',
+							val: 'testExpectedVal',
+						}, {
+							name: NETWORK_PROP.METHOD,
+							val: NETWORK_METHOD.GET,
+						}]},
+						response: {props: [{
+							name: NETWORK_PROP.BODY,
+							val: 'testBody',
+						}, {
+							name: NETWORK_PROP.STATUS,
+							val: 200,
+						}]},
+					},
+				},
+				'queryFailed: "Chain description."'
+					+ `${EOL}\tFailing checks:`
+					+ `${EOL}\t~ request header "testHeader": testExpectedVal (expected)`
+					+ `${EOL}\t× request header "testHeader": testActualVal (actual)`
+					+ `${EOL}\t~ request method: GET (expected)`
+					+ `${EOL}\t× request method: POST (actual)`
+					+ `${EOL}\t~ response body: testBody (expected)`
+					+ `${EOL}\t× response body: not found (actual)`
+					+ `${EOL}\t~ response status: 200 (expected)`
+					+ `${EOL}\t× response status: unknown (actual)`,
 			],
 			[basePayload('queryFailed', 'applicationError'), 'Application thrown unexpected error while executing command "Chain description.".'],
 			[basePayload('queryFailed', 'exprException'), 'JavaScript error: .'],
@@ -250,6 +326,20 @@ describe('Socket error messages', () => {
 			[
 				set(lensPath(['response', 'message', 'info', 'currentLandingActivity']), 'some.android.activity', basePayload('landingActivityTimeoutError')),
 				'We have waited for the requested activity to open, but instead the some.android.activity was started. Please check the configuration settings.',
+			],
+			[
+				set(lensPath(['response']), {
+					executeThrowException: true,
+					executeExceptionMessage: 'error',
+				}, basePayload()),
+				'JavaScript expression error: "error".',
+			],
+			[
+				set(lensPath(['response']), {
+					matchJSThrowException: true,
+					matchJSExceptionMessage: 'error',
+				}, basePayload()),
+				'JavaScript expression error: "error".',
 			],
 		].forEach(([payload, expectMessage]) => {
 			assert.equal(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));

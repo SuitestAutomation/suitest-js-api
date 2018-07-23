@@ -52,6 +52,8 @@ const {authContext, appContext, pairedDeviceContext, testContext} = require('./l
 const envHelper = require('./lib/utils/envHelper');
 const {warnUnusedLeaves} = require('./lib/utils/unusedExpressionWatchers');
 
+const {warnLauncherAndLibHasDiffVersions} = require('./lib/utils/packageMetadataHelper');
+
 // Publicly available API goes here
 class SUITEST_API {
 	constructor() {
@@ -139,6 +141,8 @@ const shutDown = () => {
 	// Warn user about un-awaited chains
 	warnUnusedLeaves();
 
+	// warn about that launcher and library have different versions
+	warnLauncherAndLibHasDiffVersions();
 	// Do not force process exit, because this will interfere with other libs (e.g. Mocha)
 	// that user might be using. Instead make sure there are no event listeners left on our side
 	// to keep process running
