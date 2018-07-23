@@ -348,11 +348,10 @@ describe('Socket error messages', () => {
 
 	it('should test getInfoErrorMessage', () => {
 		const msg1 = getInfoErrorMessage('message', 'prefix ', {
-			result: 'fatal',
-			error: 'test is not started',
+			errorType: 'testIsNotStarted',
 		}, 'stack\n\tat line1\n\tat line2');
 
-		assert.strictEqual(msg1, 'prefix message\n\tat line1', 'message 1');
+		assert.strictEqual(msg1, 'prefix message Test session will now close and all remaining Suitest commands will fail. To allow execution of remaining Suitest commands call suitest.startTest() or fix this error.\n\tat line1', 'message 1');
 
 		const msg2 = getInfoErrorMessage('message', 'prefix ', {
 			result: 'fatal',
