@@ -12,10 +12,10 @@ for living room devices and web browsers.
 With this JavaScript API you can create and run automated end-to-end tests
 or write an automation plugin for other software.
 
-[Detailed API docs](https://suite.st/docs/suitest-api/) as well as other useful
+[Detailed API docs][api docs] as well as other useful
 resources about test automation are available on the 
-[Suitest website](https://suite.st/docs/). To use the API you'll need a
-[free Suitest account](https://the.suite.st/registration).
+[Suitest website][docs]. To use the API you'll need a
+[free Suitest account][registration].
 
 ## What is Suitest good for?
 
@@ -54,8 +54,12 @@ Suitest supports automating end-to-end testing of:
 - Xbox One apps
 - Traditional websites and web apps for desktop browsers.
 
+## Contributing
 
+Read our [contributing guide][] to learn about our development process, how to propose
+bugfixes and improvements, and how to build and test your changes to Suitest JS API.
 
-
-
-
+[api docs]: https://suite.st/docs/suitest-api/
+[docs]: https://suite.st/docs/
+[registration]: https://the.suite.st/registration
+[contributing guide]: https://github.com/SuitestAutomation/suitest-js-api/blob/master/CONTRIBUTING.md
