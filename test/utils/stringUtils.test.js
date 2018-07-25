@@ -22,5 +22,6 @@ describe('stringUtils util', () => {
 	it('test appendDot', () => {
 		assert.equal(appendDot(''), '.');
 		assert.equal(appendDot('test'), 'test.');
+		assert.equal(appendDot('test.'), 'test.');
 	});
 });

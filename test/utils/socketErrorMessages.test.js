@@ -96,7 +96,7 @@ describe('Socket error messages', () => {
 			[basePayload('missingPackage'), 'There is nothing to test, because the selected configuration does not contain an app package. Upload a package on your app\'s configuration page before continuing.'],
 			[basePayload('internalError'), 'Internal error occurred. Chain description.'],
 			[basePayload('ILInternalError'), 'Internal error occurred. Chain description.'],
-			[basePayload('queryTimeout'), 'Application did not respond for 60 seconds. Executing "Chain description".'],
+			[basePayload('queryTimeout'), 'Application did not respond for 60 seconds. Executing "Chain description.".'],
 			[basePayload('serverError'), 'Server error occurred. Chain description.'],
 			[basePayload('invalidCredentials'), 'Credentials for this device were changed.'],
 			[basePayload('syntaxError'), 'Test command received invalid input. Chain description.'],
@@ -362,5 +362,9 @@ describe('Socket error messages', () => {
 		const msg3 = getInfoErrorMessage('message', 'prefix ', {}, 'stack\n\tat line1\n\tat line2');
 
 		assert.strictEqual(msg3, 'prefix message\n\tat line1', 'message 3');
+
+		const msg4 = getInfoErrorMessage('message' + EOL, 'prefix ', {}, 'stack\n\tat line1\n\tat line2');
+
+		assert.strictEqual(msg4, 'prefix message' + EOL + '\tat line1', 'message 3');
 	});
 });
