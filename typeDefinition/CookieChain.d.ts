@@ -72,4 +72,4 @@ interface CookieEvalModifiers<T> extends
 interface CookieAbandonedChain extends AbstractChain {}
 
 type CookieQueryResult = string;
-type CookieEvalResult = boolean;
+type CookieEvalResult = boolean | void;

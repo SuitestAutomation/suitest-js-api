@@ -48,4 +48,4 @@ interface WindowEmptyChain extends WindowBaseEvalChain<WindowEmptyChain> {}
 interface WindowAbandonedChain extends AbstractChain {}
 
 type WindowQueryResult = string;
-type WindowEvalResult = boolean;
+type WindowEvalResult = boolean | void;
