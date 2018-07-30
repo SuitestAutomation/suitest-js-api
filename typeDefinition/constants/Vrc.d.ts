@@ -71,5 +71,5 @@ export type VrcConstants = {
 	SELECT                  : symbol,
 
 	// Roku
-	STAR                    : symbol,
+	REPLAY                    : symbol,
 };
