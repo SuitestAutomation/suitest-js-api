@@ -106,5 +106,5 @@ interface ElementBaseEvalChain<TSelf> extends
 
 interface ElementAbandonedChain extends AbstractChain {}
 
-type ElementQueryResult = ElementProps;
+type ElementQueryResult = ElementProps | void;
 type ElementEvalResult = boolean | void;
