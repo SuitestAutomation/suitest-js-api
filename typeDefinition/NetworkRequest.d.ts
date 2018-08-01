@@ -30,4 +30,4 @@ interface NetworkRequestEvalChain<T> extends
 
 interface NetworkRequestAbandonedChain extends AbstractChain {}
 
-type NetworkRequestEvalResult = boolean;
+type NetworkRequestEvalResult = boolean | void;

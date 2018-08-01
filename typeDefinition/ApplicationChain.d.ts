@@ -22,4 +22,4 @@ interface ApplicationAbandonedChain extends
 {}
 
 type ApplicationQueryResult = string;
-type ApplicationEvalResult = boolean;
+type ApplicationEvalResult = boolean | void;

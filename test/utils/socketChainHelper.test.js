@@ -32,7 +32,7 @@ describe('socket chain helpers', () => {
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
 			contentType: 'query',
 			elementExists: false,
-		}, {stack: ''}), false, 'query element not found');
+		}, {stack: ''}), undefined, 'query element not found');
 		assert.strictEqual(helpers.processServerResponse(emptyString)({
 			contentType: 'query',
 			execute: 'val',

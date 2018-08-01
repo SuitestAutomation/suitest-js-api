@@ -75,4 +75,4 @@ interface JsExpressionAbandonedChain extends
 {}
 
 type JsExpressionQueryResult = string;
-type JsExpressionEvalResult = boolean;
+type JsExpressionEvalResult = boolean | void;

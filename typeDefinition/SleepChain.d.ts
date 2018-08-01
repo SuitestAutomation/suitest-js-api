@@ -9,4 +9,4 @@ export interface SleepChain extends
 
 interface SleepAbandonedChain extends AbstractChain {}
 
-type SleepEvalResult = void;
+type SleepEvalResult = void | boolean;
