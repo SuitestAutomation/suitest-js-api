@@ -48,7 +48,7 @@ declare namespace suitest {
 		application(): ApplicationChain;
 		clearAppData(): ClearAppDataChain;
 		cookie(cookieName: string): CookieChain;
-		element(elementSelector: ElementSelector): ElementChain;
+		element(elementSelector: ElementSelector | string): ElementChain;
 		video(): VideoChain;
 		executeCommand(jsCode: string): ExecuteCommandChain;
 		executeCommand(jsCode: Function): ExecuteCommandChain;
