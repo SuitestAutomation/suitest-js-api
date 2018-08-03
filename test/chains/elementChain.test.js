@@ -7,6 +7,7 @@ const {
 	beforeSendMsg,
 } = require('../../lib/chains/elementChain');
 const {VALUE, ELEMENT_PROP} = require('../../lib/constants/element');
+const VISIBILITY_STATE = require('../../lib/constants/visibilityState');
 const {PROP_COMPARATOR, SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const sinon = require('sinon');
 
@@ -267,7 +268,10 @@ describe('Element chain', () => {
 		}, 'testLine click until');
 		assert.deepStrictEqual(toJSON({
 			isClick: true,
-			selector: {css: 'css'},
+			selector: {
+				css: 'css',
+				index: 2,
+			},
 		}), {
 			type: 'eval',
 			request: {
@@ -280,7 +284,10 @@ describe('Element chain', () => {
 				delay: 1000,
 				target: {
 					type: 'element',
-					val: {css: 'css'},
+					val: {
+						css: 'css',
+						ifMultipleFoundReturn: 2,
+					},
 				},
 			},
 		}, 'eval click');
@@ -403,6 +410,11 @@ describe('Element chain', () => {
 						type: PROP_COMPARATOR.APPROX,
 						deviation: 100,
 					},
+					{
+						name: ELEMENT_PROP.VISIBILITY,
+						val: VISIBILITY_STATE.VISIBLE,
+						type: PROP_COMPARATOR.EQUAL,
+					},
 				],
 			},
 			selector: {apiId: 'apiId'},
@@ -431,6 +443,11 @@ describe('Element chain', () => {
 							val: 1024,
 							type: '+-',
 							deviation: 100,
+						},
+						{
+							property: 'visibility',
+							val: 'visible',
+							type: '=',
 						},
 					],
 					type: 'has',

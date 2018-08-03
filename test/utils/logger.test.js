@@ -2,7 +2,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 const logger = require('../../lib/utils/logger');
 
-describe('unusedExpressionWatchers', () => {
+describe('logger util', () => {
 	it('should display log, info, warn, error messages', () => {
 		sinon.stub(console, 'log');
 		sinon.stub(console, 'info');
