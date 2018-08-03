@@ -1,8 +1,12 @@
 import { element } from '../../index';
 
-const el = element({
+let el = element({
     css: '.my-element',
 });
+
+// element can accept strings
+el = element('.my-element');
+
 el.click();
 el.exist();
 el.moveTo();
