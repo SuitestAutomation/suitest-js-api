@@ -341,6 +341,7 @@ describe('Socket error messages', () => {
 				}, basePayload()),
 				'JavaScript expression error: "error".',
 			],
+			[basePayload('signInRequired'), 'Account needs to be signed in on target device.'],
 		].forEach(([payload, expectMessage]) => {
 			assert.equal(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
