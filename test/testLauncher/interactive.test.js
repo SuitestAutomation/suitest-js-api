@@ -21,9 +21,7 @@ describe('test launcher interactive command', function() {
 		await handler({
 			password: 'pass',
 		});
-
 		assert.strictEqual(interactiveStub.called, true);
-
 		interactiveStub.restore();
 	});
 
@@ -31,10 +29,8 @@ describe('test launcher interactive command', function() {
 		const interactiveStub = sinon.stub(SuitestLauncher.prototype, 'runInteractiveSession');
 
 		await handler({});
-
 		assert.strictEqual(promptPassword.called, true);
 		assert.strictEqual(interactiveStub.called, true);
-
 		interactiveStub.restore();
 	});
 });
