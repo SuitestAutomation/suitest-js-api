@@ -75,19 +75,14 @@ describe('webSockets', () => {
 
 	it('should reject connection promise if server was disconnected unexpectedly', async() => {
 		sinon.stub(console, 'error');
-		let err;
-
-		await testServer.stop();
 
 		try {
-			await webSockets.connect();
-		} catch (error) {
-			err = error;
+			await testServer.stop();
+			await assertThrowsAsync(webSockets.connect, err => err instanceof SuitestError);
+			assert.strictEqual(webSockets.isConnected(), false, 'connected');
+		} finally {
+			console.error.restore();
 		}
-
-		assert.ok(err);
-		assert.strictEqual(webSockets.isConnected(), false, 'connected');
-		console.error.restore();
 	});
 
 	it('should handle ws response without error message', async() => {

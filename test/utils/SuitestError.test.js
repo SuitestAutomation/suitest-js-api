@@ -51,24 +51,26 @@ describe('SuitestError', () => {
 	});
 
 	it('should have exit method', () => {
-		const err = new SuitestError('test', SuitestError.AUTH_NOT_ALLOWED);
-
 		sinon.stub(process, 'exit');
 		sinon.stub(console, 'error');
 
-		assert.ok(err.exit, 'exit');
-		assert.ok(typeof err.exit === 'function', 'exit is function');
+		try {
+			const err = new SuitestError('test', SuitestError.AUTH_NOT_ALLOWED);
 
-		err.exit();
-		assert(process.exit.calledWith(1));
-		assert(process.exit.called);
+			assert.ok(err.exit, 'exit');
+			assert.ok(typeof err.exit === 'function', 'exit is function');
 
-		err.exit(0);
-		assert(process.exit.calledWith(0));
-		assert(process.exit.called);
+			err.exit();
+			assert(process.exit.calledWith(1));
+			assert(process.exit.called);
 
-		process.exit.restore();
-		console.error.restore();
+			err.exit(0);
+			assert(process.exit.calledWith(0));
+			assert(process.exit.called);
+		} finally {
+			process.exit.restore();
+			console.error.restore();
+		}
 	});
 
 	it('unknown error', () => {

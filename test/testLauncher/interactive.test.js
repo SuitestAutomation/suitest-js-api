@@ -18,19 +18,25 @@ describe('test launcher interactive command', function() {
 	it('"interactive" command should and start interactive process', async() => {
 		const interactiveStub = sinon.stub(SuitestLauncher.prototype, 'runInteractiveSession');
 
-		await handler({
-			password: 'pass',
-		});
-		assert.strictEqual(interactiveStub.called, true);
-		interactiveStub.restore();
+		try {
+			await handler({
+				password: 'pass',
+			});
+			assert.strictEqual(interactiveStub.called, true);
+		} finally {
+			interactiveStub.restore();
+		}
 	});
 
 	it('"interactive" command should ask user password and start interactive process', async() => {
 		const interactiveStub = sinon.stub(SuitestLauncher.prototype, 'runInteractiveSession');
 
-		await handler({});
-		assert.strictEqual(promptPassword.called, true);
-		assert.strictEqual(interactiveStub.called, true);
-		interactiveStub.restore();
+		try {
+			await handler({});
+			assert.strictEqual(promptPassword.called, true);
+			assert.strictEqual(interactiveStub.called, true);
+		} finally {
+			interactiveStub.restore();
+		}
 	});
 });
