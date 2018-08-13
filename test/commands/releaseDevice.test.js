@@ -1,14 +1,17 @@
 const assert = require('assert');
 const testServer = require('../../lib/utils/testServer');
+const sinon = require('sinon');
 
 const sessionConstants = require('../../lib/constants/session');
 const {authContext, pairedDeviceContext} = require('../../lib/context');
 const releaseDevice = require('../../lib/commands/releaseDevice');
 const SuitestError = require('../../lib/utils/SuitestError');
 const webSockets = require('../../lib/api/webSockets');
+const logger = require('../../lib/utils/logger');
 
 describe('releaseDevice', () => {
 	before(async() => {
+		sinon.stub(logger, 'info');
 		await testServer.start();
 		await webSockets.connect();
 	});
@@ -19,6 +22,7 @@ describe('releaseDevice', () => {
 	});
 
 	after(async() => {
+		logger.info.restore();
 		await testServer.stop();
 		pairedDeviceContext.clear();
 		authContext.clear();

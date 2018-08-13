@@ -8,9 +8,13 @@ const envVars = require('../../lib/constants/enviroment');
 const webSockets = require('../../lib/api/webSockets');
 const {pairedDeviceContext, authContext, appContext, testContext} = require('../../lib/context');
 const sessionConstants = require('../../lib/constants/session');
+const logger = require('../../lib/utils/logger');
 
 describe('envHelper.js', () => {
 	before(async() => {
+		sinon.stub(logger, 'debug');
+		sinon.stub(logger, 'info');
+		sinon.stub(console, 'error');
 		await testServer.start();
 	});
 
@@ -24,6 +28,10 @@ describe('envHelper.js', () => {
 	});
 
 	after(async() => {
+		logger.info.restore();
+		logger.debug.restore();
+		console.error.restore();
+
 		webSockets.disconnect();
 		await testServer.stop();
 

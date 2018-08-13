@@ -18,7 +18,7 @@ describe('Queue', function() {
 		};
 
 		for (let i = 0; i < 4; i++) {
-			queue.push(func.bind(this, i === 3 ? 1 : 40 * i, i, obj, i === 0));
+			queue.push(func.bind(this, i === 3 ? 1 : 300 * i, i, obj, i === 0));
 		}
 
 		queue.start().then(result => {
