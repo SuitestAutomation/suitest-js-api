@@ -1,17 +1,17 @@
 export type NetworkProp = {
-	BODY: symbol,
-	METHOD: symbol,
-	STATUS: symbol,
+	BODY:   string,
+	METHOD: string,
+	STATUS: string,
 };
 
 export type NetworkMethod = {
-	GET: symbol,
-	POST: symbol,
-	PUT: symbol,
-	HEAD: symbol,
-	DELETE: symbol,
-	CONNECT: symbol,
-	OPTIONS: symbol,
-	TRACE: symbol,
-	PATCH: symbol,
+	GET:     string,
+	POST:    string,
+	PUT:     string,
+	HEAD:    string,
+	DELETE:  string,
+	CONNECT: string,
+	OPTIONS: string,
+	TRACE:   string,
+	PATCH:   string,
 };

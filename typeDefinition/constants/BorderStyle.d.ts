@@ -1,6 +1,6 @@
 export type BorderStyle = {
-	BEZEL: symbol,
-	RECTANGLE: symbol,
-	NONE: symbol,
-	ROUNDED: symbol,
+	BEZEL:     string,
+	RECTANGLE: string,
+	NONE:      string,
+	ROUNDED:   string,
 };

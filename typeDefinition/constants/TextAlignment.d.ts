@@ -1,7 +1,7 @@
 export type TextAlignment = {
-	CENTER: symbol,
-	JUSTIFIED: symbol,
-	LEFT: symbol,
-	RIGHT: symbol,
-	NATURAL: symbol,
+	CENTER:    string,
+	JUSTIFIED: string,
+	LEFT:      string,
+	RIGHT:     string,
+	NATURAL:   string,
 };
