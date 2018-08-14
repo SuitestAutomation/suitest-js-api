@@ -74,10 +74,6 @@ describe('Press button chain', () => {
 		info.restore();
 	});
 
-	it.skip('should engage execution on "then"', async() => {
-		assert.deepStrictEqual(await pressButton(buttonTypes.BLUE), 'press');
-	});
-
 	it('should throw error in case of invalid input', () => {
 		testInputErrorSync(pressButton, []);
 		// empty string is invalid

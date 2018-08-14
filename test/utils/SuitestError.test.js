@@ -1,10 +1,19 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const SuitestError = require('../../lib/utils/SuitestError');
+const logger = require('../../lib/utils/logger');
 const suitest = require('../../index');
 const {API_CONSTRUCTOR_NAME, API_LIB_PATH_IDENTIFIERS} = require('../../lib/constants');
 
 describe('SuitestError', () => {
+	before(() => {
+		sinon.stub(logger, 'info');
+	});
+
+	after(() => {
+		logger.info.restore();
+	});
+
 	it('should extend Error', () => {
 		assert(new SuitestError() instanceof Error);
 	});
@@ -42,24 +51,26 @@ describe('SuitestError', () => {
 	});
 
 	it('should have exit method', () => {
-		const err = new SuitestError('test', SuitestError.AUTH_NOT_ALLOWED);
-
-		assert.ok(err.exit, 'exit');
-		assert.ok(typeof err.exit === 'function', 'exit is function');
-
 		sinon.stub(process, 'exit');
-		sinon.stub(console, 'log');
+		sinon.stub(console, 'error');
 
-		err.exit();
-		assert(process.exit.calledWith(1));
-		assert(process.exit.called);
+		try {
+			const err = new SuitestError('test', SuitestError.AUTH_NOT_ALLOWED);
 
-		err.exit(0);
-		assert(process.exit.calledWith(0));
-		assert(process.exit.called);
+			assert.ok(err.exit, 'exit');
+			assert.ok(typeof err.exit === 'function', 'exit is function');
 
-		process.exit.restore();
-		console.log.restore();
+			err.exit();
+			assert(process.exit.calledWith(1));
+			assert(process.exit.called);
+
+			err.exit(0);
+			assert(process.exit.calledWith(0));
+			assert(process.exit.called);
+		} finally {
+			process.exit.restore();
+			console.error.restore();
+		}
 	});
 
 	it('unknown error', () => {

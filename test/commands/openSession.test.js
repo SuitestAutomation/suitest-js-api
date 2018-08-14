@@ -1,5 +1,6 @@
 const assert = require('assert');
 const nock = require('nock');
+const sinon = require('sinon');
 
 const testServer = require('../../lib/utils/testServer');
 const {authContext} = require('../../lib/context');
@@ -9,9 +10,11 @@ const endpoints = require('../../lib/api/endpoints');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {config} = require('../../config');
 const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
+const logger = require('../../lib/utils/logger');
 
 describe('openSession', () => {
 	before(async() => {
+		sinon.stub(logger, 'info');
 		await testServer.start();
 	});
 
@@ -20,6 +23,7 @@ describe('openSession', () => {
 	});
 
 	after(async() => {
+		logger.info.restore();
 		nock.cleanAll();
 		authContext.clear();
 		await testServer.stop();
