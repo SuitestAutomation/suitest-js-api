@@ -1,6 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const helpers = require('../../lib/utils/socketChainHelper');
+const logger = require('../../lib/utils/logger');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {PROP_COMPARATOR, SUBJ_COMPARATOR, ELEMENT_PROP} = require('../../lib/mappings');
 const {toString: elementToString} = require('../../lib/chains/elementChain');
@@ -18,7 +19,7 @@ describe('socket chain helpers', () => {
 		assert.strictEqual(helpers.getTimeoutValue({timeout: 1000}), 1000, 'user value');
 	});
 
-	it('shouldv provide a method to handle server chain web sockets response', () => {
+	it('should provide a method to handle server chain web sockets response', () => {
 		const emptyString = () => '';
 
 		// query
@@ -216,5 +217,18 @@ describe('socket chain helpers', () => {
 			), err => err.message.includes('Fatal'),
 			'Fatal error thrown correctly'
 		);
+
+		sinon.stub(logger, 'warn');
+
+		try {
+			assert.strictEqual(helpers.processServerResponse(emptyString)({
+				contentType: 'eval',
+				result: 'warning',
+				errorType: 'error',
+			}, {stack: ''}), true, 'eval warning');
+			assert.strictEqual(logger.warn.called, true, 'warning bumped');
+		} finally {
+			logger.warn.restore();
+		}
 	});
 });
