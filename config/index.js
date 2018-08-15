@@ -15,11 +15,11 @@ const {ENV_VARS} = require('../lib/mappings');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
 
-const configFields = ['logLevel', 'disallowCrashReports', 'continueOnFatalError'];
+const configFields = ['logLevel', 'disallowCrashReports', 'continueOnFatalError', 'timestamp'];
 const launcherFields = [
 	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
-	'logDir', // launcher common
+	'logDir', 'timestamp', // launcher common
 ];
 
 const main = {
@@ -28,6 +28,7 @@ const main = {
 	disallowCrashReports: false,
 	logLevel: logLevels.normal,
 	sentryDsn,
+	timestamp: 'YYYY.MM.DD HH:mm:ss',
 	wsUrl: 'wss://the.suite.st/api/public/v2/socket',
 };
 
@@ -37,6 +38,7 @@ const test = {
 	disallowCrashReports: false,
 	logLevel: logLevels.debug,
 	sentryDsn,
+	timestamp: 'YYYY.MM.DD HH:mm:ss',
 	wsUrl: 'ws://localhost:3000/',
 };
 
