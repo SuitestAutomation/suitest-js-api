@@ -100,10 +100,12 @@ export interface WillMadeModifier<T> {
 
 export interface RequestMatchesModifier<T> {
 	requestMatches(request: object|object[]): T;
+	requestMatches(name: string|symbol, val: string|number): T;
 }
 
 export interface ResponseMatchesModifier<T> {
 	responseMatches(response: object|object[]): T;
+	responseMatches(name: string|symbol, val: string|number): T;
 }
 
 export interface UntilModifier<T> {
@@ -141,33 +143,33 @@ export type PropertyValue = string | number | symbol;
 export type PropertyObjectDefinition = {
 	name: PropNameType,
 	val?: PropertyValue,
-	type?: symbol,
+	type?: string,
 	deviation?: number
 };
 
 export type PropertyRepoObjectDefinition = {
-	type?: symbol,
+	type?: string,
 	deviation?: number
 };
 
-type PropertyDefinitionType = Array<symbol | string | PropertyObjectDefinition>;
-type PropNameType = symbol;
+type PropertyDefinitionType = Array<string | PropertyObjectDefinition>;
+type PropNameType = string;
 
 
 export interface ElementMatchModifiers<T> {
-	match(propertyName: PropNameType, propertyValue?: PropertyValue, comparator?: symbol, accuracy?: number): T;
+	match(propertyName: PropNameType, propertyValue?: PropertyValue, comparator?: string, accuracy?: number): T;
 	match(propertyDefinition: PropertyObjectDefinition): T;
 	match(propertyDefinition: PropertyDefinitionType): T;
 
-	matches(propertyName: PropNameType, propertyValue?: PropertyValue, comparator?: symbol, accuracy?: number): T;
+	matches(propertyName: PropNameType, propertyValue?: PropertyValue, comparator?: string, accuracy?: number): T;
 	matches(propertyDefinition: PropertyObjectDefinition): T;
 	matches(propertyDefinition: PropertyDefinitionType): T;
 
-	matchRepo(propertyName: PropNameType, comparator?: symbol, accuracy?: number): T;
+	matchRepo(propertyName: PropNameType, comparator?: string, accuracy?: number): T;
 	matchRepo(propertyDefinition: PropertyRepoObjectDefinition): T;
 	matchRepo(propertyDefinition: PropertyDefinitionType): T;
 
-	matchesRepo(propertyName: PropNameType, comparator?: symbol, accuracy?: number): T;
+	matchesRepo(propertyName: PropNameType, comparator?: string, accuracy?: number): T;
 	matchesRepo(propertyDefinition: PropertyRepoObjectDefinition): T;
 	matchesRepo(propertyDefinition: PropertyDefinitionType): T;
 }

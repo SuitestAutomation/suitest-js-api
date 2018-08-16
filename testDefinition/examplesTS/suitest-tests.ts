@@ -261,6 +261,8 @@ async function elementTest() {
 	const element = suitest.element({css: '#repo-id'});
 
 	await element.matches(suitest.PROP.WIDTH);
+	await element.matches('width');
+	await element.matches('borderStyle');
 	await element.matches(suitest.PROP.HEIGHT);
 	await element.matches(suitest.PROP.TOP, suitest.VALUE.REPO, suitest.COMP.APPROX, 20);
 	await element.matches(suitest.PROP.BG_COLOR, '#F00');
@@ -273,7 +275,7 @@ async function elementTest() {
 		name: suitest.PROP.HEIGHT,
 	});
 	await suitest.element({css: '#repo-id'}).matches({
-		name: suitest.PROP.TOP,
+		name: 'top',
 		val: suitest.VALUE.REPO,
 		type: suitest.COMP.APPROX,
 		deviation: 20,
@@ -313,7 +315,7 @@ async function elementTest() {
 			},
 			{
 				name: suitest.PROP.LEFT,
-				type: suitest.COMP.EQUAL,
+				type: '=',
 			},
 		]);
 
@@ -373,7 +375,7 @@ async function videoTest() {
 	// Check if video's width and height match snapshot from video repo, top position as in repo +- 20px and custom background color
 	const videoEl = suitest.video();
 
-	await videoEl.matches(suitest.PROP.WIDTH);
+	await videoEl.matches('width');
 	await videoEl.matches(suitest.PROP.HEIGHT);
 	await videoEl.matches(suitest.PROP.TOP, suitest.VALUE.REPO, suitest.COMP.APPROX, 20);
 	await videoEl.matches(suitest.PROP.BG_COLOR, '#F00');
@@ -603,6 +605,7 @@ async function networkRequestTest() {
 	await suitest.networkRequest().equal('http://test').willBeMade(); // correct
 	await suitest.networkRequest().equal('http://test').wasMade(); // correct
 	await suitest.networkRequest().wasMade().equal('http://test'); // correct
+	await suitest.networkRequest().contain('v3').requestMatches('adfasd', 'adfdsf');
 	// getters
 	baseNetworkRequest.it.should.with.times;
 	baseNetworkRequest.should.it.with.times;
@@ -689,7 +692,7 @@ async function testPressButton() {
 	await suitest.press(suitest.VRC.OK);
 
 	// Press OK, UP once
-	await suitest.press([suitest.VRC.OK, suitest.VRC.UP]);
+	await suitest.press([suitest.VRC.OK, 'UP']);
 
 	// Press OK exactly 10x every 10s
 	await suitest.press(suitest.VRC.OK)

@@ -76,7 +76,8 @@ describe('Press button chain', () => {
 
 	it('should throw error in case of invalid input', () => {
 		testInputErrorSync(pressButton, []);
-		testInputErrorSync(pressButton, [['Up', 'Down']]);
+		// empty string is invalid
+		testInputErrorSync(pressButton, [['', 'Down']]);
 	});
 
 	it('should generate correct socket message based on data', () => {

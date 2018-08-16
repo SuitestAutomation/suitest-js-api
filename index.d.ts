@@ -59,8 +59,8 @@ declare namespace suitest {
 		openUrl(absoluteUrl: string): OpenUrlChain;
 		pollUrl(url: string, response: string): PollUrlChain;
 		position(x: number, y: number): PositionChain;
-		press(key: symbol): PressButtonChain;
-		press(keys: symbol[]): PressButtonChain;
+		press(key: string): PressButtonChain;
+		press(keys: string[]): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
 
@@ -105,8 +105,8 @@ declare namespace suitest {
 		openUrl(absoluteUrl: string): OpenUrlChain;
 		pollUrl(url: string, response: string): PollUrlChain;
 		position(x: number, y: number): PositionChain;
-		press(key: symbol): PressButtonChain;
-		press(keys: symbol[]): PressButtonChain;
+		press(key: string): PressButtonChain;
+		press(keys: string[]): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
 	}
