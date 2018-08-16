@@ -100,10 +100,12 @@ export interface WillMadeModifier<T> {
 
 export interface RequestMatchesModifier<T> {
 	requestMatches(request: object|object[]): T;
+	requestMatches(name: string|symbol, val: string|number): T;
 }
 
 export interface ResponseMatchesModifier<T> {
 	responseMatches(response: object|object[]): T;
+	responseMatches(name: string|symbol, val: string|number): T;
 }
 
 export interface UntilModifier<T> {
@@ -137,7 +139,7 @@ export declare namespace WindowModifiers {
 	}
 }
 
-export type PropertyValue = string | number;
+export type PropertyValue = string | number | symbol;
 export type PropertyObjectDefinition = {
 	name: PropNameType,
 	val?: PropertyValue,

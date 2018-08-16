@@ -262,6 +262,7 @@ async function elementTest() {
 
 	await element.matches(suitest.PROP.WIDTH);
 	await element.matches('width');
+	await element.matches('borderStyle');
 	await element.matches(suitest.PROP.HEIGHT);
 	await element.matches(suitest.PROP.TOP, suitest.VALUE.REPO, suitest.COMP.APPROX, 20);
 	await element.matches(suitest.PROP.BG_COLOR, '#F00');
@@ -604,6 +605,7 @@ async function networkRequestTest() {
 	await suitest.networkRequest().equal('http://test').willBeMade(); // correct
 	await suitest.networkRequest().equal('http://test').wasMade(); // correct
 	await suitest.networkRequest().wasMade().equal('http://test'); // correct
+	await suitest.networkRequest().contain('v3').requestMatches('adfasd', 'adfdsf');
 	// getters
 	baseNetworkRequest.it.should.with.times;
 	baseNetworkRequest.should.it.with.times;
