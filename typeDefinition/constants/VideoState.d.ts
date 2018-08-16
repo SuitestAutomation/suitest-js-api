@@ -9,7 +9,7 @@ export type VideoState = {
 	IDLE:               'idle',
 	PREPARING:          'preparing',
 	PREPARED:           'prepared',
-	PLAYBACK_COMPLETED: 'playbackCompleted',
+	PLAYBACK_COMPLETED: 'playback_completed',
 	UNKNOWN:            'unknown',
 	REVERSING:          'reversing',
 };
