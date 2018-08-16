@@ -6,12 +6,12 @@
  * Individual functions from utils are still covered in scope of those file's tests.
  */
 
-const {pick} = require('ramda');
 const logLevels = require('../lib/constants/logLevels');
 const rc = require('rc');
 const {validate, validators} = require('../lib/validataion');
 const {invalidConfigObj} = require('../lib/texts');
 const {ENV_VARS} = require('../lib/mappings');
+const {pickNonNil} = require('../lib/utils/common');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
 
@@ -50,23 +50,21 @@ const envConfig = pickConfigFieldsFromEnvVars(configFields);
 
 const config = {
 	...(global._suitestTesting ? test : main),
-	...validate(validators.CONFIGURE, pick(configFields, rcConfig), invalidConfigObj()), // extend with rc file
+	...validate(validators.CONFIGURE, pickNonNil(configFields, rcConfig), invalidConfigObj()), // extend with rc file
 	...envConfig, // extend with env vars
 };
 
-const launcherParams = pick(launcherFields, rcConfig);
+const launcherParams = pickNonNil(launcherFields, rcConfig);
 
 /**
  * Override config object
- * Only used in .configure() command which is going to be depricated
  * @param {Object} overrideObj
  */
 function override(overrideObj = {}) {
-	const _overrideObj = pick(configFields, overrideObj);
+	const _overrideObj = pickNonNil(configFields, overrideObj);
 
 	validate(validators.CONFIGURE, _overrideObj, invalidConfigObj());
-
-	Object.assign(config, _overrideObj);
+	extend(_overrideObj);
 }
 
 /**
