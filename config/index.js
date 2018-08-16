@@ -7,6 +7,7 @@
  */
 
 const logLevels = require('../lib/constants/logLevels');
+const timestamp = require('../lib/constants/timestamp');
 const rc = require('rc');
 const {validate, validators} = require('../lib/validataion');
 const {invalidConfigObj} = require('../lib/texts');
@@ -28,7 +29,7 @@ const main = {
 	disallowCrashReports: false,
 	logLevel: logLevels.normal,
 	sentryDsn,
-	timestamp: 'YYYY.MM.DD HH:mm:ss',
+	timestamp: timestamp.default,
 	wsUrl: 'wss://the.suite.st/api/public/v2/socket',
 };
 
@@ -38,7 +39,7 @@ const test = {
 	disallowCrashReports: false,
 	logLevel: logLevels.debug,
 	sentryDsn,
-	timestamp: 'YYYY.MM.DD HH:mm:ss',
+	timestamp: timestamp.default,
 	wsUrl: 'ws://localhost:3000/',
 };
 
