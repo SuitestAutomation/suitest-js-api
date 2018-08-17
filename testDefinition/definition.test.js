@@ -50,7 +50,10 @@ describe('suitest typescripts declarations tests', () => {
 		done();
 	});
 	it('should not compile example networkRequest chain', (done) => {
-		assert.ok(getDiagnostics('networkRequestChain.fail').length > 0, 'should not compile networkRequest chain example');
+		assert.ok(getDiagnostics(
+			'networkRequestChain.fail').length > 0,
+			'should not compile networkRequest chain example',
+		);
 		done();
 	});
 	it('should compile suitest-tests', (done) => {
