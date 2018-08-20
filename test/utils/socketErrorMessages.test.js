@@ -97,6 +97,18 @@ describe('Socket error messages', () => {
 			[basePayload('internalError'), 'Internal error occurred. Chain description.'],
 			[basePayload('ILInternalError'), 'Internal error occurred. Chain description.'],
 			[basePayload('queryTimeout'), 'Application did not respond for 60 seconds. Executing "Chain description.".'],
+			[
+				set(lensPath(['response', 'message', 'info', 'timeout']), 3000, basePayload('queryTimeout', 'missingILResponse')),
+				'The wait time exceeded 3 seconds. Executing "Chain description.".',
+			],
+			[
+				set(lensPath(['response', 'message', 'info', 'timeout']), 1000, basePayload('queryTimeout', 'missingILResponse')),
+				'The wait time exceeded 1 second. Executing "Chain description.".',
+			],
+			[
+				set(lensPath(['response', 'message', 'info', 'timeout']), 500, basePayload('queryTimeout', 'missingILResponse')),
+				'The wait time exceeded 0.5 seconds. Executing "Chain description.".',
+			],
 			[basePayload('serverError'), 'Server error occurred. Chain description.'],
 			[basePayload('invalidCredentials'), 'Credentials for this device were changed.'],
 			[basePayload('syntaxError'), 'Test command received invalid input. Chain description.'],
