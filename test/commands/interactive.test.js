@@ -8,7 +8,8 @@ const {startRepl} = require('../../lib/testLauncher/repl');
 
 describe('interactive command', () => {
 	it('should display warning if .interactive() command not allowed', async() => {
-		replConfig = config.repl;
+		const repl = config.repl;
+
 		extend({repl: false});
 		let result = true;
 
@@ -20,7 +21,7 @@ describe('interactive command', () => {
 		} finally {
 			logger.info.restore();
 			warnStub.restore();
-			extend({replConfig});
+			extend({repl});
 		}
 
 		assert.strictEqual(result, undefined, 'promise resolved');
@@ -29,7 +30,8 @@ describe('interactive command', () => {
 	});
 
 	it('should start repl', async() => {
-		replConfig = config.repl;
+		const repl = config.repl;
+
 		extend({repl: true});
 		let result = true;
 
@@ -41,7 +43,7 @@ describe('interactive command', () => {
 		} finally {
 			logger.info.restore();
 			warnStub.restore();
-			extend({replConfig});
+			extend({repl});
 		}
 
 		assert.strictEqual(result, undefined, 'promise resolved');
