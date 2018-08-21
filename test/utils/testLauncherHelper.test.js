@@ -57,26 +57,6 @@ describe('testLauncherHelper util', () => {
 		assert.deepStrictEqual(testLauncherHelper.mergeConfigs({a: true}, {a: false}), {a: false});
 	});
 
-	it('should read from child process stdout and stderr correctly', done => {
-		const childSpy = sinon.spy(l => {
-			if (l === 'testError') {
-				done();
-			}
-		});
-		const child = spawn('node', ['--version'], {shell: true});
-
-		testLauncherHelper.followChildProcess(child, childSpy);
-
-		child.stdout.on('data', () => {
-			assert.strictEqual(childSpy.called, true);
-			child.stderr.push('testError');
-		});
-
-		child.stderr.on('data', err => {
-			assert.strictEqual(err.toString(), 'testError');
-		});
-	});
-
 	it('should validateInput correctly', () => {
 		const validate = sinon.stub(validation, 'validate');
 		const argsValidationError = sinon.stub(log, 'argsValidationError');
