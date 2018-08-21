@@ -16,11 +16,11 @@ const {pickNonNil} = require('../lib/utils/common');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
 
-const configFields = ['logLevel', 'disallowCrashReports', 'continueOnFatalError', 'timestamp'];
+const configFields = ['logLevel', 'disallowCrashReports', 'continueOnFatalError', 'timestamp', 'repl'];
 const launcherFields = [
 	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
-	'logDir', 'timestamp', // launcher common
+	'logDir', 'timestamp', 'repl', // launcher common
 ];
 
 const main = {
