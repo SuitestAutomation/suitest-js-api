@@ -1,7 +1,14 @@
 const assert = require('assert');
 const stackTraceParser = require('../../lib/utils/stackTraceParser');
+const {setActive, isActive} = require('../../lib/testLauncher/repl');
+
+const replState = isActive;
 
 describe('stackTraceParser util', () => {
+	afterEach(() => {
+		setActive(replState);
+	});
+
 	it('test fetchSource', () => {
 		const {fetchSource} = stackTraceParser;
 		const error = new Error();
@@ -34,21 +41,39 @@ describe('stackTraceParser util', () => {
 	});
 
 	it('test prependStack', () => {
-		const error = {};
 		const stack = 'title1\nat test.test (test.js:1:1)\nat test.test (test.js:2:2)';
 
-		error.stack = stack;
 		assert.equal(
-			stackTraceParser.prependStack(error, 'title2\nat test.test (test.js:0:0)').stack,
+			stackTraceParser.prependStack(stack, 'title2\nat test.test (test.js:0:0)'),
 			'title1\nat test.test (test.js:0:0)\nat test.test (test.js:1:1)\nat test.test (test.js:2:2)',
 			'prepended',
 		);
 
-		error.stack = stack;
 		assert.equal(
-			stackTraceParser.prependStack(error, 'title2\nat test.test (test.js:1:1)').stack,
+			stackTraceParser.prependStack(stack, 'title2\nat test.test (test.js:1:1)'),
 			stack,
 			'not changed, lines duplicated',
+		);
+	});
+
+	it('test normalizeError', () => {
+		const error = {};
+		const stack = 'title1\nat test.test (test.js:1:1)\nat test.test (test.js:2:2)';
+
+		setActive(false);
+		error.stack = stack;
+		assert.equal(
+			stackTraceParser.normalizeError(error, 'title2\nat test.test (test.js:0:0)').stack,
+			'title1\nat test.test (test.js:0:0)\nat test.test (test.js:1:1)\nat test.test (test.js:2:2)',
+			'prepended new stack if repl is inactive',
+		);
+
+		setActive(true);
+		error.stack = stack;
+		assert.equal(
+			stackTraceParser.normalizeError(error, 'title2\nat test.test (test.js:0:0)').stack,
+			'title1\n',
+			'lines cleared if repl is active',
 		);
 	});
 
@@ -59,8 +84,10 @@ describe('stackTraceParser util', () => {
 		assert.strictEqual(stackTraceParser.isStackLine('something at something'), false);
 	});
 
-	it('test getFirstStackLine', () => {
-		assert.strictEqual(stackTraceParser.getFirstStackLine('Some Error:\n\tat line1\n\tat line2'), '\tat line1');
-		assert.strictEqual(stackTraceParser.getFirstStackLine('\tat line1\n\tat line2'), '\tat line1');
+	it('test normalizeStack', () => {
+		setActive(true);
+		assert.strictEqual(stackTraceParser.normalizeStack('Some Error:\n\tat line1\n\tat line2'), 'Some Error:\n');
+		setActive(false);
+		assert.strictEqual(stackTraceParser.normalizeStack('Some Error:\n\tat line1\n\tat line2'), 'Some Error:\n\tat line1\n\tat line2');
 	});
 });
