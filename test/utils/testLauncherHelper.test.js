@@ -35,7 +35,7 @@ describe('testLauncherHelper util', () => {
 
 		testLauncherHelper.handleLauncherError(err);
 		assert(process.exit.calledWith(1));
-		assert(console.error.called);
+		assert(launcherLogger.error.called);
 	});
 
 	it('should handle launcher child successful result', () => {
