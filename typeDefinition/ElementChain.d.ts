@@ -28,7 +28,6 @@ export interface ElementChain extends
 // -matchers +timeout +negation
 interface ElementWithoutEvalChain extends
 	ElementBaseEvalChain<ElementWithoutEvalChain>,
-	Negatable<ElementTimeoutChain>,
 	Timeout<ElementNegationChain>
 {}
 
@@ -60,8 +59,7 @@ interface ElementTimeoutChain extends
 
 // -matchers -timeout +negation
 interface ElementNegationChain extends
-	ElementBaseEvalChain<ElementNegationChain>,
-	Negatable<ElementEmptyChain>
+	ElementBaseEvalChain<ElementNegationChain>
 {}
 
 // -matchers -timeout -negation

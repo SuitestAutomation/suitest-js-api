@@ -39,10 +39,28 @@ describe('suitest typescripts declarations tests', () => {
 		assert.equal(messages.join('\n'), '', 'should compile element chain example without errors');
 		done();
 	});
-	it('should not compile example element chain', (done) => {
-		assert.equal(getDiagnostics('elementChain.fail').length, 4, 'should not compile element chain example');
-		done();
-	});
+
+	(() => {
+		const messages = getDiagnosticResultsMessages(getDiagnostics('elementChain.fail'));
+		const expectedErrors = [
+			'Property \'onmousedown\' does not exist on type \'ElementChain\'.',
+			'Property \'matches\' does not exist on type \'ElementWithoutNegation\'.',
+			'Property \'matchesJS\' does not exist on type \'ElementWithoutNegation\'.',
+			'Property \'matchesRepo\' does not exist on type \'ElementWithoutNegation\'.',
+			'Property \'doesNot\' does not exist on type \'ElementNegationChain\'.',
+			'Property \'doesNot\' does not exist on type \'ElementWithoutEvalChain\'.',
+			'Property \'not\' does not exist on type \'ElementNegationChain\'.',
+			'Property \'not\' does not exist on type \'ElementWithoutEvalChain\'.',
+			'Property \'not\' does not exist on type \'ElementNegationChain\'.',
+		];
+
+		return expectedErrors.map(error => {
+			return it(`Expect ${error} to be thrown`, (done) => {
+				return assert.ok(messages.includes(error), 'missing error ' + error), done();
+			});
+		});
+	})();
+
 	it('should compile suitest-tests', (done) => {
 		const messages = getDiagnosticResultsMessages(getDiagnostics('suitest-tests'));
 

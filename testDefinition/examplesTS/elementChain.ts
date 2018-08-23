@@ -1,4 +1,4 @@
-import { element } from '../../index';
+import {element, PROP} from '../../index';
 
 let el = element({
     css: '.my-element',
@@ -17,4 +17,6 @@ el.then(e => e && e.backgroundColor);
 el.then(e => e && e.text);
 el.then(e => e && e.id);
 el.doesNot().exist();
-
+el.timeout(1).doesNot().exist();
+el.doesNot().exist().timeout(1);
+el.matchesJS('');
