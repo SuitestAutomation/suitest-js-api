@@ -40,7 +40,7 @@ describe('suitest typescripts declarations tests', () => {
 		done();
 	});
 	it('should not compile example element chain', (done) => {
-		assert.ok(getDiagnostics('elementChain.fail').length > 0, 'should not compile element chain example');
+		assert.equal(getDiagnostics('elementChain.fail').length, 4, 'should not compile element chain example');
 		done();
 	});
 	it('should compile suitest-tests', (done) => {

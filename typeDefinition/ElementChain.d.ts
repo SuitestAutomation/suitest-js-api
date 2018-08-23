@@ -43,7 +43,7 @@ interface ElementWithoutTimeout extends
 interface ElementWithoutNegation extends
 	ElementBaseEvalChain<ElementWithoutNegation>,
 	Timeout<ElementEvalChain>,
-	ElementEvalModifiers<ElementTimeoutChain>
+	ElementEvalModifiersWithNegation<ElementTimeoutChain>
 {}
 
 // +matchers -timeout -negation
@@ -93,6 +93,10 @@ interface ElementEvalModifiers<T> extends
 	MatchJSModifiers<T>,
 	ExistsModifiers<T>,
 	ElementMatchModifiers<T>
+{}
+
+interface ElementEvalModifiersWithNegation<T> extends
+	ExistsModifiers<T>
 {}
 
 interface ElementBaseQueryChain<TSelf> extends

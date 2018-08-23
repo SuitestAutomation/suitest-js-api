@@ -16,4 +16,5 @@ el.exists();
 el.then(e => e && e.backgroundColor);
 el.then(e => e && e.text);
 el.then(e => e && e.id);
+el.doesNot().exist();
 

@@ -152,10 +152,6 @@ describe('Element chain', () => {
 		);
 		assert.equal(element('element').not().exists().toString(), 'Check if element element does not exist');
 		assert.equal(
-			element('element').not().matchesJS('').toString(),
-			'Check if element element does not match JavaScript expression'
-		);
-		assert.equal(
 			element('element').matches(ELEMENT_PROP.ID).toString(),
 			'Check if element element has defined properties'
 		);
