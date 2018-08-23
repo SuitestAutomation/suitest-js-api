@@ -7,7 +7,7 @@ describe('repl', () => {
 		sinon.stub(repl, 'start').returns({
 			close: () => void 0,
 			context: {},
-			on: () => {},
+			on: () => void 0,
 		});
 		require('../../lib/utils/testHelpers/mocks').restoreRepl();
 	});
