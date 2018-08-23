@@ -7,6 +7,7 @@ describe('repl', () => {
 		sinon.stub(repl, 'start').returns({
 			close: () => void 0,
 			context: {},
+			on: () => {},
 		});
 		require('../../lib/utils/testHelpers/mocks').restoreRepl();
 	});
@@ -14,19 +15,16 @@ describe('repl', () => {
 	after(() => {
 		repl.start.restore();
 		require('../../lib/utils/testHelpers/mocks').stubRepl();
+		require('../../lib/testLauncher/repl').setActive(false);
 	});
 
 	it('should test startRepl', async() => {
-		const {startRepl} = require('../../lib/testLauncher/repl');
+		const {startRepl, isActive} = require('../../lib/testLauncher/repl');
 		const suitestInstance = {};
-		const promise = startRepl(suitestInstance);
+		const promsie = startRepl(suitestInstance);
 
-		assert.strictEqual(typeof suitestInstance.resume, 'function', 'resume method added');
+		assert.strictEqual(isActive(), true, 'repl is active');
 		assert.strictEqual(repl.start.called, true, 'repl start called');
-
-		setTimeout(suitestInstance.resume);
-		await promise;
-
-		assert.strictEqual(suitestInstance.resume, undefined, 'resume method deleted');
+		assert.strictEqual(promsie instanceof Promise, true, 'promise returned');
 	});
 });
