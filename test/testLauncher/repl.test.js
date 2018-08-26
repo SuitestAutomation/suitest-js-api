@@ -44,4 +44,20 @@ describe('repl', () => {
 		await promsie;
 		assert.strictEqual(isActive(), false, 'repl is back to inactive');
 	});
+
+	it('should test upgradeEval', async() => {
+		const {upgradeEval} = require('../../lib/testLauncher/repl');
+
+		const eval = sinon.stub();
+		const upgrader = sinon.stub();
+		const replInstance = {eval};
+
+		upgradeEval(replInstance, upgrader);
+		replInstance.eval('test');
+
+		assert.strictEqual(upgrader.called, true, 'upgrader called');
+		assert.strictEqual(upgrader.lastCall.args[0], 'test', 'upgrader args');
+		assert.strictEqual(eval.called, true, 'eval called');
+		assert.strictEqual(eval.lastCall.args[0], 'test', 'eval args');
+	});
 });
