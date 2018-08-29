@@ -57,9 +57,6 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.click, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
-		assert.strictEqual(typeof chain.not, 'function');
-		assert.strictEqual(typeof chain.doesNot, 'function');
-		assert.strictEqual(typeof chain.isNot, 'function');
 	});
 
 	it('should have only allowed modifiers after click is applied', () => {
@@ -151,10 +148,6 @@ describe('Element chain', () => {
 			'Check if element element matches JavaScript expression'
 		);
 		assert.equal(element('element').not().exists().toString(), 'Check if element element does not exist');
-		assert.equal(
-			element('element').not().matchesJS('').toString(),
-			'Check if element element does not match JavaScript expression'
-		);
 		assert.equal(
 			element('element').matches(ELEMENT_PROP.ID).toString(),
 			'Check if element element has defined properties'
