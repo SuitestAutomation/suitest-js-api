@@ -382,7 +382,7 @@ async function videoTest() {
 	await video().matches(suitest.PROP.TOP, suitest.VALUE.REPO, suitest.COMP.APPROX, 20);
 	await video().matches(suitest.PROP.BG_COLOR, '#F00');
 
-	// Same with object syntax
+	// Same with object syntax should have only allowed modifiers after match is applied
 	await suitest.element({css: '#repo-id'}).matches({
 		name: suitest.PROP.WIDTH,
 	});
