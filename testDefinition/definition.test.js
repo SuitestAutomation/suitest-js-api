@@ -61,6 +61,20 @@ describe('suitest typescripts declarations tests', () => {
 		});
 	})();
 
+	it('should compile example networkRequest chain', (done) => {
+		const messages = getDiagnosticResultsMessages(getDiagnostics('networkRequestChain'));
+
+		assert.equal(messages.join('\n'), '', 'should compile networkRequest chain example without errors');
+		done();
+	});
+	it('should not compile example networkRequest chain', (done) => {
+		assert.ok(
+			getDiagnostics('networkRequestChain.fail').length > 0,
+			'should not compile networkRequest chain example',
+		);
+		done();
+	});
+
 	it('should compile suitest-tests', (done) => {
 		const messages = getDiagnosticResultsMessages(getDiagnostics('suitest-tests'));
 

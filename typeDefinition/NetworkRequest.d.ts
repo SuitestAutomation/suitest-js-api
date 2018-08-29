@@ -2,6 +2,7 @@ import {
 	AbstractChain,
 	Timeout,
 	Equalable,
+	Containable,
 	Negatable,
 	BaseChain,
 	WasMadeModifier,
@@ -14,6 +15,7 @@ export interface NetworkRequestChain extends
 	Timeout<NetworkRequestChain>,
 	Negatable<NetworkRequestChain>,
 	Equalable<NetworkRequestChain>,
+	Containable<NetworkRequestChain>,
 	NetworkRequestMadeModifiers<NetworkRequestChain>,
 	NetworkRequestEvalChain<NetworkRequestChain>
 {}
