@@ -152,10 +152,6 @@ describe('Element chain', () => {
 			'Checking if "el-api-id" is missing'
 		);
 		assert.equal(
-			element('el-api-id').not().matchesJS('function(el){return false}').toString(),
-			'Checking if "el-api-id" does not match JS:\nfunction(el){return false}'
-		);
-		assert.equal(
 			element('el-api-id').matches(ELEMENT_PROP.ID).toString(),
 			'Checking if "el-api-id" matches:\n' +
 			'  id = valueRepo'
