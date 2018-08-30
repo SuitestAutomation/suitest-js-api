@@ -57,9 +57,6 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.click, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
-		assert.strictEqual(typeof chain.not, 'function');
-		assert.strictEqual(typeof chain.doesNot, 'function');
-		assert.strictEqual(typeof chain.isNot, 'function');
 	});
 
 	it('should have only allowed modifiers after click is applied', () => {
