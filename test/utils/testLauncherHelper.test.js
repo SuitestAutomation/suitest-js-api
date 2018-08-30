@@ -35,7 +35,7 @@ describe('testLauncherHelper util', () => {
 
 		testLauncherHelper.handleLauncherError(err);
 		assert(process.exit.calledWith(1));
-		assert(console.error.called);
+		assert(launcherLogger.error.called);
 	});
 
 	it('should handle launcher child successful result', () => {
@@ -95,6 +95,7 @@ describe('testLauncherHelper util', () => {
 
 	it('should writeLogs create dir and stream correctly', () => {
 		const createWriteStream = sinon.stub(launcherLoggerHelper, 'createWriteStream').callsFake((path, id) => {
+
 			if (id === '2') {
 				throw new SuitestError('err');
 			} else if (id === '3') {
@@ -104,18 +105,33 @@ describe('testLauncherHelper util', () => {
 		const mkDirByPathSync = sinon.stub(launcherLoggerHelper, 'mkDirByPathSync');
 		const _ = sinon.stub(launcherLogger, 'log');
 
-		testLauncherHelper.writeLogs('1', ['a', 'red'], './fake/path');
+		const deviceMeta = {
+			displayName: 'displayName',
+			shortName: 'shortName',
+			manufacturer: 'manufacturer',
+			model: 'model',
+		};
 
-		assert.deepEqual(createWriteStream.args[0], ['./fake/path', '1'], 'createWriteStream called with right args');
+		testLauncherHelper.writeLogs(
+			{
+				deviceId: '1',
+				...deviceMeta,
+			},
+			['a', 'red'],
+			new Date(),
+			'./fake/path',
+			'automated'
+		);
+
 		assert.equal(mkDirByPathSync.args[0], './fake/path', 'mkDirByPathSync called with right args');
 		assert.ok(_.called, 'log called');
 
-		testLauncherHelper.writeLogs('2', ['a', 'red'], './fake/path');
-		assert.ok(process.exit.calledWith(1), 'proccess exit called with 1');
+		testLauncherHelper.writeLogs({deviceId: '2'}, ['a', 'red'], './fake/path');
+		assert.ok(process.exit.calledWith(1), 'process exit called with 1');
 
-		testLauncherHelper.writeLogs('3', ['a', 'red'], './fake/path');
-		assert.ok(process.exit.calledWith(1), 'proccess exit called with 1');
-		assert.equal(launcherLogger.error.firstCall.args[1], '3', 'error called with right deviceId');
+		testLauncherHelper.writeLogs({deviceId: '3'}, ['a', 'red'], './fake/path');
+		assert.ok(process.exit.calledWith(1), 'process exit called with 1');
+
 		_.restore();
 
 		createWriteStream.restore();

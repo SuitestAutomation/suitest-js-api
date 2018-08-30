@@ -55,11 +55,11 @@ describe('Open URL chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(toString({absoluteURL: '/test'}), 'Open URL /test');
+		assert.equal(toString({absoluteURL: '/test'}), 'Opening /test');
 	});
 
 	it('should have beforeSendMsg', () => {
-		const info = sinon.stub(console, 'info');
+		const info = sinon.stub(console, 'log');
 
 		beforeSendMsg({absoluteURL: '/'});
 		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');

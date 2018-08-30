@@ -40,10 +40,7 @@ describe('launcherLoggerHelper', () => {
 				&& err.message.includes('ANY error')
 				&& err.message.includes('protectedPath2');
 		}, 'error handler handle error');
-		assert.throws(mkDirByPathSync.bind(null, './protectedPath1'), (err) => {
-			return err.type === SuitestError.type
-				&& err.message.includes('Permission');
-		}, 'error handler handle permission error');
+
 		fs.mkdirSync.restore();
 		sep.restore();
 	});

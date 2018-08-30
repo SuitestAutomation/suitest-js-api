@@ -160,9 +160,9 @@ describe('Socket error messages', () => {
 					},
 				},
 				'App loaded actualUrl instead of the expected expectedUrl. Consider updating the app URL in settings.'
-					+ `${EOL}\tFailing checks:`
-					+ `${EOL}\t~ expectedUrl (expected)`
-					+ `${EOL}\t× actualUrl (actual)${EOL}\t`,
+				+ `${EOL}\tFailing checks:`
+				+ `${EOL}\t~ expectedUrl (expected)`
+				+ `${EOL}\t× actualUrl (actual)${EOL}\t`,
 			],
 			[
 				{
@@ -177,9 +177,9 @@ describe('Socket error messages', () => {
 					},
 				},
 				'queryFailed: "Chain description."'
-					+ `${EOL}\tFailing checks:`
-					+ `${EOL}\t~ url: test (expected)`
-					+ `${EOL}\t× url: request was not made (actual)`,
+				+ `${EOL}\tFailing checks:`
+				+ `${EOL}\t~ url: test (expected)`
+				+ `${EOL}\t× url: request was not made (actual)`,
 			],
 			[
 				{
@@ -210,32 +210,36 @@ describe('Socket error messages', () => {
 					},
 					chainData: {
 						type: 'networkRequest',
-						request: {props: [{
-							name: 'testHeader',
-							val: 'testExpectedVal',
-						}, {
-							name: NETWORK_PROP.METHOD,
-							val: NETWORK_METHOD.GET,
-						}]},
-						response: {props: [{
-							name: NETWORK_PROP.BODY,
-							val: 'testBody',
-						}, {
-							name: NETWORK_PROP.STATUS,
-							val: 200,
-						}]},
+						request: {
+							props: [{
+								name: 'testHeader',
+								val: 'testExpectedVal',
+							}, {
+								name: NETWORK_PROP.METHOD,
+								val: NETWORK_METHOD.GET,
+							}],
+						},
+						response: {
+							props: [{
+								name: NETWORK_PROP.BODY,
+								val: 'testBody',
+							}, {
+								name: NETWORK_PROP.STATUS,
+								val: 200,
+							}],
+						},
 					},
 				},
 				'queryFailed: "Chain description."'
-					+ `${EOL}\tFailing checks:`
-					+ `${EOL}\t~ request header "testHeader": testExpectedVal (expected)`
-					+ `${EOL}\t× request header "testHeader": testActualVal (actual)`
-					+ `${EOL}\t~ request method: GET (expected)`
-					+ `${EOL}\t× request method: POST (actual)`
-					+ `${EOL}\t~ response body: testBody (expected)`
-					+ `${EOL}\t× response body: not found (actual)`
-					+ `${EOL}\t~ response status: 200 (expected)`
-					+ `${EOL}\t× response status: unknown (actual)`,
+				+ `${EOL}\tFailing checks:`
+				+ `${EOL}\t~ request header "testHeader": testExpectedVal (expected)`
+				+ `${EOL}\t× request header "testHeader": testActualVal (actual)`
+				+ `${EOL}\t~ request method: GET (expected)`
+				+ `${EOL}\t× request method: POST (actual)`
+				+ `${EOL}\t~ response body: testBody (expected)`
+				+ `${EOL}\t× response body: not found (actual)`
+				+ `${EOL}\t~ response status: 200 (expected)`
+				+ `${EOL}\t× response status: unknown (actual)`,
 			],
 			[basePayload('queryFailed', 'applicationError'), 'Application thrown unexpected error while executing command "Chain description.".'],
 			[basePayload('queryFailed', 'exprException'), 'JavaScript error: .'],
@@ -359,24 +363,43 @@ describe('Socket error messages', () => {
 	});
 
 	it('should test getInfoErrorMessage', () => {
-		const msg1 = getInfoErrorMessage('message', 'prefix ', {
-			errorType: 'testIsNotStarted',
-		}, 'stack\n\tat line1\n\tat line2');
 
-		assert.strictEqual(msg1, 'prefix message Test session will now close and all remaining Suitest commands will fail. To allow execution of remaining Suitest commands call suitest.startTest() or fix this error.\n\tat line1', 'message 1');
+		const msg1 = getInfoErrorMessage(
+			'message',
+			'prefix ',
+			{errorType: 'testIsNotStarted'},
+			'stack\n\tat line1\n\tat line2').replace(/\r/gm, '');
+
+		assert.strictEqual(
+			msg1,
+			'prefix message Test session will now close and all remaining Suitest commands will fail. To allow execution of remaining Suitest commands call suitest.startTest() or fix this error.\n\tat line1',
+		);
 
 		const msg2 = getInfoErrorMessage('message', 'prefix ', {
 			result: 'fatal',
-		}, 'stack\n\tat line1\n\tat line2');
+		}, 'stack\n\tat line1\n\tat line2').replace(/\r/gm, '');
 
-		assert.strictEqual(msg2, 'prefix message Test session will now close and all remaining Suitest commands will fail. To allow execution of remaining Suitest commands call suitest.startTest() or fix this error.\n\tat line1', 'message 1');
+		assert.strictEqual(
+			msg2,
+			'prefix message Test session will now close and all remaining Suitest commands will fail. To allow execution of remaining Suitest commands call suitest.startTest() or fix this error.\n\tat line1'
+		);
 
-		const msg3 = getInfoErrorMessage('message', 'prefix ', {}, 'stack\n\tat line1\n\tat line2');
+		const msg3 = getInfoErrorMessage(
+			'message',
+			'prefix ',
+			{},
+			'stack\n\tat line1\n\tat line2'
+		).replace(/\r/gm, '');
 
-		assert.strictEqual(msg3, 'prefix message\n\tat line1', 'message 3');
+		assert.strictEqual(msg3, 'prefix message\n\tat line1');
 
-		const msg4 = getInfoErrorMessage('message' + EOL, 'prefix ', {}, 'stack\n\tat line1\n\tat line2');
+		const msg4 = getInfoErrorMessage(
+			'message' + EOL,
+			'prefix ',
+			{},
+			'stack\n\tat line1\n\tat line2'
+		);
 
-		assert.strictEqual(msg4, 'prefix message' + EOL + '\tat line1', 'message 3');
+		assert.strictEqual(msg4, 'prefix message' + EOL + '\tat line1');
 	});
 });

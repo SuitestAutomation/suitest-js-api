@@ -34,7 +34,8 @@ describe('suitest test launcher', function() {
 		).once('exit', (exitCode) => {
 			assert.equal(exitCode, 0, 'should exit without error');
 			done();
-		});
+		})
+
 	});
 
 	it('"automated" command should exit with exitCode 1 if required args not provided', (done) => {
@@ -104,10 +105,14 @@ describe('suitest test launcher', function() {
 		).once('exit', (exitCode) => {
 			assert.equal(exitCode, 1, 'should exit without error');
 			done();
-		});
+		})
+		child.stderr.on('data', (data) => {
+				console.log(data.toString());
+			})
 
 		child.stdout.on('data', (data) => {
 			if (!passProvided) {
+				console.log(data.toString());
 				assert.strictEqual(`${data}`, texts['tl.promptPassword'](), 'password asked');
 				// send myPassword to child task
 				child.stdin.setEncoding('utf-8');
