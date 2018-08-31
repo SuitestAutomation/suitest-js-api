@@ -53,7 +53,6 @@ describe('logger util', () => {
 		log.restore();
 	});
 
-
 	it('should log operation types in both modes', () => {
 		const log = sinon.stub(console, 'log');
 
