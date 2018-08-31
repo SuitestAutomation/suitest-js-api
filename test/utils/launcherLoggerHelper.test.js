@@ -20,7 +20,7 @@ describe('launcherLoggerHelper', () => {
 	});
 
 	it('should call mkdirSync and throw conrrect errors', () => {
-		const mkDir = sinon.stub(fs, 'mkdirSync').callsFake((p) => {
+		sinon.stub(fs, 'mkdirSync').callsFake((p) => {
 			const err = new Error('');
 
 			if (p.includes('protectedPath1')) {

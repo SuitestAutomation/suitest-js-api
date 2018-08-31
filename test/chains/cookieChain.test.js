@@ -97,12 +97,14 @@ describe('Cookie chain', () => {
 		}), 'Checking if "cookieName" cookie is missing');
 		assert.equal(toString({
 			cookieName: 'cookieName',
-			comparator: {type: SUBJ_COMPARATOR.MATCH_JS, val: "function(cookie){}"},
+			comparator: {type: SUBJ_COMPARATOR.MATCH_JS,
+				val: 'function(cookie){}'},
 		}), 'Checking if "cookieName" cookie matches JS:\nfunction(cookie){}');
 		assert.equal(toString({
 			cookieName: 'cookieName',
 			isNegated: true,
-			comparator: {type: SUBJ_COMPARATOR.MATCH_JS, val: "function(cookie){}"},
+			comparator: {type: SUBJ_COMPARATOR.MATCH_JS,
+				val: 'function(cookie){}'},
 		}), 'Checking if "cookieName" cookie does not match JS:\nfunction(cookie){}');
 		assert.equal(toString({
 			cookieName: 'cookieName',

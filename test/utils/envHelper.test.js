@@ -56,7 +56,6 @@ describe('envHelper.js', () => {
 	});
 
 	it('should read data from env, launch interactive session, pair to device, set app config', async() => {
-
 		process.env[envVars.SUITEST_SESSION_TYPE] = 'interactive';
 		process.env[envVars.SUITEST_SESSION_TOKEN] = 'token';
 		process.env[envVars.SUITEST_DEVICE_ID] = deviceId;
@@ -71,8 +70,6 @@ describe('envHelper.js', () => {
 	});
 
 	it('should launch interactive session in debug mode and send enableDebugMode ws request', async() => {
-
-
 		process.env[envVars.SUITEST_SESSION_TYPE] = 'interactive';
 		process.env[envVars.SUITEST_SESSION_TOKEN] = 'token';
 		process.env[envVars.SUITEST_DEVICE_ID] = deviceId;

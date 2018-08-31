@@ -34,8 +34,7 @@ describe('suitest test launcher', function() {
 		).once('exit', (exitCode) => {
 			assert.equal(exitCode, 0, 'should exit without error');
 			done();
-		})
-
+		});
 	});
 
 	it('"automated" command should exit with exitCode 1 if required args not provided', (done) => {
@@ -78,7 +77,8 @@ describe('suitest test launcher', function() {
 				testLauncherTest, 'interactive', '-u', 'userEmail', '-p', 'userPass',
 				'-o', 'orgId', '-c', 'configId', '-d', 'deviceId', 'npm', '--version',
 			],
-			{shell: true, stdio: 'inherit'}
+			{shell: true,
+				stdio: 'inherit'}
 		).once('exit', (exitCode) => {
 			assert.equal(exitCode, 0, 'should exit without error');
 			done();
@@ -105,10 +105,11 @@ describe('suitest test launcher', function() {
 		).once('exit', (exitCode) => {
 			assert.equal(exitCode, 1, 'should exit without error');
 			done();
-		})
+		});
+
 		child.stderr.on('data', (data) => {
-				console.log(data.toString());
-			})
+			console.log(data.toString());
+		});
 
 		child.stdout.on('data', (data) => {
 			if (!passProvided) {

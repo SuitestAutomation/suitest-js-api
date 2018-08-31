@@ -189,11 +189,11 @@ describe('Element chain', () => {
 			'Moving mouse to "el-api-id"'
 		);
 		assert.equal(
-			element("el-api-id").sendText('text string').toString(),
+			element('el-api-id').sendText('text string').toString(),
 			'Sending text "text string" to "el-api-id"'
 		);
 		assert.equal(
-			element("el-api-id").sendText('text string').repeat(10).interval(2000).toString(),
+			element('el-api-id').sendText('text string').repeat(10).interval(2000).toString(),
 			'Sending text "text string" to "el-api-id", repeat 10 times every 2000 ms'
 		);
 	});
