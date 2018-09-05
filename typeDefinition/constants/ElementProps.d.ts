@@ -25,6 +25,7 @@ export type ElementProps = {
 	padding: number,
 	fontSize: number,
 	fontFamily: string,
+	fontURI: string,
 	fontWeight: number,
 	name: string,
 	automationName: string,

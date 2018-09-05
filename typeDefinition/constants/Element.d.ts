@@ -64,6 +64,7 @@ export type ElementPropTypes = {
 	CONTENT_MODE:               symbol,
 	IMAGE_HASH:                 symbol,
 	FONT_NAME:                  symbol,
+	FONT_URI:                   symbol,
 	HAS_META_DATA:              symbol,
 	HAS_NAV_MARKERS:            symbol,
 	IS_FOCUSED:                 symbol,

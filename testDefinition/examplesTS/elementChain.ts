@@ -18,18 +18,18 @@ el.then(e => e.id);
 el.matches([
 	{
 		name: PROP.FONT_NAME,
-		val: 'sdf',
+		val: 'string',
 	},
 	{
 		name: PROP.FONT_SIZE,
-		val: 123,
+		val: 1,
 	},
 	{
 		name: PROP.ITEM_FOCUSED,
-		val: 11,
+		val: 1,
 	},
 	{
-		name: PROP.IS_CHECKED,
-		val: true,
+		name: PROP.FONT_URI,
+		val: 'string',
 	},
 ]);
