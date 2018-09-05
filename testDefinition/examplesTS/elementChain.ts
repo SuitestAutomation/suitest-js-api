@@ -1,4 +1,4 @@
-import { element, assert, PROP } from '../../index';
+import { element, assert, PROP, VISIBILITY_STATE } from '../../index';
 
 const el = element({
     css: '.my-element',
@@ -21,8 +21,8 @@ el.matches([
 		val: 'string',
 	},
 	{
-		name: PROP.FONT_SIZE,
-		val: 1,
+		name: PROP.VISIBILITY,
+		val: VISIBILITY_STATE.VISIBLE,
 	},
 	{
 		name: PROP.ITEM_FOCUSED,

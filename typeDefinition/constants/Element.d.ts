@@ -56,7 +56,6 @@ export type ElementPropTypes = {
 	VIDEO_STATE:                symbol,
 	VIDEO_URL:                  symbol,
 	VISIBILITY:                 symbol,
-	VISIBLE:                    symbol,
 	WIDTH:                      symbol,
 	Z_INDEX:                    symbol,
 	ACCESSIBILITY_IDENTIFIER:   symbol,

@@ -20,7 +20,6 @@ export type ElementProps = {
 	videoPos: number,
 	videoUrl: string,
 	visibility: string,
-	visible: boolean,
 	margin: number,
 	padding: number,
 	fontSize: number,
