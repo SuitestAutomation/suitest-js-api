@@ -471,6 +471,8 @@ async function jsExpressionTest() {
 
 	// should have all necessary modifiers
 	const baseLocation = jsExpression(() => '');
+	suitest.assert.jsExpression('');
+	suitest.assert.jsExpression(() => '');
 
 	baseLocation.not();
 	baseLocation.doesNot();

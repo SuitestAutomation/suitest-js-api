@@ -219,6 +219,11 @@ describe('JavaScript expression chain', () => {
 		testInputErrorSync(jsExpression, []);
 		testInputErrorSync(jsExpression, [1]);
 		testInputErrorSync(jsExpression, ['']);
+		testInputErrorSync(toJSON, [{
+			isAssert: true,
+			timeout: 0,
+			expression: '1+1',
+		}]);
 	});
 
 	it('should define assert function', () => {
