@@ -96,15 +96,15 @@ describe('Window chain', () => {
 	it('should convert to string with meaningful message', () => {
 		assert.equal(window().toString(), 'Window chain');
 		assert.equal(
-			window().sendText("text string").toString(),
+			window().sendText('text string').toString(),
 			'Sending text "text string" to window'
 		);
 		assert.equal(
-			window().sendText("text string").repeat(3).interval(4000).toString(),
+			window().sendText('text string').repeat(3).interval(4000).toString(),
 			'Sending text "text string" to window, repeat 3 times every 4000 ms'
 		);
 		assert.equal(
-			window().sendText("text string").repeat(3).interval(4000).until({
+			window().sendText('text string').repeat(3).interval(4000).until({
 				toJSON: () => ({
 					request: {
 						condition: {
