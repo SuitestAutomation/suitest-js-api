@@ -14,20 +14,20 @@ const envVars = require('../../lib/constants/enviroment');
 const logger = require('../../lib/utils/logger');
 
 describe('SuitestLauncher', () => {
-	before(async () => {
+	before(async() => {
 		sinon.stub(process, 'exit');
 		sinon.stub(logger, 'error');
 		sinon.stub(logger, 'log');
 		sinon.stub(snippets, 'finalAutomated');
 	});
 
-	beforeEach(async () => {
+	beforeEach(async() => {
 		nock.cleanAll();
 		authContext.clear();
 		await testServer.restart();
 	});
 
-	after(async () => {
+	after(async() => {
 		await testServer.stop();
 		process.exit.restore();
 		logger.error.restore();
@@ -35,7 +35,7 @@ describe('SuitestLauncher', () => {
 		snippets.finalAutomated.restore();
 	});
 
-	it('should throw correct error on lack of arguments', async () => {
+	it('should throw correct error on lack of arguments', async() => {
 		const suitestLauncher = new TestLauncher();
 
 		try {
@@ -55,7 +55,7 @@ describe('SuitestLauncher', () => {
 		}
 	});
 
-	it('should throw correct error on invalid json schema', async () => {
+	it('should throw correct error on invalid json schema', async() => {
 		const suitestAotomatedLauncher = new TestLauncher({
 			tokenKey: 1,
 			tokenPassword: 1,
@@ -87,7 +87,7 @@ describe('SuitestLauncher', () => {
 		}
 	});
 
-	it('should exit runAutomatedSession when no devices in response', async () => {
+	it('should exit runAutomatedSession when no devices in response', async() => {
 		const testNock = nock(config.apiUrl).post(makeUrlFromArray([endpoints.testPackGenTokens, {id: 10}]))
 			.reply(200, {
 				deviceAccessToken: 'deviceAccessToken',
@@ -111,7 +111,7 @@ describe('SuitestLauncher', () => {
 		}
 	});
 
-	it('should exit process if inspect arg provided in automated mode', async () => {
+	it('should exit process if inspect arg provided in automated mode', async() => {
 		const suitestLauncher = new TestLauncher({
 			tokenKey: '1',
 			tokenPassword: '1',
@@ -130,7 +130,7 @@ describe('SuitestLauncher', () => {
 		}
 	});
 
-	it('should log successfull result for child process', async () => {
+	it('should log successfull result for child process', async() => {
 		const testNock = nock(config.apiUrl).post(makeUrlFromArray([endpoints.testPackGenTokens, {id: 10}]))
 			.reply(200, {
 				deviceAccessToken: 'deviceAccessToken',
@@ -156,7 +156,7 @@ describe('SuitestLauncher', () => {
 		assert.strictEqual(snippets.finalAutomated.called, true, 'snippets.finalAutomated called');
 	});
 
-	it('should exit runAutomatedSession if startTestPack fails', async () => {
+	it('should exit runAutomatedSession if startTestPack fails', async() => {
 		const testNock = nock(config.apiUrl)
 			.post(makeUrlFromArray([endpoints.testPackGenTokens, {id: 10}]))
 			.reply(404);
@@ -173,7 +173,7 @@ describe('SuitestLauncher', () => {
 		assert(logger.error.called);
 	});
 
-	it('should exit runInteractiveSession if openSession fails', async () => {
+	it('should exit runInteractiveSession if openSession fails', async() => {
 		const testNock = nock(config.apiUrl).post(endpoints.session).reply(404);
 		const suitestLauncher = new TestLauncher({
 			username: 'username',
@@ -189,7 +189,7 @@ describe('SuitestLauncher', () => {
 		assert(logger.error.called);
 	});
 
-	it('should exit runInteractiveSession when illegal command provided', async () => {
+	it('should exit runInteractiveSession when illegal command provided', async() => {
 		const testNock = nock(config.apiUrl).post(endpoints.session).reply(200, {
 			deviceAccessToken: 'deviceAccessToken',
 		});
@@ -214,7 +214,7 @@ describe('SuitestLauncher', () => {
 		assert(logger.error.called);
 	});
 
-	it('should run runInteractiveSession in debug mode succesfully', async () => {
+	it('should run runInteractiveSession in debug mode succesfully', async() => {
 		const testNock = nock(config.apiUrl).post(endpoints.session).reply(200, {
 			deviceAccessToken: 'deviceAccessToken',
 		});
