@@ -749,3 +749,7 @@ async function windowTest() {
 	window().with.should.it.times;
 	window().times.should.with.it;
 }
+
+async function commandsTest() {
+	await suitest.interactive();
+}
