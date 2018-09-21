@@ -33,13 +33,6 @@ const getDiagnosticResultsMessages = (diagnosticResults = []) => {
 };
 
 describe('suitest typescripts declarations tests', () => {
-	it('should compile example element chain', (done) => {
-		const messages = getDiagnosticResultsMessages(getDiagnostics('elementChain'));
-
-		assert.equal(messages.join('\n'), '', 'should compile element chain example without errors');
-		done();
-	});
-
 	(() => {
 		const messages = getDiagnosticResultsMessages(getDiagnostics('elementChain.fail'));
 		const expectedErrors = [
@@ -61,24 +54,31 @@ describe('suitest typescripts declarations tests', () => {
 		});
 	})();
 
-	it('should compile example networkRequest chain', (done) => {
-		const messages = getDiagnosticResultsMessages(getDiagnostics('networkRequestChain'));
+	// should compile files without error
+	[
+		'elementChain', 'networkRequestChain', 'javascriptExpressionChain',
+		'locationChain', 'cookieChain', 'applicationChain',
+		'clearAppDataChain', 'executeCommandChain', 'openAppChain',
+		'openUrlChain', 'pollUrlChain', 'positionChain',
+		'pressButtonChain', 'sleepChain', 'windowChain',
+		'videoChain',
+	].forEach(fileName => {
+		it(`should compile example ${fileName}`, (done) => {
+			const messages = getDiagnosticResultsMessages(getDiagnostics(fileName));
 
-		assert.equal(messages.join('\n'), '', 'should compile networkRequest chain example without errors');
-		done();
+			assert.equal(messages.join('\n'), '', `should compile ${fileName} example without errors`);
+			done();
+		});
 	});
-	it('should not compile example networkRequest chain', (done) => {
-		assert.ok(
-			getDiagnostics('networkRequestChain.fail').length > 0,
-			'should not compile networkRequest chain example',
-		);
-		done();
-	});
 
-	it('should compile suitest-tests', (done) => {
-		const messages = getDiagnosticResultsMessages(getDiagnostics('suitest-tests'));
-
-		assert.equal(messages.join('\n'), '', 'should compile suitest-tests');
-		done();
+	// should compile files with error
+	['networkRequestChain.fail', 'elementChain.fail'].forEach(fileName => {
+		it(`should not compile example ${fileName} chain`, (done) => {
+			assert.ok(
+				getDiagnostics(fileName).length > 0,
+				`should not compile ${fileName} chain example`,
+			);
+			done();
+		});
 	});
 });
