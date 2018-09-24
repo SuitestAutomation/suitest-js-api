@@ -6,8 +6,9 @@ const validation = require('../../lib/validataion');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {snippets: log} = require('../../lib/testLauncher/launcherLogger');
 const launcherLogger = require('../../lib/utils/logger');
-const testLauncherHelper = require('../../lib/utils/testLauncherHelper');
 const launcherLoggerHelper = require('../../lib/utils/launcherLoggerHelper');
+const testLauncherHelper = require('../../lib/utils/testLauncherHelper');
+
 
 describe('testLauncherHelper util', () => {
 	beforeEach(() => {
@@ -93,17 +94,9 @@ describe('testLauncherHelper util', () => {
 		argsValidationError.restore();
 	});
 
+	//todo this is not much of a test
 	it('should writeLogs create dir and stream correctly', () => {
-		const createWriteStream = sinon.stub(launcherLoggerHelper, 'createWriteStream').callsFake((path, id) => {
-
-			if (id === '2') {
-				throw new SuitestError('err');
-			} else if (id === '3') {
-				throw new Error('err');
-			}
-		});
 		const mkDirByPathSync = sinon.stub(launcherLoggerHelper, 'mkDirByPathSync');
-		const _ = sinon.stub(launcherLogger, 'log');
 
 		const deviceMeta = {
 			displayName: 'displayName',
@@ -124,17 +117,6 @@ describe('testLauncherHelper util', () => {
 		);
 
 		assert.equal(mkDirByPathSync.args[0], './fake/path', 'mkDirByPathSync called with right args');
-		assert.ok(_.called, 'log called');
-
-		testLauncherHelper.writeLogs({deviceId: '2'}, ['a', 'red'], './fake/path');
-		assert.ok(process.exit.calledWith(1), 'process exit called with 1');
-
-		testLauncherHelper.writeLogs({deviceId: '3'}, ['a', 'red'], './fake/path');
-		assert.ok(process.exit.calledWith(1), 'process exit called with 1');
-
-		_.restore();
-
-		createWriteStream.restore();
 		mkDirByPathSync.restore();
 	});
 });
