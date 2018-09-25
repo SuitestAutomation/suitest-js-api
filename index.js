@@ -171,10 +171,10 @@ const shutDown = () => {
 // Exit process with code 1 on uncaughtException or unhandledRejection
 // Required for proper termination of test launcher child processes
 const exit = err => {
-	webSockets.disconnect();
 	console.error(err);
+	webSockets.disconnect();
 	process.exit(1);
 };
 
-process.once('uncaughtException', exit);
-process.once('unhandledRejection', exit);
+process.on('uncaughtException', exit);
+process.on('unhandledRejection', exit);
