@@ -9,7 +9,6 @@ const launcherLogger = require('../../lib/utils/logger');
 const launcherLoggerHelper = require('../../lib/utils/launcherLoggerHelper');
 const testLauncherHelper = require('../../lib/utils/testLauncherHelper');
 
-
 describe('testLauncherHelper util', () => {
 	beforeEach(() => {
 		sinon.stub(process, 'exit');
@@ -74,9 +73,10 @@ describe('testLauncherHelper util', () => {
 		argsValidationError.restore();
 	});
 
-	//todo this is not much of a test
+	// todo this is not much of a test
 	it('should writeLogs create dir and stream correctly', () => {
 		const mkDirByPathSync = sinon.stub(launcherLoggerHelper, 'mkDirByPathSync');
+		const createWriteStream = sinon.stub(launcherLoggerHelper, 'createWriteStream');
 
 		const deviceMeta = {
 			displayName: 'displayName',
@@ -92,11 +92,11 @@ describe('testLauncherHelper util', () => {
 			},
 			['a', 'red'],
 			new Date(),
-			'./fake/path',
-			'automated'
+			'./fake/path'
 		);
 
 		assert.equal(mkDirByPathSync.args[0], './fake/path', 'mkDirByPathSync called with right args');
 		mkDirByPathSync.restore();
+		createWriteStream.restore();
 	});
 });
