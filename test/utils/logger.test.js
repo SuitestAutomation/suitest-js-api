@@ -98,7 +98,7 @@ describe('logger util', () => {
 
 	it('should only add timestamp in launcher mode', () => {
 		const log = sinon.stub(console, 'log');
-		const dateFormat = 'MMM D HH:MM';
+		const dateFormat = 'MMM D HH:mm:ss';
 
 		logger.log('lalala');
 

@@ -68,7 +68,7 @@ describe('Socket error messages', () => {
 	});
 
 	it('Error message should return specific messages', () => {
-		const toString = () => 'Chain description';
+		const toString = (data, nameOnly) => nameOnly? 'Element name' : 'Chain description';
 		const chainData = {};
 		const basePayload = (errorType, code, reason) => {
 			let payload = {
@@ -127,8 +127,8 @@ describe('Socket error messages', () => {
 			],
 			[basePayload('deviceError'), 'Internal error occurred. Chain description.'],
 			[basePayload('deviceError', 'unsupportedSelector', ''), 'Internal error occurred. Chain description.'],
-			[basePayload('deviceError', 'unsupportedSelector', 'xpathNotSupported'), 'The element cannot be found, because this device does not support XPath.'],
-			[basePayload('deviceError', 'deviceFailure', 'cssSelectorInvalid'), 'The element cannot be found, the identifying property css selector is invalid.'],
+			[basePayload('deviceError', 'unsupportedSelector', 'xpathNotSupported'), 'Element cannot be found, because this device does not support XPath lookups.'],
+			[basePayload('deviceError', 'deviceFailure', 'cssSelectorInvalid'), 'CSS selector is invalid.'],
 			[basePayload('deviceError', 'videoAdapterInvalidOutput', 'some explanation from IL'), 'Video adapter error: some explanation from IL.'],
 			[basePayload('deviceError', 'videoAdapterNotFunction', 'some explanation from IL'), 'Video adapter error: some explanation from IL.'],
 			[basePayload('deviceError', 'videoAdapterThrownError', 'some explanation from IL'), 'Video adapter error: some explanation from IL.'],
@@ -304,25 +304,24 @@ describe('Socket error messages', () => {
 			[basePayload('invalidRepositoryReference'), 'Chain description.'],
 			[
 				basePayload('invalidRepositoryReference', 'notExistingElement'),
-				'Element was not found in repository. Chain description.',
+				'Element Element name was not found in repository.',
 			],
 			[
 				set(lensPath(['response', 'message', 'property']), 'someProp', basePayload('invalidRepositoryReference', 'unknownProperty')),
-				'This element does not support property someProp.',
+				'Element Element name does not support property "someProp".',
 			],
-			[basePayload('invalidRepositoryReference', 'notExistingPlatform'), 'Element is not defined for selected platform. Chain description.'],
+			[basePayload('invalidRepositoryReference', 'notExistingPlatform'), 'Element Element name has no defined identifying properties for this platform.'],
 			[basePayload('openAppOverrideFailed'), 'An error occurred while executing the "Open app override test".'],
 			[basePayload('Success'), 'Command executed successfully.'],
-			[basePayload('NoSuchElement'), 'An element could not be located on the page using the given search parameters. Chain description.'],
-			[basePayload('NoSuchFrame'), 'A request to switch to a frame could not be satisfied because the frame could not be found. Chain description.'],
+			[basePayload('NoSuchElement'), 'Element Element name was not found.'],
+			[basePayload('NoSuchFrame'), 'Cannot switch to frame Element name.'],
 			[basePayload('UnknownCommand'), 'The requested resource could not be found, or a request was received using an HTTP method that is not supported by the mapped resource. Chain description.'],
-			[basePayload('StaleElementReference'), 'Referenced element is no longer in the DOM. Chain description.'],
-			[basePayload('ElementNotVisible'), 'Referenced element is not visible on the page. Chain description.'],
-			[basePayload('InvalidElementState'), 'An element command could not be completed because the element is in an invalid state (e.g. attempting to click a disabled element). Chain description.'],
+			[basePayload('StaleElementReference'), 'Element Element name is no longer inside DOM.'],
+			[basePayload('ElementNotVisible'), 'Element Element name is not currently visible.'],
+			[basePayload('InvalidElementState'), 'Cannot perform operation with element Element name because this element is in an invalid state (e.g. attempting to click a disabled element).'],
 			[basePayload('UnknownError'), 'UnknownError: "Chain description."'],
-			[basePayload('ElementIsNotSelectable'), 'An attempt was made to select an element that cannot be selected. Chain description.'],
-			[basePayload('JavaScriptError'), 'An error occurred while executing user supplied JavaScript. Chain description.'],
-			[basePayload('XPathLookupError'), 'An error occurred while searching for an element by XPath. Chain description.'],
+			[basePayload('ElementIsNotSelectable'), 'Element Element name is not selectable.'],
+			[basePayload('XPathLookupError'), 'XPath error occurred when searching for Element name.'],
 			[basePayload('Timeout'), 'This command takes too long to execute. Chain description.'],
 			[basePayload('NoSuchWindow'), 'A request to switch to a different window could not be satisfied because the window could not be found. Chain description.'],
 			[basePayload('InvalidCookieDomain'), 'Cannot set a cookie on a domain different from the current page. Chain description.'],
@@ -330,13 +329,13 @@ describe('Socket error messages', () => {
 			[basePayload('UnexpectedAlertOpen'), 'A modal dialog was open, blocking this operation. Chain description.'],
 			[basePayload('NoAlertOpenError'), 'There was no modal dialog on the page. Chain description.'],
 			[basePayload('ScriptTimeout'), 'A script takes too long to execute. Chain description.'],
-			[basePayload('InvalidElementCoordinates'), 'The coordinates provided to an interactions operation are invalid. Chain description.'],
+			[basePayload('InvalidElementCoordinates'), 'Invalid coordinates specified for Element name.'],
 			[basePayload('IMENotAvailable'), 'IME was not available.'],
 			[basePayload('IMEEngineActivationFailed'), 'An IME engine could not be started.'],
 			[basePayload('InvalidSelector'), 'This selector is malformed. Chain description.'],
 			[basePayload('unknownWebDriverKey'), 'This key is not supported on the target device.'],
-			[basePayload('unfocusableElement'), 'The target element is not designed to receive any text input. Chain description.'],
-			[basePayload('unclickableElement'), 'Another element is obstructing the target element, so it cannot be clicked on. Chain description.'],
+			[basePayload('unfocusableElement'), 'Element Element name is not designed to receive any text input.'],
+			[basePayload('unclickableElement'), 'Cannot click on Element name because the element is obstructed by another element.'],
 			[basePayload('appiumInstanceError'), 'Failed to initialize device control.'],
 			[basePayload('deviceConnectionError'), 'Failed to initialize device control.'],
 			[
