@@ -68,7 +68,7 @@ describe('Socket error messages', () => {
 	});
 
 	it('Error message should return specific messages', () => {
-		const toString = (data, nameOnly) => nameOnly? 'Element name' : 'Chain description';
+		const toString = (data, nameOnly) => nameOnly ? 'Element name' : 'Chain description';
 		const chainData = {};
 		const basePayload = (errorType, code, reason) => {
 			let payload = {
