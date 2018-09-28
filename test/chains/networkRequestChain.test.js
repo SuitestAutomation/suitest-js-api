@@ -54,100 +54,140 @@ describe('Network request chain', () => {
 	it('should convert to string with meaningful message', () => {
 		assert.equal(
 			networkRequest().equals('http://suite.st/test').wasMade().toString(),
-			'Check if request to http://suite.st/test was made'
+			'Checking if a network request\nto URL: http://suite.st/test\nwas made'
 		);
 		assert.equal(
 			networkRequest().equals('http://suite.st/test').not().wasMade().toString(),
-			'Check if request to http://suite.st/test was not made'
+			'Checking if a network request\nto URL: http://suite.st/test\nwas NOT made'
 		);
 		assert.equal(
 			networkRequest().contains('test').wasMade().toString(),
-			'Check if request containing test in URL was made'
+			'Checking if a network request\nmatching: test\nwas made'
 		);
 		assert.equal(
 			networkRequest().contains('test').not().wasMade().toString(),
-			'Check if request containing test in URL was not made'
+			'Checking if a network request\nmatching: test\nwas NOT made'
 		);
 		assert.equal(
 			networkRequest().equals('http://suite.st/test').requestMatches({
 				name: 'test',
 				val: 'test',
 			}).wasMade().toString(),
-			'Check if request matching defined parameters to http://suite.st/test was made'
+			'Checking if a network request\n' +
+			'to URL: http://suite.st/test\n' +
+			'With request headers: \n' +
+			'  test: test\n' +
+			'was made'
 		);
 		assert.equal(
 			networkRequest().equals('http://suite.st/test').requestMatches({
 				name: 'test',
 				val: 'test',
 			}).not().wasMade().toString(),
-			'Check if request matching defined parameters to http://suite.st/test was not made'
+			'Checking if a network request\n' +
+			'to URL: http://suite.st/test\n' +
+			'With request headers: \n' +
+			'  test: test\n' +
+			'was NOT made'
 		);
 		assert.equal(
 			networkRequest().contains('test').requestMatches({
 				name: 'test',
 				val: 'test',
 			}).wasMade().toString(),
-			'Check if request matching defined parameters containing test in URL was made'
+			'Checking if a network request\n' +
+			'matching: test\n' +
+			'With request headers: \n' +
+			'  test: test\n' +
+			'was made'
 		);
 		assert.equal(
 			networkRequest().contains('test').requestMatches({
-				name: 'test',
-				val: 'test',
+				name: 'headerName',
+				val: 'headerVal',
 			}).not().wasMade().toString(),
-			'Check if request matching defined parameters containing test in URL was not made'
+			'Checking if a network request\n' +
+			'matching: test\n' +
+			'With request headers: \n' +
+			'  headerName: headerVal\n' +
+			'was NOT made'
 		);
 		assert.equal(
 			networkRequest().equals('http://suite.st/test').willBeMade().toString(),
-			'Check if request to http://suite.st/test will be made during next 2000ms'
+			'Checking if a network request\n' +
+			'to URL: http://suite.st/test\n' +
+			'will made during the next 2000 ms'
 		);
 		assert.equal(
 			networkRequest().equals('http://suite.st/test').not().willBeMade().toString(),
-			'Check if request to http://suite.st/test will be not made during next 2000ms'
+			'Checking if a network request\n' +
+			'to URL: http://suite.st/test\n' +
+			'will NOT be made during the next 2000 ms'
 		);
 		assert.equal(
 			networkRequest().contains('test').willBeMade().toString(),
-			'Check if request containing test in URL will be made during next 2000ms'
+			'Checking if a network request\n' +
+			'matching: test\n' +
+			'will made during the next 2000 ms'
 		);
 		assert.equal(
 			networkRequest().contains('test').not().willBeMade().toString(),
-			'Check if request containing test in URL will be not made during next 2000ms'
+			'Checking if a network request\n' +
+			'matching: test\n' +
+			'will NOT be made during the next 2000 ms'
 		);
 		assert.equal(
 			networkRequest().equals('http://suite.st/test').requestMatches({
-				name: 'test',
-				val: 'test',
+				name: 'headerName',
+				val: 'headerVal',
 			}).willBeMade().toString(),
-			'Check if request matching defined parameters to http://suite.st/test will be made during next 2000ms'
+			'Checking if a network request\n' +
+			'to URL: http://suite.st/test\n' +
+			'With request headers: \n' +
+			'  headerName: headerVal\n' +
+			'will made during the next 2000 ms'
 		);
 		assert.equal(
 			networkRequest().equals('http://suite.st/test').requestMatches({
-				name: 'test',
-				val: 'test',
+				name: 'headerName',
+				val: 'headerVal',
 			}).not().willBeMade().toString(),
-			'Check if request matching defined parameters to http://suite.st/test will be not made during next 2000ms'
+			'Checking if a network request\n' +
+			'to URL: http://suite.st/test\n' +
+			'With request headers: \n' +
+			'  headerName: headerVal\n' +
+			'will NOT be made during the next 2000 ms'
 		);
 		assert.equal(
 			networkRequest().contains('test').requestMatches({
-				name: 'test',
-				val: 'test',
+				name: 'headerName',
+				val: 'headerVal',
 			}).willBeMade().toString(),
-			'Check if request matching defined parameters containing test in URL will be made during next 2000ms'
+			'Checking if a network request\n' +
+			'matching: test\n' +
+			'With request headers: \n' +
+			'  headerName: headerVal\n' +
+			'will made during the next 2000 ms'
 		);
 		assert.equal(
 			networkRequest().contains('test').requestMatches({
-				name: 'test',
-				val: 'test',
+				name: 'headerName',
+				val: 'headerVal',
 			}).not().willBeMade().toString(),
-			'Check if request matching defined parameters containing test in URL will be not made during next 2000ms'
+			'Checking if a network request\n' +
+			'matching: test\n' +
+			'With request headers: \n' +
+			'  headerName: headerVal\n' +
+			'will NOT be made during the next 2000 ms'
 		);
 	});
 
 	it('should have beforeSendMsg', () => {
-		const info = sinon.stub(console, 'info');
+		const log = sinon.stub(console, 'log');
 
-		beforeSendMsg({});
-		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
-		info.restore();
+		beforeSendMsg({comparator : {val : 'http://example.net'}});
+		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		log.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

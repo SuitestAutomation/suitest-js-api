@@ -133,16 +133,6 @@ envHelper.handleUserEnvVar();
 // Export public API
 module.exports = new SUITEST_API();
 
-// Old Windows/Node process shutdown workaround
-let winRl;
-
-if (process.platform === 'win32') {
-	winRl = require('readline').createInterface({
-		input: process.stdin,
-		output: process.stdout,
-	});
-}
-
 // Listen to process events to trigger websocket termination and dump warnings, if any
 const shutDown = () => {
 	// Make sure socket connection is done
@@ -174,12 +164,7 @@ const shutDown = () => {
 
 	// Ctrl+Break on Windows
 	'SIGBREAK',
-].forEach(term => {
-	if (winRl && term !== 'exit')
-		winRl.on(term, () => process.emit(term));
-
-	process.on(term, shutDown);
-});
+].forEach(term => process.on(term, shutDown));
 
 // Exit process with code 1 on uncaughtException or unhandledRejection
 // Required for proper termination of test launcher child processes

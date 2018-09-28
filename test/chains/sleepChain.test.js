@@ -44,15 +44,15 @@ describe('Sleep chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(toString({milliseconds: 10}), 'Sleep for 10ms');
+		assert.equal(toString({milliseconds: 10}), 'Sleeping for 10ms');
 	});
 
 	it('should have beforeSendMsg', () => {
-		const info = sinon.stub(console, 'info');
+		const log = sinon.stub(console, 'log');
 
 		beforeSendMsg({milliseconds: 10});
-		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
-		info.restore();
+		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		log.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

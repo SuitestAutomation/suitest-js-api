@@ -46,15 +46,15 @@ describe('Poll URL chain', () => {
 		assert.equal(toString({
 			url: 'url',
 			response: true,
-		}), 'Poll URL "url" every 500ms until response equals true');
+		}), 'Will poll "url" every 500ms until response equals "true"');
 	});
 
 	it('should have beforeSendMsg', () => {
-		const info = sinon.stub(console, 'info');
+		const log = sinon.stub(console, 'log');
 
 		beforeSendMsg({url: ''});
-		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
-		info.restore();
+		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		log.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {
