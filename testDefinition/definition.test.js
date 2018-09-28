@@ -74,7 +74,6 @@ describe('suitest typescripts declarations tests', () => {
 		);
 		done();
 	});
-
 	it('should compile suitest-tests', (done) => {
 		const messages = getDiagnosticResultsMessages(getDiagnostics('suitest-tests'));
 

@@ -126,26 +126,26 @@ describe('Location chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(location().toString(), 'Get current location');
-		assert.equal(location().equal('test').toString(), 'Check if current location equals test');
-		assert.equal(location().not().equal('test').toString(), 'Check if current location does not equal test');
-		assert.equal(location().contains('test').toString(), 'Check if current location contains test');
-		assert.equal(location().not().contains('test').toString(), 'Check if current location does not contain test');
-		assert.equal(location().startWith('test').toString(), 'Check if current location starts with test');
+		assert.equal(location().toString(), 'Getting current location');
+		assert.equal(location().equal('test').toString(), 'Checking if current location equals "test"');
+		assert.equal(location().not().equal('test').toString(), 'Checking if current location does not equal "test"');
+		assert.equal(location().contains('test').toString(), 'Checking if current location contains "test"');
+		assert.equal(location().not().contains('test').toString(), 'Checking if current location does not contain "test"');
+		assert.equal(location().startWith('test').toString(), 'Checking if current location starts with "test"');
 		assert.equal(
 			location().not().startWith('test').toString(),
-			'Check if current location does not start with test'
+			'Checking if current location does not start with "test"'
 		);
-		assert.equal(location().endWith('test').toString(), 'Check if current location ends with test');
-		assert.equal(location().not().endWith('test').toString(), 'Check if current location does not end with test');
+		assert.equal(location().endWith('test').toString(), 'Checking if current location ends with "test"');
+		assert.equal(location().not().endWith('test').toString(), 'Checking if current location does not end with "test"');
 	});
 
 	it('should have beforeSendMsg', () => {
-		const info = sinon.stub(console, 'info');
+		const log = sinon.stub(console, 'log');
 
 		beforeSendMsg({});
-		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
-		info.restore();
+		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		log.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

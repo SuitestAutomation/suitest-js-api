@@ -95,13 +95,16 @@ describe('Window chain', () => {
 
 	it('should convert to string with meaningful message', () => {
 		assert.equal(window().toString(), 'Window chain');
-		assert.equal(window().sendText('text').toString(), 'Send text \'text\' to window');
 		assert.equal(
-			window().sendText('text').repeat(3).interval(4000).toString(),
-			'Send text \'text\' to window 3 times every 4000ms'
+			window().sendText('text string').toString(),
+			'Sending text "text string" to window'
 		);
 		assert.equal(
-			window().sendText('text').repeat(3).interval(4000).until({
+			window().sendText('text string').repeat(3).interval(4000).toString(),
+			'Sending text "text string" to window, repeat 3 times every 4000 ms'
+		);
+		assert.equal(
+			window().sendText('text string').repeat(3).interval(4000).until({
 				toJSON: () => ({
 					request: {
 						condition: {
@@ -112,23 +115,23 @@ describe('Window chain', () => {
 					},
 				}),
 			}).toString(),
-			'Send text \'text\' to window 3 times every 4000ms'
+			'Sending text "text string" to window, repeat 3 times every 4000 ms'
 		);
-		assert.equal(window().refresh('').toString(), 'Refresh browser page');
-		assert.equal(window().goBack('').toString(), 'Navigate back with browser history');
-		assert.equal(window().goForward('').toString(), 'Navigate forward with browser history');
-		assert.equal(window().dismissModal('').toString(), 'Dismiss browser modal dialog');
-		assert.equal(window().acceptModal().toString(), 'Accept modal dialog');
-		assert.equal(window().acceptModal('text').toString(), 'Accept modal dialog with \'text\' message');
-		assert.equal(window().setSize(10, 20).toString(), 'Set browser window size to 10, 20');
+		assert.equal(window().refresh('').toString(), 'Refreshing browser page');
+		assert.equal(window().goBack('').toString(), 'Navigating back in browser history');
+		assert.equal(window().goForward('').toString(), 'Navigating forward in browser history');
+		assert.equal(window().dismissModal('').toString(), 'Dismissing modal dialog');
+		assert.equal(window().acceptModal().toString(), 'Accepting modal dialog');
+		assert.equal(window().acceptModal('text').toString(), 'Accepting modal dialog with \'text\' message');
+		assert.equal(window().setSize(10, 20).toString(), 'Setting browser window size to 10, 20');
 	});
 
 	it('should have beforeSendMsg', () => {
-		const info = sinon.stub(console, 'info');
+		const log = sinon.stub(console, 'log');
 
 		beforeSendMsg({sendText: 'text'});
-		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
-		info.restore();
+		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		log.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

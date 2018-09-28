@@ -10,7 +10,7 @@ const {SUBJ_COMPARATOR} = require('../../lib/mappings');
 const comparatorTypes = require('../../lib/constants/comparator');
 const sinon = require('sinon');
 
-describe('Location chain', () => {
+describe('JavaScript expression chain', () => {
 	it('should have all necessary modifiers', () => {
 		const chain = jsExpression('1+1');
 
@@ -108,20 +108,27 @@ describe('Location chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(jsExpression('1+1').toString(), 'Get result of JavaScript expression');
-		assert.equal(jsExpression('1+1').equal('test').toString(), 'Check if JavaScript expression equals test');
+		assert.equal(jsExpression('1+1').toString(), 'Evaluating JS:\n1+1');
+		assert.equal(
+			jsExpression('1+1').equal('test').toString(),
+			'Check if JS expression\n' +
+			'1+1\n' +
+			'equals string "test"'
+		);
 		assert.equal(
 			jsExpression('1+1').doesNot().startWith('test').toString(),
-			'Check if JavaScript expression does not start with test'
+			'Check if JS expression\n' +
+			'1+1\n' +
+			'does not start with string "test"'
 		);
 	});
 
 	it('should have beforeSendMsg', () => {
-		const info = sinon.stub(console, 'info');
+		const log = sinon.stub(console, 'log');
 
 		beforeSendMsg('1+1');
-		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
-		info.restore();
+		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		log.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {
