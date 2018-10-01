@@ -16,14 +16,12 @@ const deviceId = uuid();
 
 describe('envHelper.js', () => {
 	before(async() => {
-		sinon.stub(logger, 'debug');
-		sinon.stub(logger, 'info');
+		sinon.stub(logger, 'log');
 		sinon.stub(console, 'error');
 		await testServer.start();
 	});
 
 	beforeEach(async() => {
-		await testServer.restart();
 		stubDeviceInfoFeed(deviceId);
 
 		pairedDeviceContext.clear();
@@ -33,8 +31,7 @@ describe('envHelper.js', () => {
 	});
 
 	after(async() => {
-		logger.info.restore();
-		logger.debug.restore();
+		logger.log.restore();
 		console.error.restore();
 
 		webSockets.disconnect();

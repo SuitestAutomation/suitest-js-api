@@ -13,6 +13,7 @@ const logger = require('../../lib/utils/logger');
 describe('startTest', () => {
 	before(async() => {
 		sinon.stub(logger, 'info');
+		sinon.stub(logger, 'delayed');
 		await testServer.start();
 	});
 
@@ -23,6 +24,7 @@ describe('startTest', () => {
 
 	after(async() => {
 		logger.info.restore();
+		logger.delayed.restore();
 		await testServer.stop();
 		testContext.clear();
 		authContext.clear();

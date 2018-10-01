@@ -1,7 +1,6 @@
 const path = require('path');
 const assert = require('assert');
 const {authContext} = require('../../lib/context');
-const testServer = require('../../lib/utils/testServer');
 
 const testLauncherTest = processExecPath(path.resolve(__dirname, '../../lib/utils/testHelpers/testLauncherTest.js'));
 const spawn = require('child_process').spawn;
@@ -14,13 +13,11 @@ describe('suitest test launcher', function() {
 	this.timeout(5000); // increase timeout limit for current test suite
 
 	beforeEach(async() => {
-		await testServer.restart();
 		authContext.clear();
 	});
 
 	after(async() => {
 		authContext.clear();
-		await testServer.stop();
 	});
 
 	it('"automated" command should exit with exitCode 0', (done) => {

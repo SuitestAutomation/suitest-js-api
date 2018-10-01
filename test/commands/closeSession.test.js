@@ -13,7 +13,8 @@ const logger = require('../../lib/utils/logger');
 describe('closeSession', () => {
 	before(() => {
 		nock.disableNetConnect();
-		sinon.stub(logger, 'info');
+		sinon.stub(logger, 'log');
+		sinon.stub(logger, 'delayed');
 	});
 
 	beforeEach(() => {
@@ -21,7 +22,8 @@ describe('closeSession', () => {
 	});
 
 	after(() => {
-		logger.info.restore();
+		logger.log.restore();
+		logger.delayed.restore();
 		nock.cleanAll();
 		nock.enableNetConnect();
 		authContext.clear();

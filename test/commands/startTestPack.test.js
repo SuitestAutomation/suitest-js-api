@@ -16,6 +16,7 @@ const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputErro
 describe('startTestPack', () => {
 	before(async() => {
 		sinon.stub(logger, 'info');
+		sinon.stub(logger, 'delayed');
 		await testServer.start();
 	});
 
@@ -25,6 +26,7 @@ describe('startTestPack', () => {
 
 	after(async() => {
 		logger.info.restore();
+		logger.delayed.restore();
 		nock.cleanAll();
 		authContext.clear();
 		await testServer.stop();
@@ -81,7 +83,6 @@ describe('startTestPack', () => {
 	});
 
 	it('should be started accessTokenKey', async() => {
-		await testServer.restart();
 		const testNock = nock(config.apiUrl).post(makeUrlFromArray([endpoints.testPackGenTokens, {id: 10}]))
 			.reply(200, {deviceAccessToken: 'deviceAccessToken'});
 		let res;

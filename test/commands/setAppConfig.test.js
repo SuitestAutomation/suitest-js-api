@@ -13,7 +13,9 @@ const logger = require('../../lib/utils/logger');
 
 describe('setAppConfig', () => {
 	before(async() => {
-		sinon.stub(logger, 'info');
+		sinon.stub(logger, 'log');
+		sinon.stub(logger, 'json');
+		sinon.stub(logger, 'delayed');
 		await testServer.start();
 		await webSockets.connect();
 	});
@@ -22,7 +24,9 @@ describe('setAppConfig', () => {
 		authContext.clear();
 	});
 	after(async() => {
-		logger.info.restore();
+		logger.log.restore();
+		logger.json.restore();
+		logger.delayed.restore();
 		await testServer.stop();
 		webSockets.disconnect();
 		appContext.clear();

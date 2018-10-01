@@ -14,7 +14,8 @@ const logger = require('../../lib/utils/logger');
 
 describe('openSession', () => {
 	before(async() => {
-		sinon.stub(logger, 'info');
+		sinon.stub(logger, 'log');
+		sinon.stub(logger, 'delayed');
 		await testServer.start();
 	});
 
@@ -23,7 +24,8 @@ describe('openSession', () => {
 	});
 
 	after(async() => {
-		logger.info.restore();
+		logger.log.restore();
+		logger.delayed.restore();
 		nock.cleanAll();
 		authContext.clear();
 		await testServer.stop();
@@ -73,8 +75,6 @@ describe('openSession', () => {
 	});
 
 	it('should open session for guest context when user sessionToken provided', async() => {
-		await testServer.restart();
-
 		const authData = {sessionToken: 'sessionToken'};
 
 		try {
@@ -89,8 +89,6 @@ describe('openSession', () => {
 	});
 
 	it('should open session and set Interactive context explicitly when provided as second arg', async() => {
-		await testServer.restart();
-
 		const authData = {sessionToken: 'sessionToken'};
 
 		try {

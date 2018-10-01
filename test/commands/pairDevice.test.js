@@ -16,7 +16,8 @@ const stubDeviceInfoFeed = require('../../lib/utils/testHelpers/mockDeviceInfo')
 
 describe('pairDevice', () => {
 	before(async() => {
-		sinon.stub(logger, 'info');
+		sinon.stub(logger, 'log');
+		sinon.stub(logger, 'delayed');
 		await testServer.start();
 		await webSockets.connect();
 	});
@@ -27,7 +28,8 @@ describe('pairDevice', () => {
 	});
 
 	after(async() => {
-		logger.info.restore();
+		logger.log.restore();
+		logger.delayed.restore();
 		await testServer.stop();
 		pairedDeviceContext.clear();
 		authContext.clear();
