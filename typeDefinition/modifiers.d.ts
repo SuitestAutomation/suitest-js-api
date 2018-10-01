@@ -99,8 +99,8 @@ export interface WillMadeModifier<T> {
 }
 
 type RequestPropName = symbol | string;
-type RequestPropValue = symbol | string | number;
-type RequestPropComparator = symbol;
+type RequestPropValue =  string | number;
+type RequestPropComparator = string;
 
 export interface RequestMatchesModifier<T> {
 	requestMatches(request: object|object[]): T;
@@ -109,7 +109,7 @@ export interface RequestMatchesModifier<T> {
 
 type ResponsePropName = symbol | string;
 type ResponsePropValue = string | number;
-type ResponsePropComparator = symbol;
+type ResponsePropComparator = string;
 
 export interface ResponseMatchesModifier<T> {
 	responseMatches(response: object|object[]): T;
