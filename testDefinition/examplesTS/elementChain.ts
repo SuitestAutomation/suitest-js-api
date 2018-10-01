@@ -1,8 +1,12 @@
 import { element, assert, PROP, VISIBILITY_STATE } from '../../index';
 
-const el = element({
+let el = element({
     css: '.my-element',
 });
+
+// element can accept strings
+el = element('.my-element');
+
 el.click();
 el.exist();
 el.moveTo();
@@ -10,9 +14,13 @@ el.sendText('');
 el.timeout(1);
 el.exists();
 el.matches(PROP.IS_CHECKED, true);
-el.then(e => e.backgroundColor);
-el.then(e => e.text);
-el.then(e => e.id);
+el.then(e => e && e.backgroundColor);
+el.then(e => e && e.text);
+el.then(e => e && e.id);
+el.doesNot().exist();
+el.timeout(1).doesNot().exist();
+el.doesNot().exist().timeout(1);
+el.matchesJS('');
 
 // roku
 el.matches([

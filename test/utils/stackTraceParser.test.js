@@ -51,4 +51,16 @@ describe('stackTraceParser util', () => {
 			'not changed, lines duplicated',
 		);
 	});
+
+	it('test isStackLine', () => {
+		assert.strictEqual(stackTraceParser.isStackLine('at something'), true);
+		assert.strictEqual(stackTraceParser.isStackLine('\tat something\n'), true);
+		assert.strictEqual(stackTraceParser.isStackLine('something'), false);
+		assert.strictEqual(stackTraceParser.isStackLine('something at something'), false);
+	});
+
+	it('test getFirstStackLine', () => {
+		assert.strictEqual(stackTraceParser.getFirstStackLine('Some Error:\n\tat line1\n\tat line2'), '\tat line1');
+		assert.strictEqual(stackTraceParser.getFirstStackLine('\tat line1\n\tat line2'), '\tat line1');
+	});
 });

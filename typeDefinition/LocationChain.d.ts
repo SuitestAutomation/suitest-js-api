@@ -77,4 +77,4 @@ interface LocationAbandonedChain extends
 {}
 
 type LocationQueryResult = string;
-type LocationEvalResult = boolean;
+type LocationEvalResult = boolean | void;

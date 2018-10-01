@@ -98,12 +98,22 @@ export interface WillMadeModifier<T> {
 	willBeMade(): T;
 }
 
+type RequestPropName = symbol | string;
+type RequestPropValue = symbol | string | number;
+type RequestPropComparator = symbol;
+
 export interface RequestMatchesModifier<T> {
 	requestMatches(request: object|object[]): T;
+	requestMatches(name: RequestPropName, value: RequestPropValue, type?: RequestPropComparator): T;
 }
+
+type ResponsePropName = symbol | string;
+type ResponsePropValue = string | number;
+type ResponsePropComparator = symbol;
 
 export interface ResponseMatchesModifier<T> {
 	responseMatches(response: object|object[]): T;
+	responseMatches(name: ResponsePropName, value: ResponsePropValue, type?: ResponsePropComparator): T;
 }
 
 export interface UntilModifier<T> {

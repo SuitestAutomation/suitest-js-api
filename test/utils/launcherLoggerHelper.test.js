@@ -20,7 +20,7 @@ describe('launcherLoggerHelper', () => {
 	});
 
 	it('should call mkdirSync and throw conrrect errors', () => {
-		const mkDir = sinon.stub(fs, 'mkdirSync').callsFake((p) => {
+		sinon.stub(fs, 'mkdirSync').callsFake((p) => {
 			const err = new Error('');
 
 			if (p.includes('protectedPath1')) {
@@ -37,12 +37,10 @@ describe('launcherLoggerHelper', () => {
 
 		assert.throws(mkDirByPathSync.bind(null, './protectedPath2'), (err) => {
 			return err.type === SuitestError.type
-				&& err.message.includes('Unknown error');
+				&& err.message.includes('ANY error')
+				&& err.message.includes('protectedPath2');
 		}, 'error handler handle error');
-		assert.throws(mkDirByPathSync.bind(null, './protectedPath1'), (err) => {
-			return err.type === SuitestError.type
-				&& err.message.includes('Permission');
-		}, 'error handler handle permission error');
+
 		fs.mkdirSync.restore();
 		sep.restore();
 	});
@@ -111,7 +109,8 @@ describe('launcherLoggerHelper', () => {
 		}, 'error handler handle EACCES');
 		assert.throws(errHandler.bind(null, {code: 'ANY'}), (err) => {
 			return err.type === SuitestError.type
-				&& err.message.includes('Unknown error');
+				&& err.message.includes('ANY error')
+				&& err.message.includes('path1/path2');
 		}, 'error handler handle error');
 		fs.existsSync.restore();
 		fs.unlinkSync.restore();

@@ -22,13 +22,9 @@ describe('SuitestLauncher', () => {
 	});
 
 	beforeEach(async() => {
+		nock.cleanAll();
 		authContext.clear();
 		await testServer.restart();
-	});
-
-	afterEach(() => {
-		authContext.clear();
-		nock.cleanAll();
 	});
 
 	after(async() => {
@@ -157,7 +153,7 @@ describe('SuitestLauncher', () => {
 		assert.ok(testNock.isDone(), 'request');
 		assert.ok(sessionCloseNock.isDone(), 'request');
 		assert.ok(devicesDetailsNock.isDone(), 'request');
-		assert.strictEqual(snippets.finalAutomated.called, true);
+		assert.strictEqual(snippets.finalAutomated.called, true, 'snippets.finalAutomated called');
 	});
 
 	it('should exit runAutomatedSession if startTestPack fails', async() => {
