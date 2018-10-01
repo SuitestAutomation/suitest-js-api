@@ -20,7 +20,7 @@ describe('launcherLoggerHelper', () => {
 	});
 
 	it('should call mkdirSync and throw conrrect errors', () => {
-		const mkDir = sinon.stub(fs, 'mkdirSync').callsFake((p) => {
+		sinon.stub(fs, 'mkdirSync').callsFake((p) => {
 			const err = new Error('');
 
 			if (p.includes('protectedPath1')) {
@@ -40,10 +40,7 @@ describe('launcherLoggerHelper', () => {
 				&& err.message.includes('ANY error')
 				&& err.message.includes('protectedPath2');
 		}, 'error handler handle error');
-		assert.throws(mkDirByPathSync.bind(null, './protectedPath1'), (err) => {
-			return err.type === SuitestError.type
-				&& err.message.includes('Permission');
-		}, 'error handler handle permission error');
+
 		fs.mkdirSync.restore();
 		sep.restore();
 	});

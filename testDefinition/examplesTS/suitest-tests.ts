@@ -253,7 +253,6 @@ function testCookieChain() {
 
 async function elementTest() {
 	await suitest.element({css: '#repo-id'})
-		.match(suitest.PROP.WIDTH, 100)
 		.timeout(10)
 		.not();
 
@@ -368,7 +367,6 @@ async function videoTest() {
 	video().timeout(10);
 
 	await video()
-		.match(suitest.PROP.WIDTH, 100)
 		.timeout(10)
 		.not();
 
@@ -386,7 +384,7 @@ async function videoTest() {
 	await video().matches(suitest.PROP.TOP, suitest.VALUE.REPO, suitest.COMP.APPROX, 20);
 	await video().matches(suitest.PROP.BG_COLOR, '#F00');
 
-	// Same with object syntax
+	// Same with object syntax should have only allowed modifiers after match is applied
 	await suitest.element({css: '#repo-id'}).matches({
 		name: suitest.PROP.WIDTH,
 	});
@@ -475,6 +473,8 @@ async function jsExpressionTest() {
 
 	// should have all necessary modifiers
 	const baseLocation = jsExpression(() => '');
+	suitest.assert.jsExpression('');
+	suitest.assert.jsExpression(() => '');
 
 	baseLocation.not();
 	baseLocation.doesNot();

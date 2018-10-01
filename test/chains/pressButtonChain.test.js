@@ -35,18 +35,21 @@ describe('Press button chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(pressButton(buttonTypes.BACK).toString(), 'Press button BACK');
+		assert.equal(
+			pressButton(buttonTypes.BACK).toString(),
+			'Pressing button BACK'
+		);
 		assert.equal(
 			pressButton([buttonTypes.BLUE, buttonTypes.DOWN]).toString(),
-			'Press buttons BLUE, DOWN'
+			'Pressing buttons BLUE, DOWN'
 		);
 		assert.equal(
 			pressButton(buttonTypes.BLUE).repeat(10).toString(),
-			'Press button BLUE 10 times every 500ms'
+			'Pressing button BLUE, repeat 10 times every 500 ms'
 		);
 		assert.equal(
 			pressButton(buttonTypes.BLUE).repeat(10).interval(2000).toString(),
-			'Press button BLUE 10 times every 2000ms'
+			'Pressing button BLUE, repeat 10 times every 2000 ms'
 		);
 		assert.equal(
 			pressButton(buttonTypes.BLUE)
@@ -62,16 +65,16 @@ describe('Press button chain', () => {
 					}),
 				})
 				.repeat(10).interval(2000).toString(),
-			'Press button BLUE 10 times every 2000ms'
+			'Pressing button BLUE, repeat 10 times every 2000 ms'
 		);
 	});
 
 	it('should have beforeSendMsg', () => {
-		const info = sinon.stub(console, 'info');
+		const log = sinon.stub(console, 'log');
 
 		beforeSendMsg({ids: ['Up']});
-		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
-		info.restore();
+		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		log.restore();
 	});
 
 	it('should throw error in case of invalid input', () => {
@@ -90,7 +93,7 @@ describe('Press button chain', () => {
 				type: 'button',
 				ids: [VRC[buttonTypes.UP]],
 				count: 1,
-				delay: 1000,
+				delay: 1,
 			},
 		}, 'type testLine default');
 		assert.deepStrictEqual(toJSON({

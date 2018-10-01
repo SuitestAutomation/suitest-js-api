@@ -9,6 +9,10 @@ const webSockets = require('../../lib/api/webSockets');
 const {pairedDeviceContext, authContext, appContext, testContext} = require('../../lib/context');
 const sessionConstants = require('../../lib/constants/session');
 const logger = require('../../lib/utils/logger');
+const nock = require('nock');
+const stubDeviceInfoFeed = require('../../lib/utils/testHelpers/mockDeviceInfo');
+
+const deviceId = uuid();
 
 describe('envHelper.js', () => {
 	before(async() => {
@@ -20,6 +24,7 @@ describe('envHelper.js', () => {
 
 	beforeEach(async() => {
 		await testServer.restart();
+		stubDeviceInfoFeed(deviceId);
 
 		pairedDeviceContext.clear();
 		authContext.clear();
@@ -34,6 +39,7 @@ describe('envHelper.js', () => {
 
 		webSockets.disconnect();
 		await testServer.stop();
+		nock.cleanAll();
 
 		pairedDeviceContext.clear();
 		authContext.clear();
@@ -50,7 +56,7 @@ describe('envHelper.js', () => {
 	it('should read data from env, launch automated session and pair to device', async() => {
 		process.env[envVars.SUITEST_SESSION_TYPE] = 'automated';
 		process.env[envVars.SUITEST_SESSION_TOKEN] = 'token';
-		process.env[envVars.SUITEST_DEVICE_ID] = uuid();
+		process.env[envVars.SUITEST_DEVICE_ID] = deviceId;
 
 		const res = await envHelper.handleUserEnvVar();
 
@@ -58,8 +64,6 @@ describe('envHelper.js', () => {
 	});
 
 	it('should read data from env, launch interactive session, pair to device, set app config', async() => {
-		const deviceId = uuid();
-
 		process.env[envVars.SUITEST_SESSION_TYPE] = 'interactive';
 		process.env[envVars.SUITEST_SESSION_TOKEN] = 'token';
 		process.env[envVars.SUITEST_DEVICE_ID] = deviceId;
@@ -74,8 +78,6 @@ describe('envHelper.js', () => {
 	});
 
 	it('should launch interactive session in debug mode and send enableDebugMode ws request', async() => {
-		const deviceId = uuid();
-
 		process.env[envVars.SUITEST_SESSION_TYPE] = 'interactive';
 		process.env[envVars.SUITEST_SESSION_TOKEN] = 'token';
 		process.env[envVars.SUITEST_DEVICE_ID] = deviceId;

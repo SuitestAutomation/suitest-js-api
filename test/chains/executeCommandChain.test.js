@@ -35,15 +35,15 @@ describe('Execute command chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(executeCommand('1+1').toString(), 'Execute command');
+		assert.equal(executeCommand('1+1').toString(), 'Executing command:\n1+1');
 	});
 
 	it('should have beforeSendMsg', () => {
-		const info = sinon.stub(console, 'info');
+		const log = sinon.stub(console, 'log');
 
 		beforeSendMsg('1+1');
-		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
-		info.restore();
+		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		log.restore();
 	});
 
 	it('should throw error in case of invalid input', () => {

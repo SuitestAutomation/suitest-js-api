@@ -30,7 +30,7 @@ describe('process-args', () => {
 		assert.deepEqual(hideOwnArgs(), ['npm', 'test', '-s', 'some arg'], 'hidden lib arguments');
 	});
 
-	it('hideOwnArgs should unshift execPath', () => {
+	it('hideOwnArgs should not unshift execPath', () => {
 		process.execPath = 'testPath';
 		process.argv = [
 			'/Users/aaa/bin/iojs',
@@ -45,7 +45,7 @@ describe('process-args', () => {
 
 		assert.deepEqual(
 			hideOwnArgs(),
-			['testPath', './testDir', '-s', 'some arg'],
+			['./testDir', '-s', 'some arg'],
 			'hidden lib arguments',
 		);
 	});

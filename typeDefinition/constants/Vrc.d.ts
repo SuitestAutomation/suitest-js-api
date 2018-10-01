@@ -69,4 +69,7 @@ export type VrcConstants = {
 
 	// apple tv
 	SELECT: 'ENTER',
+
+	// Roku
+	REPLAY: 'REPLAY',
 };

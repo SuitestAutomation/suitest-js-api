@@ -68,7 +68,8 @@ describe('authContext', () => {
 			assert.equal(error.code, SuitestError.AUTH_FAILED, 'error code');
 			assert.equal(
 				error.message,
-				'You\'re not allowed to execute .login function. Make sure you\'re logged in with the correct credentials.',
+				'You\'re not allowed to execute .login function. ' +
+				'Make sure you\'re logged in with the correct credentials.',
 				'error code');
 		}
 		assert.ok(!authedReqObject, 'authed');

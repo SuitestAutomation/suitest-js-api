@@ -60,15 +60,16 @@ describe('Video chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(video().toString(), 'Get video element properties');
-		assert.equal(video().exists().toString(), 'Check if video element exists');
+		assert.equal(video().toString(), 'Getting properties of "video"');
+		assert.equal(video().exists().toString(), 'Checking if "video" exists');
 		assert.equal(
-			video().matchesJS('').toString(),
-			'Check if video element matches JavaScript expression'
+			video().matchesJS('function(el){return false}').toString(),
+			'Checking if "video" matches JS:\nfunction(el){return false}'
 		);
 		assert.equal(
 			video().matches(ELEMENT_PROP.ID, 'someId').toString(),
-			'Check if video element has defined properties'
+			'Checking if "video" matches:\n' +
+			'  id = someId'
 		);
 	});
 

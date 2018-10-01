@@ -57,9 +57,6 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.click, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
-		assert.strictEqual(typeof chain.not, 'function');
-		assert.strictEqual(typeof chain.doesNot, 'function');
-		assert.strictEqual(typeof chain.isNot, 'function');
 	});
 
 	it('should have only allowed modifiers after click is applied', () => {
@@ -140,39 +137,40 @@ describe('Element chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(element('element').toString(), 'Get element element properties');
-		assert.equal(element('element').exists().toString(), 'Check if element element exists');
+		assert.equal(element('el-api-id').toString(), 'Getting properties of "el-api-id"');
+		assert.equal(element('el-api-id').exists().toString(), 'Checking if "el-api-id" exists');
 		assert.equal(element({
 			css: 'body',
 			index: 1,
-		}).exists().toString(), 'Check if {"css":"body","index":1} element exists');
+		}).exists().toString(), 'Checking if "{"css":"body","index":1}" exists');
 		assert.equal(
-			element('element').matchesJS('').toString(),
-			'Check if element element matches JavaScript expression'
-		);
-		assert.equal(element('element').not().exists().toString(), 'Check if element element does not exist');
-		assert.equal(
-			element('element').not().matchesJS('').toString(),
-			'Check if element element does not match JavaScript expression'
+			element('el-api-id').matchesJS('function(el){return false}').toString(),
+			'Checking if "el-api-id" matches JS:\nfunction(el){return false}'
 		);
 		assert.equal(
-			element('element').matches(ELEMENT_PROP.ID).toString(),
-			'Check if element element has defined properties'
+			element('el-api-id').not().exists().toString(),
+			'Checking if "el-api-id" is missing'
 		);
 		assert.equal(
-			element('element').matches({name: ELEMENT_PROP.ID}).toString(),
-			'Check if element element has defined properties'
+			element('el-api-id').matches(ELEMENT_PROP.ID).toString(),
+			'Checking if "el-api-id" matches:\n' +
+			'  id = valueRepo'
 		);
 		assert.equal(
-			element('element').click().toString(),
-			'Click on element element'
+			element('el-api-id').matches({name: ELEMENT_PROP.ID}).toString(),
+			'Checking if "el-api-id" matches:\n' +
+			'  id = valueRepo'
 		);
 		assert.equal(
-			element('element').click().repeat(10).interval(2000).toString(),
-			'Click on element element 10 times every 2000ms'
+			element('el-api-id').click().toString(),
+			'Clicking on "el-api-id"'
 		);
 		assert.equal(
-			element('element').click().repeat(10).interval(2000).until({
+			element('el-api-id').click().repeat(10).interval(2000).toString(),
+			'Clicking on "el-api-id", repeat 10 times every 2000 ms'
+		);
+		assert.equal(
+			element('el-api-id').click().repeat(10).interval(2000).until({
 				toJSON: () => ({
 					request: {
 						condition: {
@@ -184,28 +182,28 @@ describe('Element chain', () => {
 				}),
 			})
 				.toString(),
-			'Click on element element 10 times every 2000ms'
+			'Clicking on "el-api-id", repeat 10 times every 2000 ms'
 		);
 		assert.equal(
-			element('element').moveTo().toString(),
-			'Move cursor to element element'
+			element('el-api-id').moveTo().toString(),
+			'Moving mouse to "el-api-id"'
 		);
 		assert.equal(
-			element('element').sendText('text').toString(),
-			'Send text \'text\' to element element'
+			element('el-api-id').sendText('text string').toString(),
+			'Sending text "text string" to "el-api-id"'
 		);
 		assert.equal(
-			element('element').sendText('text').repeat(10).interval(2000).toString(),
-			'Send text \'text\' to element element 10 times every 2000ms'
+			element('el-api-id').sendText('text string').repeat(10).interval(2000).toString(),
+			'Sending text "text string" to "el-api-id", repeat 10 times every 2000 ms'
 		);
 	});
 
 	it('should have beforeSendMsg', () => {
-		const info = sinon.stub(console, 'info');
+		const log = sinon.stub(console, 'log');
 
 		beforeSendMsg({selector: {}});
-		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
-		info.restore();
+		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		log.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {
@@ -281,7 +279,7 @@ describe('Element chain', () => {
 					button: 'left',
 				}],
 				count: 1,
-				delay: 1000,
+				delay: 1,
 				target: {
 					type: 'element',
 					val: {
