@@ -147,7 +147,7 @@ export declare namespace WindowModifiers {
 	}
 }
 
-export type PropertyValue = string | number | symbol;
+export type PropertyValue = string | number | symbol | boolean;
 export type PropertyObjectDefinition = {
 	name: PropNameType,
 	val?: PropertyValue,
