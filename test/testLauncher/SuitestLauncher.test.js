@@ -229,8 +229,8 @@ describe('SuitestLauncher', () => {
 			deviceId: 'deviceId',
 			appConfigId: 'config',
 			inspectBrk: '9121',
-		}, ['date']);
-		const cpForkStub = sinon.stub(cp, 'fork');
+		}, ['npm']);
+		const cpForkStub = sinon.stub(cp, 'spawn');
 
 		await suitestLauncher.runInteractiveSession();
 

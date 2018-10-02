@@ -1,80 +1,116 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const path = require('path');
+const Promise = require('bluebird');
 
-const {config, extend} = require('../../config');
 const logger = require('../../lib/utils/logger');
 const interactive = require('../../lib/commands/interactive');
-const {startRepl} = require('../../lib/testLauncher/repl');
+const repl = require('../../lib/testLauncher/repl');
+const texts = require('../../lib/texts');
+const {authContext} = require('../../lib/context');
+
+const stubbed = {};
 
 describe('interactive command', () => {
-	it('should display warning if .interactive() command not allowed', async() => {
-		const repl = config.repl;
-
-		extend({repl: false});
-		let result = true;
-
-		sinon.stub(logger, 'info');
-		const warnStub = sinon.stub(logger, 'warn');
-
-		try {
-			result = await interactive();
-		} finally {
-			logger.info.restore();
-			warnStub.restore();
-			extend({repl});
-		}
-
-		assert.strictEqual(result, undefined, 'promise resolved');
-		assert.strictEqual(startRepl.called, false, 'repl not called');
-		assert.strictEqual(warnStub.called, true, 'warning displayed');
+	before(() => {
+		process.env.REPL_IPC_PORT = 'fake';
 	});
 
-	it('should start repl', async() => {
-		const repl = config.repl;
+	beforeEach(() => {
+		sinon.stub(logger);
+		stubbed.authContext = sinon.stub(authContext, 'isInteractiveSession').returns(true);
+	});
+	afterEach(() => {
+		sinon.restore();
+		stubbed.authContext.restore();
+	});
+	it('should not start another repl instance if one is already running', async() => {
+		const replSessionEnded = sinon.stub(texts, 'replSessionEnded');
 
-		extend({repl: true});
-		let result = true;
+		let startRepl;
+		let replCalls = 0;
 
-		sinon.stub(logger, 'info');
-		const warnStub = sinon.stub(logger, 'warn');
+		return new Promise(async resolve => {
+			startRepl = sinon.stub(repl, 'startRepl').callsFake(async() => {
+				await interactive();
+				++replCalls;
+				assert.equal(replCalls, 1, 'Second call is ignored');
+				resolve();
+			});
+			await interactive();
+		}).then(async() => {
+			startRepl.restore();
+			startRepl = sinon.stub(repl, 'startRepl').returns(Promise.resolve());
 
-		try {
-			result = await interactive();
-		} finally {
-			logger.info.restore();
-			warnStub.restore();
-			extend({repl});
-		}
-
-		assert.strictEqual(result, undefined, 'promise resolved');
-		assert.strictEqual(startRepl.called, true, 'repl called');
-		assert.deepEqual(startRepl.lastCall.args[0].dir, __dirname, 'dir');
-		assert.deepEqual(startRepl.lastCall.args[0].require, [], 'require');
-		assert.strictEqual(warnStub.called, false, 'warning not displayed');
+			await interactive();
+			assert.equal(replSessionEnded.callCount, 2, 'Repl went through exactly 2x although 3 attempts where made');
+		}).then(() => {
+			startRepl.restore();
+			replSessionEnded.restore();
+		});
 	});
 
-	it('should start repl with require files', async() => {
-		const repl = config.repl;
+	it('should not give warning in interactive mode and give warning in automated mode', async() => {
+		const replWarnInteractive = sinon.stub(texts, 'replWarnInteractive');
+		const startRepl = sinon.stub(repl, 'startRepl').resolves(1);
 
-		extend({repl: true});
-		let result = true;
+		await interactive();
+		assert.ok(!replWarnInteractive.called, 'Warning not displayed in interactive mode');
+		stubbed.authContext.restore();
+		stubbed.authContext = sinon.stub(authContext, 'isInteractiveSession').returns(false);
+		await interactive();
+		assert.ok(replWarnInteractive.called, 'Warning displayed in automated mode');
 
-		sinon.stub(logger, 'info');
-		const warnStub = sinon.stub(logger, 'warn');
+		startRepl.restore();
+		replWarnInteractive.restore();
+	});
 
-		try {
-			result = await interactive({require: ['test.js']});
-		} finally {
-			logger.info.restore();
-			warnStub.restore();
-			extend({repl});
-		}
+	it('should print the welcome message describing all launch settings', async() => {
+		const startRepl = sinon.stub(repl, 'startRepl').resolves(1);
+		const replWelcomeMessage = sinon.spy(texts, 'replWelcomeMessage');
 
-		assert.strictEqual(result, undefined, 'promise resolved');
-		assert.strictEqual(startRepl.called, true, 'repl called');
-		assert.deepEqual(startRepl.lastCall.args[0].dir, __dirname, 'dir');
-		assert.deepEqual(startRepl.lastCall.args[0].require, [path.resolve(__dirname, 'test.js')], 'require');
-		assert.strictEqual(warnStub.called, false, 'warning not displayed');
+		// eslint-disable-next-line max-len
+		const expected = 'Test execution has been paused for the interactive session\nNow you can:\n\n  1. Edit watched files - Suitest will reload them and execute the repeater\n     function every time they change on disk.\n  2. Use the prompt below to execute any JavaScript in real time.\n\nHere is your environment:\n\n  Current working dir: \u001b[37mC:\\Users\\Taras\\projects\\suitest-js-api\\test\\commands\u001b[39m\n  Repeater function: \u001b[37mnone\u001b[39m\n  Available local variables: \u001b[37msuitest\u001b[39m\n  Watched files (relative to your working dir):\n    - \u001b[37mC:\\Users\\Taras\\projects\\suitest-js-api\\test\\commands\\**\\*.js\u001b[39m\n\n';
+
+		await interactive();
+		assert.ok(replWelcomeMessage.returned(expected), 'Message is correct');
+		startRepl.restore();
+		replWelcomeMessage.restore();
+	});
+
+	it('should set default parameters', async() => {
+		const startRepl = sinon.stub(repl, 'startRepl').resolves(1);
+
+		await interactive();
+		const args = startRepl.firstCall.args[0];
+
+		assert.equal(args.cwd, __dirname, 'CWD set');
+		assert.ok(args.vars.suitest, 'Suitest var set');
+		assert.equal(args.watch, path.join(__dirname, '**/*.js'), 'Watch folder set');
+		assert.ok(!args.repeater, 'Repeater not present');
+
+		startRepl.restore();
+	});
+
+	it('should accept repl user options', async() => {
+		const startRepl = sinon.stub(repl, 'startRepl').resolves(1);
+
+		const fakeVar = {a: 1};
+		const repeater = a => a;
+
+		await interactive({
+			watch: 'bububu',
+			vars: {fakeVar},
+			repeater,
+		});
+
+		const args = startRepl.firstCall.args[0];
+
+		assert.equal(args.cwd, __dirname, 'CWD set correctly');
+		assert.deepEqual(args.vars.fakeVar, fakeVar, 'User var set correctly');
+		assert.equal(args.watch, 'bububu', 'Watch parameter set correctly');
+		assert.equal(args.repeater, repeater, 'Repeater set correctly');
+
+		startRepl.restore();
 	});
 });

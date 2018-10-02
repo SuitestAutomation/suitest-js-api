@@ -1,63 +1,139 @@
 const assert = require('assert');
 const repl = require('repl');
 const sinon = require('sinon');
+const chokidar = require('chokidar');
 const EventEmitter = require('events');
 
-let context;
-let evalStub;
-let defineCommandStub;
+const texts = require('../../lib/texts');
+const SuitestError = require('../../lib/utils/SuitestError');
+const suitestRepl = require('../../lib/testLauncher/repl');
+
+const sandbox = require('sinon').createSandbox();
 
 // mock repl instance
 class ReplInstance extends EventEmitter {
-	constructor() {
+	constructor(autoEnd = true) {
+		// console.log('booooo');
 		super();
-		this.context = context = {};
-		setTimeout(() => this.emit('exit'), 50);
+		this.context = {};
 		this.close = sinon.stub();
-		this.eval = evalStub = sinon.stub();
-		this.defineCommand = defineCommandStub = sinon.stub();
+		this.eval = (a, b, c, f) => f && f();
+		this.defineCommand = sinon.stub();
+
+		if (autoEnd)
+			setInterval(() => this.emitExit(), 10);
+	}
+
+	emitExit() {
+		this.emit('exit');
 	}
 }
 
 describe('repl', () => {
-	before(() => {
-		sinon.stub(repl, 'start').returns(new ReplInstance());
-		require('../../lib/utils/testHelpers/mocks').restoreRepl();
+	beforeEach(() => {
+		process.env.REPL_IPC_PORT = '9999';
+		sandbox.stub(repl, 'start').returns(new ReplInstance());
 	});
 
-	after(() => {
+	afterEach(() => {
+		sandbox.restore();
+	});
+
+	it('should require IPC port', () => {
+		const replIpcNotAvailable = sandbox.stub(texts, 'replIpcNotAvailable');
+		const port = process.env.REPL_IPC_PORT;
+
+		delete process.env.REPL_IPC_PORT;
+
+		const {startRepl} = suitestRepl;
+		let passed = false;
+
+		try {
+			startRepl();
+		} catch (e) {
+			console.log(replIpcNotAvailable.called);
+			assert.equal(e.code, SuitestError.IPC_ERROR, 'Error code is correct');
+			assert.ok(replIpcNotAvailable.called, 'Error message is correct');
+			passed = true;
+		}
+
+		assert.ok(passed, 'Error was not thrown when it should have been.');
+		process.env.REPL_IPC_PORT = port;
+	});
+
+	it('should handle IPC startup error', async() => {
+		const replIpcErrorInChildProcess = sandbox.stub(texts, 'replIpcErrorInChildProcess');
+
+		suitestRepl.startRepl();
+
+		return new Promise(resolve => {
+			let error = false;
+
+			process.removeAllListeners('uncaughtException');
+			process.on('uncaughtException', function check(e) {
+				try {
+					assert.ok(replIpcErrorInChildProcess.called, 'Connection error was thrown');
+					assert.equal(e.code, SuitestError.IPC_ERROR, 'Error code was correct');
+				} catch (e) {
+					error = e;
+				}
+
+				process.off('unhandledException', check);
+
+				if (error)
+					throw error;
+
+				resolve();
+			});
+		});
+	});
+
+	it('should start REPL instance', async() => {
+		const {setupReplIpc} = require('../../lib/utils/testLauncherHelper');
+
+		process.stdin.setRawMode = sinon.stub();
+		process.env.REPL_IPC_PORT = await setupReplIpc();
+		sandbox.stub(process, 'chdir');
+
+		await suitestRepl.startRepl({});
+		assert.ok(repl.start.called, 'Repl instance was started');
+	});
+
+	it('Should apply the repl options', async() => {
+		const chDir = sandbox.stub(process, 'chdir');
+		const choki = new EventEmitter();
+
+		sandbox.stub(chokidar, 'watch').returns(choki);
+		choki.close = sinon.stub();
+
+		const {setupReplIpc} = require('../../lib/utils/testLauncherHelper');
+		const repeater = sinon.stub();
+		const watch = '../../lib/utils/testHelpers/repl.js';
+
 		repl.start.restore();
-		require('../../lib/utils/testHelpers/mocks').stubRepl();
-	});
+		sandbox.stub(repl, 'start').returns(new ReplInstance(false));
 
-	it('should test startRepl', async() => {
-		const {startRepl, isActive} = require('../../lib/testLauncher/repl');
-		const testContext = {suitest: 'suitest'};
-		const promsie = startRepl({context: testContext});
+		require(watch);
 
-		assert.strictEqual(isActive(), true, 'repl is active');
-		assert.strictEqual(repl.start.called, true, 'repl start called');
-		assert.strictEqual(evalStub.called, true, 'replInstance eval called');
-		assert.strictEqual(defineCommandStub.lastCall.args[0], 'r', '.r command defined');
-		assert.deepEqual(context, testContext, 'replInstance context extended');
-		assert.strictEqual(promsie instanceof Promise, true, 'promise returned');
-		await promsie;
-		assert.strictEqual(isActive(), false, 'repl is back to inactive');
-	});
+		process.stdin.setRawMode = sinon.stub();
+		process.env.REPL_IPC_PORT = await setupReplIpc();
 
-	it('should test upgradeEval', async() => {
-		const {upgradeEval} = require('../../lib/testLauncher/repl');
+		suitestRepl.startRepl({
+			cwd: __dirname,
+			repeater: repeater,
+			watch: watch,
+		});
 
-		const eval = sinon.stub();
-		const upgrader = sinon.stub();
-		const replInstance = {eval};
+		await new Promise(resolve => {
+			setInterval(() => chDir.called && resolve(), 10);
+		});
 
-		upgradeEval(replInstance, upgrader);
-		replInstance.eval('test');
-
-		assert.strictEqual(upgrader.called, true, 'upgrader called');
-		assert.strictEqual(upgrader.lastCall.args[0], 'test', 'upgrader args');
-		assert.strictEqual(eval.called, true, 'eval called');
-		assert.strictEqual(eval.lastCall.args[0], 'test', 'eval args');
+		await new Promise(resolve => {
+			choki.emit('change', watch);
+			setInterval(() => {
+				if (global.iHaveBeenRequired === 2 && repeater.called)
+					resolve();
+			});
+		});
 	});
 });

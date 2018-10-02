@@ -1,5 +1,4 @@
 --require config/setTestConfig
 --require lib/utils/testHelpers/mockWebSocket.js
 --require lib/utils/testHelpers/mockRaven.js
---require lib/utils/testHelpers/mocks.js
 --recursive
