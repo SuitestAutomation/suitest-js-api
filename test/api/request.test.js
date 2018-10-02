@@ -1,12 +1,12 @@
 const assert = require('assert');
 const nock = require('nock');
-const httpStatuses = require('http').STATUS_CODES;
 
 const request = require('../../lib/api/request');
 const SuitestError = require('../../lib/utils/SuitestError');
 
 describe('request', () => {
 	before(() => {
+		nock.cleanAll();
 		nock.disableNetConnect();
 	});
 

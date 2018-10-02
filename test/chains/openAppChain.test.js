@@ -55,16 +55,16 @@ describe('Open app chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(toString({}), 'Open app');
-		assert.equal(toString({relativeURL: '/test'}), 'Open app at /test');
+		assert.equal(toString({}), 'Opening app at homepage');
+		assert.equal(toString({relativeURL: '/test'}), 'Opening app at /test');
 	});
 
 	it('should have beforeSendMsg', () => {
-		const info = sinon.stub(console, 'info');
+		const log = sinon.stub(console, 'log');
 
 		beforeSendMsg({});
-		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
-		info.restore();
+		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		log.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

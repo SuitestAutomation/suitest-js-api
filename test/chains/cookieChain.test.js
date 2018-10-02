@@ -85,32 +85,34 @@ describe('Cookie chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(toString({cookieName: 'cookieName'}), 'Get cookieName cookie');
+		assert.equal(toString({cookieName: 'cookieName'}), 'Getting "cookieName" cookie');
 		assert.equal(toString({
 			cookieName: 'cookieName',
 			comparator: {type: SUBJ_COMPARATOR.EXIST},
-		}), 'Check if cookieName cookie exists');
+		}), 'Checking if "cookieName" cookie exists');
 		assert.equal(toString({
 			cookieName: 'cookieName',
 			isNegated: true,
 			comparator: {type: SUBJ_COMPARATOR.EXIST},
-		}), 'Check if cookieName cookie does not exist');
+		}), 'Checking if "cookieName" cookie is missing');
 		assert.equal(toString({
 			cookieName: 'cookieName',
-			comparator: {type: SUBJ_COMPARATOR.MATCH_JS},
-		}), 'Check if cookieName cookie matches JavaScript expression');
+			comparator: {type: SUBJ_COMPARATOR.MATCH_JS,
+				val: 'function(cookie){}'},
+		}), 'Checking if "cookieName" cookie matches JS:\nfunction(cookie){}');
 		assert.equal(toString({
 			cookieName: 'cookieName',
 			isNegated: true,
-			comparator: {type: SUBJ_COMPARATOR.MATCH_JS},
-		}), 'Check if cookieName cookie does not match JavaScript expression');
+			comparator: {type: SUBJ_COMPARATOR.MATCH_JS,
+				val: 'function(cookie){}'},
+		}), 'Checking if "cookieName" cookie does not match JS:\nfunction(cookie){}');
 		assert.equal(toString({
 			cookieName: 'cookieName',
 			comparator: {
 				type: SUBJ_COMPARATOR.EQUAL,
 				val: 'test',
 			},
-		}), 'Check if cookieName cookie equals test');
+		}), 'Checking if "cookieName" cookie equals test');
 		assert.equal(toString({
 			cookieName: 'cookieName',
 			isNegated: true,
@@ -118,15 +120,15 @@ describe('Cookie chain', () => {
 				type: SUBJ_COMPARATOR.EQUAL,
 				val: 'test',
 			},
-		}), 'Check if cookieName cookie does not equal test');
+		}), 'Checking if "cookieName" cookie does not equal test');
 	});
 
 	it('should have beforeSendMsg', () => {
-		const info = sinon.stub(console, 'info');
+		const log = sinon.stub(console, 'log');
 
 		beforeSendMsg({cookieName: 'cookieName'});
-		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
-		info.restore();
+		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		log.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

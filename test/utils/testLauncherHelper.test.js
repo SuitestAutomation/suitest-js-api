@@ -6,8 +6,8 @@ const validation = require('../../lib/validataion');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {snippets: log} = require('../../lib/testLauncher/launcherLogger');
 const launcherLogger = require('../../lib/utils/logger');
-const testLauncherHelper = require('../../lib/utils/testLauncherHelper');
 const launcherLoggerHelper = require('../../lib/utils/launcherLoggerHelper');
+const testLauncherHelper = require('../../lib/utils/testLauncherHelper');
 
 describe('testLauncherHelper util', () => {
 	beforeEach(() => {
@@ -93,32 +93,30 @@ describe('testLauncherHelper util', () => {
 		argsValidationError.restore();
 	});
 
+	// todo this is not much of a test
 	it('should writeLogs create dir and stream correctly', () => {
-		const createWriteStream = sinon.stub(launcherLoggerHelper, 'createWriteStream').callsFake((path, id) => {
-			if (id === '2') {
-				throw new SuitestError('err');
-			} else if (id === '3') {
-				throw new Error('err');
-			}
-		});
 		const mkDirByPathSync = sinon.stub(launcherLoggerHelper, 'mkDirByPathSync');
-		const _ = sinon.stub(launcherLogger, 'log');
+		const createWriteStream = sinon.stub(launcherLoggerHelper, 'createWriteStream');
 
-		testLauncherHelper.writeLogs('1', ['a', 'red'], './fake/path');
+		const deviceMeta = {
+			displayName: 'displayName',
+			shortName: 'shortName',
+			manufacturer: 'manufacturer',
+			model: 'model',
+		};
 
-		assert.deepEqual(createWriteStream.args[0], ['./fake/path', '1'], 'createWriteStream called with right args');
+		testLauncherHelper.writeLogs(
+			{
+				deviceId: '1',
+				...deviceMeta,
+			},
+			['a', 'red'],
+			new Date(),
+			'./fake/path'
+		);
+
 		assert.equal(mkDirByPathSync.args[0], './fake/path', 'mkDirByPathSync called with right args');
-		assert.ok(_.called, 'log called');
-
-		testLauncherHelper.writeLogs('2', ['a', 'red'], './fake/path');
-		assert.ok(process.exit.calledWith(1), 'proccess exit called with 1');
-
-		testLauncherHelper.writeLogs('3', ['a', 'red'], './fake/path');
-		assert.ok(process.exit.calledWith(1), 'proccess exit called with 1');
-		assert.equal(launcherLogger.error.firstCall.args[1], '3', 'error called with right deviceId');
-		_.restore();
-
-		createWriteStream.restore();
 		mkDirByPathSync.restore();
+		createWriteStream.restore();
 	});
 });

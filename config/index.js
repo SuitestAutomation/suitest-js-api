@@ -85,6 +85,10 @@ function extend(ext) {
  * If file found, but json invalid, throw error.
  */
 function readRcConfig() {
+	// ignore .suitestrc files when running unit tests
+	if (global._suitestTesting)
+		return {};
+
 	return rc('suitest', {}, () => ({}));
 }
 

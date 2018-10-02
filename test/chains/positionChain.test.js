@@ -66,14 +66,14 @@ describe('Position chain', () => {
 		);
 		assert.equal(
 			position(1, 1).click().toString(),
-			'Click on 1, 1 position'
+			'Clicking at [1, 1]'
 		);
 		assert.equal(
-			position(1, 1).click().repeat(10).interval(2000).toString(),
-			'Click on 1, 1 position 10 times every 2000ms'
+			position(1, 2).click().repeat(10).interval(2000).toString(),
+			'Clicking at [1, 2], repeat 10 times every 2000 ms'
 		);
 		assert.equal(
-			position(1, 1).click()
+			position(1, 2).click()
 				.until({
 					toJSON: () => ({
 						request: {
@@ -86,23 +86,23 @@ describe('Position chain', () => {
 					}),
 				})
 				.repeat(10).interval(2000).toString(),
-			'Click on 1, 1 position 10 times every 2000ms'
+			'Clicking at [1, 2], repeat 10 times every 2000 ms'
 		);
 		assert.equal(
-			position(1, 1).moveTo().toString(),
-			'Move cursor to 1, 1 position'
+			position(1, 2).moveTo().toString(),
+			'Moving cursor to position [1, 2]'
 		);
 	});
 
 	it('should have beforeSendMsg', () => {
-		const info = sinon.stub(console, 'info');
+		const log = sinon.stub(console, 'log');
 
 		beforeSendMsg({coordinates: {
 			x: 10,
 			y: 20,
 		}});
-		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
-		info.restore();
+		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		log.restore();
 	});
 
 	it('should throw error in case of invalid input', () => {
