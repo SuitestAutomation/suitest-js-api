@@ -78,7 +78,7 @@ describe('repl', () => {
 					error = e;
 				}
 
-				process.off('unhandledException', check);
+				process.removeListener('unhandledException', check);
 
 				if (error)
 					throw error;

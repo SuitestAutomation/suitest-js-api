@@ -73,7 +73,8 @@ describe('interactive command', () => {
 		const expected = 'Test execution has been paused for the interactive session\nNow you can:\n\n  1. Edit watched files - Suitest will reload them and execute the repeater\n     function every time they change on disk.\n  2. Use the prompt below to execute any JavaScript in real time.\n\nHere is your environment:\n\n  Current working dir: \u001b[37mC:\\Users\\Taras\\projects\\suitest-js-api\\test\\commands\u001b[39m\n  Repeater function: \u001b[37mnone\u001b[39m\n  Available local variables: \u001b[37msuitest\u001b[39m\n  Watched files (relative to your working dir):\n    - \u001b[37mC:\\Users\\Taras\\projects\\suitest-js-api\\test\\commands\\**\\*.js\u001b[39m\n\n';
 
 		await interactive();
-		assert.ok(replWelcomeMessage.returned(expected), 'Message is correct');
+
+		assert.equal(replWelcomeMessage.firstCall.returnValue, expected, 'Message is correct');
 		startRepl.restore();
 		replWelcomeMessage.restore();
 	});
