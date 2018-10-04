@@ -7,6 +7,8 @@ const EventEmitter = require('events');
 const texts = require('../../lib/texts');
 const SuitestError = require('../../lib/utils/SuitestError');
 const suitestRepl = require('../../lib/testLauncher/repl');
+const errorListeners = require('../../lib/utils/errorListeners');
+const {setupReplIpc} = require('../../lib/utils/testLauncherHelper');
 
 const sandbox = require('sinon').createSandbox();
 
@@ -29,9 +31,18 @@ class ReplInstance extends EventEmitter {
 	}
 }
 
+async function ensureReplPortExists(mock = false) {
+	const mockPort = '9999';
+	const current = process.env.REPL_IPC_PORT;
+
+	if (mock)
+		return process.env.REPL_IPC_PORT = mockPort;
+	else if (!current || current === mockPort)
+		process.env.REPL_IPC_PORT = await setupReplIpc();
+}
+
 describe('repl', () => {
 	beforeEach(() => {
-		process.env.REPL_IPC_PORT = '9999';
 		sandbox.stub(repl, 'start').returns(new ReplInstance());
 	});
 
@@ -64,12 +75,14 @@ describe('repl', () => {
 	it('should handle IPC startup error', async() => {
 		const replIpcErrorInChildProcess = sandbox.stub(texts, 'replIpcErrorInChildProcess');
 
+		await ensureReplPortExists(true);
+
 		suitestRepl.startRepl();
 
 		return new Promise(resolve => {
 			let error = false;
+			const errListeners = errorListeners.pauseErrorListeners();
 
-			process.removeAllListeners('uncaughtException');
 			process.on('uncaughtException', function check(e) {
 				try {
 					assert.ok(replIpcErrorInChildProcess.called, 'Connection error was thrown');
@@ -78,7 +91,7 @@ describe('repl', () => {
 					error = e;
 				}
 
-				process.removeListener('unhandledException', check);
+				errorListeners.restoreErrorListeners(errListeners);
 
 				if (error)
 					throw error;
@@ -89,12 +102,9 @@ describe('repl', () => {
 	});
 
 	it('should start REPL instance', async() => {
-		const {setupReplIpc} = require('../../lib/utils/testLauncherHelper');
-
 		process.stdin.setRawMode = sinon.stub();
-		process.env.REPL_IPC_PORT = await setupReplIpc();
 		sandbox.stub(process, 'chdir');
-
+		await ensureReplPortExists();
 		await suitestRepl.startRepl({});
 		assert.ok(repl.start.called, 'Repl instance was started');
 	});
@@ -106,9 +116,10 @@ describe('repl', () => {
 		sandbox.stub(chokidar, 'watch').returns(choki);
 		choki.close = sinon.stub();
 
-		const {setupReplIpc} = require('../../lib/utils/testLauncherHelper');
 		const repeater = sinon.stub();
 		const watch = '../../lib/utils/testHelpers/repl.js';
+
+		await ensureReplPortExists();
 
 		repl.start.restore();
 		sandbox.stub(repl, 'start').returns(new ReplInstance(false));
@@ -116,7 +127,6 @@ describe('repl', () => {
 		require(watch);
 
 		process.stdin.setRawMode = sinon.stub();
-		process.env.REPL_IPC_PORT = await setupReplIpc();
 
 		suitestRepl.startRepl({
 			cwd: __dirname,

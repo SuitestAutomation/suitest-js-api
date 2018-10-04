@@ -27,7 +27,7 @@
     "suitest": "bin/suitest"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --exit",
     "test-definitions": "cd ./testDefinition && mocha --no-timeouts definition.test.js",
     "test-watch": "yarn test -- -w",
     "coverage": "nyc --reporter=lcov yarn test",
