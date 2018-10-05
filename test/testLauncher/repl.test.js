@@ -15,7 +15,6 @@ const sandbox = require('sinon').createSandbox();
 // mock repl instance
 class ReplInstance extends EventEmitter {
 	constructor(autoEnd = true) {
-		// console.log('booooo');
 		super();
 		this.context = {};
 		this.close = sinon.stub();
@@ -62,7 +61,6 @@ describe('repl', () => {
 		try {
 			startRepl();
 		} catch (e) {
-			console.log(replIpcNotAvailable.called);
 			assert.equal(e.code, SuitestError.IPC_ERROR, 'Error code is correct');
 			assert.ok(replIpcNotAvailable.called, 'Error message is correct');
 			passed = true;

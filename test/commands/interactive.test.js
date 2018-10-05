@@ -1,7 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const path = require('path');
-const Promise = require('bluebird');
 
 const logger = require('../../lib/utils/logger');
 const interactive = require('../../lib/commands/interactive');
