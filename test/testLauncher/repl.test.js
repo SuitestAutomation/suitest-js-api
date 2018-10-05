@@ -144,4 +144,38 @@ describe('repl', () => {
 			});
 		});
 	});
+
+	it('Should apply accept repeater as string', async() => {
+		const replHelper = require('../../lib/utils/testHelpers/repl');
+		let repeater = sandbox.stub(replHelper, 'repeater');
+
+		const {repeaterFromString} = suitestRepl;
+		const path = require('path');
+
+		repeaterFromString(
+			'repl#repeater',
+			path.join(__dirname, '/../../lib/utils/testHelpers/'),
+			''
+		)();
+
+		assert(repeater.called, 'Repeater with module spec was correctly resolved');
+
+		repeater = sandbox.stub(replHelper.nested, 'repeater');
+
+		repeaterFromString(
+			'repl#nested.repeater',
+			path.join(__dirname, '/../../lib/utils/testHelpers/'),
+			''
+		)();
+
+		assert(repeater.called, 'Nested repeater with module spec was correctly resolved');
+
+		repeaterFromString(
+			'nested.repeater',
+			path.join(__dirname, '/../../lib/utils/testHelpers/'),
+			'repl.js'
+		)();
+
+		assert(repeater.secondCall, 'Repeater without module name was correctly resolved');
+	});
 });
