@@ -34,7 +34,7 @@ describe('interactive command', () => {
 				await interactive();
 				++replCalls;
 				assert.equal(replCalls, 1, 'Second call is ignored');
-				resolve();
+				process.nextTick(resolve);
 			});
 			await interactive();
 		}).then(async() => {
