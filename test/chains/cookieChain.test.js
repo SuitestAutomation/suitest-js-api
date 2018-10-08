@@ -25,6 +25,7 @@ const allCookieComposers = [
 	composers.CONTAIN,
 	composers.EQUAL,
 	composers.MATCH_JS,
+	composers.MATCH_BS,
 	composers.EXIST,
 	composers.ASSERT,
 	composers.GETTERS,
@@ -37,6 +38,7 @@ const comparatorComposers = [
 	composers.CONTAIN,
 	composers.EQUAL,
 	composers.MATCH_JS,
+	composers.MATCH_BS,
 	composers.EXIST,
 ];
 
@@ -106,6 +108,17 @@ describe('Cookie chain', () => {
 			comparator: {type: SUBJ_COMPARATOR.MATCH_JS,
 				val: 'function(cookie){}'},
 		}), 'Checking if "cookieName" cookie does not match JS:\nfunction(cookie){}');
+		assert.equal(toString({
+			cookieName: 'cookieName',
+			comparator: {type: SUBJ_COMPARATOR.MATCH_BS,
+				val: 'function(cookie){}'},
+		}), 'Checking if "cookieName" cookie matches BrightScript:\nfunction(cookie){}');
+		assert.equal(toString({
+			cookieName: 'cookieName',
+			isNegated: true,
+			comparator: {type: SUBJ_COMPARATOR.MATCH_BS,
+				val: 'function(cookie){}'},
+		}), 'Checking if "cookieName" cookie does not match BrightScript:\nfunction(cookie){}');
 		assert.equal(toString({
 			cookieName: 'cookieName',
 			comparator: {

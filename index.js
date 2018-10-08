@@ -23,7 +23,9 @@ const {pressButton, pressButtonAssert} = require('./lib/chains/pressButtonChain'
 const {position, positionAssert} = require('./lib/chains/positionChain');
 const {window, windowAssert} = require('./lib/chains/windowChain');
 const {executeCommand, executeCommandAssert} = require('./lib/chains/executeCommandChain');
+const {executeBrightScript, executeBrightScriptAssert} = require('./lib/chains/executeBrightScriptChain');
 const {jsExpression, jsExpressionAssert} = require('./lib/chains/javascriptExpressionChain');
+const {brightScriptExpression, brightScriptExpressionAssert} = require('./lib/chains/brightScriptExpressionChain');
 const {element, elementAssert} = require('./lib/chains/elementChain');
 const {networkRequest, networkRequestAssert} = require('./lib/chains/networkRequestChain');
 const {pollUrl, pollUrlAssert} = require('./lib/chains/pollUrlChain');
@@ -78,7 +80,9 @@ class SUITEST_API {
 		this.position = position;
 		this.window = window;
 		this.executeCommand = executeCommand;
+		this.executeBrightScript = executeBrightScript;
 		this.jsExpression = jsExpression;
+		this.brightScriptExpression = brightScriptExpression;
 		this.element = element;
 		this.video = video;
 		this.networkRequest = networkRequest;
@@ -117,7 +121,9 @@ class SUITEST_API {
 			position: positionAssert,
 			window: windowAssert,
 			executeCommand: executeCommandAssert,
+			executeBrightScript: executeBrightScriptAssert,
 			jsExpression: jsExpressionAssert,
+			brightScriptExpression: brightScriptExpressionAssert,
 			cookie: cookieAssert,
 			element: elementAssert,
 			pollUrl: pollUrlAssert,

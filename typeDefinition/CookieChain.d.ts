@@ -4,6 +4,7 @@ import {
 	Timeout,
 	ExistsModifiers,
 	MatchJSModifiers,
+	MatchBrightScriptModifiers,
 	StringModifiers,
 	BaseChain,
 } from './modifiers';
@@ -66,6 +67,7 @@ interface CookieBaseEvalChain<TSelf> extends BaseChain<TSelf, CookieEvalResult, 
 interface CookieEvalModifiers<T> extends
 	StringModifiers<T>,
 	MatchJSModifiers<T>,
+	MatchBrightScriptModifiers<T>,
 	ExistsModifiers<T>
 {}
 

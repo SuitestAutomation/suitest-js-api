@@ -198,6 +198,8 @@ function testCookieChain() {
 	timeoutCookie.exists();
 	timeoutCookie.matchJS('');
 	timeoutCookie.matchesJS('');
+	timeoutCookie.matchesBrightScript('');
+	timeoutCookie.matchBrightScript('');
 	timeoutCookie.equal('');
 	timeoutCookie.equals('');
 	timeoutCookie.contain('');
@@ -239,6 +241,7 @@ function testCookieChain() {
 	cookie('cookieName').contain('').not().timeout(10);
 	cookie('cookieName').exist().timeout(10).not();
 	cookie('cookieName').not().matchJS(() => true).timeout(10);
+	cookie('cookieName').not().matchBrightScript(() => true).timeout(10);
 	cookie('cookieName').not().timeout(10).equal('');
 	cookie('cookieName').timeout(10).not().endsWith('test');
 	cookie('cookieName').timeout(10).endWith('test').not();
@@ -440,6 +443,7 @@ async function videoTest() {
 	video().toString();
 	video().exists().toString();
 	video().matchesJS('').toString();
+	video().matchesBrightScript('').toString();
 	video().matches(suitest.PROP.ID).toString();
 	video().click().toString();
 	video().click().repeat(10).interval(2000).toString();
@@ -466,6 +470,19 @@ async function executeCommandTest() {
 	executeCommand(() => {}).then();
 	executeCommand(() => {}).clone();
 	executeCommand(() => {}).toString();
+}
+
+async function executeBrightScriptTest() {
+	const {executeBrightScript} = suitest;
+
+	await executeBrightScript('adasd');
+	await executeBrightScript(() => '');
+	await executeBrightScript((a: string) => a.toLowerCase());
+
+	executeBrightScript(() => {}).abandon();
+	executeBrightScript(() => {}).then();
+	executeBrightScript(() => {}).clone();
+	executeBrightScript(() => {}).toString();
 }
 
 async function jsExpressionTest() {
@@ -555,6 +572,95 @@ async function jsExpressionTest() {
 	jsExpression(() => '').should.it.with.times;
 	jsExpression(() => '').with.should.it.times;
 	jsExpression(() => '').times.should.with.it;
+}
+
+async function BrightScriptExpressionTest() {
+	const {brightScriptExpression} = suitest;
+
+	// should have all necessary modifiers
+	const baseChain = brightScriptExpression(() => '');
+	suitest.assert.brightScriptExpression('');
+	suitest.assert.brightScriptExpression(() => '');
+
+	baseChain.not();
+	baseChain.doesNot();
+	baseChain.isNot();
+	baseChain.timeout(10);
+	baseChain.equal('');
+	baseChain.equals('');
+	baseChain.contain('');
+	baseChain.contains('');
+	baseChain.startWith('');
+	baseChain.startsWith('');
+	baseChain.endWith('');
+	baseChain.endsWith('');
+	baseChain.clone();
+	baseChain.abandon();
+	baseChain.toString();
+
+	// should have only allowed modifiers after condition started
+	const equalLoc = brightScriptExpression(() => '').equal('');
+
+	equalLoc.not();
+	equalLoc.doesNot();
+	equalLoc.isNot();
+	equalLoc.timeout(10);
+	baseChain.clone();
+	baseChain.abandon();
+	equalLoc.toString();
+
+	// should have only allowed modifiers after timeout is set
+	const timeoutLoc = brightScriptExpression(() => '').timeout(10);
+
+	timeoutLoc.not();
+	timeoutLoc.doesNot();
+	timeoutLoc.isNot();
+	timeoutLoc.equal('');
+	timeoutLoc.equals('');
+	timeoutLoc.contain('');
+	timeoutLoc.contains('');
+	timeoutLoc.startWith('');
+	timeoutLoc.startsWith('');
+	timeoutLoc.endWith('');
+	timeoutLoc.endsWith('');
+	baseChain.clone();
+	baseChain.abandon();
+	timeoutLoc.toString();
+
+	// should have only allowed modifiers after it is nagated
+	const notLoc = brightScriptExpression(() => '').not();
+
+	notLoc.timeout(10);
+	notLoc.equal('');
+	notLoc.equals('');
+	notLoc.contain('');
+	notLoc.contains('');
+	notLoc.startWith('');
+	notLoc.startsWith('');
+	notLoc.endWith('');
+	notLoc.endsWith('');
+	baseChain.clone();
+	baseChain.abandon();
+	notLoc.toString();
+
+	// should have only toString method
+	const abandonedLoc = baseChain.abandon();
+
+	abandonedLoc.toString();
+
+	// chaining examples
+	brightScriptExpression(() => '').contain('').not().timeout(10);
+	brightScriptExpression(() => '').contain('').timeout(10).not();
+	brightScriptExpression(() => '').not().timeout(10).equal('');
+	brightScriptExpression(() => '').timeout(10).not().endsWith('test');
+	brightScriptExpression(() => '').timeout(10).endWith('test').not();
+	brightScriptExpression(() => '').timeout(10).endWith('test').not().toAssert();
+
+	// getters
+	brightScriptExpression(() => '').it.should.with.times;
+	brightScriptExpression(() => '').should.it.with.times;
+	brightScriptExpression(() => '').with.should.it.times;
+	brightScriptExpression(() => '').times.should.with.it;
 }
 
 function testOpenAppChain() {

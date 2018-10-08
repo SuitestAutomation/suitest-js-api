@@ -21,6 +21,8 @@ el.doesNot().exist();
 el.timeout(1).doesNot().exist();
 el.doesNot().exist().timeout(1);
 el.matchesJS('');
+el.matchesBrightScript('');
+el.matchBrightScript(() => null);
 
 // roku
 el.matches([
