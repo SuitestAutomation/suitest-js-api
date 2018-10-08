@@ -6,6 +6,7 @@ const {
 	toJSON,
 	getComposers,
 	beforeSendMsg,
+	toString,
 } = require('../../lib/chains/networkRequestChain');
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
@@ -185,7 +186,7 @@ describe('Network request chain', () => {
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
 
-		beforeSendMsg({comparator : {val : 'http://example.net'}});
+		beforeSendMsg({comparator: {val: 'http://example.net'}});
 		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
 		log.restore();
 	});
@@ -409,5 +410,65 @@ describe('Network request chain', () => {
 		assert.ok('clone' in chain);
 		assert.ok('abandon' in chain);
 		assert.ok('toJSON' in chain);
+	});
+
+	it('toString should return correct string', () => {
+		assert.deepStrictEqual(toString({
+			comparator: {
+				type: SUBJ_COMPARATOR.EQUAL,
+				val: 'test',
+			},
+			request: {
+				type: SUBJ_COMPARATOR.REQUEST_MATCHES,
+				props: [
+					{
+						name: NETWORK_PROP.METHOD,
+						val: NETWORK_METHOD.GET,
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+					{
+						name: NETWORK_PROP.BODY,
+						val: 'test',
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+					{
+						name: 'header',
+						val: 'test',
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+				],
+			},
+			response: {
+				type: SUBJ_COMPARATOR.RESPONSE_MATCHES,
+				props: [
+					{
+						name: NETWORK_PROP.STATUS,
+						val: 500,
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+					{
+						name: NETWORK_PROP.BODY,
+						val: 'test',
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+					{
+						name: 'header',
+						val: 'test',
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+				],
+			},
+			wasMade: true,
+		}), ['Checking if a network request',
+			'to URL: test',
+			'With request headers: ',
+			'  @method: GET',
+			'  @body: test',
+			'  header: test',
+			'With response headers: ',
+			'  @status: 500',
+			'  @body: test',
+			'  header: test',
+			'was made'].join('\n'));
 	});
 });
