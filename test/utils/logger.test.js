@@ -60,7 +60,7 @@ describe('logger util', () => {
 
 		assert.equal(
 			log.firstCall.args[0],
-			'\u001b[90mtimestamp Launcher \u001b[39m\u001b[36m\u001b[1mA \u001b[22m\u001b[39m\u001b[37moperation\u001b[39m',
+			'\u001b[90mtimestamp Launcher \u001b[39m\u001b[36m\u001b[1mA\u001b[22m\u001b[39m \u001b[37moperation\u001b[39m',
 			'In plain mode opType should be merged with line'
 		);
 	});
