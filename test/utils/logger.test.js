@@ -77,6 +77,6 @@ describe('logger util', () => {
 
 		logger.log('operation');
 
-		assert(log.secondCall.args[0].includes('MyDevice'), 'device short display name is included in left rail');
+		assert(log.firstCall.args[0].includes('MyDevice'), 'device short display name is included in left rail');
 	});
 });
