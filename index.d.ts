@@ -42,7 +42,7 @@ declare namespace suitest {
 		startTest(clientTestId: string, options?: StartTestOptions): Promise<void|SuitestError>;
 		endTest(): Promise<void|SuitestError>;
 		configure(config: ConfigureOptions): Promise<void|SuitestError>;
-		interactive(): Promise<void>;
+		interactive(cwd?:string, repeater?: string, watch?: string|Array<string>, ignore?:string): Promise<void>;
 
 		// subjects
 		location(): LocationChain;
