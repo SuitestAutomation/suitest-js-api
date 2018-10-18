@@ -357,6 +357,12 @@ describe('Socket error messages', () => {
 				'JavaScript expression error: "error".',
 			],
 			[basePayload('signInRequired'), 'Account needs to be signed in on target device.'],
+			[basePayload('appleError65'), 'Unable to launch WebDriverAgent because of xcodebuild failure: "xcodebuild failed with code 65".'],
+			[basePayload('appleError70'), 'Unable to launch WebDriverAgent because of xcodebuild failure: "xcodebuild failed with code 70".'],
+			[basePayload('appleEconnresetError'), 'Unable to start WebDriverAgent session because of xcodebuild failure: "Could not proxy command to remote server".'],
+			[basePayload('applePairingError'), 'Pairing failed. Try restarting both device and Mac.'],
+			[basePayload('appleIosDeployError'), 'Could not initialize ios-deploy make sure it is installed (npm install -g ios-deploy) and works on your system.'],
+			[basePayload('appleAppSignError'), 'Could not install app.'],
 		].forEach(([payload, expectMessage]) => {
 			assert.equal(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
