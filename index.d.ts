@@ -24,6 +24,7 @@ import {ContentMode} from './typeDefinition/constants/ContentMode';
 import {ElementState} from './typeDefinition/constants/ElementState';
 import {TextAlignment} from './typeDefinition/constants/TextAlignment';
 import {BorderStyle} from './typeDefinition/constants/BorderStyle';
+import {ReplOptions} from './typeDefinition/InteractiveCommandChain';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -42,6 +43,7 @@ declare namespace suitest {
 		startTest(clientTestId: string, options?: StartTestOptions): Promise<void|SuitestError>;
 		endTest(): Promise<void|SuitestError>;
 		configure(config: ConfigureOptions): Promise<void|SuitestError>;
+		interactive(options: ReplOptions): Promise<void>;
 
 		// subjects
 		location(): LocationChain;
