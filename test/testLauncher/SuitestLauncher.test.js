@@ -12,11 +12,16 @@ const config = require('../../config').config;
 const {snippets} = require('../../lib/testLauncher/launcherLogger');
 const envVars = require('../../lib/constants/enviroment');
 const logger = require('../../lib/utils/logger');
+const mockSpawn = require('../../lib/utils/testHelpers/mockSpawn');
 
 describe('SuitestLauncher', () => {
 	before(async() => {
+		mockSpawn.mock();
+		sinon.stub(console, 'error');
 		sinon.stub(process, 'exit');
 		sinon.stub(logger, 'error');
+		sinon.stub(logger, 'debug');
+		sinon.stub(logger, 'info');
 		sinon.stub(logger, 'log');
 		sinon.stub(snippets, 'finalAutomated');
 	});
@@ -28,10 +33,14 @@ describe('SuitestLauncher', () => {
 	});
 
 	after(async() => {
+		mockSpawn.restore();
 		await testServer.stop();
 		process.exit.restore();
 		logger.error.restore();
 		logger.log.restore();
+		logger.debug.restore();
+		logger.info.restore();
+		console.error.restore();
 		snippets.finalAutomated.restore();
 	});
 
@@ -130,32 +139,6 @@ describe('SuitestLauncher', () => {
 		}
 	});
 
-	it('should log successfull result for child process', async() => {
-		const testNock = nock(config.apiUrl).post(makeUrlFromArray([endpoints.testPackGenTokens, {id: 10}]))
-			.reply(200, {
-				deviceAccessToken: 'deviceAccessToken',
-				testPack: {devices: [{deviceId: 'device1'}]},
-			});
-		const devicesDetailsNock = nock(config.apiUrl).get(makeUrlFromArray([endpoints.devices, null, {limit: 100}]))
-			.reply(200, {
-				values: [{deviceId: 'device1'}],
-			});
-		const sessionCloseNock = nock(config.apiUrl).post(endpoints.sessionClose).reply(200, {});
-		const suitestLauncher = new TestLauncher({
-			tokenKey: '1',
-			tokenPassword: '1',
-			testPackId: 10,
-			concurrency: 1,
-		}, ['npm', '--version']);
-
-		await suitestLauncher.runAutomatedSession();
-
-		assert.ok(testNock.isDone(), 'request');
-		assert.ok(sessionCloseNock.isDone(), 'request');
-		assert.ok(devicesDetailsNock.isDone(), 'request');
-		assert.strictEqual(snippets.finalAutomated.called, true, 'snippets.finalAutomated called');
-	});
-
 	it('should exit runAutomatedSession if startTestPack fails', async() => {
 		const testNock = nock(config.apiUrl)
 			.post(makeUrlFromArray([endpoints.testPackGenTokens, {id: 10}]))
@@ -174,6 +157,8 @@ describe('SuitestLauncher', () => {
 	});
 
 	it('should exit runInteractiveSession if openSession fails', async() => {
+		cp.spawn.sequence.add(cp.spawn.simple(1));
+
 		const testNock = nock(config.apiUrl).post(endpoints.session).reply(404);
 		const suitestLauncher = new TestLauncher({
 			username: 'username',
@@ -215,6 +200,8 @@ describe('SuitestLauncher', () => {
 	});
 
 	it('should run runInteractiveSession in debug mode succesfully', async() => {
+		cp.spawn.sequence.add(cp.spawn.simple(0));
+
 		const testNock = nock(config.apiUrl).post(endpoints.session).reply(200, {
 			deviceAccessToken: 'deviceAccessToken',
 		});

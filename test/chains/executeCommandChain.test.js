@@ -46,10 +46,6 @@ describe('Execute command chain', () => {
 		log.restore();
 	});
 
-	it.skip('should engage execution on "then"', async() => {
-		assert.strictEqual(await executeCommand('1+1'), 'executeCommand');
-	});
-
 	it('should throw error in case of invalid input', () => {
 		executeCommand(function() {
 			return 1 + 1;

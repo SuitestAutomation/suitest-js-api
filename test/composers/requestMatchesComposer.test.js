@@ -90,10 +90,8 @@ describe('Network Request Match Composer', () => {
 
 		testInputErrorSync(chain.requestMatch, ['Content-Type']);
 		testInputErrorSync(chain.requestMatch, [Symbol('unknown'), 'test']);
-		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.METHOD, NETWORK_METHOD.GET, '=']);
 		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.METHOD, NETWORK_METHOD.GET, Symbol('=')]);
 		testInputErrorSync(chain.requestMatch, ['Content-Type', 500]);
-		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.METHOD, 'GET']);
 		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.METHOD, Symbol('GET')]);
 		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.BODY, 123]);
 	});

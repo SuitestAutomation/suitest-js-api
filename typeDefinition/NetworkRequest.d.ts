@@ -9,6 +9,7 @@ import {
 	WillMadeModifier,
 	RequestMatchesModifier,
 	ResponseMatchesModifier,
+	StringModifiers,
 } from './modifiers';
 
 export interface NetworkRequestChain extends
@@ -21,7 +22,9 @@ export interface NetworkRequestChain extends
 {}
 
 interface NetworkRequestMadeModifiers<T> extends
-	WasMadeModifier<T>, WillMadeModifier<T>
+	StringModifiers<T>,
+	WasMadeModifier<T>,
+	WillMadeModifier<T>
 {}
 
 interface NetworkRequestEvalChain<T> extends

@@ -9,6 +9,7 @@ const SuitestError = require('../../lib/utils/SuitestError');
 const suitestRepl = require('../../lib/testLauncher/repl');
 const errorListeners = require('../../lib/utils/errorListeners');
 const {setupReplIpc} = require('../../lib/utils/testLauncherHelper');
+const logger = require('../../lib/utils/logger');
 
 const sandbox = require('sinon').createSandbox();
 
@@ -41,6 +42,22 @@ async function ensureReplPortExists(mock = false) {
 }
 
 describe('repl', () => {
+	before(() => {
+		sinon.stub(console, 'error');
+		sinon.stub(logger, 'error');
+		sinon.stub(logger, 'debug');
+		sinon.stub(logger, 'info');
+		sinon.stub(logger, 'log');
+	});
+
+	after(() => {
+		logger.error.restore();
+		logger.log.restore();
+		logger.debug.restore();
+		logger.info.restore();
+		console.error.restore();
+	});
+
 	beforeEach(() => {
 		sandbox.stub(repl, 'start').returns(new ReplInstance());
 	});
@@ -111,38 +128,44 @@ describe('repl', () => {
 		const chDir = sandbox.stub(process, 'chdir');
 		const choki = new EventEmitter();
 
-		sandbox.stub(chokidar, 'watch').returns(choki);
-		choki.close = sinon.stub();
+		sinon.stub(console, 'log');
 
-		const repeater = sinon.stub();
-		const watch = '../../lib/utils/testHelpers/repl.js';
+		try {
+			sandbox.stub(chokidar, 'watch').returns(choki);
+			choki.close = sinon.stub();
 
-		await ensureReplPortExists();
+			const repeater = sinon.stub();
+			const watch = '../../lib/utils/testHelpers/repl.js';
 
-		repl.start.restore();
-		sandbox.stub(repl, 'start').returns(new ReplInstance(false));
+			await ensureReplPortExists();
 
-		require(watch);
+			repl.start.restore();
+			sandbox.stub(repl, 'start').returns(new ReplInstance(false));
 
-		process.stdin.setRawMode = sinon.stub();
+			require(watch);
 
-		suitestRepl.startRepl({
-			cwd: __dirname,
-			repeater: repeater,
-			watch: watch,
-		});
+			process.stdin.setRawMode = sinon.stub();
 
-		await new Promise(resolve => {
-			setInterval(() => chDir.called && resolve(), 10);
-		});
-
-		await new Promise(resolve => {
-			choki.emit('change', watch);
-			setInterval(() => {
-				if (global.iHaveBeenRequired === 2 && repeater.called)
-					resolve();
+			suitestRepl.startRepl({
+				cwd: __dirname,
+				repeater: repeater,
+				watch: watch,
 			});
-		});
+
+			await new Promise(resolve => {
+				setInterval(() => chDir.called && resolve(), 10);
+			});
+
+			await new Promise(resolve => {
+				choki.emit('change', watch);
+				setInterval(() => {
+					if (global.iHaveBeenRequired === 2 && repeater.called)
+						resolve();
+				});
+			});
+		} finally {
+			console.log.restore();
+		}
 	});
 
 	it('Should apply accept repeater as string', async() => {
