@@ -3,6 +3,7 @@ const uuid = require('uuid/v1');
 const nock = require('nock');
 
 const testServer = require('../../lib/utils/testServer');
+const sinon = require('sinon');
 
 const sessionConstants = require('../../lib/constants/session');
 const {authContext, pairedDeviceContext} = require('../../lib/context');
@@ -10,10 +11,13 @@ const {pairDevice} = require('../../lib/commands/pairDevice');
 const SuitestError = require('../../lib/utils/SuitestError');
 const webSockets = require('../../lib/api/webSockets');
 const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
+const logger = require('../../lib/utils/logger');
 const stubDeviceInfoFeed = require('../../lib/utils/testHelpers/mockDeviceInfo');
 
 describe('pairDevice', () => {
 	before(async() => {
+		sinon.stub(logger, 'log');
+		sinon.stub(logger, 'delayed');
 		await testServer.start();
 		await webSockets.connect();
 	});
@@ -24,6 +28,8 @@ describe('pairDevice', () => {
 	});
 
 	after(async() => {
+		logger.log.restore();
+		logger.delayed.restore();
 		await testServer.stop();
 		pairedDeviceContext.clear();
 		authContext.clear();

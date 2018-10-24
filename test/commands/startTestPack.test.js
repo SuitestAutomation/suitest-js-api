@@ -1,6 +1,8 @@
 const assert = require('assert');
 const nock = require('nock');
+const sinon = require('sinon');
 
+const logger = require('../../lib/utils/logger');
 const testServer = require('../../lib/utils/testServer');
 const {authContext} = require('../../lib/context');
 const sessionConstants = require('../../lib/constants/session');
@@ -13,6 +15,8 @@ const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputErro
 
 describe('startTestPack', () => {
 	before(async() => {
+		sinon.stub(logger, 'info');
+		sinon.stub(logger, 'delayed');
 		await testServer.start();
 	});
 
@@ -21,6 +25,8 @@ describe('startTestPack', () => {
 	});
 
 	after(async() => {
+		logger.info.restore();
+		logger.delayed.restore();
 		nock.cleanAll();
 		authContext.clear();
 		await testServer.stop();
@@ -77,7 +83,6 @@ describe('startTestPack', () => {
 	});
 
 	it('should be started accessTokenKey', async() => {
-		await testServer.restart();
 		const testNock = nock(config.apiUrl).post(makeUrlFromArray([endpoints.testPackGenTokens, {id: 10}]))
 			.reply(200, {deviceAccessToken: 'deviceAccessToken'});
 		let res;

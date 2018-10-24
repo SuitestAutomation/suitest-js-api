@@ -1,5 +1,6 @@
 const assert = require('assert');
 const nock = require('nock');
+const sinon = require('sinon');
 
 const {authContext, appContext} = require('../../lib/context');
 const sessionConstants = require('../../lib/constants/session');
@@ -7,10 +8,13 @@ const {closeSession} = require('../../lib/commands/closeSession');
 const endpoints = require('../../lib/api/endpoints');
 const SuitestError = require('../../lib/utils/SuitestError');
 const envVars = require('../../lib/constants/enviroment');
+const logger = require('../../lib/utils/logger');
 
 describe('closeSession', () => {
 	before(() => {
 		nock.disableNetConnect();
+		sinon.stub(logger, 'log');
+		sinon.stub(logger, 'delayed');
 	});
 
 	beforeEach(() => {
@@ -18,6 +22,8 @@ describe('closeSession', () => {
 	});
 
 	after(() => {
+		logger.log.restore();
+		logger.delayed.restore();
 		nock.cleanAll();
 		nock.enableNetConnect();
 		authContext.clear();

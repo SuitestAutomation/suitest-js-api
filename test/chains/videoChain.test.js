@@ -73,9 +73,6 @@ describe('Video chain', () => {
 		);
 	});
 
-	it.skip('should engage execution on "then"', async() => {
-		assert.strictEqual(await video(), 'element');
-	});
 	it('should define assert function', () => {
 		const chain = videoAssert();
 
