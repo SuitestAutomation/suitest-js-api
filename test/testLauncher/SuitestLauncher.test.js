@@ -139,34 +139,6 @@ describe('SuitestLauncher', () => {
 		}
 	});
 
-	it('should log successfull result for child process', async() => {
-		cp.spawn.sequence.add(cp.spawn.simple(0));
-
-		const testNock = nock(config.apiUrl).post(makeUrlFromArray([endpoints.testPackGenTokens, {id: 10}]))
-			.reply(200, {
-				deviceAccessToken: 'deviceAccessToken',
-				testPack: {devices: [{deviceId: 'device1'}]},
-			});
-		const devicesDetailsNock = nock(config.apiUrl).get(makeUrlFromArray([endpoints.devices, null, {limit: 100}]))
-			.reply(200, {
-				values: [{deviceId: 'device1'}],
-			});
-		const sessionCloseNock = nock(config.apiUrl).post(endpoints.sessionClose).reply(200, {});
-		const suitestLauncher = new TestLauncher({
-			tokenKey: '1',
-			tokenPassword: '1',
-			testPackId: 10,
-			concurrency: 1,
-		}, ['npm', '--version']);
-
-		await suitestLauncher.runAutomatedSession();
-
-		assert.ok(testNock.isDone(), 'request');
-		assert.ok(sessionCloseNock.isDone(), 'request');
-		assert.ok(devicesDetailsNock.isDone(), 'request');
-		assert.strictEqual(snippets.finalAutomated.called, true, 'snippets.finalAutomated called');
-	});
-
 	it('should exit runAutomatedSession if startTestPack fails', async() => {
 		const testNock = nock(config.apiUrl)
 			.post(makeUrlFromArray([endpoints.testPackGenTokens, {id: 10}]))
@@ -244,8 +216,8 @@ describe('SuitestLauncher', () => {
 			deviceId: 'deviceId',
 			appConfigId: 'config',
 			inspectBrk: '9121',
-		}, ['date']);
-		const cpForkStub = sinon.stub(cp, 'fork');
+		}, ['npm']);
+		const cpForkStub = sinon.stub(cp, 'spawn');
 
 		await suitestLauncher.runInteractiveSession();
 
