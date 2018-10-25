@@ -111,13 +111,13 @@ describe('BrightScript expression chain', () => {
 		assert.equal(brightScriptExpression('1+1').toString(), 'Evaluating BS:\n1+1');
 		assert.equal(
 			brightScriptExpression('1+1').equal('test').toString(),
-			'Check if BS expression\n' +
+			'Check if BrightScript expression\n' +
 			'1+1\n' +
 			'equals string "test"'
 		);
 		assert.equal(
 			brightScriptExpression('1+1').doesNot().startWith('test').toString(),
-			'Check if BS expression\n' +
+			'Check if BrightScript expression\n' +
 			'1+1\n' +
 			'does not start with string "test"'
 		);
