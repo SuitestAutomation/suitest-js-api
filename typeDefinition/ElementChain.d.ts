@@ -2,6 +2,7 @@ import {
 	AbstractChain,
 	Negatable,
 	MatchJSModifiers,
+	MatchBrightScriptModifiers,
 	ExistsModifiers,
 	ElementMatchModifiers,
 	Timeout,
@@ -89,6 +90,7 @@ interface ElementRepeatChain extends
 
 interface ElementEvalModifiers<T> extends
 	MatchJSModifiers<T>,
+	MatchBrightScriptModifiers<T>,
 	ExistsModifiers<T>,
 	ElementMatchModifiers<T>
 {}

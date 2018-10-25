@@ -30,6 +30,8 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.matchesRepo, 'function');
 		assert.strictEqual(typeof chain.matchJS, 'function');
 		assert.strictEqual(typeof chain.matchesJS, 'function');
+		assert.strictEqual(typeof chain.matchBrightScript, 'function');
+		assert.strictEqual(typeof chain.matchesBrightScript, 'function');
 		assert.strictEqual(typeof chain.timeout, 'function');
 		assert.strictEqual(typeof chain.click, 'function');
 		assert.strictEqual(typeof chain.repeat, 'undefined');
@@ -54,6 +56,8 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.matchesRepo, 'undefined');
 		assert.strictEqual(typeof chain.matchJS, 'undefined');
 		assert.strictEqual(typeof chain.matchesJS, 'undefined');
+		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
@@ -70,6 +74,8 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.matchesRepo, 'undefined');
 		assert.strictEqual(typeof chain.matchJS, 'undefined');
 		assert.strictEqual(typeof chain.matchesJS, 'undefined');
+		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
 		assert.strictEqual(typeof chain.repeat, 'function');
 		assert.strictEqual(typeof chain.interval, 'function');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
@@ -91,6 +97,8 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.matchesRepo, 'undefined');
 		assert.strictEqual(typeof chain.matchJS, 'undefined');
 		assert.strictEqual(typeof chain.matchesJS, 'undefined');
+		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
 		assert.strictEqual(typeof chain.repeat, 'undefined');
 		assert.strictEqual(typeof chain.interval, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
@@ -112,6 +120,8 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.matchesRepo, 'undefined');
 		assert.strictEqual(typeof chain.matchJS, 'undefined');
 		assert.strictEqual(typeof chain.matchesJS, 'undefined');
+		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
 		assert.strictEqual(typeof chain.repeat, 'function');
 		assert.strictEqual(typeof chain.interval, 'function');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
@@ -146,6 +156,10 @@ describe('Element chain', () => {
 		assert.equal(
 			element('el-api-id').matchesJS('function(el){return false}').toString(),
 			'Checking if "el-api-id" matches JS:\nfunction(el){return false}'
+		);
+		assert.equal(
+			element('el-api-id').matchesBrightScript('function(el){return false}').toString(),
+			'Checking if "el-api-id" matches BrightScript:\nfunction(el){return false}'
 		);
 		assert.equal(
 			element('el-api-id').not().exists().toString(),
@@ -385,6 +399,28 @@ describe('Element chain', () => {
 				timeout: 2000,
 			},
 		}, 'element mathces js testLine');
+		assert.deepStrictEqual(toJSON({
+			isAssert: true,
+			comparator: {
+				type: SUBJ_COMPARATOR.MATCH_BRS,
+				val: '1+1',
+			},
+			selector: {apiId: 'apiId'},
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'element',
+						apiId: 'apiId',
+					},
+					type: 'matchesBRS',
+					val: '1+1',
+				},
+				timeout: 2000,
+			},
+		}, 'element mathces bs testLine');
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
 			comparator: {

@@ -39,6 +39,7 @@ describe('suitest typescripts declarations tests', () => {
 			'Property \'onmousedown\' does not exist on type \'ElementChain\'.',
 			'Property \'matches\' does not exist on type \'ElementWithoutNegation\'.',
 			'Property \'matchesJS\' does not exist on type \'ElementWithoutNegation\'.',
+			'Property \'matchesBrightScript\' does not exist on type \'ElementWithoutNegation\'.',
 			'Property \'matchesRepo\' does not exist on type \'ElementWithoutNegation\'.',
 			'Property \'doesNot\' does not exist on type \'ElementNegationChain\'.',
 			'Property \'doesNot\' does not exist on type \'ElementWithoutEvalChain\'.',
@@ -61,7 +62,7 @@ describe('suitest typescripts declarations tests', () => {
 		'clearAppDataChain', 'executeCommandChain', 'openAppChain',
 		'openUrlChain', 'pollUrlChain', 'positionChain',
 		'pressButtonChain', 'sleepChain', 'windowChain',
-		'videoChain',
+		'videoChain', 'executeBrightScriptChain', 'brightScriptExpressionChain',
 	].forEach(fileName => {
 		it(`should compile example ${fileName}`, (done) => {
 			const messages = getDiagnosticResultsMessages(getDiagnostics(fileName));
