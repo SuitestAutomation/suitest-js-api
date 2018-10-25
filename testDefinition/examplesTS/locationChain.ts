@@ -5,6 +5,14 @@ const {location} = suitest;
 // should have all necessary modifiers
 const baseLocation = location();
 
+const jsFunc = () => true;
+const jsFuncStr = '() => true';
+const bsCodeExample = (
+`function test() as Boolean
+    return true
+end function`
+);
+
 baseLocation.not();
 baseLocation.doesNot();
 baseLocation.isNot();
@@ -13,8 +21,10 @@ baseLocation.equal('');
 baseLocation.equals('');
 baseLocation.contain('');
 baseLocation.contains('');
-baseLocation.matchJS('');
-baseLocation.matchesJS('');
+baseLocation.matchJS(jsFunc);
+baseLocation.matchesJS(jsFuncStr);
+baseLocation.matchBrightScript(bsCodeExample);
+baseLocation.matchesBrightScript(bsCodeExample);
 baseLocation.startWith('');
 baseLocation.startsWith('');
 baseLocation.endWith('');
@@ -44,8 +54,10 @@ timeoutLoc.equal('');
 timeoutLoc.equals('');
 timeoutLoc.contain('');
 timeoutLoc.contains('');
-timeoutLoc.matchJS('');
-timeoutLoc.matchesJS('');
+timeoutLoc.matchJS(jsFunc);
+timeoutLoc.matchesJS(jsFuncStr);
+timeoutLoc.matchBrightScript(bsCodeExample);
+timeoutLoc.matchesBrightScript(bsCodeExample);
 timeoutLoc.startWith('');
 timeoutLoc.startsWith('');
 timeoutLoc.endWith('');
@@ -62,8 +74,10 @@ notLoc.equal('');
 notLoc.equals('');
 notLoc.contain('');
 notLoc.contains('');
-notLoc.matchJS('');
-notLoc.matchesJS('');
+notLoc.matchJS(jsFunc);
+notLoc.matchesJS(jsFuncStr);
+notLoc.matchBrightScript(bsCodeExample);
+notLoc.matchesBrightScript(bsCodeExample);
 notLoc.startWith('');
 notLoc.startsWith('');
 notLoc.endWith('');
@@ -80,7 +94,8 @@ abandonedLoc.toString();
 // chaining examples
 location().contain('').not().timeout(10);
 location().contain('').timeout(10).not();
-location().not().matchJS(() => true).timeout(10);
+location().not().matchJS(jsFunc).timeout(10);
+location().not().matchBrightScript(bsCodeExample).timeout(10);
 location().not().timeout(10).equal('');
 location().timeout(10).not().endsWith('test');
 location().timeout(10).endWith('test').not();

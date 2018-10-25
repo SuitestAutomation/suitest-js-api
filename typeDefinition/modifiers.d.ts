@@ -85,7 +85,7 @@ export interface MatchJSModifiers<T> {
 	matchesJS(value: JSExpression): T;
 }
 
-export type BrightScriptExpression = ((value: any) => boolean) | string;
+export type BrightScriptExpression = string;
 export interface MatchBrightScriptModifiers<T> {
 	matchBrightScript(value: BrightScriptExpression): T;
 	matchesBrightScript(value: BrightScriptExpression): T;

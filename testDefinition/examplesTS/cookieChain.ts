@@ -5,13 +5,23 @@ const {cookie} = suitest;
 // should have all necessary modifiers
 const baseCookie = cookie('cookieName');
 
+const jsFunc = () => true;
+const jsFuncStr = '() => true';
+const bsCodeExample = (
+`function test() as Boolean
+    return true
+end function`
+);
+
 baseCookie.not();
 baseCookie.doesNot();
 baseCookie.isNot();
 baseCookie.exist();
 baseCookie.exists();
-baseCookie.matchJS('');
-baseCookie.matchesJS('');
+baseCookie.matchJS(jsFunc);
+baseCookie.matchesJS(jsFuncStr);
+baseCookie.matchBrightScript(bsCodeExample);
+baseCookie.matchesBrightScript(bsCodeExample);
 baseCookie.equal('');
 baseCookie.equals('');
 baseCookie.contain('');
@@ -44,8 +54,10 @@ timeoutCookie.doesNot();
 timeoutCookie.isNot();
 timeoutCookie.exist();
 timeoutCookie.exists();
-timeoutCookie.matchJS('');
-timeoutCookie.matchesJS('');
+timeoutCookie.matchJS(jsFunc);
+timeoutCookie.matchesJS(jsFuncStr);
+timeoutCookie.matchBrightScript(bsCodeExample);
+timeoutCookie.matchesBrightScript(bsCodeExample);
 timeoutCookie.equal('');
 timeoutCookie.equals('');
 timeoutCookie.contain('');
@@ -66,8 +78,10 @@ notCookie.equal('');
 notCookie.equals('');
 notCookie.contain('');
 notCookie.contains('');
-notCookie.matchJS('');
-notCookie.matchesJS('');
+notCookie.matchJS(jsFunc);
+notCookie.matchesJS(jsFuncStr);
+notCookie.matchBrightScript(bsCodeExample);
+notCookie.matchesBrightScript(bsCodeExample);
 notCookie.startWith('');
 notCookie.startsWith('');
 notCookie.endWith('');
@@ -86,7 +100,8 @@ abandonedCookie.toString();
 // chaining exapmples
 cookie('cookieName').contain('').not().timeout(10);
 cookie('cookieName').exist().timeout(10).not();
-cookie('cookieName').not().matchJS(() => true).timeout(10);
+cookie('cookieName').not().matchJS(jsFunc).timeout(10);
+cookie('cookieName').not().matchBrightScript(bsCodeExample).timeout(10);
 cookie('cookieName').not().timeout(10).equal('');
 cookie('cookieName').timeout(10).not().endsWith('test');
 cookie('cookieName').timeout(10).endWith('test').not();

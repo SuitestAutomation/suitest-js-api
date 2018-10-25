@@ -62,7 +62,7 @@ describe('suitest typescripts declarations tests', () => {
 		'clearAppDataChain', 'executeCommandChain', 'openAppChain',
 		'openUrlChain', 'pollUrlChain', 'positionChain',
 		'pressButtonChain', 'sleepChain', 'windowChain',
-		'videoChain',
+		'videoChain', 'executeBrightScriptChain', 'brightScriptExpressionChain',
 	].forEach(fileName => {
 		it(`should compile example ${fileName}`, (done) => {
 			const messages = getDiagnosticResultsMessages(getDiagnostics(fileName));
