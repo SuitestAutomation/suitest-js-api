@@ -9,75 +9,75 @@ end function`
 const {brightScriptExpression} = suitest;
 
 // should have all necessary modifiers
-const baseChain = brightScriptExpression(bsCodeExample);
+const baseBSExpression = brightScriptExpression(bsCodeExample);
 suitest.assert.brightScriptExpression('');
 suitest.assert.brightScriptExpression(bsCodeExample);
 
-baseChain.not();
-baseChain.doesNot();
-baseChain.isNot();
-baseChain.timeout(10);
-baseChain.equal('');
-baseChain.equals('');
-baseChain.contain('');
-baseChain.contains('');
-baseChain.startWith('');
-baseChain.startsWith('');
-baseChain.endWith('');
-baseChain.endsWith('');
-baseChain.clone();
-baseChain.abandon();
-baseChain.toString();
+baseBSExpression.not();
+baseBSExpression.doesNot();
+baseBSExpression.isNot();
+baseBSExpression.timeout(10);
+baseBSExpression.equal('');
+baseBSExpression.equals('');
+baseBSExpression.contain('');
+baseBSExpression.contains('');
+baseBSExpression.startWith('');
+baseBSExpression.startsWith('');
+baseBSExpression.endWith('');
+baseBSExpression.endsWith('');
+baseBSExpression.clone();
+baseBSExpression.abandon();
+baseBSExpression.toString();
 
 // should have only allowed modifiers after condition started
-const equalLoc = brightScriptExpression(bsCodeExample).equal('');
+const equalBSExpression = brightScriptExpression(bsCodeExample).equal('');
 
-equalLoc.not();
-equalLoc.doesNot();
-equalLoc.isNot();
-equalLoc.timeout(10);
-baseChain.clone();
-baseChain.abandon();
-equalLoc.toString();
+equalBSExpression.not();
+equalBSExpression.doesNot();
+equalBSExpression.isNot();
+equalBSExpression.timeout(10);
+equalBSExpression.clone();
+equalBSExpression.abandon();
+equalBSExpression.toString();
 
 // should have only allowed modifiers after timeout is set
-const timeoutLoc = brightScriptExpression(bsCodeExample).timeout(10);
+const timeoutBSExpression = brightScriptExpression(bsCodeExample).timeout(10);
 
-timeoutLoc.not();
-timeoutLoc.doesNot();
-timeoutLoc.isNot();
-timeoutLoc.equal('');
-timeoutLoc.equals('');
-timeoutLoc.contain('');
-timeoutLoc.contains('');
-timeoutLoc.startWith('');
-timeoutLoc.startsWith('');
-timeoutLoc.endWith('');
-timeoutLoc.endsWith('');
-baseChain.clone();
-baseChain.abandon();
-timeoutLoc.toString();
+timeoutBSExpression.not();
+timeoutBSExpression.doesNot();
+timeoutBSExpression.isNot();
+timeoutBSExpression.equal('');
+timeoutBSExpression.equals('');
+timeoutBSExpression.contain('');
+timeoutBSExpression.contains('');
+timeoutBSExpression.startWith('');
+timeoutBSExpression.startsWith('');
+timeoutBSExpression.endWith('');
+timeoutBSExpression.endsWith('');
+timeoutBSExpression.clone();
+timeoutBSExpression.abandon();
+timeoutBSExpression.toString();
 
 // should have only allowed modifiers after it is nagated
-const notLoc = brightScriptExpression(bsCodeExample).not();
+const notBSExpression = brightScriptExpression(bsCodeExample).not();
 
-notLoc.timeout(10);
-notLoc.equal('');
-notLoc.equals('');
-notLoc.contain('');
-notLoc.contains('');
-notLoc.startWith('');
-notLoc.startsWith('');
-notLoc.endWith('');
-notLoc.endsWith('');
-baseChain.clone();
-baseChain.abandon();
-notLoc.toString();
+notBSExpression.timeout(10);
+notBSExpression.equal('');
+notBSExpression.equals('');
+notBSExpression.contain('');
+notBSExpression.contains('');
+notBSExpression.startWith('');
+notBSExpression.startsWith('');
+notBSExpression.endWith('');
+notBSExpression.endsWith('');
+notBSExpression.clone();
+notBSExpression.abandon();
+notBSExpression.toString();
 
 // should have only toString method
-const abandonedLoc = baseChain.abandon();
+const abandonedBSExpression = baseBSExpression.abandon();
 
-abandonedLoc.toString();
+abandonedBSExpression.toString();
 
 // chaining examples
 brightScriptExpression(bsCodeExample).contain('').not().timeout(10);

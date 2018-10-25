@@ -77,8 +77,8 @@ notCookie.endWith('');
 notCookie.endsWith('');
 notCookie.exist();
 notCookie.exists();
-baseCookie.clone();
-baseCookie.abandon();
+notCookie.clone();
+notCookie.abandon();
 notCookie.toString();
 
 // should have only toString method

@@ -33,8 +33,8 @@ equalLoc.not();
 equalLoc.doesNot();
 equalLoc.isNot();
 equalLoc.timeout(10);
-baseLocation.clone();
-baseLocation.abandon();
+equalLoc.clone();
+equalLoc.abandon();
 equalLoc.toString();
 
 // should have only allowed modifiers after timeout is set
@@ -53,8 +53,8 @@ timeoutLoc.startWith('');
 timeoutLoc.startsWith('');
 timeoutLoc.endWith('');
 timeoutLoc.endsWith('');
-baseLocation.clone();
-baseLocation.abandon();
+timeoutLoc.clone();
+timeoutLoc.abandon();
 timeoutLoc.toString();
 
 // should have only allowed modifiers after it is nagated
@@ -71,8 +71,8 @@ notLoc.startWith('');
 notLoc.startsWith('');
 notLoc.endWith('');
 notLoc.endsWith('');
-baseLocation.clone();
-baseLocation.abandon();
+notLoc.clone();
+notLoc.abandon();
 notLoc.toString();
 
 // should have only toString method
