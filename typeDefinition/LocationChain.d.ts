@@ -4,7 +4,6 @@ import {
 	Timeout,
 	StringModifiers,
 	MatchJSModifiers,
-	MatchBrightScriptModifiers,
 	BaseChain,
 } from './modifiers';
 
@@ -70,8 +69,7 @@ interface LocationBaseEvalChain<TSelf> extends
 
 interface LocationEvalModifiers<T> extends
 	StringModifiers<T>,
-	MatchJSModifiers<T>,
-	MatchBrightScriptModifiers<T>
+	MatchJSModifiers<T>
 {}
 
 interface LocationAbandonedChain extends

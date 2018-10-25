@@ -7,11 +7,6 @@ const baseCookie = cookie('cookieName');
 
 const jsFunc = () => true;
 const jsFuncStr = '() => true';
-const bsCodeExample = (
-`function test() as Boolean
-    return true
-end function`
-);
 
 baseCookie.not();
 baseCookie.doesNot();
@@ -20,8 +15,6 @@ baseCookie.exist();
 baseCookie.exists();
 baseCookie.matchJS(jsFunc);
 baseCookie.matchesJS(jsFuncStr);
-baseCookie.matchBrightScript(bsCodeExample);
-baseCookie.matchesBrightScript(bsCodeExample);
 baseCookie.equal('');
 baseCookie.equals('');
 baseCookie.contain('');
@@ -56,8 +49,6 @@ timeoutCookie.exist();
 timeoutCookie.exists();
 timeoutCookie.matchJS(jsFunc);
 timeoutCookie.matchesJS(jsFuncStr);
-timeoutCookie.matchBrightScript(bsCodeExample);
-timeoutCookie.matchesBrightScript(bsCodeExample);
 timeoutCookie.equal('');
 timeoutCookie.equals('');
 timeoutCookie.contain('');
@@ -80,8 +71,6 @@ notCookie.contain('');
 notCookie.contains('');
 notCookie.matchJS(jsFunc);
 notCookie.matchesJS(jsFuncStr);
-notCookie.matchBrightScript(bsCodeExample);
-notCookie.matchesBrightScript(bsCodeExample);
 notCookie.startWith('');
 notCookie.startsWith('');
 notCookie.endWith('');
@@ -101,7 +90,6 @@ abandonedCookie.toString();
 cookie('cookieName').contain('').not().timeout(10);
 cookie('cookieName').exist().timeout(10).not();
 cookie('cookieName').not().matchJS(jsFunc).timeout(10);
-cookie('cookieName').not().matchBrightScript(bsCodeExample).timeout(10);
 cookie('cookieName').not().timeout(10).equal('');
 cookie('cookieName').timeout(10).not().endsWith('test');
 cookie('cookieName').timeout(10).endWith('test').not();

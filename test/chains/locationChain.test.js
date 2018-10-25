@@ -23,8 +23,6 @@ describe('Location chain', () => {
 		assert.strictEqual(typeof chain.contains, 'function');
 		assert.strictEqual(typeof chain.matchJS, 'function');
 		assert.strictEqual(typeof chain.matchesJS, 'function');
-		assert.strictEqual(typeof chain.matchBrightScript, 'function');
-		assert.strictEqual(typeof chain.matchesBrightScript, 'function');
 		assert.strictEqual(typeof chain.startWith, 'function');
 		assert.strictEqual(typeof chain.startsWith, 'function');
 		assert.strictEqual(typeof chain.endWith, 'function');
@@ -76,8 +74,6 @@ describe('Location chain', () => {
 		assert.strictEqual(typeof chain.contains, 'function');
 		assert.strictEqual(typeof chain.matchJS, 'function');
 		assert.strictEqual(typeof chain.matchesJS, 'function');
-		assert.strictEqual(typeof chain.matchBrightScript, 'function');
-		assert.strictEqual(typeof chain.matchesBrightScript, 'function');
 		assert.strictEqual(typeof chain.startWith, 'function');
 		assert.strictEqual(typeof chain.startsWith, 'function');
 		assert.strictEqual(typeof chain.endWith, 'function');
@@ -100,8 +96,6 @@ describe('Location chain', () => {
 		assert.strictEqual(typeof chain.contains, 'function');
 		assert.strictEqual(typeof chain.matchJS, 'function');
 		assert.strictEqual(typeof chain.matchesJS, 'function');
-		assert.strictEqual(typeof chain.matchBrightScript, 'function');
-		assert.strictEqual(typeof chain.matchesBrightScript, 'function');
 		assert.strictEqual(typeof chain.startWith, 'function');
 		assert.strictEqual(typeof chain.startsWith, 'function');
 		assert.strictEqual(typeof chain.endWith, 'function');
@@ -124,8 +118,6 @@ describe('Location chain', () => {
 		assert.strictEqual(typeof chain.contains, 'function');
 		assert.strictEqual(typeof chain.matchJS, 'function');
 		assert.strictEqual(typeof chain.matchesJS, 'function');
-		assert.strictEqual(typeof chain.matchBrightScript, 'function');
-		assert.strictEqual(typeof chain.matchesBrightScript, 'function');
 		assert.strictEqual(typeof chain.startWith, 'function');
 		assert.strictEqual(typeof chain.startsWith, 'function');
 		assert.strictEqual(typeof chain.endWith, 'function');

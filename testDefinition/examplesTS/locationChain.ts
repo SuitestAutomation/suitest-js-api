@@ -7,11 +7,6 @@ const baseLocation = location();
 
 const jsFunc = () => true;
 const jsFuncStr = '() => true';
-const bsCodeExample = (
-`function test() as Boolean
-    return true
-end function`
-);
 
 baseLocation.not();
 baseLocation.doesNot();
@@ -23,8 +18,6 @@ baseLocation.contain('');
 baseLocation.contains('');
 baseLocation.matchJS(jsFunc);
 baseLocation.matchesJS(jsFuncStr);
-baseLocation.matchBrightScript(bsCodeExample);
-baseLocation.matchesBrightScript(bsCodeExample);
 baseLocation.startWith('');
 baseLocation.startsWith('');
 baseLocation.endWith('');
@@ -56,8 +49,6 @@ timeoutLoc.contain('');
 timeoutLoc.contains('');
 timeoutLoc.matchJS(jsFunc);
 timeoutLoc.matchesJS(jsFuncStr);
-timeoutLoc.matchBrightScript(bsCodeExample);
-timeoutLoc.matchesBrightScript(bsCodeExample);
 timeoutLoc.startWith('');
 timeoutLoc.startsWith('');
 timeoutLoc.endWith('');
@@ -76,8 +67,6 @@ notLoc.contain('');
 notLoc.contains('');
 notLoc.matchJS(jsFunc);
 notLoc.matchesJS(jsFuncStr);
-notLoc.matchBrightScript(bsCodeExample);
-notLoc.matchesBrightScript(bsCodeExample);
 notLoc.startWith('');
 notLoc.startsWith('');
 notLoc.endWith('');
@@ -95,7 +84,6 @@ abandonedLoc.toString();
 location().contain('').not().timeout(10);
 location().contain('').timeout(10).not();
 location().not().matchJS(jsFunc).timeout(10);
-location().not().matchBrightScript(bsCodeExample).timeout(10);
 location().not().timeout(10).equal('');
 location().timeout(10).not().endsWith('test');
 location().timeout(10).endWith('test').not();
