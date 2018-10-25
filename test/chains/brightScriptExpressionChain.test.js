@@ -108,7 +108,7 @@ describe('BrightScript expression chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(brightScriptExpression('1+1').toString(), 'Evaluating BS:\n1+1');
+		assert.equal(brightScriptExpression('1+1').toString(), 'Evaluating BrightScript:\n1+1');
 		assert.equal(
 			brightScriptExpression('1+1').equal('test').toString(),
 			'Check if BrightScript expression\n' +
