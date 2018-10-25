@@ -3,7 +3,7 @@ import * as suitest from '../../index';
 const {element, PROP, VALUE, COMP, VISIBILITY_STATE} = suitest;
 
 const el = element({css: '.my-element'});
-const bsCodeExample = (
+const brsCodeExample = (
 `function test() as Boolean
     return true
 end function`
@@ -23,7 +23,7 @@ el.doesNot().exist();
 el.timeout(1).doesNot().exist();
 el.doesNot().exist().timeout(1);
 el.matchesBrightScript('');
-el.matchBrightScript(bsCodeExample);
+el.matchBrightScript(brsCodeExample);
 el.abandon();
 el.matchesJS(() => true);
 el.matchJS('() => true');

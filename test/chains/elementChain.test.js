@@ -402,7 +402,7 @@ describe('Element chain', () => {
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
 			comparator: {
-				type: SUBJ_COMPARATOR.MATCH_BS,
+				type: SUBJ_COMPARATOR.MATCH_BRS,
 				val: '1+1',
 			},
 			selector: {apiId: 'apiId'},

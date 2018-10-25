@@ -38,7 +38,7 @@ describe('Match BrightScript Composer', () => {
 
 		assert.deepStrictEqual(makeChain.firstCall.args[0], {
 			comparator: {
-				type: SUBJ_COMPARATOR.MATCH_BS,
+				type: SUBJ_COMPARATOR.MATCH_BRS,
 				val: 'test',
 			},
 		});

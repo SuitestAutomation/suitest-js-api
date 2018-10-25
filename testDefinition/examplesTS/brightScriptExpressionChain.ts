@@ -1,6 +1,6 @@
 import * as suitest from '../../index';
 
-const bsCodeExample = (
+const brsCodeExample = (
 `function test() as Boolean
     return true
 end function`
@@ -9,86 +9,86 @@ end function`
 const {brightScriptExpression} = suitest;
 
 // should have all necessary modifiers
-const baseBSExpression = brightScriptExpression(bsCodeExample);
+const baseBRSExpression = brightScriptExpression(brsCodeExample);
 suitest.assert.brightScriptExpression('');
-suitest.assert.brightScriptExpression(bsCodeExample);
+suitest.assert.brightScriptExpression(brsCodeExample);
 
-baseBSExpression.not();
-baseBSExpression.doesNot();
-baseBSExpression.isNot();
-baseBSExpression.timeout(10);
-baseBSExpression.equal('');
-baseBSExpression.equals('');
-baseBSExpression.contain('');
-baseBSExpression.contains('');
-baseBSExpression.startWith('');
-baseBSExpression.startsWith('');
-baseBSExpression.endWith('');
-baseBSExpression.endsWith('');
-baseBSExpression.clone();
-baseBSExpression.abandon();
-baseBSExpression.toString();
+baseBRSExpression.not();
+baseBRSExpression.doesNot();
+baseBRSExpression.isNot();
+baseBRSExpression.timeout(10);
+baseBRSExpression.equal('');
+baseBRSExpression.equals('');
+baseBRSExpression.contain('');
+baseBRSExpression.contains('');
+baseBRSExpression.startWith('');
+baseBRSExpression.startsWith('');
+baseBRSExpression.endWith('');
+baseBRSExpression.endsWith('');
+baseBRSExpression.clone();
+baseBRSExpression.abandon();
+baseBRSExpression.toString();
 
 // should have only allowed modifiers after condition started
-const equalBSExpression = brightScriptExpression(bsCodeExample).equal('');
+const equalBRSExpression = brightScriptExpression(brsCodeExample).equal('');
 
-equalBSExpression.not();
-equalBSExpression.doesNot();
-equalBSExpression.isNot();
-equalBSExpression.timeout(10);
-equalBSExpression.clone();
-equalBSExpression.abandon();
-equalBSExpression.toString();
+equalBRSExpression.not();
+equalBRSExpression.doesNot();
+equalBRSExpression.isNot();
+equalBRSExpression.timeout(10);
+equalBRSExpression.clone();
+equalBRSExpression.abandon();
+equalBRSExpression.toString();
 
 // should have only allowed modifiers after timeout is set
-const timeoutBSExpression = brightScriptExpression(bsCodeExample).timeout(10);
+const timeoutBRSExpression = brightScriptExpression(brsCodeExample).timeout(10);
 
-timeoutBSExpression.not();
-timeoutBSExpression.doesNot();
-timeoutBSExpression.isNot();
-timeoutBSExpression.equal('');
-timeoutBSExpression.equals('');
-timeoutBSExpression.contain('');
-timeoutBSExpression.contains('');
-timeoutBSExpression.startWith('');
-timeoutBSExpression.startsWith('');
-timeoutBSExpression.endWith('');
-timeoutBSExpression.endsWith('');
-timeoutBSExpression.clone();
-timeoutBSExpression.abandon();
-timeoutBSExpression.toString();
+timeoutBRSExpression.not();
+timeoutBRSExpression.doesNot();
+timeoutBRSExpression.isNot();
+timeoutBRSExpression.equal('');
+timeoutBRSExpression.equals('');
+timeoutBRSExpression.contain('');
+timeoutBRSExpression.contains('');
+timeoutBRSExpression.startWith('');
+timeoutBRSExpression.startsWith('');
+timeoutBRSExpression.endWith('');
+timeoutBRSExpression.endsWith('');
+timeoutBRSExpression.clone();
+timeoutBRSExpression.abandon();
+timeoutBRSExpression.toString();
 
 // should have only allowed modifiers after it is nagated
-const notBSExpression = brightScriptExpression(bsCodeExample).not();
+const notBRSExpression = brightScriptExpression(brsCodeExample).not();
 
-notBSExpression.timeout(10);
-notBSExpression.equal('');
-notBSExpression.equals('');
-notBSExpression.contain('');
-notBSExpression.contains('');
-notBSExpression.startWith('');
-notBSExpression.startsWith('');
-notBSExpression.endWith('');
-notBSExpression.endsWith('');
-notBSExpression.clone();
-notBSExpression.abandon();
-notBSExpression.toString();
+notBRSExpression.timeout(10);
+notBRSExpression.equal('');
+notBRSExpression.equals('');
+notBRSExpression.contain('');
+notBRSExpression.contains('');
+notBRSExpression.startWith('');
+notBRSExpression.startsWith('');
+notBRSExpression.endWith('');
+notBRSExpression.endsWith('');
+notBRSExpression.clone();
+notBRSExpression.abandon();
+notBRSExpression.toString();
 
 // should have only toString method
-const abandonedBSExpression = baseBSExpression.abandon();
+const abandonedBRSExpression = baseBRSExpression.abandon();
 
-abandonedBSExpression.toString();
+abandonedBRSExpression.toString();
 
 // chaining examples
-brightScriptExpression(bsCodeExample).contain('').not().timeout(10);
-brightScriptExpression(bsCodeExample).contain('').timeout(10).not();
-brightScriptExpression(bsCodeExample).not().timeout(10).equal('');
-brightScriptExpression(bsCodeExample).timeout(10).not().endsWith('test');
-brightScriptExpression(bsCodeExample).timeout(10).endWith('test').not();
-brightScriptExpression(bsCodeExample).timeout(10).endWith('test').not().toAssert();
+brightScriptExpression(brsCodeExample).contain('').not().timeout(10);
+brightScriptExpression(brsCodeExample).contain('').timeout(10).not();
+brightScriptExpression(brsCodeExample).not().timeout(10).equal('');
+brightScriptExpression(brsCodeExample).timeout(10).not().endsWith('test');
+brightScriptExpression(brsCodeExample).timeout(10).endWith('test').not();
+brightScriptExpression(brsCodeExample).timeout(10).endWith('test').not().toAssert();
 
 // gettersbsCodeExample
-brightScriptExpression(bsCodeExample).it.should.with.times;
-brightScriptExpression(bsCodeExample).should.it.with.times;
-brightScriptExpression(bsCodeExample).with.should.it.times;
-brightScriptExpression(bsCodeExample).times.should.with.it;
+brightScriptExpression(brsCodeExample).it.should.with.times;
+brightScriptExpression(brsCodeExample).should.it.with.times;
+brightScriptExpression(brsCodeExample).with.should.it.times;
+brightScriptExpression(brsCodeExample).times.should.with.it;

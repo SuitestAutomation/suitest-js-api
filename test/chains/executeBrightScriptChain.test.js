@@ -13,7 +13,7 @@ const sinon = require('sinon');
  * however it's compliant to BDD principles because of this.
  * We don't care about implementation details, we need code to do what we want
  */
-describe('Execute brightscript chain', () => {
+describe('Execute BrightScript chain', () => {
 	it('should have all necessary modifiers', () => {
 		const chain = executeBrightScript('1+1');
 

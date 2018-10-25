@@ -58,7 +58,7 @@ declare namespace suitest {
 		executeCommand(jsCode: Function): ExecuteCommandChain;
 		jsExpression(expression: string): JsExpressionChain;
 		jsExpression(expression: Function): JsExpressionChain;
-		executeBrightScript(bsCode: string): ExecuteBrightScriptChain;
+		executeBrightScript(brsCode: string): ExecuteBrightScriptChain;
 		brightScriptExpression(expression: string): BrightScriptExpressionChain;
 		openApp(relativeUrl?: string): OpenAppChain;
 		networkRequest(): NetworkRequestChain;
@@ -106,7 +106,7 @@ declare namespace suitest {
 		executeCommand(jsCode: Function): ExecuteCommandChain;
 		jsExpression(expression: string): JsExpressionChain;
 		jsExpression(expression: Function): JsExpressionChain;
-		executeBrightScript(bsCode: string): ExecuteBrightScriptChain;
+		executeBrightScript(brsCode: string): ExecuteBrightScriptChain;
 		brightScriptExpression(expression: string): BrightScriptExpressionChain;
 		openApp(relativeUrl?: string): OpenAppChain;
 		networkRequest(): NetworkRequestChain;
