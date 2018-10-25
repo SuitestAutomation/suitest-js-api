@@ -44,5 +44,6 @@ describe('Match BrightScript Composer', () => {
 		});
 
 		testInputErrorSync(chain.matchBrightScript, [123]);
+		testInputErrorSync(chain.matchBrightScript, [() => { /**/ }]);
 	});
 });

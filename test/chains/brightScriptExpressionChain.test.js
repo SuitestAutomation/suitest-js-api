@@ -211,14 +211,12 @@ describe('BrightScript expression chain', () => {
 	});
 
 	it('should throw error in case of invalid input', () => {
-		brightScriptExpression(function() {
-			return 1 + 1;
-		});
-		assert.ok(true, 'no error');
-
 		testInputErrorSync(brightScriptExpression, []);
 		testInputErrorSync(brightScriptExpression, [1]);
 		testInputErrorSync(brightScriptExpression, ['']);
+		testInputErrorSync(brightScriptExpression, [function() {
+			return 1 + 1;
+		}]);
 		testInputErrorSync(toJSON, [{
 			isAssert: true,
 			timeout: 0,

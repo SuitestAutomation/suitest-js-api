@@ -47,14 +47,12 @@ describe('Execute brightscript chain', () => {
 	});
 
 	it('should throw error in case of invalid input', () => {
-		executeBrightScript(function() {
-			return 1 + 1;
-		});
-		assert.ok(true, 'no error');
-
 		testInputErrorSync(executeBrightScript, []);
 		testInputErrorSync(executeBrightScript, [1]);
 		testInputErrorSync(executeBrightScript, ['']);
+		testInputErrorSync(executeBrightScript, [function() {
+			return 1 + 1;
+		}]);
 	});
 
 	it('should generate correct socket message based on data', () => {
