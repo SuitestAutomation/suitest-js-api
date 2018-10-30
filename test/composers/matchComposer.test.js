@@ -112,6 +112,7 @@ describe('Match Composer', () => {
 		assert.strictEqual(chain.match(ELEMENT_PROP.PIVOT_X, 0.5), undefined, 'number');
 		assert.strictEqual(chain.match(ELEMENT_PROP.BG_COLOR, '#fff'), undefined, 'string');
 		assert.strictEqual(chain.match(ELEMENT_PROP.TEXT_SIZE, VALUE.REPO), undefined, 'constant');
+		assert.strictEqual(chain.match(ELEMENT_PROP.VALUE, 'value'), undefined, 'string');
 	});
 
 	it('should throw error in case of invalid input', () => {
@@ -133,6 +134,7 @@ describe('Match Composer', () => {
 			name: ELEMENT_PROP.BG_COLOR,
 			val: VALUE.REPO,
 		}]);
+		testInputErrorSync(chain.match, [ELEMENT_PROP.VALUE, 1]);
 	});
 
 	it('should accept object with single property as object', () => {
