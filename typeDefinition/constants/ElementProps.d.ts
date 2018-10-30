@@ -74,4 +74,5 @@ export type ElementProps = {
 	leftAbsolute:            number,
 	topAbsolute:             number,
 	tintColor:               string,
+	value:                   string,
 }
