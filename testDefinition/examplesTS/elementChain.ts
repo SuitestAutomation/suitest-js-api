@@ -109,3 +109,6 @@ el.matches([
 		val: 'string',
 	},
 ]);
+
+// With assert
+suitest.assert.element('api-id');
