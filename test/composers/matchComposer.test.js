@@ -35,7 +35,6 @@ describe('Match Composer', () => {
 	});
 
 	it('should accept single property spread to arguments', () => {
-		// suitest.element('some name')
 		const data = {selector: {apiId: 'some name'}};
 		const chain = {};
 		const makeChain = sinon.spy();
