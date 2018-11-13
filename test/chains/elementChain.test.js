@@ -30,8 +30,8 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.matchesRepo, 'function');
 		assert.strictEqual(typeof chain.matchJS, 'function');
 		assert.strictEqual(typeof chain.matchesJS, 'function');
-		assert.strictEqual(typeof chain.matchBrightScript, 'function');
-		assert.strictEqual(typeof chain.matchesBrightScript, 'function');
+		// assert.strictEqual(typeof chain.matchBrightScript, 'function');
+		// assert.strictEqual(typeof chain.matchesBrightScript, 'function');
 		assert.strictEqual(typeof chain.timeout, 'function');
 		assert.strictEqual(typeof chain.click, 'function');
 		assert.strictEqual(typeof chain.repeat, 'undefined');
@@ -157,10 +157,10 @@ describe('Element chain', () => {
 			element('el-api-id').matchesJS('function(el){return false}').toString(),
 			'Checking if "el-api-id" matches JS:\nfunction(el){return false}'
 		);
-		assert.equal(
-			element('el-api-id').matchesBrightScript('function(el){return false}').toString(),
-			'Checking if "el-api-id" matches BrightScript:\nfunction(el){return false}'
-		);
+		// assert.equal(
+		// 	element('el-api-id').matchesBrightScript('function(el){return false}').toString(),
+		// 	'Checking if "el-api-id" matches BrightScript:\nfunction(el){return false}'
+		// );
 		assert.equal(
 			element('el-api-id').not().exists().toString(),
 			'Checking if "el-api-id" is missing'
