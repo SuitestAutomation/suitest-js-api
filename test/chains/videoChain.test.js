@@ -24,8 +24,8 @@ describe('Video chain', () => {
 		assert.strictEqual(typeof chain.matchesRepo, 'function');
 		assert.strictEqual(typeof chain.matchJS, 'function');
 		assert.strictEqual(typeof chain.matchesJS, 'function');
-		assert.strictEqual(typeof chain.matchBrightScript, 'function');
-		assert.strictEqual(typeof chain.matchesBrightScript, 'function');
+		// assert.strictEqual(typeof chain.matchBrightScript, 'function');
+		// assert.strictEqual(typeof chain.matchesBrightScript, 'function');
 		assert.strictEqual(typeof chain.timeout, 'function');
 
 		assert.strictEqual(chain.with, chain);
@@ -70,10 +70,10 @@ describe('Video chain', () => {
 			video().matchesJS('function(el){return false}').toString(),
 			'Checking if "video" matches JS:\nfunction(el){return false}'
 		);
-		assert.equal(
-			video().matchesBrightScript('function(el){return false}').toString(),
-			'Checking if "video" matches BrightScript:\nfunction(el){return false}'
-		);
+		// assert.equal(
+		// 	video().matchesBrightScript('function(el){return false}').toString(),
+		// 	'Checking if "video" matches BrightScript:\nfunction(el){return false}'
+		// );
 		assert.equal(
 			video().matches(ELEMENT_PROP.ID, 'someId').toString(),
 			'Checking if "video" matches:\n' +
