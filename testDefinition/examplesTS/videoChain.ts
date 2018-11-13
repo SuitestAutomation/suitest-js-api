@@ -12,6 +12,7 @@ video().doesNot();
 video().isNot();
 video().exist();
 video().exists();
+video().visible();
 video().then();
 video().timeout(10);
 video().toString();

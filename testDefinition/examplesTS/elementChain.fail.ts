@@ -7,6 +7,8 @@ el.onmousedown;
 el.doesNot().matches(PROP.OPACITY, 1);
 el.not().matchesJS('');
 el.not().matchesRepo(PROP.OPACITY);
+el.not().visible();
+el.visible().doesNot();
 
 el.matchesJS('').timeout(1).doesNot();
 el.matches(PROP.OPACITY, 1).doesNot();

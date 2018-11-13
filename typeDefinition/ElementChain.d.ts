@@ -12,6 +12,7 @@ import {
 	Intervalable,
 	BaseChain,
 	UntilModifier,
+	VisibleModifier,
 } from './modifiers';
 import {ElementProps} from "./constants/ElementProps";
 
@@ -22,7 +23,8 @@ export interface ElementChain extends
 	ElementEvalModifiers<ElementWithoutEvalChain>,
 	SendTextModifier<ElementRepeatIntervalChain>, // sendText
 	Clickable<ElementRepeatIntervalChain>, // click
-	MoveToModifier<ElementEmptyChain> // moveTo
+	MoveToModifier<ElementEmptyChain>, // moveTo
+	VisibleModifier<ElementWithoutEvalChain> // moveTo
 {}
 
 // -matchers +timeout +negation
