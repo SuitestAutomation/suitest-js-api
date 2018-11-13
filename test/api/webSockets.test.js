@@ -3,6 +3,7 @@ const testServer = require('../../lib/utils/testServer');
 const webSockets = require('../../lib/api/webSockets');
 const SuitestError = require('../../lib/utils/SuitestError');
 const assertThrowsAsync = require('../../lib/utils/assertThrowsAsync');
+const sinon = require('sinon');
 
 describe('webSockets', () => {
 	beforeEach(async() => {
@@ -73,18 +74,15 @@ describe('webSockets', () => {
 	});
 
 	it('should reject connection promise if server was disconnected unexpectedly', async() => {
-		let err;
-
-		await testServer.stop();
+		sinon.stub(console, 'error');
 
 		try {
-			await webSockets.connect();
-		} catch (error) {
-			err = error;
+			await testServer.stop();
+			await assertThrowsAsync(webSockets.connect, err => err instanceof SuitestError);
+			assert.strictEqual(webSockets.isConnected(), false, 'connected');
+		} finally {
+			console.error.restore();
 		}
-
-		assert.ok(err);
-		assert.strictEqual(webSockets.isConnected(), false, 'connected');
 	});
 
 	it('should handle ws response without error message', async() => {

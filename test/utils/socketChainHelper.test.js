@@ -90,12 +90,12 @@ describe('socket chain helpers', () => {
 				type: 'element',
 				selector: {css: 'body'},
 				comparator: {
-					type: SUBJ_COMPARATOR['has'],
+					type: 'has',
 					props: [
 						{
-							name: ELEMENT_PROP['height'],
+							name: 'height',
 							val: 100,
-							type: PROP_COMPARATOR['='],
+							type: '=',
 							deviation: undefined,
 						},
 					],
@@ -148,19 +148,19 @@ describe('socket chain helpers', () => {
 					selector: {css: 'body'},
 					comparator:
 						{
-							type: SUBJ_COMPARATOR['has'],
+							type: 'has',
 							props:
 								[
 									{
-										name: ELEMENT_PROP['height'],
+										name: 'height',
 										val: 100,
-										type: PROP_COMPARATOR['='],
+										type: '=',
 										deviation: undefined,
 									},
 									{
-										name: ELEMENT_PROP['width'],
+										name: 'width',
 										val: 200,
-										type: PROP_COMPARATOR['='],
+										type: '=',
 										deviation: undefined,
 									},
 								],

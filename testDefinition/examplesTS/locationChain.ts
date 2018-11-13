@@ -5,6 +5,9 @@ const {location} = suitest;
 // should have all necessary modifiers
 const baseLocation = location();
 
+const jsFunc = () => true;
+const jsFuncStr = '() => true';
+
 baseLocation.not();
 baseLocation.doesNot();
 baseLocation.isNot();
@@ -13,8 +16,8 @@ baseLocation.equal('');
 baseLocation.equals('');
 baseLocation.contain('');
 baseLocation.contains('');
-baseLocation.matchJS('');
-baseLocation.matchesJS('');
+baseLocation.matchJS(jsFunc);
+baseLocation.matchesJS(jsFuncStr);
 baseLocation.startWith('');
 baseLocation.startsWith('');
 baseLocation.endWith('');
@@ -30,8 +33,8 @@ equalLoc.not();
 equalLoc.doesNot();
 equalLoc.isNot();
 equalLoc.timeout(10);
-baseLocation.clone();
-baseLocation.abandon();
+equalLoc.clone();
+equalLoc.abandon();
 equalLoc.toString();
 
 // should have only allowed modifiers after timeout is set
@@ -44,14 +47,14 @@ timeoutLoc.equal('');
 timeoutLoc.equals('');
 timeoutLoc.contain('');
 timeoutLoc.contains('');
-timeoutLoc.matchJS('');
-timeoutLoc.matchesJS('');
+timeoutLoc.matchJS(jsFunc);
+timeoutLoc.matchesJS(jsFuncStr);
 timeoutLoc.startWith('');
 timeoutLoc.startsWith('');
 timeoutLoc.endWith('');
 timeoutLoc.endsWith('');
-baseLocation.clone();
-baseLocation.abandon();
+timeoutLoc.clone();
+timeoutLoc.abandon();
 timeoutLoc.toString();
 
 // should have only allowed modifiers after it is nagated
@@ -62,14 +65,14 @@ notLoc.equal('');
 notLoc.equals('');
 notLoc.contain('');
 notLoc.contains('');
-notLoc.matchJS('');
-notLoc.matchesJS('');
+notLoc.matchJS(jsFunc);
+notLoc.matchesJS(jsFuncStr);
 notLoc.startWith('');
 notLoc.startsWith('');
 notLoc.endWith('');
 notLoc.endsWith('');
-baseLocation.clone();
-baseLocation.abandon();
+notLoc.clone();
+notLoc.abandon();
 notLoc.toString();
 
 // should have only toString method
@@ -80,7 +83,7 @@ abandonedLoc.toString();
 // chaining examples
 location().contain('').not().timeout(10);
 location().contain('').timeout(10).not();
-location().not().matchJS(() => true).timeout(10);
+location().not().matchJS(jsFunc).timeout(10);
 location().not().timeout(10).equal('');
 location().timeout(10).not().endsWith('test');
 location().timeout(10).endWith('test').not();

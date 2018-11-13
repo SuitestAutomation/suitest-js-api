@@ -1,9 +1,9 @@
 export type ElementState = {
-	SELECTED: symbol,
-	HIGHLIGHTED: symbol,
-	DISABLED: symbol,
-	NORMAL: symbol,
-	APPLICATION: symbol,
-	FOCUSED: symbol,
-	RESERVED: symbol,
+	SELECTED:    'selected',
+	HIGHLIGHTED: 'highlighted',
+	DISABLED:    'disabled',
+	NORMAL:      'normal',
+	APPLICATION: 'application',
+	FOCUSED:     'focused',
+	RESERVED:    'reserved',
 };

@@ -357,6 +357,12 @@ describe('Socket error messages', () => {
 				'JavaScript expression error: "error".',
 			],
 			[basePayload('signInRequired'), 'Account needs to be signed in on target device.'],
+			[basePayload('appleError65'), 'Failed to launch app: Apple ID account error - see https://suite.st/docs/devices/apple-tv/#apple-id-account-error.'],
+			[basePayload('appleError70'), 'Failed to launch app: Xcode error - see https://suite.st/docs/devices/apple-tv/#xcode-error.'],
+			[basePayload('appleEconnresetError'), 'Failed to launch app: Connection (ECONNRESET) error - see https://suite.st/docs/devices/apple-tv/#connection-econnreset-error.'],
+			[basePayload('applePairingError'), 'Failed to launch app: Pairing error - see https://suite.st/docs/devices/apple-tv/#pairing-error.'],
+			[basePayload('appleIosDeployError'), 'Failed to launch app: iOS Deploy not found error - see https://suite.st//docs/devices/apple-tv/#ios-deploy-not-found.'],
+			[basePayload('appleAppSignError'), 'Failed to launch app: App code sign error - see https://suite.st/docs/devices/apple-tv/#app-code-sign-error.'],
 		].forEach(([payload, expectMessage]) => {
 			assert.equal(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});

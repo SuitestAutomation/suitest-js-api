@@ -34,19 +34,16 @@ describe('stackTraceParser util', () => {
 	});
 
 	it('test prependStack', () => {
-		const error = {};
 		const stack = 'title1\nat test.test (test.js:1:1)\nat test.test (test.js:2:2)';
 
-		error.stack = stack;
 		assert.equal(
-			stackTraceParser.prependStack(error, 'title2\nat test.test (test.js:0:0)').stack,
+			stackTraceParser.prependStack(stack, 'title2\nat test.test (test.js:0:0)'),
 			'title1\nat test.test (test.js:0:0)\nat test.test (test.js:1:1)\nat test.test (test.js:2:2)',
 			'prepended',
 		);
 
-		error.stack = stack;
 		assert.equal(
-			stackTraceParser.prependStack(error, 'title2\nat test.test (test.js:1:1)').stack,
+			stackTraceParser.prependStack(stack, 'title2\nat test.test (test.js:1:1)'),
 			stack,
 			'not changed, lines duplicated',
 		);
@@ -57,10 +54,5 @@ describe('stackTraceParser util', () => {
 		assert.strictEqual(stackTraceParser.isStackLine('\tat something\n'), true);
 		assert.strictEqual(stackTraceParser.isStackLine('something'), false);
 		assert.strictEqual(stackTraceParser.isStackLine('something at something'), false);
-	});
-
-	it('test getFirstStackLine', () => {
-		assert.strictEqual(stackTraceParser.getFirstStackLine('Some Error:\n\tat line1\n\tat line2'), '\tat line1');
-		assert.strictEqual(stackTraceParser.getFirstStackLine('\tat line1\n\tat line2'), '\tat line1');
 	});
 });
