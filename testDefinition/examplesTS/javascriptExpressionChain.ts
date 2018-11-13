@@ -3,75 +3,75 @@ import * as suitest from '../../index';
 const {jsExpression} = suitest;
 
 // should have all necessary modifiers
-const baseLocation = jsExpression(() => '');
+const baseJSExpression = jsExpression(() => '');
 suitest.assert.jsExpression('');
 suitest.assert.jsExpression(() => '');
 
-baseLocation.not();
-baseLocation.doesNot();
-baseLocation.isNot();
-baseLocation.timeout(10);
-baseLocation.equal('');
-baseLocation.equals('');
-baseLocation.contain('');
-baseLocation.contains('');
-baseLocation.startWith('');
-baseLocation.startsWith('');
-baseLocation.endWith('');
-baseLocation.endsWith('');
-baseLocation.clone();
-baseLocation.abandon();
-baseLocation.toString();
+baseJSExpression.not();
+baseJSExpression.doesNot();
+baseJSExpression.isNot();
+baseJSExpression.timeout(10);
+baseJSExpression.equal('');
+baseJSExpression.equals('');
+baseJSExpression.contain('');
+baseJSExpression.contains('');
+baseJSExpression.startWith('');
+baseJSExpression.startsWith('');
+baseJSExpression.endWith('');
+baseJSExpression.endsWith('');
+baseJSExpression.clone();
+baseJSExpression.abandon();
+baseJSExpression.toString();
 
 // should have only allowed modifiers after condition started
-const equalLoc = jsExpression(() => '').equal('');
+const equalJSExpression = jsExpression(() => '').equal('');
 
-equalLoc.not();
-equalLoc.doesNot();
-equalLoc.isNot();
-equalLoc.timeout(10);
-baseLocation.clone();
-baseLocation.abandon();
-equalLoc.toString();
+equalJSExpression.not();
+equalJSExpression.doesNot();
+equalJSExpression.isNot();
+equalJSExpression.timeout(10);
+equalJSExpression.clone();
+equalJSExpression.abandon();
+equalJSExpression.toString();
 
 // should have only allowed modifiers after timeout is set
-const timeoutLoc = jsExpression(() => '').timeout(10);
+const timeoutJSExpression = jsExpression(() => '').timeout(10);
 
-timeoutLoc.not();
-timeoutLoc.doesNot();
-timeoutLoc.isNot();
-timeoutLoc.equal('');
-timeoutLoc.equals('');
-timeoutLoc.contain('');
-timeoutLoc.contains('');
-timeoutLoc.startWith('');
-timeoutLoc.startsWith('');
-timeoutLoc.endWith('');
-timeoutLoc.endsWith('');
-baseLocation.clone();
-baseLocation.abandon();
-timeoutLoc.toString();
+timeoutJSExpression.not();
+timeoutJSExpression.doesNot();
+timeoutJSExpression.isNot();
+timeoutJSExpression.equal('');
+timeoutJSExpression.equals('');
+timeoutJSExpression.contain('');
+timeoutJSExpression.contains('');
+timeoutJSExpression.startWith('');
+timeoutJSExpression.startsWith('');
+timeoutJSExpression.endWith('');
+timeoutJSExpression.endsWith('');
+timeoutJSExpression.clone();
+timeoutJSExpression.abandon();
+timeoutJSExpression.toString();
 
 // should have only allowed modifiers after it is nagated
-const notLoc = jsExpression(() => '').not();
+const notJSExpression = jsExpression(() => '').not();
 
-notLoc.timeout(10);
-notLoc.equal('');
-notLoc.equals('');
-notLoc.contain('');
-notLoc.contains('');
-notLoc.startWith('');
-notLoc.startsWith('');
-notLoc.endWith('');
-notLoc.endsWith('');
-baseLocation.clone();
-baseLocation.abandon();
-notLoc.toString();
+notJSExpression.timeout(10);
+notJSExpression.equal('');
+notJSExpression.equals('');
+notJSExpression.contain('');
+notJSExpression.contains('');
+notJSExpression.startWith('');
+notJSExpression.startsWith('');
+notJSExpression.endWith('');
+notJSExpression.endsWith('');
+notJSExpression.clone();
+notJSExpression.abandon();
+notJSExpression.toString();
 
 // should have only toString method
-const abandonedLoc = baseLocation.abandon();
+const abandonedJSExpression = baseJSExpression.abandon();
 
-abandonedLoc.toString();
+abandonedJSExpression.toString();
 
 // chaining examples
 jsExpression(() => '').contain('').not().timeout(10);
