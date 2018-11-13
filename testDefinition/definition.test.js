@@ -40,6 +40,8 @@ describe('suitest typescripts declarations tests', () => {
 			'Property \'matches\' does not exist on type \'ElementWithoutNegation\'.',
 			'Property \'matchesJS\' does not exist on type \'ElementWithoutNegation\'.',
 			'Property \'matchesRepo\' does not exist on type \'ElementWithoutNegation\'.',
+			'Property \'visible\' does not exist on type \'ElementWithoutNegation\'.',
+			'Property \'doesNot\' does not exist on type \'ElementWithoutEvalChain\'.',
 			'Property \'doesNot\' does not exist on type \'ElementNegationChain\'.',
 			'Property \'doesNot\' does not exist on type \'ElementWithoutEvalChain\'.',
 			'Property \'not\' does not exist on type \'ElementNegationChain\'.',

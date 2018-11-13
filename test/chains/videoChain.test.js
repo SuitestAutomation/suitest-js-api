@@ -18,6 +18,7 @@ describe('Video chain', () => {
 		assert.strictEqual(typeof chain.isNot, 'function');
 		assert.strictEqual(typeof chain.exist, 'function');
 		assert.strictEqual(typeof chain.exists, 'function');
+		assert.strictEqual(typeof chain.visible, 'function');
 		assert.strictEqual(typeof chain.match, 'function');
 		assert.strictEqual(typeof chain.matches, 'function');
 		assert.strictEqual(typeof chain.matchRepo, 'function');
@@ -37,6 +38,7 @@ describe('Video chain', () => {
 
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
 		assert.strictEqual(typeof chain.match, 'undefined');
 		assert.strictEqual(typeof chain.matches, 'undefined');
 		assert.strictEqual(typeof chain.matchRepo, 'undefined');
@@ -51,8 +53,15 @@ describe('Video chain', () => {
 		assert.strictEqual(typeof chain.abandon, 'undefined');
 	});
 
-	it('should have only allowed modifiers after exists is applied', () => {
-		const chain = video().not();
+	it('should have only allowed modifiers after exists or visible is applied', () => {
+		let chain = video().not();
+
+		assert.strictEqual(typeof chain.not, 'undefined');
+		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
+
+		chain = video().visible();
 
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');

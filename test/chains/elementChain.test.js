@@ -24,6 +24,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.isNot, 'function');
 		assert.strictEqual(typeof chain.exist, 'function');
 		assert.strictEqual(typeof chain.exists, 'function');
+		assert.strictEqual(typeof chain.visible, 'function');
 		assert.strictEqual(typeof chain.match, 'function');
 		assert.strictEqual(typeof chain.matches, 'function');
 		assert.strictEqual(typeof chain.matchRepo, 'function');
@@ -48,6 +49,7 @@ describe('Element chain', () => {
 
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
 		assert.strictEqual(typeof chain.match, 'undefined');
 		assert.strictEqual(typeof chain.matches, 'undefined');
 		assert.strictEqual(typeof chain.matchRepo, 'undefined');
@@ -64,6 +66,7 @@ describe('Element chain', () => {
 
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
 		assert.strictEqual(typeof chain.match, 'undefined');
 		assert.strictEqual(typeof chain.matches, 'undefined');
 		assert.strictEqual(typeof chain.matchRepo, 'undefined');
@@ -85,6 +88,7 @@ describe('Element chain', () => {
 
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
 		assert.strictEqual(typeof chain.match, 'undefined');
 		assert.strictEqual(typeof chain.matches, 'undefined');
 		assert.strictEqual(typeof chain.matchRepo, 'undefined');
@@ -106,6 +110,7 @@ describe('Element chain', () => {
 
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
 		assert.strictEqual(typeof chain.match, 'undefined');
 		assert.strictEqual(typeof chain.matches, 'undefined');
 		assert.strictEqual(typeof chain.matchRepo, 'undefined');
@@ -134,6 +139,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
 		assert.strictEqual(typeof chain.isNot, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
 	});
 
 	it('should convert to string with meaningful message', () => {
@@ -150,6 +156,10 @@ describe('Element chain', () => {
 		assert.equal(
 			element('el-api-id').not().exists().toString(),
 			'Checking if "el-api-id" is missing'
+		);
+		assert.equal(
+			element('el-api-id').visible().toString(),
+			'Checking if "el-api-id" is visible'
 		);
 		assert.equal(
 			element('el-api-id').matches(ELEMENT_PROP.ID).toString(),
@@ -363,6 +373,26 @@ describe('Element chain', () => {
 				timeout: 2000,
 			},
 		}, 'element does not exist testLine');
+		assert.deepStrictEqual(toJSON({
+			comparator: {
+				type: SUBJ_COMPARATOR.VISIBLE,
+			},
+			selector: {apiId: 'apiId'},
+			timeout: 2000,
+		}), {
+			type: 'eval',
+			request: {
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'element',
+						apiId: 'apiId',
+					},
+					type: 'visible',
+				},
+				timeout: 2000,
+			},
+		}, 'element visible testLine');
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
 			comparator: {

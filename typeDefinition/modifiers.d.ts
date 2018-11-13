@@ -90,6 +90,10 @@ export interface ExistsModifiers<T> {
 	exists(): T;
 }
 
+export interface VisibleModifier<T> {
+	visible(): T;
+}
+
 export interface WasMadeModifier<T> {
 	wasMade(): T;
 }
