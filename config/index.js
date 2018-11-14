@@ -23,7 +23,7 @@ const configFields = ['logLevel', 'disallowCrashReports', 'continueOnFatalError'
 const launcherFields = [
 	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
-	'logDir', 'timestamp', // launcher common
+	'logDir', 'timestamp', 'config', // launcher common
 ];
 const allFields = [...configFields, ...launcherFields];
 
