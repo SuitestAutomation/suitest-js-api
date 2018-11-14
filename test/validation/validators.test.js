@@ -2,7 +2,6 @@ const assert = require('assert');
 const {
 	validatePositiveNumber,
 	validateNonEmptyStringOrUndefined,
-	validateArrayOfSymbols,
 } = require('../../lib/validataion/validators');
 const {validate, validators} = require('../../lib/validataion');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
@@ -24,20 +23,6 @@ describe('validators', () => {
 		assert.throws(() => validateNonEmptyStringOrUndefined(null), /Error/);
 		assert.throws(() => validateNonEmptyStringOrUndefined(1), /Error/);
 		assert.throws(() => validateNonEmptyStringOrUndefined({}), /Error/);
-	});
-
-	it('should validate array of symbols', () => {
-		assert.ok(validateArrayOfSymbols([Symbol(1)]));
-		assert.ok(validateArrayOfSymbols([Symbol(1), Symbol(2)]));
-		assert.throws(() => validateArrayOfSymbols(Symbol(1)), /Error/);
-		assert.throws(() => validateArrayOfSymbols([1, 2]), /Error/);
-	});
-
-	it('should validate array of symbols', () => {
-		assert.ok(validateArrayOfSymbols([Symbol(1)]));
-		assert.ok(validateArrayOfSymbols([Symbol(1), Symbol(2)]));
-		assert.throws(() => validateArrayOfSymbols(Symbol(1)), /Error/);
-		assert.throws(() => validateArrayOfSymbols([1, 2]), /Error/);
 	});
 
 	it('should throw correct error message', () => {

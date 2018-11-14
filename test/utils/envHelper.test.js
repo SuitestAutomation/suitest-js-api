@@ -8,6 +8,7 @@ const envVars = require('../../lib/constants/enviroment');
 const webSockets = require('../../lib/api/webSockets');
 const {pairedDeviceContext, authContext, appContext, testContext} = require('../../lib/context');
 const sessionConstants = require('../../lib/constants/session');
+const logger = require('../../lib/utils/logger');
 const nock = require('nock');
 const stubDeviceInfoFeed = require('../../lib/utils/testHelpers/mockDeviceInfo');
 
@@ -15,11 +16,12 @@ const deviceId = uuid();
 
 describe('envHelper.js', () => {
 	before(async() => {
+		sinon.stub(logger, 'log');
+		sinon.stub(console, 'error');
 		await testServer.start();
 	});
 
 	beforeEach(async() => {
-		await testServer.restart();
 		stubDeviceInfoFeed(deviceId);
 
 		pairedDeviceContext.clear();
@@ -29,6 +31,9 @@ describe('envHelper.js', () => {
 	});
 
 	after(async() => {
+		logger.log.restore();
+		console.error.restore();
+
 		webSockets.disconnect();
 		await testServer.stop();
 		nock.cleanAll();

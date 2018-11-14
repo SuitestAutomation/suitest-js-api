@@ -50,6 +50,8 @@ describe('Location chain', () => {
 		assert.strictEqual(typeof chain.contains, 'undefined');
 		assert.strictEqual(typeof chain.matchJS, 'undefined');
 		assert.strictEqual(typeof chain.matchesJS, 'undefined');
+		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
 		assert.strictEqual(typeof chain.startWith, 'undefined');
 		assert.strictEqual(typeof chain.startsWith, 'undefined');
 		assert.strictEqual(typeof chain.endWith, 'undefined');

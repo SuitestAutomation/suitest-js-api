@@ -1,12 +1,10 @@
 const assert = require('assert');
 const sinon = require('sinon');
-const spawn = require('child_process').spawn;
 const validation = require('../../lib/validataion');
 
 const SuitestError = require('../../lib/utils/SuitestError');
 const {snippets: log} = require('../../lib/testLauncher/launcherLogger');
 const launcherLogger = require('../../lib/utils/logger');
-const launcherLoggerHelper = require('../../lib/utils/launcherLoggerHelper');
 const testLauncherHelper = require('../../lib/utils/testLauncherHelper');
 
 describe('testLauncherHelper util', () => {
@@ -57,26 +55,6 @@ describe('testLauncherHelper util', () => {
 		assert.deepStrictEqual(testLauncherHelper.mergeConfigs({a: true}, {a: false}), {a: false});
 	});
 
-	it('should read from child process stdout and stderr correctly', done => {
-		const childSpy = sinon.spy(l => {
-			if (l === 'testError') {
-				done();
-			}
-		});
-		const child = spawn('node', ['--version'], {shell: true});
-
-		testLauncherHelper.followChildProcess(child, childSpy);
-
-		child.stdout.on('data', () => {
-			assert.strictEqual(childSpy.called, true);
-			child.stderr.push('testError');
-		});
-
-		child.stderr.on('data', err => {
-			assert.strictEqual(err.toString(), 'testError');
-		});
-	});
-
 	it('should validateInput correctly', () => {
 		const validate = sinon.stub(validation, 'validate');
 		const argsValidationError = sinon.stub(log, 'argsValidationError');
@@ -91,32 +69,5 @@ describe('testLauncherHelper util', () => {
 		assert.ok(argsValidationError.firstCall.args[0].message.includes('Invalid input'));
 		assert.ok(process.exit.calledWith(1), 'exit called with 1');
 		argsValidationError.restore();
-	});
-
-	// todo this is not much of a test
-	it('should writeLogs create dir and stream correctly', () => {
-		const mkDirByPathSync = sinon.stub(launcherLoggerHelper, 'mkDirByPathSync');
-		const createWriteStream = sinon.stub(launcherLoggerHelper, 'createWriteStream');
-
-		const deviceMeta = {
-			displayName: 'displayName',
-			shortName: 'shortName',
-			manufacturer: 'manufacturer',
-			model: 'model',
-		};
-
-		testLauncherHelper.writeLogs(
-			{
-				deviceId: '1',
-				...deviceMeta,
-			},
-			['a', 'red'],
-			new Date(),
-			'./fake/path'
-		);
-
-		assert.equal(mkDirByPathSync.args[0], './fake/path', 'mkDirByPathSync called with right args');
-		mkDirByPathSync.restore();
-		createWriteStream.restore();
 	});
 });

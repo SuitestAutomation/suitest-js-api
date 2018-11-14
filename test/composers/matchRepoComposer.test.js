@@ -94,10 +94,8 @@ describe('Match Repo Composer', () => {
 
 		Object.defineProperties(chain, matchRepoComposer(data, chain, makeChain));
 
-		testInputErrorSync(chain.matchRepo, ['height']);
 		testInputErrorSync(chain.matchRepo, [Symbol('height')]);
 		testInputErrorSync(chain.matchRepo, [ELEMENT_PROP.HEIGHT, 500]);
-		testInputErrorSync(chain.matchRepo, [ELEMENT_PROP.LEFT, '>']);
 		testInputErrorSync(chain.matchRepo, [ELEMENT_PROP.LEFT, Symbol('>')]);
 		testInputErrorSync(chain.matchRepo, [ELEMENT_PROP.LEFT, PROP_COMPARATOR.APPROX, '20']);
 		testInputErrorSync(chain.matchRepo, [{

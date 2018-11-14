@@ -1,6 +1,6 @@
 export type VisibilityState = {
-	VISIBLE: symbol,
-	INVISIBLE: symbol,
-	COLLAPSED: symbol,
-	GONE: symbol,
+	VISIBLE:   'visible',
+	INVISIBLE: 'invisible',
+	COLLAPSED: 'collapsed',
+	GONE:      'collapsed',
 };

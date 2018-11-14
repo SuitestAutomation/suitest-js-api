@@ -77,13 +77,10 @@ describe('Press button chain', () => {
 		log.restore();
 	});
 
-	it.skip('should engage execution on "then"', async() => {
-		assert.deepStrictEqual(await pressButton(buttonTypes.BLUE), 'press');
-	});
-
 	it('should throw error in case of invalid input', () => {
 		testInputErrorSync(pressButton, []);
-		testInputErrorSync(pressButton, [['Up', 'Down']]);
+		// empty string is invalid
+		testInputErrorSync(pressButton, [['', 'Down']]);
 	});
 
 	it('should generate correct socket message based on data', () => {

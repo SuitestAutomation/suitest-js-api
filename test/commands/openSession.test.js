@@ -1,5 +1,6 @@
 const assert = require('assert');
 const nock = require('nock');
+const sinon = require('sinon');
 
 const testServer = require('../../lib/utils/testServer');
 const {authContext} = require('../../lib/context');
@@ -9,9 +10,12 @@ const endpoints = require('../../lib/api/endpoints');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {config} = require('../../config');
 const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
+const logger = require('../../lib/utils/logger');
 
 describe('openSession', () => {
 	before(async() => {
+		sinon.stub(logger, 'log');
+		sinon.stub(logger, 'delayed');
 		await testServer.start();
 	});
 
@@ -20,6 +24,8 @@ describe('openSession', () => {
 	});
 
 	after(async() => {
+		logger.log.restore();
+		logger.delayed.restore();
 		nock.cleanAll();
 		authContext.clear();
 		await testServer.stop();
@@ -69,8 +75,6 @@ describe('openSession', () => {
 	});
 
 	it('should open session for guest context when user sessionToken provided', async() => {
-		await testServer.restart();
-
 		const authData = {sessionToken: 'sessionToken'};
 
 		try {
@@ -85,8 +89,6 @@ describe('openSession', () => {
 	});
 
 	it('should open session and set Interactive context explicitly when provided as second arg', async() => {
-		await testServer.restart();
-
 		const authData = {sessionToken: 'sessionToken'};
 
 		try {

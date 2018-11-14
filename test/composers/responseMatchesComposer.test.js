@@ -134,8 +134,6 @@ describe('Network Request Match Composer', () => {
 		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.BODY, 123]);
 		testInputErrorSync(chain.responseMatch, ['Content-Type']);
 		testInputErrorSync(chain.responseMatch, [Symbol('unknown'), 'test']);
-		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.STATUS, 200, '=']);
-		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.STATUS, 200, '=']);
 		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.STATUS, 200, Symbol('=')]);
 		testInputErrorSync(chain.responseMatch, ['Content-Type', 500]);
 		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.STATUS, '200']);

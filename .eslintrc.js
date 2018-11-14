@@ -65,7 +65,7 @@ module.exports = {
 		"no-whitespace-before-property": "warn",
 		"object-curly-newline": ["warn", { "consistent": true }],
 		"object-curly-spacing": ["warn", "never"],
-		"object-property-newline": "warn",
+		"object-property-newline": ["warn", { "allowAllPropertiesOnSameLine": true }],
 		"one-var-declaration-per-line": "warn",
 		"padded-blocks": ["warn", "never"],
 		"quotes": ["warn", "single", { "avoidEscape": true }],
