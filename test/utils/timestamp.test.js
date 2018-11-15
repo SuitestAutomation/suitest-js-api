@@ -4,13 +4,6 @@ const {format} = require('../../lib/utils/timestamp');
 const timestampOff = require('../../lib/constants/timestamp').none;
 
 describe('timestamp util', () => {
-	it('should be curried', async() => {
-		const date = Date.now();
-		const fmt = 'MMMM DD, YYYY';
-
-		assert.strictEqual(format(fmt, date), format(fmt)(date), 'is curried');
-	});
-
 	it('should format date correctly', async() => {
 		const date = new Date('December 17, 1995');
 
