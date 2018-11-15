@@ -1,22 +1,22 @@
 const assert = require('assert');
 
 const {format} = require('../../lib/utils/timestamp');
-const {config, override} = require('../../config');
 const timestampOff = require('../../lib/constants/timestamp').none;
 
-const cachedConfig = {...config};
-
 describe('timestamp util', () => {
-	after(() => {
-		override(cachedConfig);
+	it('should be curried', async() => {
+		const date = Date.now();
+		const fmt = 'MMMM DD, YYYY';
+
+		assert.strictEqual(format(fmt, date), format(fmt)(date), 'is curried');
 	});
 
 	it('should format date correctly', async() => {
-		override({timestamp: 'MMMM DD, YYYY'});
-		assert.strictEqual(format(new Date('December 17, 1995')), 'December 17, 1995');
-		override({timestamp: 'YYYY MM DD'});
-		assert.strictEqual(format(new Date('December 17, 1995')), '1995 12 17');
-		override({timestamp: timestampOff});
-		assert.strictEqual(format(new Date('December 17, 1995')), '');
+		const date = new Date('December 17, 1995');
+
+		assert.strictEqual(format('MMMM DD, YYYY', date), 'December 17, 1995', 'correct format 1');
+		assert.strictEqual(format('YYYY MM DD', date), '1995 12 17', 'correct format 2');
+		assert.strictEqual(format(timestampOff, date), '', 'no timestamp');
 	});
 });
+
