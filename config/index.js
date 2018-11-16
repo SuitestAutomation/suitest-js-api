@@ -13,9 +13,10 @@ const envVars = require('../lib/constants/enviroment');
 const logLevels = require('../lib/constants/logLevels');
 const timestamp = require('../lib/constants/timestamp');
 const {validate, validators} = require('../lib/validataion');
-const {invalidConfigObj} = require('../lib/texts');
+const {invalidConfigObj, invalidUserConfig} = require('../lib/texts');
 const {ENV_VARS} = require('../lib/mappings');
 const {pickNonNil} = require('../lib/utils/common');
+const SuitestError = require('../lib/utils/SuitestError');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
 
@@ -103,15 +104,16 @@ function readRcConfig() {
 
 /**
  * Read josn config file provided by user.
- * @param {string} configFile - path to config file
- * @return {Object}
+ * @param {string} path - path to config file
+ * @throws {SuitestError}
+ * @returns {Object} - parsed json
  */
-function readUserConfig(configFile) {
-	// ignore config files when running unit tests
-	if (global._suitestTesting)
-		return {};
-
-	return JSON.parse(fs.readFileSync(configFile));
+function readUserConfig(path) {
+	try {
+		return JSON.parse(fs.readFileSync(path));
+	} catch (error) {
+		throw new SuitestError(invalidUserConfig(path, error.message), error.code);
+	}
 }
 
 /**
