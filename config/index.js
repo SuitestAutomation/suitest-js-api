@@ -6,13 +6,17 @@
  * Individual functions from utils are still covered in scope of those file's tests.
  */
 
+const fs = require('fs');
+const rc = require('rc');
+
+const envVars = require('../lib/constants/enviroment');
 const logLevels = require('../lib/constants/logLevels');
 const timestamp = require('../lib/constants/timestamp');
-const rc = require('rc');
 const {validate, validators} = require('../lib/validataion');
-const {invalidConfigObj} = require('../lib/texts');
+const {invalidConfigObj, invalidUserConfig} = require('../lib/texts');
 const {ENV_VARS} = require('../lib/mappings');
 const {pickNonNil} = require('../lib/utils/common');
+const SuitestError = require('../lib/utils/SuitestError');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
 
@@ -20,8 +24,9 @@ const configFields = ['logLevel', 'disallowCrashReports', 'continueOnFatalError'
 const launcherFields = [
 	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
-	'logDir', 'timestamp', // launcher common
+	'logDir', 'timestamp', 'config', // launcher common
 ];
+const allFields = [...configFields, ...launcherFields];
 
 const main = {
 	apiUrl: 'https://the.suite.st/api/public/v2',
@@ -46,14 +51,19 @@ const test = {
 Object.freeze(main);
 Object.freeze(test);
 
+const userConfigFile = process.env[envVars.SUITEST_USER_CONFIG];
+
+const defaultConfig = global._suitestTesting ? test : main;
 const rcConfig = readRcConfig();
+const userConfig = userConfigFile ? readUserConfig(userConfigFile) : {};
 const envConfig = pickConfigFieldsFromEnvVars(configFields);
 
-const config = {
-	...(global._suitestTesting ? test : main),
-	...validate(validators.CONFIGURE, pickNonNil(configFields, rcConfig), invalidConfigObj()), // extend with rc file
-	...envConfig, // extend with env vars
-};
+const config = {};
+
+extend(defaultConfig); // extend with default config
+override(rcConfig); // extend with rc file
+override(userConfig); // extend with user config file
+extend(envConfig); // extend with env vars
 
 const launcherParams = pickNonNil(launcherFields, rcConfig);
 
@@ -62,7 +72,7 @@ const launcherParams = pickNonNil(launcherFields, rcConfig);
  * @param {Object} overrideObj
  */
 function override(overrideObj = {}) {
-	const _overrideObj = pickNonNil(configFields, overrideObj);
+	const _overrideObj = pickNonNil(allFields, overrideObj);
 
 	validate(validators.CONFIGURE, _overrideObj, invalidConfigObj());
 	extend(_overrideObj);
@@ -90,6 +100,20 @@ function readRcConfig() {
 		return {};
 
 	return rc('suitest', {}, () => ({}));
+}
+
+/**
+ * Read josn config file provided by user.
+ * @param {string} path - path to config file
+ * @throws {SuitestError}
+ * @returns {Object} - parsed json
+ */
+function readUserConfig(path) {
+	try {
+		return JSON.parse(fs.readFileSync(path));
+	} catch (error) {
+		throw new SuitestError(invalidUserConfig(path, error.message), error.code);
+	}
 }
 
 /**
@@ -124,5 +148,8 @@ module.exports = {
 	launcherParams,
 	override,
 	extend,
+	readUserConfig,
+
+	// for testing
 	pickConfigFieldsFromEnvVars,
 };
