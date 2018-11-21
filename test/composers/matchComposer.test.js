@@ -74,6 +74,22 @@ describe('Match Composer', () => {
 			selector: {apiId: 'some name'},
 		});
 
+		chain.match(ELEMENT_PROP.WEB_VIEW_URL, 'some string');
+		assert.deepStrictEqual(makeChain.lastCall.args[0], {
+			comparator: {
+				type: SUBJ_COMPARATOR.MATCH,
+				props: [
+					{
+						name: ELEMENT_PROP.WEB_VIEW_URL,
+						val: 'some string',
+						type: PROP_COMPARATOR.EQUAL,
+						deviation: undefined,
+					},
+				],
+			},
+			selector: {apiId: 'some name'},
+		});
+
 		chain.match(ELEMENT_PROP.TOP, 500, PROP_COMPARATOR.GREATER);
 		assert.deepStrictEqual(makeChain.lastCall.args[0], {
 			comparator: {
@@ -128,6 +144,7 @@ describe('Match Composer', () => {
 		testInputErrorSync(chain.match, [ELEMENT_PROP.LEFT, 500, PROP_COMPARATOR.APPROX, '20']);
 		testInputErrorSync(chain.match, [ELEMENT_PROP.LEFT, '10']);
 		testInputErrorSync(chain.match, [ELEMENT_PROP.BG_COLOR, 10]);
+		testInputErrorSync(chain.match, [ELEMENT_PROP.WEB_VIEW_URL, 10]);
 		testInputErrorSync(chain.match, [ELEMENT_PROP.BG_COLOR, VALUE.REPO]);
 		testInputErrorSync(chain.match, [{
 			name: ELEMENT_PROP.BG_COLOR,

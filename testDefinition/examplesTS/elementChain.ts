@@ -115,4 +115,9 @@ el.matches([
 		name: PROP.FONT_URI,
 		val: 'string',
 	},
+	{
+		name: PROP.WEB_VIEW_URL,
+		type: COMP.END,
+		val: 'string',
+	},
 ]);
