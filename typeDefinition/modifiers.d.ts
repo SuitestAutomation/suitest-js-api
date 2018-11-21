@@ -54,6 +54,10 @@ export interface SendTextModifier<T> {
 	sendText(text: string): T
 }
 
+export interface SetTextModifier<T> {
+	setText(text: string): T
+}
+
 export interface Repeatable<T> {
 	repeat(times: number): T;
 }
