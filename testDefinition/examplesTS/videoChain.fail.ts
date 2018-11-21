@@ -1,4 +1,3 @@
-
 import {video} from '../../index';
 
 video().sendText('text');
