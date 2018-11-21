@@ -74,7 +74,7 @@ describe('suitest typescripts declarations tests', () => {
 	});
 
 	// should compile files with error
-	['networkRequestChain.fail', 'elementChain.fail'].forEach(fileName => {
+	['networkRequestChain.fail', 'elementChain.fail', 'videoChain.fail'].forEach(fileName => {
 		it(`should not compile example ${fileName} chain`, (done) => {
 			assert.ok(
 				getDiagnostics(fileName).length > 0,

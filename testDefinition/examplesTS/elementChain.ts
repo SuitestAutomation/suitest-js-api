@@ -13,6 +13,7 @@ el.click();
 el.exist();
 el.moveTo();
 el.sendText('');
+el.setText('');
 el.timeout(1);
 el.exists();
 el.matches(PROP.IS_CHECKED, true);
@@ -35,8 +36,11 @@ el.matchesJS('').toString();
 el.click().repeat(10).interval(2000).toString();
 el.moveTo().toString();
 el.sendText('text').toString();
+el.setText('text').toString();
 el.sendText('text').repeat(10).interval(2000).toString();
 el.sendText('text').repeat(10).interval(2000).toAssert();
+el.setText('text').repeat(10).interval(2000).toString();
+el.setText('text').repeat(10).interval(2000).toAssert();
 el.timeout(10).not();
 
 // Check if element's width and height match snapshot from element repo, top position as in repo +- 20px and custom background color
