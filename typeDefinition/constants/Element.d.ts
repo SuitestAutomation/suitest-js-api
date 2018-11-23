@@ -72,7 +72,7 @@ export type ElementPropTypes = {
 	NUMBER_OF_SEGMENTS:        'numberOfSegments',
 	PLACEHOLDER:               'placeholder',
 	PROPOSAL_URL:              'proposalUrl',
-	WEB_VIEW_URL:              'url',
+	URL:                       'url',
 	SELECTED_IMAGE_TINT_COLOR: 'selectedImageTintColor',
 	STATE:                     'state',
 	TEXT_ALIGNMENT:            'textAlignment',
