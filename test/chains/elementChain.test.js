@@ -241,11 +241,11 @@ describe('Element chain', () => {
 		);
 		assert.equal(
 			element('el-api-id').setText('text string').toString(),
-			'Setting text "text string" on "el-api-id"'
+			'Setting text "text string" for "el-api-id"'
 		);
 		assert.equal(
 			element('el-api-id').setText('text string').repeat(10).interval(2000).toString(),
-			'Setting text "text string" on "el-api-id", repeat 10 times every 2000 ms'
+			'Setting text "text string" for "el-api-id", repeat 10 times every 2000 ms'
 		);
 	});
 
