@@ -116,7 +116,7 @@ el.matches([
 		val: 'string',
 	},
 	{
-		name: PROP.WEB_VIEW_URL,
+		name: PROP.URL,
 		type: COMP.END,
 		val: 'string',
 	},

@@ -450,7 +450,7 @@ describe('Element chain', () => {
 						type: PROP_COMPARATOR.EQUAL,
 					},
 					{
-						name: ELEMENT_PROP.WEB_VIEW_URL,
+						name: ELEMENT_PROP.URL,
 						val: 'string',
 						type: PROP_COMPARATOR.END,
 					},
