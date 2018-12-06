@@ -1,6 +1,6 @@
 {
   "name": "suitest-js-api",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "main": "index.js",
   "repository": "git@github.com:SuitestAutomation/suitest-js-api.git",
   "author": "Suitest <hello@suite.st>",
@@ -31,8 +31,7 @@
     "test-definitions": "cd ./testDefinition && mocha --no-timeouts definition.test.js",
     "test-watch": "yarn test -- -w",
     "coverage": "nyc --reporter=lcov yarn test",
-    "lint": "eslint lib/ test/ --quiet",
-    "postversion": "git branch -d latest && git push origin --delete latest && git branch latest && git push origin latest:latest"
+    "lint": "eslint lib/ test/ --quiet"
   },
   "nyc": {
     "check-coverage": true,
@@ -64,7 +63,7 @@
     "stryker-javascript-mutator": "^0.11.0",
     "stryker-mocha-framework": "^0.12.3",
     "stryker-mocha-runner": "^0.14.3",
-    "typescript": "^2.9.2"
+    "typescript": "^3.1.3"
   },
   "dependencies": {
     "ajv": "^6.1.1",
