@@ -23,7 +23,7 @@ export interface ElementChain extends
 	Timeout<ElementWithoutTimeout>, // timeout
 	ElementEvalModifiers<ElementWithoutEvalChain>,
 	SendTextModifier<ElementRepeatIntervalChain>, // sendText
-	SetTextModifier<ElementRepeatIntervalChain>, // setText
+	SetTextModifier<ElementEmptyChain>, // setText
 	Clickable<ElementRepeatIntervalChain>, // click
 	MoveToModifier<ElementEmptyChain> // moveTo
 {}

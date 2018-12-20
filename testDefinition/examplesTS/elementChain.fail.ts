@@ -17,3 +17,9 @@ el.matchesBrightScript('').timeout(1).not();
 el.matchBrightScript('').timeout(1).not();
 el.matchesRepo(PROP.OPACITY).not();
 el.matchesRepo(PROP.OPACITY).timeout(1).not();
+
+// set text
+el.setText('text').interval();
+el.setText(PROP.OPACITY).timeout();
+el.setText(PROP.OPACITY).count();
+el.setText(PROP.OPACITY).until();

@@ -397,21 +397,15 @@ describe('Element chain', () => {
 			isAssert: true,
 			setText: 'text',
 			selector: {apiId: 'apiId'},
-			repeat: 2,
-			interval: 2000,
-			until: 'testCondition',
 		}), {
 			type: 'testLine',
 			request: {
 				type: 'setText',
-				count: 2,
-				delay: 2000,
 				target: {
 					type: 'element',
 					apiId: 'apiId',
 				},
 				val: 'text',
-				condition: 'testCondition',
 			},
 		}, 'testLine setText until');
 		assert.deepStrictEqual(toJSON({
