@@ -39,8 +39,8 @@ el.sendText('text').toString();
 el.setText('text').toString();
 el.sendText('text').repeat(10).interval(2000).toString();
 el.sendText('text').repeat(10).interval(2000).toAssert();
-el.setText('text').repeat(10).interval(2000).toString();
-el.setText('text').repeat(10).interval(2000).toAssert();
+el.setText('text').toString();
+el.setText('text').toAssert();
 el.timeout(10).not();
 
 // Check if element's width and height match snapshot from element repo, top position as in repo +- 20px and custom background color
