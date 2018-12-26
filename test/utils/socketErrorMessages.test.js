@@ -312,6 +312,7 @@ describe('Socket error messages', () => {
 			],
 			[basePayload('invalidRepositoryReference', 'notExistingPlatform'), 'Element Element name has no defined identifying properties for this platform.'],
 			[basePayload('openAppOverrideFailed'), 'An error occurred while executing the "Open app override test".'],
+			[basePayload('invalidOpenAppOverrideReference'), 'Could not start execution, please check open app override setting. https://suite.st/docs/application/more-configuration-options/#open-app-override-test'],
 			[basePayload('Success'), 'Command executed successfully.'],
 			[basePayload('NoSuchElement'), 'Element Element name was not found.'],
 			[basePayload('NoSuchFrame'), 'Cannot switch to frame Element name.'],
