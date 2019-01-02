@@ -279,6 +279,10 @@ describe('Socket error messages', () => {
 				'Maximum amount of key presses 4 reached. Condition was not satisfied. Chain description.',
 			],
 			[basePayload('appNotRunning'), 'Application is not running.'],
+			[
+				set(lensPath(['response', 'executionError']), 'appNotRunning', basePayload()),
+				'Application is not running.',
+			],
 			[basePayload('bootstrapPageNotDetected'), 'App seems to have exited correctly but something went wrong when loading the Suitest channel autostart application.'],
 			[basePayload('wrongAppDetected'), 'App seems to have exited correctly, however another app has been opened.'],
 			[
@@ -370,7 +374,6 @@ describe('Socket error messages', () => {
 	});
 
 	it('should test getInfoErrorMessage', () => {
-
 		const msg1 = getInfoErrorMessage(
 			'message',
 			'prefix ',
