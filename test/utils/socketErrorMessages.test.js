@@ -308,14 +308,21 @@ describe('Socket error messages', () => {
 			[basePayload('invalidUrl'), 'Application could not be launched. Please verify you have provided URL for this configuration.'],
 			[basePayload('invalidRepositoryReference'), 'Chain description.'],
 			[
-				basePayload('invalidRepositoryReference', 'notExistingElement'),
-				'Element Element name was not found in repository.',
+				set(lensPath(['response', 'message', 'apiId']), 'apiId', basePayload('invalidRepositoryReference', 'notExistingElement')),
+				'Element apiId was not found in repository.',
 			],
 			[
-				set(lensPath(['response', 'message', 'property']), 'someProp', basePayload('invalidRepositoryReference', 'unknownProperty')),
-				'Element Element name does not support property "someProp".',
+				set(lensPath(['response', 'message']), {
+					property: 'someProp',
+					apiId: 'apiId',
+					code: 'unknownProperty',
+				}, basePayload('invalidRepositoryReference')),
+				'Element apiId does not support property "someProp".',
 			],
-			[basePayload('invalidRepositoryReference', 'notExistingPlatform'), 'Element Element name has no defined identifying properties for this platform.'],
+			[
+				set(lensPath(['response', 'message', 'apiId']), 'apiId', basePayload('invalidRepositoryReference', 'notExistingPlatform')),
+				'Element apiId has no defined identifying properties for this platform.',
+			],
 			[basePayload('openAppOverrideFailed'), 'An error occurred while executing the "Open app override test".'],
 			[basePayload('Success'), 'Command executed successfully.'],
 			[basePayload('NoSuchElement'), 'Element Element name was not found.'],
