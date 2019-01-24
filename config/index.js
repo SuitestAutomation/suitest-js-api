@@ -13,10 +13,11 @@ const {validate, validators} = require('../lib/validataion');
 const {invalidConfigObj} = require('../lib/texts');
 const {ENV_VARS} = require('../lib/mappings');
 const {pickNonNil} = require('../lib/utils/common');
+const {isWholePositiveNumber} = require('../lib/utils/stringUtils');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
 
-const configFields = ['logLevel', 'disallowCrashReports', 'continueOnFatalError', 'timestamp'];
+const configFields = ['logLevel', 'disallowCrashReports', 'continueOnFatalError', 'timestamp', 'defaultTimeout'];
 const launcherFields = [
 	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
@@ -30,6 +31,7 @@ const main = {
 	logLevel: logLevels.normal,
 	sentryDsn,
 	timestamp: timestamp.default,
+	defaultTimeout: 2002,
 	wsUrl: 'wss://the.suite.st/api/public/v2/socket',
 };
 
@@ -40,24 +42,25 @@ const test = {
 	logLevel: logLevels.debug,
 	sentryDsn,
 	timestamp: timestamp.default,
+	defaultTimeout: 2002,
 	wsUrl: 'ws://localhost:3000/',
 };
 
-Object.freeze(main);
-Object.freeze(test);
+ Object.freeze(main);
+ Object.freeze(test);
 
-const rcConfig = readRcConfig();
-const envConfig = pickConfigFieldsFromEnvVars(configFields);
+ const rcConfig = readRcConfig();
+ const envConfig = pickConfigFieldsFromEnvVars(configFields);
 
-const config = {
+ const config = {
 	...(global._suitestTesting ? test : main),
 	...validate(validators.CONFIGURE, pickNonNil(configFields, rcConfig), invalidConfigObj()), // extend with rc file
 	...envConfig, // extend with env vars
 };
 
-const launcherParams = pickNonNil(launcherFields, rcConfig);
+ const launcherParams = pickNonNil(launcherFields, rcConfig);
 
-/**
+ /**
  * Override config object
  * @param {Object} overrideObj
  */
@@ -99,8 +102,14 @@ function readRcConfig() {
  */
 function pickConfigFieldsFromEnvVars(configFields) {
 	return configFields.reduce((out, key) => {
+
 		if (ENV_VARS[key] in process.env) {
 			const val = process.env[ENV_VARS[key]];
+
+			if(isWholePositiveNumber(val)){
+				out[key] = parseInt(val);
+				return out;
+			}
 
 			switch (val) {
 				case 'true':
