@@ -31,7 +31,7 @@ const main = {
 	logLevel: logLevels.normal,
 	sentryDsn,
 	timestamp: timestamp.default,
-	defaultTimeout: 2002,
+	defaultTimeout: 2000,
 	wsUrl: 'wss://the.suite.st/api/public/v2/socket',
 };
 
@@ -42,7 +42,7 @@ const test = {
 	logLevel: logLevels.debug,
 	sentryDsn,
 	timestamp: timestamp.default,
-	defaultTimeout: 2002,
+	defaultTimeout: 2000,
 	wsUrl: 'ws://localhost:3000/',
 };
 
