@@ -17,3 +17,14 @@ el.matchesBrightScript('').timeout(1).not();
 el.matchBrightScript('').timeout(1).not();
 el.matchesRepo(PROP.OPACITY).not();
 el.matchesRepo(PROP.OPACITY).timeout(1).not();
+
+element('repo-id').matchesRepo([{
+    name: PROP.BG_COLOR,
+    val: '#F00', // invalid, value is always taken from repo. Use matches for this
+}]);
+element('repo-id').matchesRepo({
+    name: PROP.BG_COLOR,
+    val: '#F00', // invalid, value is always taken from repo. Use matches for this
+});
+
+

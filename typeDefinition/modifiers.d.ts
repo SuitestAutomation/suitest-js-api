@@ -107,18 +107,28 @@ export interface WillMadeModifier<T> {
 type RequestPropName = symbol | string;
 type RequestPropValue =  string | number;
 type RequestPropComparator = string;
+type RequestItem = {
+	name: RequestPropName,
+	val: RequestPropValue,
+	type?: RequestPropComparator
+}
 
 export interface RequestMatchesModifier<T> {
-	requestMatches(request: object|object[]): T;
+	requestMatches(request: RequestItem | (RequestItem | object)[] | object): T;
 	requestMatches(name: RequestPropName, value: RequestPropValue, type?: RequestPropComparator): T;
 }
 
 type ResponsePropName = symbol | string;
 type ResponsePropValue = string | number;
 type ResponsePropComparator = string;
+type ResponseMatchItem = {
+	name: ResponsePropName,
+	val: ResponsePropValue,
+	type?: ResponsePropComparator
+}
 
 export interface ResponseMatchesModifier<T> {
-	responseMatches(response: object|object[]): T;
+	responseMatches(response: ResponseMatchItem | (ResponseMatchItem | object)[] | object): T;
 	responseMatches(name: ResponsePropName, value: ResponsePropValue, type?: ResponsePropComparator): T;
 }
 
@@ -162,30 +172,28 @@ export type PropertyObjectDefinition = {
 };
 
 export type PropertyRepoObjectDefinition = {
+	name: PropNameType,
 	type?: string,
 	deviation?: number
 };
 
-type PropertyDefinitionType = Array<string | PropertyObjectDefinition>;
+type MatchesPropertiesItems = Array<string | PropertyObjectDefinition | object>;
+type MatchesRepoPropertiesItems = (string | PropertyRepoObjectDefinition)[]
 type PropNameType = string;
 
 
 export interface ElementMatchModifiers<T> {
 	match(propertyName: PropNameType, propertyValue?: PropertyValue, comparator?: string, accuracy?: number): T;
-	match(propertyDefinition: PropertyObjectDefinition): T;
-	match(propertyDefinition: PropertyDefinitionType): T;
+	match(propertyDefinition: PropertyObjectDefinition | MatchesPropertiesItems | object ): T;
 
 	matches(propertyName: PropNameType, propertyValue?: PropertyValue, comparator?: string, accuracy?: number): T;
-	matches(propertyDefinition: PropertyObjectDefinition): T;
-	matches(propertyDefinition: PropertyDefinitionType): T;
+	matches(propertyDefinition: PropertyObjectDefinition | MatchesPropertiesItems | object): T;
 
 	matchRepo(propertyName: PropNameType, comparator?: string, accuracy?: number): T;
-	matchRepo(propertyDefinition: PropertyRepoObjectDefinition): T;
-	matchRepo(propertyDefinition: PropertyDefinitionType): T;
+	matchRepo(propertyDefinition: PropertyRepoObjectDefinition | MatchesRepoPropertiesItems): T;
 
 	matchesRepo(propertyName: PropNameType, comparator?: string, accuracy?: number): T;
-	matchesRepo(propertyDefinition: PropertyRepoObjectDefinition): T;
-	matchesRepo(propertyDefinition: PropertyDefinitionType): T;
+	matchesRepo(propertyDefinition: PropertyRepoObjectDefinition | MatchesRepoPropertiesItems): T;
 }
 
 export interface HasExitedModifiers<T> {
