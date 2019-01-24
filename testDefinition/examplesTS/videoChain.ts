@@ -42,6 +42,9 @@ video().isPaused();
 video().isStopped();
 video().isPlaying();
 video().isStopped().toAssert();
+video().toAssert().isStopped();
+video().isStopped().timeout(10);
+video().timeout(1).isStopped();
 
 async function videoTest() {
 	await video().timeout(10).not();
