@@ -38,6 +38,10 @@ video().should.it.with.times;
 video().with.should.it.times;
 video().times.should.with.it;
 
+video().isPaused();
+video().isStopped();
+video().isStopped().toAssert();
+
 async function videoTest() {
 	await video().timeout(10).not();
 	// Check if video's width and height match snapshot from video repo, top position as in repo +- 20px and custom background color
