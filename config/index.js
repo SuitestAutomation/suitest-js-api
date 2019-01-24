@@ -87,7 +87,7 @@ const launcherParams = pickNonNil(launcherFields, rcConfig);
  * @param {Object} overrideObj
  */
 function override(overrideObj = {}) {
-	const _overrideObj = pickNonNil(configFields.map((name)=>name), overrideObj);
+	const _overrideObj = pickNonNil(configFields.map(({name})=>name), overrideObj);
 
 	validate(validators.CONFIGURE, _overrideObj, invalidConfigObj());
 	extend(_overrideObj);
