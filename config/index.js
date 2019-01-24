@@ -13,7 +13,6 @@ const {validate, validators} = require('../lib/validataion');
 const {invalidConfigObj} = require('../lib/texts');
 const {ENV_VARS} = require('../lib/mappings');
 const {pickNonNil} = require('../lib/utils/common');
-const {isWholePositiveNumber} = require('../lib/utils/stringUtils');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
 
