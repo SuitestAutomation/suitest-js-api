@@ -40,6 +40,7 @@ video().times.should.with.it;
 
 video().isPaused();
 video().isStopped();
+video().isPlaying();
 video().isStopped().toAssert();
 
 async function videoTest() {
