@@ -46,21 +46,21 @@ const test = {
 	wsUrl: 'ws://localhost:3000/',
 };
 
- Object.freeze(main);
- Object.freeze(test);
+Object.freeze(main);
+Object.freeze(test);
 
- const rcConfig = readRcConfig();
- const envConfig = pickConfigFieldsFromEnvVars(configFields);
+const rcConfig = readRcConfig();
+const envConfig = pickConfigFieldsFromEnvVars(configFields);
 
- const config = {
+const config = {
 	...(global._suitestTesting ? test : main),
 	...validate(validators.CONFIGURE, pickNonNil(configFields, rcConfig), invalidConfigObj()), // extend with rc file
 	...envConfig, // extend with env vars
 };
 
- const launcherParams = pickNonNil(launcherFields, rcConfig);
+const launcherParams = pickNonNil(launcherFields, rcConfig);
 
- /**
+/**
  * Override config object
  * @param {Object} overrideObj
  */
