@@ -3,5 +3,5 @@ import {VideoStateModifiers} from './modifiers';
 
 export interface VideoChain extends
 	ElementChain,
-	VideoStateModifiers<VideoChain>
+	VideoStateModifiers<ElementChain>
 {}
