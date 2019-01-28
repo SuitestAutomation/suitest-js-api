@@ -115,6 +115,11 @@ el.matches([
 		name: PROP.FONT_URI,
 		val: 'string',
 	},
+	{
+		name: PROP.URL,
+		type: COMP.END,
+		val: 'string',
+	},
 ]);
 
 // With assert
