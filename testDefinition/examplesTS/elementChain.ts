@@ -3,6 +3,11 @@ import * as suitest from '../../index';
 const {element, PROP, VALUE, COMP, VISIBILITY_STATE} = suitest;
 
 const el = element({css: '.my-element'});
+// const brsCodeExample = (
+// `function test() as Boolean
+//     return true
+// end function`
+// );
 
 el.click();
 el.exist();
@@ -17,6 +22,8 @@ el.then(e => e && e.id);
 el.doesNot().exist();
 el.timeout(1).doesNot().exist();
 el.doesNot().exist().timeout(1);
+// el.matchesBrightScript('');
+// el.matchBrightScript(brsCodeExample);
 el.abandon();
 el.matchesJS(() => true);
 el.matchJS('() => true');
@@ -106,6 +113,11 @@ el.matches([
 	},
 	{
 		name: PROP.FONT_URI,
+		val: 'string',
+	},
+	{
+		name: PROP.URL,
+		type: COMP.END,
 		val: 'string',
 	},
 ]);
