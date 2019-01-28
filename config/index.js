@@ -15,6 +15,7 @@ const {ENV_VARS} = require('../lib/mappings');
 const {pickNonNil} = require('../lib/utils/common');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
+const DEFAULT_TIMEOUT = 2000;
 
 const configFields = [
 	{
@@ -52,7 +53,7 @@ const main = {
 	logLevel: logLevels.normal,
 	sentryDsn,
 	timestamp: timestamp.default,
-	defaultTimeout: 2000,
+	defaultTimeout: DEFAULT_TIMEOUT,
 	wsUrl: 'wss://the.suite.st/api/public/v2/socket',
 };
 
@@ -63,7 +64,7 @@ const test = {
 	logLevel: logLevels.debug,
 	sentryDsn,
 	timestamp: timestamp.default,
-	defaultTimeout: 2000,
+	defaultTimeout: DEFAULT_TIMEOUT,
 	wsUrl: 'ws://localhost:3000/',
 };
 
