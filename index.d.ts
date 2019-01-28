@@ -208,6 +208,7 @@ declare namespace suitest {
 		logLevel?: 'silent'|'normal'|'verbose'|'debug';
 		disallowCrashReports?: boolean;
 		continueOnFatalError?: boolean;
+		defaultTimeout?: number;
 	}
 
 	interface ResponseError {

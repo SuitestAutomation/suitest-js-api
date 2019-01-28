@@ -15,8 +15,31 @@ const {ENV_VARS} = require('../lib/mappings');
 const {pickNonNil} = require('../lib/utils/common');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
+const DEFAULT_TIMEOUT = 2000;
 
-const configFields = ['logLevel', 'disallowCrashReports', 'continueOnFatalError', 'timestamp'];
+const configFields = [
+	{
+		name: 'logLevel',
+		type: 'string'
+	},
+	{
+		name: 'disallowCrashReports',
+		type: 'bool'
+	},
+	{
+		name: 'continueOnFatalError',
+		type: 'bool'
+	},
+	{
+		name: 'timestamp',
+		type: 'string'
+	},
+	{
+		name: 'defaultTimeout',
+		type: 'number'
+	}
+];
+
 const launcherFields = [
 	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
@@ -30,6 +53,7 @@ const main = {
 	logLevel: logLevels.normal,
 	sentryDsn,
 	timestamp: timestamp.default,
+	defaultTimeout: DEFAULT_TIMEOUT,
 	wsUrl: 'wss://the.suite.st/api/public/v2/socket',
 };
 
@@ -40,6 +64,7 @@ const test = {
 	logLevel: logLevels.debug,
 	sentryDsn,
 	timestamp: timestamp.default,
+	defaultTimeout: DEFAULT_TIMEOUT,
 	wsUrl: 'ws://localhost:3000/',
 };
 
@@ -51,7 +76,7 @@ const envConfig = pickConfigFieldsFromEnvVars(configFields);
 
 const config = {
 	...(global._suitestTesting ? test : main),
-	...validate(validators.CONFIGURE, pickNonNil(configFields, rcConfig), invalidConfigObj()), // extend with rc file
+	...validate(validators.CONFIGURE, pickNonNil(configFields.map(({name}) => name), rcConfig), invalidConfigObj()), // extend with rc file
 	...envConfig, // extend with env vars
 };
 
@@ -62,7 +87,7 @@ const launcherParams = pickNonNil(launcherFields, rcConfig);
  * @param {Object} overrideObj
  */
 function override(overrideObj = {}) {
-	const _overrideObj = pickNonNil(configFields, overrideObj);
+	const _overrideObj = pickNonNil(configFields.map(({name})=>name), overrideObj);
 
 	validate(validators.CONFIGURE, _overrideObj, invalidConfigObj());
 	extend(_overrideObj);
@@ -98,19 +123,20 @@ function readRcConfig() {
  * @returns {Object}
  */
 function pickConfigFieldsFromEnvVars(configFields) {
-	return configFields.reduce((out, key) => {
-		if (ENV_VARS[key] in process.env) {
-			const val = process.env[ENV_VARS[key]];
+	return configFields.reduce((out, {name, type}) => {
 
-			switch (val) {
-				case 'true':
-					out[key] = true;
+		if (ENV_VARS[name] in process.env) {
+			const val = process.env[ENV_VARS[name]];
+
+			switch (type) {
+				case 'bool':
+					out[name] = (val === 'true');
 					break;
-				case 'false':
-					out[key] = false;
+				case 'number':
+					out[name] = parseInt(val);
 					break;
 				default:
-					out[key] = val;
+					out[name] = val;
 					break;
 			}
 		}
