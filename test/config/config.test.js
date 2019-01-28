@@ -17,7 +17,28 @@ describe('config', () => {
 		process.env[envVars.SUITEST_CONFIG_CONTINUE_ON_FATAL_ERROR] = 'true';
 
 		const configFields = config
-			.pickConfigFieldsFromEnvVars(['logLevel', 'disallowCrashReports', 'continueOnFatalError']);
+			.pickConfigFieldsFromEnvVars([
+				{
+					name: 'logLevel',
+					type: 'string'
+				},
+				{
+					name: 'disallowCrashReports',
+					type: 'bool'
+				},
+				{
+					name: 'continueOnFatalError',
+					type: 'bool'
+				},
+				{
+					name: 'timestamp',
+					type: 'string'
+				},
+				{
+					name: 'defaultTimeout',
+					type: 'number'
+				}
+			]);
 
 		assert.deepEqual(configFields, {
 			logLevel: 'verbose',

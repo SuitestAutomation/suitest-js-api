@@ -449,6 +449,11 @@ describe('Element chain', () => {
 						val: VISIBILITY_STATE.VISIBLE,
 						type: PROP_COMPARATOR.EQUAL,
 					},
+					{
+						name: ELEMENT_PROP.URL,
+						val: 'string',
+						type: PROP_COMPARATOR.END,
+					},
 				],
 			},
 			selector: {apiId: 'apiId'},
@@ -482,6 +487,11 @@ describe('Element chain', () => {
 							property: 'visibility',
 							val: 'visible',
 							type: '=',
+						},
+						{
+							property: 'url',
+							val: 'string',
+							type: '$',
 						},
 					],
 					type: 'has',
