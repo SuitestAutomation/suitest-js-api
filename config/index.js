@@ -44,14 +44,13 @@ const configFields = [
 	},
 ];
 
-const configFieldNames = configFields.map(({name}) => name);
-
 const launcherFields = [
 	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
 	'logDir', 'timestamp', 'config', // launcher common
 ];
-const allFields = [...configFieldNames, ...launcherFields];
+
+const allFields = [...configFields.map(({name}) => name), ...launcherFields];
 
 const main = {
 	apiUrl: 'https://the.suite.st/api/public/v2',
