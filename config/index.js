@@ -47,7 +47,7 @@ const configFields = [
 const launcherFields = [
 	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
-	'logDir', 'timestamp', 'config', // launcher common
+	'logDir', 'timestamp', 'configFile', // launcher common
 ];
 const allFields = [...configFields.map(({name}) => name), ...launcherFields];
 
