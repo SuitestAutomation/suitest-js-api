@@ -205,7 +205,7 @@ declare namespace suitest {
 	}
 
 	interface ConfigureOptions {
-		logLevel?: 'silent'|'normal'|'verbose'|'debug';
+		logLevel?: 'silent'|'normal'|'verbose'|'debug'|'silly';
 		disallowCrashReports?: boolean;
 		continueOnFatalError?: boolean;
 		defaultTimeout?: number;
