@@ -54,15 +54,20 @@ describe('logger util', () => {
 	});
 
 	it('should log operation type', () => {
-		sinon.stub(timestamp, 'format').returns('timestamp');
+		sinon.stub(timestamp, 'formatDate').returns('timestamp');
 
-		logger.log('|A|', 'operation');
+		try {
+			logger.log('|A|', 'operation');
 
-		assert.equal(
-			log.firstCall.args[0],
-			'\u001b[90mtimestamp Launcher \u001b[39m\u001b[36m\u001b[1mA\u001b[22m\u001b[39m \u001b[37moperation\u001b[39m',
-			'In plain mode opType should be merged with line'
-		);
+			assert.equal(
+				log.firstCall.args[0],
+				'\u001b[90mtimestamp Launcher \u001b[39m\u001b[36m\u001b[1mA' +
+				'\u001b[22m\u001b[39m \u001b[37moperation\u001b[39m',
+				'In plain mode opType should be merged with line'
+			);
+		} finally {
+			timestamp.formatDate.restore();
+		}
 	});
 
 	it('should display the name of the device in the left rail', () => {

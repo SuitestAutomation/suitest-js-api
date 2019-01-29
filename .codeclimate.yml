@@ -34,3 +34,9 @@ plugins:
   eslint:
     enabled: true
     channel: "eslint-4"
+  duplication:
+    enabled: true
+    config:
+      languages:
+        javascript:
+          mass_threshold: 75
