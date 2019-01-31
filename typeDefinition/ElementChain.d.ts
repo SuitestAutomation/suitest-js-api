@@ -2,6 +2,7 @@ import {
 	AbstractChain,
 	Negatable,
 	MatchJSModifiers,
+	// MatchBrightScriptModifiers,
 	ExistsModifiers,
 	ElementMatchModifiers,
 	Timeout,
@@ -13,6 +14,7 @@ import {
 	BaseChain,
 	UntilModifier,
 	VisibleModifier,
+	VideoStateModifiers,
 } from './modifiers';
 import {ElementProps} from "./constants/ElementProps";
 
@@ -24,7 +26,7 @@ export interface ElementChain extends
 	SendTextModifier<ElementRepeatIntervalChain>, // sendText
 	Clickable<ElementRepeatIntervalChain>, // click
 	MoveToModifier<ElementEmptyChain>, // moveTo
-	VisibleModifier<ElementWithoutEvalChain> // moveTo
+	VisibleModifier<ElementWithoutEvalChain>
 {}
 
 // -matchers +timeout +negation
@@ -90,7 +92,9 @@ interface ElementRepeatChain extends
 {}
 
 interface ElementEvalModifiers<T> extends
+	VideoStateModifiers<T>,
 	MatchJSModifiers<T>,
+	// MatchBrightScriptModifiers<T>,
 	ExistsModifiers<T>,
 	ElementMatchModifiers<T>
 {}

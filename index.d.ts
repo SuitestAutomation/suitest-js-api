@@ -5,7 +5,9 @@ import {CookieChain} from './typeDefinition/CookieChain';
 import {ElementChain} from './typeDefinition/ElementChain';
 import * as elementTypes from './typeDefinition/constants/Element';
 import {ExecuteCommandChain} from './typeDefinition/ExecuteCommandChain';
+// import {ExecuteBrightScriptChain} from './typeDefinition/ExecuteBrightScriptChain';
 import {JsExpressionChain} from './typeDefinition/JavascriptExpression';
+// import {BrightScriptExpressionChain} from './typeDefinition/BrightScriptExpression';
 import {OpenAppChain} from './typeDefinition/OpenAppChain';
 import {NetworkRequestChain} from './typeDefinition/NetworkRequest';
 import {OpenUrlChain} from './typeDefinition/OpenUrl';
@@ -56,6 +58,8 @@ declare namespace suitest {
 		executeCommand(jsCode: Function): ExecuteCommandChain;
 		jsExpression(expression: string): JsExpressionChain;
 		jsExpression(expression: Function): JsExpressionChain;
+		// executeBrightScript(brsCode: string): ExecuteBrightScriptChain;
+		// brightScriptExpression(expression: string): BrightScriptExpressionChain;
 		openApp(relativeUrl?: string): OpenAppChain;
 		networkRequest(): NetworkRequestChain;
 		openUrl(absoluteUrl: string): OpenUrlChain;
@@ -96,12 +100,14 @@ declare namespace suitest {
 		application(): ApplicationChain;
 		clearAppData(): ClearAppDataChain;
 		cookie(cookieName: string): CookieChain;
-		element(elementSelector: ElementSelector): ElementChain;
+		element(elementSelector: ElementSelector | string): ElementChain;
 		video(): VideoChain;
 		executeCommand(jsCode: string): ExecuteCommandChain;
 		executeCommand(jsCode: Function): ExecuteCommandChain;
 		jsExpression(expression: string): JsExpressionChain;
 		jsExpression(expression: Function): JsExpressionChain;
+		// executeBrightScript(brsCode: string): ExecuteBrightScriptChain;
+		// brightScriptExpression(expression: string): BrightScriptExpressionChain;
 		openApp(relativeUrl?: string): OpenAppChain;
 		networkRequest(): NetworkRequestChain;
 		openUrl(absoluteUrl: string): OpenUrlChain;
@@ -199,9 +205,10 @@ declare namespace suitest {
 	}
 
 	interface ConfigureOptions {
-		logLevel?: 'silent'|'normal'|'verbose'|'debug';
+		logLevel?: 'silent'|'normal'|'verbose'|'debug'|'silly';
 		disallowCrashReports?: boolean;
 		continueOnFatalError?: boolean;
+		defaultTimeout?: number;
 	}
 
 	interface ResponseError {

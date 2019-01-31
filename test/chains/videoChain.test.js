@@ -25,6 +25,11 @@ describe('Video chain', () => {
 		assert.strictEqual(typeof chain.matchesRepo, 'function');
 		assert.strictEqual(typeof chain.matchJS, 'function');
 		assert.strictEqual(typeof chain.matchesJS, 'function');
+		assert.strictEqual(typeof chain.isPlaying, 'function');
+		assert.strictEqual(typeof chain.isStopped, 'function');
+		assert.strictEqual(typeof chain.isPaused, 'function');
+		// assert.strictEqual(typeof chain.matchBrightScript, 'function');
+		// assert.strictEqual(typeof chain.matchesBrightScript, 'function');
 		assert.strictEqual(typeof chain.timeout, 'function');
 
 		assert.strictEqual(chain.with, chain);
@@ -45,6 +50,11 @@ describe('Video chain', () => {
 		assert.strictEqual(typeof chain.matchesRepo, 'undefined');
 		assert.strictEqual(typeof chain.matchJS, 'undefined');
 		assert.strictEqual(typeof chain.matchesJS, 'undefined');
+		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.isPlaying, 'undefined');
+		assert.strictEqual(typeof chain.isPaused, 'undefined');
+		assert.strictEqual(typeof chain.isStopped, 'undefined');
 	});
 
 	it('should have only allowed modifiers after matchJS is applied', () => {
@@ -75,6 +85,10 @@ describe('Video chain', () => {
 			video().matchesJS('function(el){return false}').toString(),
 			'Checking if "video" matches JS:\nfunction(el){return false}'
 		);
+		// assert.equal(
+		// 	video().matchesBrightScript('function(el){return false}').toString(),
+		// 	'Checking if "video" matches BrightScript:\nfunction(el){return false}'
+		// );
 		assert.equal(
 			video().matches(ELEMENT_PROP.ID, 'someId').toString(),
 			'Checking if "video" matches:\n' +

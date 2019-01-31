@@ -13,6 +13,7 @@ export type ElementProps = {
 	id:                      string,
 	class:                   string,
 	href:                    string,
+	url:                     string,
 	image:                   string,
 	text:                    string,
 	videoState:              string,

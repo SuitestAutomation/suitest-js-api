@@ -50,6 +50,12 @@ export interface MoveToModifier<T> {
 	moveTo(): T;
 }
 
+export interface VideoStateModifiers<T> {
+	isPlaying(): T;
+	isPaused(): T;
+	isStopped(): T;
+}
+
 export interface SendTextModifier<T> {
 	sendText(text: string): T
 }
@@ -83,6 +89,12 @@ export type JSExpression = ((value: any) => boolean) | string;
 export interface MatchJSModifiers<T> {
 	matchJS(value: JSExpression): T;
 	matchesJS(value: JSExpression): T;
+}
+
+export type BrightScriptExpression = string;
+export interface MatchBrightScriptModifiers<T> {
+	matchBrightScript(value: BrightScriptExpression): T;
+	matchesBrightScript(value: BrightScriptExpression): T;
 }
 
 export interface ExistsModifiers<T> {

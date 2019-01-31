@@ -3,6 +3,11 @@ import * as suitest from '../../index';
 const {element, PROP, VALUE, COMP, VISIBILITY_STATE} = suitest;
 
 const el = element({css: '.my-element'});
+// const brsCodeExample = (
+// `function test() as Boolean
+//     return true
+// end function`
+// );
 
 el.click();
 el.exist();
@@ -18,6 +23,8 @@ el.then(e => e && e.id);
 el.doesNot().exist();
 el.timeout(1).doesNot().exist();
 el.doesNot().exist().timeout(1);
+// el.matchesBrightScript('');
+// el.matchBrightScript(brsCodeExample);
 el.abandon();
 el.matchesJS(() => true);
 el.matchJS('() => true');
@@ -32,6 +39,9 @@ el.sendText('text').toString();
 el.sendText('text').repeat(10).interval(2000).toString();
 el.sendText('text').repeat(10).interval(2000).toAssert();
 el.timeout(10).not();
+el.isPlaying();
+el.isPaused();
+el.isStopped();
 
 // Check if element's width and height match snapshot from element repo, top position as in repo +- 20px and custom background color
 const elem = element('repo-id');
@@ -109,4 +119,12 @@ el.matches([
 		name: PROP.FONT_URI,
 		val: 'string',
 	},
+	{
+		name: PROP.URL,
+		type: COMP.END,
+		val: 'string',
+	},
 ]);
+
+// With assert
+suitest.assert.element('api-id');

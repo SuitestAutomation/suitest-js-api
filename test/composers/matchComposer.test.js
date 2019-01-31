@@ -35,7 +35,6 @@ describe('Match Composer', () => {
 	});
 
 	it('should accept single property spread to arguments', () => {
-		// suitest.element('some name')
 		const data = {selector: {apiId: 'some name'}};
 		const chain = {};
 		const makeChain = sinon.spy();
@@ -66,6 +65,22 @@ describe('Match Composer', () => {
 					{
 						name: ELEMENT_PROP.HEIGHT,
 						val: 500,
+						type: PROP_COMPARATOR.EQUAL,
+						deviation: undefined,
+					},
+				],
+			},
+			selector: {apiId: 'some name'},
+		});
+
+		chain.match(ELEMENT_PROP.URL, 'some string');
+		assert.deepStrictEqual(makeChain.lastCall.args[0], {
+			comparator: {
+				type: SUBJ_COMPARATOR.MATCH,
+				props: [
+					{
+						name: ELEMENT_PROP.URL,
+						val: 'some string',
 						type: PROP_COMPARATOR.EQUAL,
 						deviation: undefined,
 					},
@@ -129,6 +144,7 @@ describe('Match Composer', () => {
 		testInputErrorSync(chain.match, [ELEMENT_PROP.LEFT, 500, PROP_COMPARATOR.APPROX, '20']);
 		testInputErrorSync(chain.match, [ELEMENT_PROP.LEFT, '10']);
 		testInputErrorSync(chain.match, [ELEMENT_PROP.BG_COLOR, 10]);
+		testInputErrorSync(chain.match, [ELEMENT_PROP.URL, 10]);
 		testInputErrorSync(chain.match, [ELEMENT_PROP.BG_COLOR, VALUE.REPO]);
 		testInputErrorSync(chain.match, [{
 			name: ELEMENT_PROP.BG_COLOR,

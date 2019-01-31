@@ -3,6 +3,12 @@
 import * as suitest from '../../index';
 const {video} = suitest;
 
+// const brsCodeExample = (
+// `function test() as Boolean
+//     return true
+// end function`
+// );
+
 video().timeout(10);
 video().abandon();
 video().matchesJS(() => true);
@@ -18,6 +24,7 @@ video().timeout(10);
 video().toString();
 video().exists().toString();
 video().matchesJS('').toString();
+// video().matchesBrightScript(brsCodeExample).toString();
 video().matches(suitest.PROP.ID).toString();
 video().click().toString();
 video().click().repeat(10).interval(2000).toString();
@@ -31,6 +38,14 @@ video().it.should.with.times;
 video().should.it.with.times;
 video().with.should.it.times;
 video().times.should.with.it;
+
+video().isPaused();
+video().isStopped();
+video().isPlaying();
+video().isStopped().toAssert();
+video().toAssert().isStopped();
+video().isStopped().timeout(10);
+video().timeout(1).isStopped();
 
 async function videoTest() {
 	await video().timeout(10).not();

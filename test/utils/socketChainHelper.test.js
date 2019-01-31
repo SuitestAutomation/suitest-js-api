@@ -80,6 +80,10 @@ describe('socket chain helpers', () => {
 		assert.throws(() => helpers.processServerResponse(emptyString)({
 			result: 'error',
 		}, {stack: ''}), Error, 'testLine fail');
+		// execution error
+		assert.throws(() => helpers.processServerResponse(emptyString)({
+			executionError: 'appNotRunning',
+		}, {stack: ''}), Error, 'execution error');
 
 		assert.throws(
 			() => helpers.processServerResponse(elementToString)({
