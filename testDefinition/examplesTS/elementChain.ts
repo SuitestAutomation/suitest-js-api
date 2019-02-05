@@ -42,6 +42,9 @@ el.sendText('text').repeat(10).interval(2000).toAssert();
 el.setText('text').toString();
 el.setText('text').toAssert();
 el.timeout(10).not();
+el.isPlaying();
+el.isPaused();
+el.isStopped();
 
 // Check if element's width and height match snapshot from element repo, top position as in repo +- 20px and custom background color
 const elem = element('repo-id');
@@ -119,4 +122,12 @@ el.matches([
 		name: PROP.FONT_URI,
 		val: 'string',
 	},
+	{
+		name: PROP.URL,
+		type: COMP.END,
+		val: 'string',
+	},
 ]);
+
+// With assert
+suitest.assert.element('api-id');

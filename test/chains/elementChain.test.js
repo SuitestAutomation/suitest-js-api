@@ -39,6 +39,9 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.moveTo, 'function');
 		assert.strictEqual(typeof chain.sendText, 'function');
 		assert.strictEqual(typeof chain.setText, 'function');
+		assert.strictEqual(typeof chain.isPlaying, 'function');
+		assert.strictEqual(typeof chain.isStopped, 'function');
+		assert.strictEqual(typeof chain.isPaused, 'function');
 
 		assert.strictEqual(chain.with, chain);
 		assert.strictEqual(chain.it, chain);
@@ -63,6 +66,9 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
 		assert.strictEqual(typeof chain.setText, 'undefined');
+		assert.strictEqual(typeof chain.isPlaying, 'undefined');
+		assert.strictEqual(typeof chain.isPaused, 'undefined');
+		assert.strictEqual(typeof chain.isStopped, 'undefined');
 	});
 
 	it('should have only allowed modifiers after click is applied', () => {
@@ -87,6 +93,9 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
 		assert.strictEqual(typeof chain.isNot, 'undefined');
+		assert.strictEqual(typeof chain.isPlaying, 'undefined');
+		assert.strictEqual(typeof chain.isStopped, 'undefined');
+		assert.strictEqual(typeof chain.isPaused, 'undefined');
 	});
 
 	it('should have only allowed modifiers after moveTo is applied', () => {
@@ -111,6 +120,9 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
 		assert.strictEqual(typeof chain.isNot, 'undefined');
+		assert.strictEqual(typeof chain.isPaused, 'undefined');
+		assert.strictEqual(typeof chain.isPlaying, 'undefined');
+		assert.strictEqual(typeof chain.isStopped, 'undefined');
 	});
 
 	it('should have only allowed modifiers after sendText is applied', () => {
@@ -159,6 +171,9 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
 		assert.strictEqual(typeof chain.isNot, 'undefined');
+		assert.strictEqual(typeof chain.isPlaying, 'undefined');
+		assert.strictEqual(typeof chain.isStopped, 'undefined');
+		assert.strictEqual(typeof chain.isPaused, 'undefined');
 	});
 
 	it('should have only allowed modifiers after matchJS is applied', () => {
@@ -501,6 +516,11 @@ describe('Element chain', () => {
 						val: VISIBILITY_STATE.VISIBLE,
 						type: PROP_COMPARATOR.EQUAL,
 					},
+					{
+						name: ELEMENT_PROP.URL,
+						val: 'string',
+						type: PROP_COMPARATOR.END,
+					},
 				],
 			},
 			selector: {apiId: 'apiId'},
@@ -534,6 +554,11 @@ describe('Element chain', () => {
 							property: 'visibility',
 							val: 'visible',
 							type: '=',
+						},
+						{
+							property: 'url',
+							val: 'string',
+							type: '$',
 						},
 					],
 					type: 'has',
