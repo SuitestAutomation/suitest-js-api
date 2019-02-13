@@ -50,6 +50,12 @@ export interface MoveToModifier<T> {
 	moveTo(): T;
 }
 
+export interface VideoStateModifiers<T> {
+	isPlaying(): T;
+	isPaused(): T;
+	isStopped(): T;
+}
+
 export interface SendTextModifier<T> {
 	sendText(text: string): T
 }

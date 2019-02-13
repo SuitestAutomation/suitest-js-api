@@ -13,6 +13,7 @@ import {
 	Intervalable,
 	BaseChain,
 	UntilModifier,
+	VideoStateModifiers,
 } from './modifiers';
 import {ElementProps} from "./constants/ElementProps";
 
@@ -89,6 +90,7 @@ interface ElementRepeatChain extends
 {}
 
 interface ElementEvalModifiers<T> extends
+	VideoStateModifiers<T>,
 	MatchJSModifiers<T>,
 	// MatchBrightScriptModifiers<T>,
 	ExistsModifiers<T>,
