@@ -119,6 +119,18 @@ describe('Socket error messages', () => {
 			[basePayload('syntaxError', 'wrongUrl'), 'This does not look like a valid URL. Chain description.'],
 			[basePayload('invalidInput'), 'Test command received invalid input. Chain description.'],
 			[basePayload('invalidInput', 'lineTypeNotSupported'), 'This test command is not supported by the current app configuration. Chain description.'],
+			[
+				set(lensPath(['chainData']), {
+					isClick: true,
+				}, basePayload('invalidInput', 'elementNotSupported')),
+				'Chain description. .click() is unsupported by this element.',
+			],
+			[
+				set(lensPath(['chainData']), {
+					setText: true,
+				}, basePayload('invalidInput', 'elementNotSupported')),
+				'Chain description. .setText() is unsupported by this element.',
+			],
 			[basePayload('ActionNotAvailable'), 'This test command is not supported by the current app configuration. Chain description.'],
 			[
 				set(lensPath(['chainData']), {
