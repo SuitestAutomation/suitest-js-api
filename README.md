@@ -44,6 +44,7 @@ etc.
 - Microsoft Xbox One console
 - Locally installed Chrome, Firefox and Edge
 - Apple TV
+- Roku
 
 Suitest supports automating end-to-end testing of:
 
@@ -54,6 +55,7 @@ Suitest supports automating end-to-end testing of:
 - Android TV apps
 - tvOS apps
 - Xbox One apps
+- Roku apps
 - Traditional websites and web apps for desktop browsers.
 
 ## Contributing
