@@ -46,6 +46,10 @@ describe('suitest typescripts declarations tests', () => {
 			'Property \'not\' does not exist on type \'ElementNegationChain\'.',
 			'Property \'not\' does not exist on type \'ElementWithoutEvalChain\'.',
 			'Property \'not\' does not exist on type \'ElementNegationChain\'.',
+			'Property \'interval\' does not exist on type \'ElementEmptyChain\'.',
+			'Property \'timeout\' does not exist on type \'ElementEmptyChain\'.',
+			'Property \'count\' does not exist on type \'ElementEmptyChain\'.',
+			'Property \'until\' does not exist on type \'ElementEmptyChain\'.',
 		];
 
 		return expectedErrors.map(error => {
@@ -74,7 +78,7 @@ describe('suitest typescripts declarations tests', () => {
 	});
 
 	// should compile files with error
-	['networkRequestChain.fail', 'elementChain.fail'].forEach(fileName => {
+	['networkRequestChain.fail', 'elementChain.fail', 'videoChain.fail'].forEach(fileName => {
 		it(`should not compile example ${fileName} chain`, (done) => {
 			assert.ok(
 				getDiagnostics(fileName).length > 0,

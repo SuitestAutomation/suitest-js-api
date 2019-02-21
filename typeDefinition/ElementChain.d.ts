@@ -8,6 +8,7 @@ import {
 	Timeout,
 	Clickable,
 	SendTextModifier,
+	SetTextModifier,
 	MoveToModifier,
 	Repeatable,
 	Intervalable,
@@ -23,6 +24,7 @@ export interface ElementChain extends
 	Timeout<ElementWithoutTimeout>, // timeout
 	ElementEvalModifiers<ElementWithoutEvalChain>,
 	SendTextModifier<ElementRepeatIntervalChain>, // sendText
+	SetTextModifier<ElementEmptyChain>, // setText
 	Clickable<ElementRepeatIntervalChain>, // click
 	MoveToModifier<ElementEmptyChain> // moveTo
 {}
