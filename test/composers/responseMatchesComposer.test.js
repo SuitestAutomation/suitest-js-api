@@ -8,7 +8,7 @@ const {
 	PROP_COMPARATOR,
 } = require('../../lib/constants/comparator');
 
-describe('Network Request Match Composer', () => {
+describe('Network Response Match Composer', () => {
 	it('should provide .requestMatch and .requestMatches methods', () => {
 		const data = {};
 		const chain = {};
@@ -137,6 +137,7 @@ describe('Network Request Match Composer', () => {
 		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.STATUS, 200, Symbol('=')]);
 		testInputErrorSync(chain.responseMatch, ['Content-Type', 500]);
 		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.STATUS, '200']);
+		testInputErrorSync(chain.responseMatch, [{[NETWORK_PROP.STATUS]: '200'}]);
 	});
 
 	it('should accept array of property definitions as a shortcut', () => {
@@ -161,6 +162,10 @@ describe('Network Request Match Composer', () => {
 				name: 'Content-Type',
 				val: 'text/plain',
 			},
+			{
+				'Content-Encoding': 'gzip',
+				[NETWORK_PROP.STATUS]: 204,
+			},
 		]);
 		assert.deepStrictEqual(makeChain.lastCall.args[0], {
 			response: {
@@ -179,6 +184,53 @@ describe('Network Request Match Composer', () => {
 					{
 						name: 'Content-Type',
 						val: 'text/plain',
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+					{
+						name: NETWORK_PROP.STATUS,
+						val: 204,
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+					{
+						name: 'Content-Encoding',
+						val: 'gzip',
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+				],
+			},
+		});
+	});
+
+	it('Should accept plain object as hash map', () => {
+		const data = {};
+		const chain = {};
+		const makeChain = sinon.spy();
+
+		Object.defineProperties(chain, responseMatchesComposer(data, chain, makeChain));
+
+		chain.responseMatch({
+			[NETWORK_PROP.BODY]: '{}',
+			'Content-Encoding': 'gzip',
+			[NETWORK_PROP.STATUS]: 204,
+		});
+
+		assert.deepStrictEqual(makeChain.lastCall.args[0], {
+			response: {
+				type: SUBJ_COMPARATOR.RESPONSE_MATCHES,
+				props: [
+					{
+						name: NETWORK_PROP.BODY,
+						val: '{}',
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+					{
+						name: NETWORK_PROP.STATUS,
+						val: 204,
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+					{
+						name: 'Content-Encoding',
+						val: 'gzip',
 						compare: PROP_COMPARATOR.EQUAL,
 					},
 				],
