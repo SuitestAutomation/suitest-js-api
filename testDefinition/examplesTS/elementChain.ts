@@ -42,6 +42,9 @@ el.sendText('text').repeat(10).interval(2000).toAssert();
 el.setText('text').toString();
 el.setText('text').toAssert();
 el.timeout(10).not();
+el.isPlaying();
+el.isPaused();
+el.isStopped();
 
 // Check if element's width and height match snapshot from element repo, top position as in repo +- 20px and custom background color
 const elem = element('repo-id');
@@ -64,6 +67,12 @@ element({css: '#repo-id'}).matches({
 	name: PROP.BG_COLOR,
 	val: '#F00',
 });
+element({css: '#repo-id'}).matches({
+	[PROP.BG_COLOR]: 'red',
+	[PROP.HREF]: 'http://somelingk',
+	borderWidth: 233,
+});
+
 
 // Same with array syntax
 // User should be able mix'n'match this syntax options
@@ -80,6 +89,10 @@ element('repo-id').matches([
 		name: PROP.BG_COLOR,
 		val: '#F00',
 	},
+	{
+		[PROP.CLASS]: 'friendlyClass',
+		[PROP.TEXT_CONTENT]: 'Lorem ipsum',
+	}
 ]);
 
 // Alias for repo-only elements - same syntax as matches, except "value" argument is always omitted
@@ -87,13 +100,21 @@ element('repo-id').matches([
 element('repo-id').matchesRepo([
 	{
 		name: PROP.BG_COLOR,
-		val: '#F00', // invalid, value is always taken from repo. Use matches for this
 	},
 	{
 		name: PROP.LEFT,
 		type: COMP.EQUAL,
 	},
+	{
+		name: PROP.VISIBILITY,
+		type: COMP.EQUAL,
+	}
 ]);
+
+el.matchesRepo({
+	name: PROP.VISIBILITY,
+	type: COMP.EQUAL,
+});
 
 // getters
 el.it.should.with.times;
@@ -119,4 +140,12 @@ el.matches([
 		name: PROP.FONT_URI,
 		val: 'string',
 	},
+	{
+		name: PROP.URL,
+		type: COMP.END,
+		val: 'string',
+	},
 ]);
+
+// With assert
+suitest.assert.element('api-id');
