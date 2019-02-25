@@ -24,24 +24,24 @@ const DEFAULT_TIMEOUT = 2000;
 const configFields = [
 	{
 		name: 'logLevel',
-		type: 'string'
+		type: 'string',
 	},
 	{
 		name: 'disallowCrashReports',
-		type: 'bool'
+		type: 'bool',
 	},
 	{
 		name: 'continueOnFatalError',
-		type: 'bool'
+		type: 'bool',
 	},
 	{
 		name: 'timestamp',
-		type: 'string'
+		type: 'string',
 	},
 	{
 		name: 'defaultTimeout',
-		type: 'number'
-	}
+		type: 'number',
+	},
 ];
 
 const launcherFields = [
@@ -80,7 +80,10 @@ const userConfigFile = process.env[envVars.SUITEST_USER_CONFIG];
 
 const defaultConfig = global._suitestTesting ? test : main;
 const rcConfig = readRcConfig();
-const userConfig = userConfigFile ? readUserConfig(userConfigFile) : {};
+// TODO - temp fix for issue with Yargs library running the command twice
+const userConfig = userConfigFile && userConfigFile !== 'undefined'
+	? readUserConfig(userConfigFile)
+	: {};
 const envConfig = pickConfigFieldsFromEnvVars(configFields);
 
 const config = {};
