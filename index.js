@@ -1,7 +1,5 @@
 require('./lib/utils/sentry/Raven');
 
-const {config} = require('./config');
-
 // Commands
 const {openSession} = require('./lib/commands/openSession');
 const {closeSession} = require('./lib/commands/closeSession');
@@ -46,7 +44,6 @@ const VISIBILITY_STATE = require('./lib/constants/visibilityState');
 const VRC = require('./lib/constants/vrc');
 const KEY = require('./lib/constants/keys');
 const {NETWORK_PROP, NETWORK_METHOD} = require('./lib/constants/networkRequest');
-const {AUTOMATED, INTERACTIVE} = require('./lib/constants/modes');
 
 // For testing
 const webSockets = require('./lib/api/webSockets');
@@ -54,7 +51,7 @@ const webSockets = require('./lib/api/webSockets');
 // Contexts
 const {authContext, appContext, pairedDeviceContext, testContext} = require('./lib/context');
 
-const {bootstrapSession} = require('./lib/utils/sessionStarter');
+const {connectToIpcAndBootstrapSession} = require('./lib/utils/sessionStarter');
 const {warnUnusedLeaves} = require('./lib/utils/unusedExpressionWatchers');
 const {warnLauncherAndLibHasDiffVersions} = require('./lib/utils/packageMetadataHelper');
 
@@ -136,10 +133,9 @@ class SUITEST_API {
 	}
 }
 
-if (config.sessionType === AUTOMATED || config.sessionType === INTERACTIVE) {
-	// Start session, pair device, set app config in launcher child process
-	bootstrapSession(config);
-}
+// Check if we are in launcher child process, connect to master IPC,
+// override config, start session, pair device, set app config
+connectToIpcAndBootstrapSession();
 
 // Export public API
 module.exports = new SUITEST_API();
@@ -153,7 +149,7 @@ const shutDown = () => {
 	warnUnusedLeaves();
 
 	// warn about that launcher and library have different versions
-	warnLauncherAndLibHasDiffVersions(config.launcherVersion);
+	warnLauncherAndLibHasDiffVersions();
 	// Do not force process exit, because this will interfere with other libs (e.g. Mocha)
 	// that user might be using. Instead make sure there are no event listeners left on our side
 	// to keep process running

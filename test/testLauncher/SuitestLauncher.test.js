@@ -10,7 +10,6 @@ const makeUrlFromArray = require('../../lib/utils/makeUrlFromArray');
 const endpoints = require('../../lib/api/endpoints');
 const config = require('../../config').config;
 const {snippets} = require('../../lib/testLauncher/launcherLogger');
-const envVars = require('../../lib/constants/enviroment');
 const logger = require('../../lib/utils/logger');
 const mockSpawn = require('../../lib/utils/testHelpers/mockSpawn');
 
@@ -120,7 +119,9 @@ describe('SuitestLauncher', () => {
 		}
 	});
 
-	it('should exit process if inspect arg provided in automated mode', async() => {
+	it('should exit process if inspect arg provided in automated mode', async function() {
+		this.timeout(5000); // give more time to process
+
 		const suitestLauncher = new TestLauncher({
 			tokenKey: '1',
 			tokenPassword: '1',

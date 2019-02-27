@@ -13,7 +13,7 @@ const stubDeviceInfoFeed = require('../../lib/utils/testHelpers/mockDeviceInfo')
 
 const deviceId = uuid();
 
-describe('sessionStarter.js', () => {
+describe('sessionStarter util', () => {
 	before(async() => {
 		sinon.stub(logger, 'log');
 		sinon.stub(console, 'error');
@@ -22,6 +22,9 @@ describe('sessionStarter.js', () => {
 
 	beforeEach(async() => {
 		stubDeviceInfoFeed(deviceId);
+
+		sinon.stub(logger, 'error');
+		sinon.stub(process, 'exit');
 
 		pairedDeviceContext.clear();
 		authContext.clear();
@@ -43,21 +46,24 @@ describe('sessionStarter.js', () => {
 		testContext.clear();
 	});
 
+	afterEach(() => {
+		logger.error.restore();
+		process.exit.restore();
+	});
+
 	it('should launch automated session and pair to device', async() => {
-		const res = await bootstrapSession({
+		const res = await bootstrapSession(deviceId, {
 			sessionType: 'automated',
 			sessionToken: 'token',
-			deviceId,
 		});
 
 		await assert.strictEqual(res, undefined);
 	});
 
 	it('should launch interactive session, pair to device, set app config', async() => {
-		const res = await bootstrapSession({
+		const res = await bootstrapSession(deviceId, {
 			sessionType: 'interactive',
 			sessionToken: 'token',
-			deviceId,
 			appConfigId: 'configId',
 		});
 
@@ -68,10 +74,9 @@ describe('sessionStarter.js', () => {
 	});
 
 	it('should launch interactive session in debug mode and send enableDebugMode ws request', async() => {
-		const res = await bootstrapSession({
+		const res = await bootstrapSession(deviceId, {
 			sessionType: 'interactive',
 			sessionToken: 'token',
-			deviceId,
 			appConfigId: 'configId',
 			isDebugMode: true,
 		});
@@ -80,5 +85,17 @@ describe('sessionStarter.js', () => {
 		await assert.strictEqual(authContext.context, sessionConstants.INTERACTIVE);
 		await assert.strictEqual(appContext.context.configId, 'configId');
 		await assert.strictEqual(pairedDeviceContext.context.deviceId, deviceId);
+	});
+
+	it('should throw with invalid config in automated mode', async() => {
+		await bootstrapSession(deviceId, {sessionType: 'automated'});
+		assert(process.exit.calledWith(1));
+		assert(logger.error.called);
+	});
+
+	it('should throw with invalid config in interactive mode', async() => {
+		await bootstrapSession(deviceId, {sessionType: 'interactive'});
+		assert(process.exit.calledWith(1));
+		assert(logger.error.called);
 	});
 });

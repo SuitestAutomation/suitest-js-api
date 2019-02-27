@@ -6,7 +6,6 @@
  * Individual functions from utils are still covered in scope of those file's tests.
  */
 
-const envVars = require('../lib/constants/enviroment');
 const logLevels = require('../lib/constants/logLevels');
 const timestamp = require('../lib/constants/timestamp');
 const {validate, validators} = require('../lib/validataion');
@@ -44,13 +43,7 @@ const test = Object.freeze({
 	wsUrl: 'ws://localhost:3000/',
 });
 
-const defaultConfig = global._suitestTesting ? test : main;
-const launcherConfig = process.env[envVars.SUITEST_CONFIG] ? JSON.parse(process.env[envVars.SUITEST_CONFIG]) : {};
-
-const config = {
-	...defaultConfig,
-	...launcherConfig,
-};
+const config = {...(global._suitestTesting ? test : main)};
 
 /**
  * Override config object
