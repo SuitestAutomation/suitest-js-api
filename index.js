@@ -1,5 +1,7 @@
 require('./lib/utils/sentry/Raven');
 
+const {config} = require('./config');
+
 // Commands
 const {openSession} = require('./lib/commands/openSession');
 const {closeSession} = require('./lib/commands/closeSession');
@@ -44,6 +46,7 @@ const VISIBILITY_STATE = require('./lib/constants/visibilityState');
 const VRC = require('./lib/constants/vrc');
 const KEY = require('./lib/constants/keys');
 const {NETWORK_PROP, NETWORK_METHOD} = require('./lib/constants/networkRequest');
+const {AUTOMATED, INTERACTIVE} = require('./lib/constants/modes');
 
 // For testing
 const webSockets = require('./lib/api/webSockets');
@@ -51,10 +54,8 @@ const webSockets = require('./lib/api/webSockets');
 // Contexts
 const {authContext, appContext, pairedDeviceContext, testContext} = require('./lib/context');
 
-// Env helper
-const envHelper = require('./lib/utils/envHelper');
+const {bootstrapSession} = require('./lib/utils/sessionStarter');
 const {warnUnusedLeaves} = require('./lib/utils/unusedExpressionWatchers');
-
 const {warnLauncherAndLibHasDiffVersions} = require('./lib/utils/packageMetadataHelper');
 
 // Publicly available API goes here
@@ -135,8 +136,10 @@ class SUITEST_API {
 	}
 }
 
-// Start session, pair device, set app config based on env vars
-envHelper.handleUserEnvVar();
+if (config.sessionType === AUTOMATED || config.sessionType === INTERACTIVE) {
+	// Start session, pair device, set app config in launcher child process
+	bootstrapSession(config);
+}
 
 // Export public API
 module.exports = new SUITEST_API();
@@ -150,7 +153,7 @@ const shutDown = () => {
 	warnUnusedLeaves();
 
 	// warn about that launcher and library have different versions
-	warnLauncherAndLibHasDiffVersions();
+	warnLauncherAndLibHasDiffVersions(config.launcherVersion);
 	// Do not force process exit, because this will interfere with other libs (e.g. Mocha)
 	// that user might be using. Instead make sure there are no event listeners left on our side
 	// to keep process running

@@ -198,33 +198,4 @@ describe('SuitestLauncher', () => {
 		assert(process.exit.calledWith(1));
 		assert(logger.error.called);
 	});
-
-	it('should run runInteractiveSession in debug mode succesfully', async() => {
-		cp.spawn.sequence.add(cp.spawn.simple(0));
-
-		const testNock = nock(config.apiUrl).post(endpoints.session).reply(200, {
-			deviceAccessToken: 'deviceAccessToken',
-		});
-		const devicesDetailsNock = nock(config.apiUrl).get(makeUrlFromArray([endpoints.devices, null, {limit: 100}]))
-			.reply(200, {
-				values: [{deviceId: 'deviceId'}],
-			});
-		const suitestLauncher = new TestLauncher({
-			username: 'username',
-			password: 'password',
-			orgId: 'orgId',
-			deviceId: 'deviceId',
-			appConfigId: 'config',
-			inspectBrk: '9121',
-		}, ['npm']);
-		const cpForkStub = sinon.stub(cp, 'spawn');
-
-		await suitestLauncher.runInteractiveSession();
-
-		assert.ok(testNock.isDone(), 'open session request');
-		assert.ok(devicesDetailsNock.isDone(), 'device details request');
-		assert.equal(cpForkStub.getCall(0).args[2].env[envVars.SUITEST_DEBUG_MODE], 'yes');
-
-		cpForkStub.restore();
-	});
 });

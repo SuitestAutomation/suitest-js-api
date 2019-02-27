@@ -6,52 +6,23 @@
  * Individual functions from utils are still covered in scope of those file's tests.
  */
 
-const fs = require('fs');
-const rc = require('rc');
-
 const envVars = require('../lib/constants/enviroment');
 const logLevels = require('../lib/constants/logLevels');
 const timestamp = require('../lib/constants/timestamp');
 const {validate, validators} = require('../lib/validataion');
-const {invalidConfigObj, invalidUserConfig} = require('../lib/texts');
-const {ENV_VARS} = require('../lib/mappings');
+const {invalidConfigObj} = require('../lib/texts');
 const {pickNonNil} = require('../lib/utils/common');
-const SuitestError = require('../lib/utils/SuitestError');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
 const DEFAULT_TIMEOUT = 2000;
 
-const configFields = [
-	{
-		name: 'logLevel',
-		type: 'string',
-	},
-	{
-		name: 'disallowCrashReports',
-		type: 'bool',
-	},
-	{
-		name: 'continueOnFatalError',
-		type: 'bool',
-	},
-	{
-		name: 'timestamp',
-		type: 'string',
-	},
-	{
-		name: 'defaultTimeout',
-		type: 'number',
-	},
-];
-
-const launcherFields = [
+const overridableFields = [
 	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
-	'logDir', 'timestamp', 'configFile', // launcher common
+	'logLevel', 'logDir', 'timestamp', 'configFile', 'continueOnFatalError', 'disallowCrashReports', 'defaultTimeout', // launcher common
 ];
-const allFields = [...configFields.map(({name}) => name), ...launcherFields];
 
-const main = {
+const main = Object.freeze({
 	apiUrl: 'https://the.suite.st/api/public/v2',
 	continueOnFatalError: false,
 	disallowCrashReports: false,
@@ -60,9 +31,9 @@ const main = {
 	timestamp: timestamp.default,
 	defaultTimeout: DEFAULT_TIMEOUT,
 	wsUrl: 'wss://the.suite.st/api/public/v2/socket',
-};
+});
 
-const test = {
+const test = Object.freeze({
 	apiUrl: 'https://localhost',
 	continueOnFatalError: false,
 	disallowCrashReports: false,
@@ -71,36 +42,22 @@ const test = {
 	timestamp: timestamp.default,
 	defaultTimeout: DEFAULT_TIMEOUT,
 	wsUrl: 'ws://localhost:3000/',
-};
-
-Object.freeze(main);
-Object.freeze(test);
-
-const userConfigFile = process.env[envVars.SUITEST_USER_CONFIG];
+});
 
 const defaultConfig = global._suitestTesting ? test : main;
-const rcConfig = readRcConfig();
-// TODO - temp fix for issue with Yargs library running the command twice
-const userConfig = userConfigFile && userConfigFile !== 'undefined'
-	? readUserConfig(userConfigFile)
-	: {};
-const envConfig = pickConfigFieldsFromEnvVars(configFields);
+const launcherConfig = process.env[envVars.SUITEST_CONFIG] ? JSON.parse(process.env[envVars.SUITEST_CONFIG]) : {};
 
-const config = {};
-
-extend(defaultConfig); // extend with default config
-override(rcConfig); // extend with rc file
-override(userConfig); // extend with user config file
-extend(envConfig); // extend with env vars
-
-const launcherParams = pickNonNil(launcherFields, rcConfig);
+const config = {
+	...defaultConfig,
+	...launcherConfig,
+};
 
 /**
  * Override config object
  * @param {Object} overrideObj
  */
 function override(overrideObj = {}) {
-	const _overrideObj = pickNonNil(allFields, overrideObj);
+	const _overrideObj = pickNonNil(overridableFields, overrideObj);
 
 	validate(validators.CONFIGURE, _overrideObj, invalidConfigObj());
 	extend(_overrideObj);
@@ -115,70 +72,9 @@ function extend(ext) {
 	Object.assign(config, ext);
 }
 
-/**
- * Read `.suitestrc` launcher config file.
- * If file not found, return empty object.
- * Supports json and ini formats.
- * cli arguments are not parsed.
- * If file found, but json invalid, throw error.
- */
-function readRcConfig() {
-	// ignore .suitestrc files when running unit tests
-	if (global._suitestTesting)
-		return {};
-
-	return rc('suitest', {}, () => ({}));
-}
-
-/**
- * Read josn config file provided by user.
- * @param {string} path - path to config file
- * @throws {SuitestError}
- * @returns {Object} - parsed json
- */
-function readUserConfig(path) {
-	try {
-		return JSON.parse(fs.readFileSync(path));
-	} catch (error) {
-		throw new SuitestError(invalidUserConfig(path, error.message), error.code);
-	}
-}
-
-/**
- * Pick config fields from process.env
- * @param {Array<string>} configFields
- * @returns {Object}
- */
-function pickConfigFieldsFromEnvVars(configFields) {
-	return configFields.reduce((out, {name, type}) => {
-
-		if (ENV_VARS[name] in process.env) {
-			const val = process.env[ENV_VARS[name]];
-
-			switch (type) {
-				case 'bool':
-					out[name] = (val === 'true');
-					break;
-				case 'number':
-					out[name] = parseInt(val);
-					break;
-				default:
-					out[name] = val;
-					break;
-			}
-		}
-
-		return out;
-	}, {});
-}
-
 module.exports = {
 	config,
-	launcherParams,
 	override,
+	overridableFields,
 	extend,
-	readUserConfig,
-
-	// for testing
-	pickConfigFieldsFromEnvVars,
 };

@@ -8,10 +8,6 @@ const texts = require('../../lib/texts');
 
 const packageMetadataHelper = require('../../lib/utils/packageMetadataHelper');
 
-function setLauncherVersion(version) {
-	process.env[envVars.SUITEST_LAUNCHER_VERSION] = version;
-}
-
 const {version} = packageData;
 
 describe('packageMetadataHelper util', () => {
@@ -50,12 +46,10 @@ describe('packageMetadataHelper util', () => {
 		const {warnLauncherAndLibHasDiffVersions} = packageMetadataHelper;
 
 		sinon.stub(logger, 'warn');
-		setLauncherVersion(version);
-		warnLauncherAndLibHasDiffVersions();
+		warnLauncherAndLibHasDiffVersions(version);
 		assert.equal(logger.warn.callCount, 0);
 
-		setLauncherVersion('1.0.0');
-		warnLauncherAndLibHasDiffVersions();
+		warnLauncherAndLibHasDiffVersions('1.0.0');
 		assert.equal(logger.warn.callCount, 1);
 		assert.ok(logger.warn.calledWith(texts['tl.differentLauncherAndLibVersions'](version, '1.0.0')));
 	});
