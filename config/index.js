@@ -35,7 +35,7 @@ const main = Object.freeze({
 const test = Object.freeze({
 	apiUrl: 'https://localhost',
 	continueOnFatalError: false,
-	disallowCrashReports: false,
+	disallowCrashReports: true,
 	logLevel: logLevels.debug,
 	sentryDsn,
 	timestamp: timestamp.default,
