@@ -22,14 +22,14 @@ const overridableFields = [
 ];
 
 const main = Object.freeze({
-	apiUrl: 'https://the.suite.st/api/public/v2',
+	apiUrl: 'https://the.suite.st/api/public/v3',
 	continueOnFatalError: false,
 	disallowCrashReports: false,
 	logLevel: logLevels.normal,
 	sentryDsn,
 	timestamp: timestamp.default,
 	defaultTimeout: DEFAULT_TIMEOUT,
-	wsUrl: 'wss://the.suite.st/api/public/v2/socket',
+	wsUrl: 'wss://the.suite.st/api/public/v3/socket',
 });
 
 const test = Object.freeze({
