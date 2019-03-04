@@ -10,7 +10,6 @@ const makeUrlFromArray = require('../../lib/utils/makeUrlFromArray');
 const endpoints = require('../../lib/api/endpoints');
 const config = require('../../config').config;
 const {snippets} = require('../../lib/testLauncher/launcherLogger');
-const envVars = require('../../lib/constants/enviroment');
 const logger = require('../../lib/utils/logger');
 const mockSpawn = require('../../lib/utils/testHelpers/mockSpawn');
 
@@ -120,7 +119,9 @@ describe('SuitestLauncher', () => {
 		}
 	});
 
-	it('should exit process if inspect arg provided in automated mode', async() => {
+	it('should exit process if inspect arg provided in automated mode', async function() {
+		this.timeout(5000); // give more time to process
+
 		const suitestLauncher = new TestLauncher({
 			tokenKey: '1',
 			tokenPassword: '1',
@@ -197,34 +198,5 @@ describe('SuitestLauncher', () => {
 		assert.ok(sessionCloseNock.isDone(), 'request');
 		assert(process.exit.calledWith(1));
 		assert(logger.error.called);
-	});
-
-	it('should run runInteractiveSession in debug mode succesfully', async() => {
-		cp.spawn.sequence.add(cp.spawn.simple(0));
-
-		const testNock = nock(config.apiUrl).post(endpoints.session).reply(200, {
-			deviceAccessToken: 'deviceAccessToken',
-		});
-		const devicesDetailsNock = nock(config.apiUrl).get(makeUrlFromArray([endpoints.devices, null, {limit: 100}]))
-			.reply(200, {
-				values: [{deviceId: 'deviceId'}],
-			});
-		const suitestLauncher = new TestLauncher({
-			username: 'username',
-			password: 'password',
-			orgId: 'orgId',
-			deviceId: 'deviceId',
-			appConfigId: 'config',
-			inspectBrk: '9121',
-		}, ['npm']);
-		const cpForkStub = sinon.stub(cp, 'spawn');
-
-		await suitestLauncher.runInteractiveSession();
-
-		assert.ok(testNock.isDone(), 'open session request');
-		assert.ok(devicesDetailsNock.isDone(), 'device details request');
-		assert.equal(cpForkStub.getCall(0).args[2].env[envVars.SUITEST_DEBUG_MODE], 'yes');
-
-		cpForkStub.restore();
 	});
 });

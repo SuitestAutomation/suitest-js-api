@@ -2,17 +2,9 @@ const assert = require('assert');
 const nock = require('nock');
 const logger = require('../../lib/utils/logger');
 const sinon = require('sinon');
-const envVars = require('../../lib/constants/enviroment');
-const packageData = require('../../package.json');
 const texts = require('../../lib/texts');
 
 const packageMetadataHelper = require('../../lib/utils/packageMetadataHelper');
-
-function setLauncherVersion(version) {
-	process.env[envVars.SUITEST_LAUNCHER_VERSION] = version;
-}
-
-const {version} = packageData;
 
 describe('packageMetadataHelper util', () => {
 	after(async() => {
@@ -23,7 +15,6 @@ describe('packageMetadataHelper util', () => {
 		if (logger.warn.restore) {
 			logger.warn.restore();
 		}
-		delete process.env[envVars.SUITEST_LAUNCHER_VERSION];
 	});
 
 	it('test fetchLatestSuitestVersion', async() => {
@@ -46,18 +37,16 @@ describe('packageMetadataHelper util', () => {
 		assert.equal(latestVersion, '1.4.1');
 	});
 
-	it('warnLauncherAndLibHasDiffVersions util', () => {
-		const {warnLauncherAndLibHasDiffVersions} = packageMetadataHelper;
+	it('warnWhenDiffVersions util', () => {
+		const {warnWhenDiffVersions} = packageMetadataHelper;
 
 		sinon.stub(logger, 'warn');
-		setLauncherVersion(version);
-		warnLauncherAndLibHasDiffVersions();
+		warnWhenDiffVersions('1.0.0', '1.0.0');
 		assert.equal(logger.warn.callCount, 0);
 
-		setLauncherVersion('1.0.0');
-		warnLauncherAndLibHasDiffVersions();
+		warnWhenDiffVersions('1.0.0', '1.0.1');
 		assert.equal(logger.warn.callCount, 1);
-		assert.ok(logger.warn.calledWith(texts['tl.differentLauncherAndLibVersions'](version, '1.0.0')));
+		assert.ok(logger.warn.calledWith(texts['tl.differentLauncherAndLibVersions']('1.0.0', '1.0.1')));
 	});
 
 	it('warnNewVersionAvailable util', () => {

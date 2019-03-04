@@ -51,10 +51,8 @@ const webSockets = require('./lib/api/webSockets');
 // Contexts
 const {authContext, appContext, pairedDeviceContext, testContext} = require('./lib/context');
 
-// Env helper
-const envHelper = require('./lib/utils/envHelper');
+const {connectToIpcAndBootstrapSession} = require('./lib/utils/sessionStarter');
 const {warnUnusedLeaves} = require('./lib/utils/unusedExpressionWatchers');
-
 const {warnLauncherAndLibHasDiffVersions} = require('./lib/utils/packageMetadataHelper');
 
 // Publicly available API goes here
@@ -135,8 +133,9 @@ class SUITEST_API {
 	}
 }
 
-// Start session, pair device, set app config based on env vars
-envHelper.handleUserEnvVar();
+// Check if we are in launcher child process, connect to master IPC,
+// override config, start session, pair device, set app config
+connectToIpcAndBootstrapSession();
 
 // Export public API
 module.exports = new SUITEST_API();
