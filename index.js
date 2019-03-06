@@ -45,8 +45,10 @@ const VRC = require('./lib/constants/vrc');
 const KEY = require('./lib/constants/keys');
 const {NETWORK_PROP, NETWORK_METHOD} = require('./lib/constants/networkRequest');
 
-// For testing
+// Network
 const webSockets = require('./lib/api/webSockets');
+const ipcClient = require('./lib/testLauncher/ipc/client');
+const ipcServer = require('./lib/testLauncher/ipc/server');
 
 // Contexts
 const {authContext, appContext, pairedDeviceContext, testContext} = require('./lib/context');
@@ -144,6 +146,10 @@ module.exports = new SUITEST_API();
 const shutDown = () => {
 	// Make sure socket connection is done
 	webSockets.disconnect();
+
+	// Make sure ipc connection is done
+	ipcClient.disconnect();
+	ipcServer.close();
 
 	// Warn user about un-awaited chains
 	warnUnusedLeaves();
