@@ -438,7 +438,7 @@ describe('Socket error messages', () => {
 
 	it('test notStartedReasons keys', () => {
 		const reasonsCodes = [
-			'blasterError', 'bootstrappedPlatformError', 'testQueued', 'noAvailableAutomatedMinutes',
+			'blasterError', 'bootstrappedPlatformError', 'testQueued', 'noAvailableMinutes',
 			'noActivePlan', 'candyBoxOffline', 'suitestDriveOffline', 'runningBootSequence',
 			'deviceInUse', 'deviceDisabled', 'deviceDeleted', 'internalError',
 			'notDefinedPlatform', 'lgWebosPlatformError', 'xboxPlatformError', 'androidPlatformError',
@@ -461,8 +461,8 @@ describe('Socket error messages', () => {
 			'Execution will start as soon as other tests queued on this device will finish execution.'
 		);
 		assert.strictEqual(
-			getNotStartedReasonMessage('noAvailableAutomatedMinutes'),
-			'Cannot continue: you\'ve used up all of your automation minutes.\nYou automate a lot! How about getting a bigger subscription https://the.suite.st/preferences/billing? Or, if you would like to purchase more automation minutes for the current billing cycle, please contact sales@suite.st. Your automation minutes will renew.'
+			getNotStartedReasonMessage('noAvailableMinutes'),
+			'Cannot continue: you\'ve used up all of your testing minutes.\nYou testing a lot! How about getting a bigger subscription https://the.suite.st/preferences/billing? Or, if you would like to purchase more testing minutes for the current billing cycle, please contact sales@suite.st. Your testing minutes will renew.'
 		);
 		assert.strictEqual(
 			getNotStartedReasonMessage('noActivePlan'),
