@@ -184,7 +184,10 @@ const shutDown = () => {
 const exit = err => {
 	console.error(err);
 	webSockets.disconnect();
-	process.exit(1);
+	ipcClient.disconnect();
+	ipcServer.close();
+	// timeout required for ipc server.on('end') event to be processed on Windows before process exits
+	setTimeout(() => process.exit(1));
 };
 
 process.on('uncaughtException', exit);
