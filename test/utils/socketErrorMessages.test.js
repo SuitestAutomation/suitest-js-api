@@ -93,6 +93,7 @@ describe('Socket error messages', () => {
 		[
 			[basePayload('failedStart'), 'Chain description.'],
 			[basePayload('missingApp'), 'Application is not installed on the device.'],
+			[basePayload('outdatedLibrary'), 'We have detected that your instrumentation library is outdated and the package cannot be opened. Update required.'],
 			[basePayload('initPlatformFailed'), 'Failed to start Suitest bootstrap application on this device.'],
 			[basePayload('packageNotFound'), 'There is nothing to test, because the selected configuration does not contain an app package. Upload a package on your app\'s configuration page before continuing.'],
 			[basePayload('missingPackage'), 'There is nothing to test, because the selected configuration does not contain an app package. Upload a package on your app\'s configuration page before continuing.'],
@@ -119,6 +120,18 @@ describe('Socket error messages', () => {
 			[basePayload('syntaxError', 'wrongUrl'), 'This does not look like a valid URL. Chain description.'],
 			[basePayload('invalidInput'), 'Test command received invalid input. Chain description.'],
 			[basePayload('invalidInput', 'lineTypeNotSupported'), 'This test command is not supported by the current app configuration. Chain description.'],
+			[
+				set(lensPath(['chainData']), {
+					isClick: true,
+				}, basePayload('invalidInput', 'elementNotSupported')),
+				'Chain description. .click() is unsupported by this element.',
+			],
+			[
+				set(lensPath(['chainData']), {
+					setText: true,
+				}, basePayload('invalidInput', 'elementNotSupported')),
+				'Chain description. .setText() is unsupported by this element.',
+			],
 			[basePayload('ActionNotAvailable'), 'This test command is not supported by the current app configuration. Chain description.'],
 			[
 				set(lensPath(['chainData']), {

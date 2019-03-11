@@ -29,9 +29,6 @@ video().matches(suitest.PROP.ID).toString();
 video().click().toString();
 video().click().repeat(10).interval(2000).toString();
 video().moveTo().toString();
-video().sendText('text').toString();
-video().sendText('text').repeat(10).interval(2000).toString();
-video().sendText('text').repeat(10).interval(2000).toAssert();
 
 // getters
 video().it.should.with.times;

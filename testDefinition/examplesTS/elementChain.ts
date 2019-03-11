@@ -14,6 +14,7 @@ el.exist();
 el.visible();
 el.moveTo();
 el.sendText('');
+el.setText('');
 el.timeout(1);
 el.exists();
 el.matches(PROP.IS_CHECKED, true);
@@ -36,8 +37,11 @@ el.matchesJS('').toString();
 el.click().repeat(10).interval(2000).toString();
 el.moveTo().toString();
 el.sendText('text').toString();
+el.setText('text').toString();
 el.sendText('text').repeat(10).interval(2000).toString();
 el.sendText('text').repeat(10).interval(2000).toAssert();
+el.setText('text').toString();
+el.setText('text').toAssert();
 el.timeout(10).not();
 el.isPlaying();
 el.isPaused();
@@ -64,6 +68,12 @@ element({css: '#repo-id'}).matches({
 	name: PROP.BG_COLOR,
 	val: '#F00',
 });
+element({css: '#repo-id'}).matches({
+	[PROP.BG_COLOR]: 'red',
+	[PROP.HREF]: 'http://somelingk',
+	borderWidth: 233,
+});
+
 
 // Same with array syntax
 // User should be able mix'n'match this syntax options
@@ -80,6 +90,10 @@ element('repo-id').matches([
 		name: PROP.BG_COLOR,
 		val: '#F00',
 	},
+	{
+		[PROP.CLASS]: 'friendlyClass',
+		[PROP.TEXT_CONTENT]: 'Lorem ipsum',
+	}
 ]);
 
 // Alias for repo-only elements - same syntax as matches, except "value" argument is always omitted
@@ -87,13 +101,21 @@ element('repo-id').matches([
 element('repo-id').matchesRepo([
 	{
 		name: PROP.BG_COLOR,
-		val: '#F00', // invalid, value is always taken from repo. Use matches for this
 	},
 	{
 		name: PROP.LEFT,
 		type: COMP.EQUAL,
 	},
+	{
+		name: PROP.VISIBILITY,
+		type: COMP.EQUAL,
+	}
 ]);
+
+el.matchesRepo({
+	name: PROP.VISIBILITY,
+	type: COMP.EQUAL,
+});
 
 // getters
 el.it.should.with.times;

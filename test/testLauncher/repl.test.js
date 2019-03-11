@@ -4,12 +4,10 @@ const sinon = require('sinon');
 const chokidar = require('chokidar');
 const EventEmitter = require('events');
 
-const texts = require('../../lib/texts');
-const SuitestError = require('../../lib/utils/SuitestError');
-const suitestRepl = require('../../lib/testLauncher/repl');
-const errorListeners = require('../../lib/utils/errorListeners');
-const {setupReplIpc} = require('../../lib/utils/testLauncherHelper');
 const logger = require('../../lib/utils/logger');
+const envVars = require('../../lib/constants/enviroment');
+const suitestRepl = require('../../lib/testLauncher/repl');
+const ipcClient = require('../../lib/testLauncher/ipc/client');
 
 const sandbox = require('sinon').createSandbox();
 
@@ -23,22 +21,12 @@ class ReplInstance extends EventEmitter {
 		this.defineCommand = sinon.stub();
 
 		if (autoEnd)
-			setInterval(() => this.emitExit(), 10);
+			setTimeout(() => this.emitExit(), 10);
 	}
 
 	emitExit() {
 		this.emit('exit');
 	}
-}
-
-async function ensureReplPortExists(mock = false) {
-	const mockPort = '9999';
-	const current = process.env.REPL_IPC_PORT;
-
-	if (mock)
-		return process.env.REPL_IPC_PORT = mockPort;
-	else if (!current || current === mockPort)
-		process.env.REPL_IPC_PORT = await setupReplIpc();
 }
 
 describe('repl', () => {
@@ -66,61 +54,46 @@ describe('repl', () => {
 		sandbox.restore();
 	});
 
-	it('should require IPC port', () => {
-		const replIpcNotAvailable = sandbox.stub(texts, 'replIpcNotAvailable');
-		const port = process.env.REPL_IPC_PORT;
+	it('startRepl', () => {
+		const writeStub = sandbox.stub(ipcClient, 'write');
+		const addListenerStub = sandbox.stub(ipcClient, 'addListener');
 
-		delete process.env.REPL_IPC_PORT;
+		process.env[envVars.SUITEST_CHILD_PROCESS] = 'test';
 
-		const {startRepl} = suitestRepl;
-		let passed = false;
+		const replPromsie = suitestRepl.startRepl({});
 
-		try {
-			startRepl();
-		} catch (e) {
-			assert.equal(e.code, SuitestError.IPC_ERROR, 'Error code is correct');
-			assert.ok(replIpcNotAvailable.called, 'Error message is correct');
-			passed = true;
-		}
+		assert.ok(writeStub.calledOnce);
+		assert.ok(addListenerStub.calledOnce);
+		assert.ok(replPromsie instanceof Promise);
 
-		assert.ok(passed, 'Error was not thrown when it should have been.');
-		process.env.REPL_IPC_PORT = port;
+		delete process.env[envVars.SUITEST_CHILD_PROCESS];
 	});
 
-	it('should handle IPC startup error', async() => {
-		const replIpcErrorInChildProcess = sandbox.stub(texts, 'replIpcErrorInChildProcess');
+	it('startRepl', () => {
+		sandbox.stub(process, 'chdir');
+		const writeStub = sandbox.stub(ipcClient, 'write');
+		const addListenerStub = sandbox.stub(ipcClient, 'addListener');
+		const replPromsie = suitestRepl.startRepl({});
 
-		await ensureReplPortExists(true);
+		assert.ok(writeStub.notCalled);
+		assert.ok(addListenerStub.notCalled);
+		assert.ok(replPromsie instanceof Promise);
+	});
 
-		suitestRepl.startRepl();
+	it('stopRepl', () => {
+		process.env[envVars.SUITEST_CHILD_PROCESS] = 'test';
+		const writeStub = sandbox.stub(ipcClient, 'write');
 
-		return new Promise(resolve => {
-			let error = false;
-			const errListeners = errorListeners.pauseErrorListeners();
-
-			process.on('uncaughtException', function check(e) {
-				try {
-					assert.ok(replIpcErrorInChildProcess.called, 'Connection error was thrown');
-					assert.equal(e.code, SuitestError.IPC_ERROR, 'Error code was correct');
-				} catch (e) {
-					error = e;
-				}
-
-				errorListeners.restoreErrorListeners(errListeners);
-
-				if (error)
-					throw error;
-
-				resolve();
-			});
-		});
+		suitestRepl.stopRepl();
+		assert.ok(writeStub.calledOnce);
+		delete process.env[envVars.SUITEST_CHILD_PROCESS];
 	});
 
 	it('should start REPL instance', async() => {
+		sandbox.stub(ipcClient, 'write');
 		process.stdin.setRawMode = sinon.stub();
 		sandbox.stub(process, 'chdir');
-		await ensureReplPortExists();
-		await suitestRepl.startRepl({});
+		await suitestRepl.setupRepl({}, true);
 		assert.ok(repl.start.called, 'Repl instance was started');
 	});
 
@@ -128,6 +101,7 @@ describe('repl', () => {
 		const chDir = sandbox.stub(process, 'chdir');
 		const choki = new EventEmitter();
 
+		sandbox.stub(ipcClient, 'write');
 		sinon.stub(console, 'log');
 
 		try {
@@ -137,8 +111,6 @@ describe('repl', () => {
 			const repeater = sinon.stub();
 			const watch = '../../lib/utils/testHelpers/repl.js';
 
-			await ensureReplPortExists();
-
 			repl.start.restore();
 			sandbox.stub(repl, 'start').returns(new ReplInstance(false));
 
@@ -146,11 +118,11 @@ describe('repl', () => {
 
 			process.stdin.setRawMode = sinon.stub();
 
-			suitestRepl.startRepl({
+			suitestRepl.setupRepl({
 				cwd: __dirname,
 				repeater: repeater,
 				watch: watch,
-			});
+			}, false);
 
 			await new Promise(resolve => {
 				setInterval(() => chDir.called && resolve(), 10);
@@ -171,7 +143,7 @@ describe('repl', () => {
 	it('Should apply accept repeater as string', async() => {
 		const replHelper = require('../../lib/utils/testHelpers/repl');
 		let repeater = sandbox.stub(replHelper, 'repeater');
-
+		let writeStub = sandbox.stub(ipcClient, 'write');
 		const {repeaterFromString} = suitestRepl;
 		const path = require('path');
 
@@ -184,6 +156,9 @@ describe('repl', () => {
 		assert(repeater.called, 'Repeater with module spec was correctly resolved');
 
 		repeater = sandbox.stub(replHelper.nested, 'repeater');
+
+		writeStub.restore();
+		writeStub = sandbox.stub(ipcClient, 'write');
 
 		repeaterFromString(
 			'repl#nested.repeater',

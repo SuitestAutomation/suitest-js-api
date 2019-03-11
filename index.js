@@ -45,16 +45,16 @@ const VRC = require('./lib/constants/vrc');
 const KEY = require('./lib/constants/keys');
 const {NETWORK_PROP, NETWORK_METHOD} = require('./lib/constants/networkRequest');
 
-// For testing
+// Network
 const webSockets = require('./lib/api/webSockets');
+const ipcClient = require('./lib/testLauncher/ipc/client');
+const ipcServer = require('./lib/testLauncher/ipc/server');
 
 // Contexts
 const {authContext, appContext, pairedDeviceContext, testContext} = require('./lib/context');
 
-// Env helper
-const envHelper = require('./lib/utils/envHelper');
+const {connectToIpcAndBootstrapSession} = require('./lib/utils/sessionStarter');
 const {warnUnusedLeaves} = require('./lib/utils/unusedExpressionWatchers');
-
 const {warnLauncherAndLibHasDiffVersions} = require('./lib/utils/packageMetadataHelper');
 
 // Publicly available API goes here
@@ -135,8 +135,9 @@ class SUITEST_API {
 	}
 }
 
-// Start session, pair device, set app config based on env vars
-envHelper.handleUserEnvVar();
+// Check if we are in launcher child process, connect to master IPC,
+// override config, start session, pair device, set app config
+connectToIpcAndBootstrapSession();
 
 // Export public API
 module.exports = new SUITEST_API();
@@ -145,6 +146,10 @@ module.exports = new SUITEST_API();
 const shutDown = () => {
 	// Make sure socket connection is done
 	webSockets.disconnect();
+
+	// Make sure ipc connection is done
+	ipcClient.disconnect();
+	ipcServer.close();
 
 	// Warn user about un-awaited chains
 	warnUnusedLeaves();
@@ -179,6 +184,8 @@ const shutDown = () => {
 const exit = err => {
 	console.error(err);
 	webSockets.disconnect();
+	ipcClient.disconnect();
+	ipcServer.close();
 	process.exit(1);
 };
 

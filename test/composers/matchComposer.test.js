@@ -42,7 +42,7 @@ describe('Match Composer', () => {
 		Object.defineProperties(chain, matchComposer(data, chain, makeChain));
 
 		chain.match(ELEMENT_PROP.WIDTH);
-		assert.deepEqual(makeChain.lastCall.args[0], {
+		assert.deepStrictEqual(makeChain.lastCall.args[0], {
 			comparator: {
 				type: SUBJ_COMPARATOR.MATCH,
 				props: [
@@ -151,6 +151,11 @@ describe('Match Composer', () => {
 			val: VALUE.REPO,
 		}]);
 		testInputErrorSync(chain.match, [ELEMENT_PROP.VALUE, 1]);
+		// arg will be recognized as hashmap
+		testInputErrorSync(chain.match, [{
+			[ELEMENT_PROP.NAME]: 'emailField',
+			val: 'val is not existing element property',
+		}]);
 	});
 
 	it('should accept object with single property as object', () => {
@@ -245,6 +250,11 @@ describe('Match Composer', () => {
 				type: PROP_COMPARATOR.APPROX,
 				deviation: 10,
 			},
+			{
+				[ELEMENT_PROP.ALPHA]: 2,
+				[ELEMENT_PROP.BG_COLOR]: 'red',
+				[ELEMENT_PROP.WIDTH]: 400,
+			},
 		]);
 		assert.deepStrictEqual(makeChain.lastCall.args[0], {
 			comparator: {
@@ -274,9 +284,115 @@ describe('Match Composer', () => {
 						type: PROP_COMPARATOR.APPROX,
 						deviation: 10,
 					},
+					{
+						name: ELEMENT_PROP.ALPHA,
+						val: 2,
+						type: PROP_COMPARATOR.EQUAL,
+						deviation: undefined,
+					},
+					{
+						name: ELEMENT_PROP.BG_COLOR,
+						val: 'red',
+						type: PROP_COMPARATOR.EQUAL,
+						deviation: undefined,
+					},
+					{
+						name: ELEMENT_PROP.WIDTH,
+						val: 400,
+						type: PROP_COMPARATOR.EQUAL,
+						deviation: undefined,
+					},
 				],
 			},
 			selector: {apiId: 'some name'},
+		});
+	});
+
+	it('Should accept plain object as hash map', () => {
+		const data = {};
+		const chain = {};
+		const makeChain = sinon.spy();
+
+		Object.defineProperties(chain, matchComposer(data, chain, makeChain));
+
+		chain.match({
+			[ELEMENT_PROP.WIDTH]: 200,
+			[ELEMENT_PROP.TEXT_CONTENT]: 'Lorem ipsum',
+		});
+
+		assert.deepStrictEqual(makeChain.lastCall.args[0], {
+			comparator: {
+				type: SUBJ_COMPARATOR.MATCH,
+				props: [
+					{
+						name: ELEMENT_PROP.WIDTH,
+						val: 200,
+						type: PROP_COMPARATOR.EQUAL,
+						deviation: undefined,
+					},
+					{
+						name: ELEMENT_PROP.TEXT_CONTENT,
+						val: 'Lorem ipsum',
+						type: PROP_COMPARATOR.EQUAL,
+						deviation: undefined,
+					},
+				],
+			},
+		});
+	});
+
+	it('Should be called fromObject handler on intersection between object type and hashmap, ' +
+		'if intersected properties values are valid for object', () => {
+		const data = {selector: {apiId: 'mailField'}};
+		const chain = {};
+		const makeChain = sinon.spy();
+
+		Object.defineProperties(chain, matchComposer(data, chain, makeChain));
+
+		chain.match({
+			[ELEMENT_PROP.NAME]: ELEMENT_PROP.ALPHA,
+		});
+
+		assert.deepStrictEqual(makeChain.lastCall.args[0], {
+			selector: {apiId: 'mailField'},
+			comparator: {
+				type: SUBJ_COMPARATOR.MATCH,
+				props: [
+					{
+						name: ELEMENT_PROP.ALPHA,
+						val: VALUE.REPO,
+						type: PROP_COMPARATOR.EQUAL,
+						deviation: undefined,
+					},
+				],
+			},
+		});
+	});
+
+	it('Should be called fromKeyValue handler on intersection between object type and hashmap, ' +
+		'if intersected properties values are not valid for object', () => {
+		const data = {};
+		const chain = {};
+		const makeChain = sinon.spy();
+
+		Object.defineProperties(chain, matchComposer(data, chain, makeChain));
+
+		chain.match({
+			[ELEMENT_PROP.NAME]: 'userEmailField',
+		});
+
+		assert.deepStrictEqual(makeChain.lastCall.args[0], {
+			comparator: {
+				type: SUBJ_COMPARATOR.MATCH,
+				props: [
+					{
+						name: ELEMENT_PROP.NAME,
+						val: 'userEmailField',
+						type: PROP_COMPARATOR.EQUAL,
+						deviation: undefined,
+					},
+				],
+			},
 		});
 	});
 });

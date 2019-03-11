@@ -7,8 +7,8 @@ const sessionConstants = require('../../lib/constants/session');
 const {closeSession} = require('../../lib/commands/closeSession');
 const endpoints = require('../../lib/api/endpoints');
 const SuitestError = require('../../lib/utils/SuitestError');
-const envVars = require('../../lib/constants/enviroment');
 const logger = require('../../lib/utils/logger');
+const envVars = require('../../lib/constants/enviroment');
 
 describe('closeSession', () => {
 	before(() => {
@@ -113,13 +113,13 @@ describe('closeSession', () => {
 	});
 
 	it('should not call http request to invalidate tokens in test launcher child process', async() => {
-		process.env[envVars.SUITEST_CLOSE_SESSION] = 'no';
+		process.env[envVars.SUITEST_CHILD_PROCESS] = 'test';
 		authContext.setContext(sessionConstants.INTERACTIVE, 'tokenId');
 		const testNock = nock(/.*/).post(endpoints.sessionClose).reply(200);
 
 		await closeSession();
 		assert.strictEqual(testNock.isDone(), false, 'close session request not sent');
 
-		delete process.env[envVars.SUITEST_CLOSE_SESSION];
+		delete process.env[envVars.SUITEST_CHILD_PROCESS];
 	});
 });

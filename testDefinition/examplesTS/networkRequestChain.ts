@@ -25,12 +25,36 @@ networkRequest().requestMatches(NETWORK_PROP.STATUS, 200);
 networkRequest().requestMatches(NETWORK_PROP.METHOD, NETWORK_METHOD.GET);
 networkRequest().requestMatches({name: NETWORK_PROP.BODY, val: 'body'});
 networkRequest().requestMatches({name: NETWORK_PROP.BODY, val: 'body', type: COMP.START});
+networkRequest().requestMatches({
+	[NETWORK_PROP.BODY]: 'some body',
+	[NETWORK_PROP.METHOD]: NETWORK_METHOD.GET,
+	'Any-Header': 'header-value'
+});
+networkRequest().requestMatches([
+	{name: NETWORK_PROP.METHOD, val: NETWORK_METHOD.GET},
+	{
+		[NETWORK_PROP.BODY]: '{}',
+		'Any-Header': 'header-value'
+	}
+]);
 networkRequest().requestMatches(internalError);
 
 networkRequest().responseMatches('propName', 'propVal');
 networkRequest().responseMatches(NETWORK_PROP.STATUS, 200);
 networkRequest().responseMatches({name: NETWORK_PROP.BODY, val: 'body'});
 networkRequest().responseMatches({name: NETWORK_PROP.BODY, val: 'body', type: COMP.START});
+networkRequest().responseMatches({
+	[NETWORK_PROP.BODY]: 'some body',
+	[NETWORK_PROP.STATUS]: 200,
+	'Any-Header': 'header-value'
+});
+networkRequest().responseMatches([
+	{name: NETWORK_PROP.STATUS, val: 200},
+	{
+		[NETWORK_PROP.BODY]: '{}',
+		'Any-Header': 'header-value'
+	}
+]);
 networkRequest().responseMatches(internalError);
 
 networkRequest().it.should.with.times;

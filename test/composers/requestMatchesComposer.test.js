@@ -94,6 +94,7 @@ describe('Network Request Match Composer', () => {
 		testInputErrorSync(chain.requestMatch, ['Content-Type', 500]);
 		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.METHOD, Symbol('GET')]);
 		testInputErrorSync(chain.requestMatch, [NETWORK_PROP.BODY, 123]);
+		testInputErrorSync(chain.requestMatch, [{[NETWORK_PROP.BODY]: 123}]);
 	});
 
 	it('should accept object with single property as object', () => {
@@ -161,6 +162,10 @@ describe('Network Request Match Composer', () => {
 				name: 'Content-Type',
 				val: 'text/plain',
 			},
+			{
+				[NETWORK_PROP.BODY]: 'another body',
+				'Content-Encoding': 'gzip',
+			},
 		]);
 		assert.deepStrictEqual(makeChain.lastCall.args[0], {
 			request: {
@@ -179,6 +184,47 @@ describe('Network Request Match Composer', () => {
 					{
 						name: 'Content-Type',
 						val: 'text/plain',
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+					{
+						name: NETWORK_PROP.BODY,
+						val: 'another body',
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+					{
+						name: 'Content-Encoding',
+						val: 'gzip',
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+				],
+			},
+		});
+	});
+
+	it('Should accept plain object as hash map', () => {
+		const data = {};
+		const chain = {};
+		const makeChain = sinon.spy();
+
+		Object.defineProperties(chain, requestMatchesComposer(data, chain, makeChain));
+
+		chain.requestMatch({
+			[NETWORK_PROP.BODY]: '{}',
+			[NETWORK_PROP.METHOD]: NETWORK_METHOD.POST,
+		});
+
+		assert.deepStrictEqual(makeChain.lastCall.args[0], {
+			request: {
+				type: SUBJ_COMPARATOR.REQUEST_MATCHES,
+				props: [
+					{
+						name: NETWORK_PROP.BODY,
+						val: '{}',
+						compare: PROP_COMPARATOR.EQUAL,
+					},
+					{
+						name: NETWORK_PROP.METHOD,
+						val: NETWORK_METHOD.POST,
 						compare: PROP_COMPARATOR.EQUAL,
 					},
 				],
