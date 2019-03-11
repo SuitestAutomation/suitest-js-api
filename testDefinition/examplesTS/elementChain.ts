@@ -11,6 +11,7 @@ const el = element({css: '.my-element'});
 
 el.click();
 el.exist();
+el.visible();
 el.moveTo();
 el.sendText('');
 el.setText('');

@@ -53,6 +53,7 @@ export type ElementPropTypes = {
 	TOP:                       'top',
 	TRANSLATION_X:             'translationX',
 	TRANSLATION_Y:             'translationY',
+	VALUE:                     'value',
 	VIDEO_LENGTH:              'videoLength',
 	VIDEO_POSITION:            'videoPos',
 	VIDEO_STATE:               'videoState',
