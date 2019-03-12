@@ -438,7 +438,7 @@ describe('Socket error messages', () => {
 
 	it('test notStartedReasons keys', () => {
 		const reasonsCodes = [
-			'blasterError', 'bootstrappedPlatformError', 'testQueued', 'noAvailableMinutes',
+			'blasterError', 'bootstrappedPlatformError', 'testQueued', 'noAvailableAutomatedMinutes',
 			'noActivePlan', 'candyBoxOffline', 'suitestDriveOffline', 'runningBootSequence',
 			'deviceInUse', 'deviceDisabled', 'deviceDeleted', 'internalError',
 			'notDefinedPlatform', 'lgWebosPlatformError', 'xboxPlatformError', 'androidPlatformError',
