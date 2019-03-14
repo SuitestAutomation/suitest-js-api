@@ -12,6 +12,7 @@ const SuitestError = require('../../lib/utils/SuitestError');
 const makeUrlFromArray = require('../../lib/utils/makeUrlFromArray');
 const {config} = require('../../config');
 const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
+const assertThrowsAsync = require('../../lib/utils/assertThrowsAsync');
 
 describe('startTestPack', () => {
 	before(async() => {
@@ -118,6 +119,18 @@ describe('startTestPack', () => {
 			assert.ok(error, 'error');
 			assert.equal(error.code, 'ENOTFOUND', 'error code');
 		}
+	});
+
+	it('should throw correct error when test pack not found', () => {
+		nock(config.apiUrl).post(makeUrlFromArray([endpoints.testPackGenTokens, {id: 10}])).reply(404, {});
+
+		authContext.setContext(sessionConstants.ACCESS_TOKEN, 'tokenId', 'tokenPass');
+		assert.strictEqual(authContext.context, sessionConstants.ACCESS_TOKEN);
+
+		assertThrowsAsync(
+			async() => await startTestPack({testPackId: 10}),
+			err => err.code === SuitestError.SERVER_ERROR
+		);
 	});
 
 	it('should throw correct error on server response error', async() => {
