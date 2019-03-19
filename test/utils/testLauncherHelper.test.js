@@ -1,6 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const validation = require('../../lib/validataion');
+const EventEmitter = require('events');
 
 const SuitestError = require('../../lib/utils/SuitestError');
 const {snippets: log} = require('../../lib/testLauncher/launcherLogger');
@@ -60,5 +61,14 @@ describe('testLauncherHelper util', () => {
 		assert.ok(argsValidationError.firstCall.args[0].message.includes('Invalid input'));
 		assert.ok(process.exit.calledWith(1), 'exit called with 1');
 		argsValidationError.restore();
+	});
+
+	it('should increaseMaxListeners correctly', () => {
+		const emitter = new EventEmitter();
+		const listenersCount = emitter.getMaxListeners();
+
+		testLauncherHelper.increaseMaxListeners(emitter, 5);
+
+		assert.strictEqual(emitter.getMaxListeners(), listenersCount + 5);
 	});
 });
