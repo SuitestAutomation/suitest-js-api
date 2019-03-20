@@ -171,4 +171,29 @@ describe('process-args', () => {
 			'inspect is true when no value provided',
 		);
 	});
+
+	it('parseOptions when inspect-brk used without value', () => {
+		const argv = [
+			'/Users/aaa/bin/iojs',
+			'/Users/aaa/bin/suitest.js',
+			'automated',
+			'--inspect-brk',
+			'node',
+		];
+
+		assert.deepEqual(
+			parseOptions(argv),
+			{
+				_: [
+					'/Users/aaa/bin/iojs',
+					'/Users/aaa/bin/suitest.js',
+					'automated',
+					'node',
+				],
+				inspectBrk: true,
+				'inspect-brk': true,
+			},
+			'inspect-brk is true when no value provided',
+		);
+	});
 });
