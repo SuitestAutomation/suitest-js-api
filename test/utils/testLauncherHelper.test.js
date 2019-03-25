@@ -1,6 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const validation = require('../../lib/validataion');
+const EventEmitter = require('events');
 
 const SuitestError = require('../../lib/utils/SuitestError');
 const {snippets: log} = require('../../lib/testLauncher/launcherLogger');
@@ -60,6 +61,29 @@ describe('testLauncherHelper util', () => {
 		assert.ok(argsValidationError.firstCall.args[0].message.includes('Invalid input'));
 		assert.ok(process.exit.calledWith(1), 'exit called with 1');
 		argsValidationError.restore();
+	});
+
+	it('should increaseMaxListeners correctly', () => {
+		const emitter1 = new EventEmitter();
+		const listenersCount1 = emitter1.getMaxListeners();
+
+		testLauncherHelper.increaseMaxListeners(emitter1, 5, 3);
+
+		assert.strictEqual(emitter1.getMaxListeners(), listenersCount1 + 6, 'when devicesCount > concurrency allowed, limit to concurrency');
+
+		const emitter2 = new EventEmitter();
+		const listenersCount2 = emitter2.getMaxListeners();
+
+		testLauncherHelper.increaseMaxListeners(emitter2, 5, 0);
+
+		assert.strictEqual(emitter2.getMaxListeners(), listenersCount2 + 10, 'when concurrency is 0, limit to devicesCount');
+
+		const emitter3 = new EventEmitter();
+		const listenersCount3 = emitter3.getMaxListeners();
+
+		testLauncherHelper.increaseMaxListeners(emitter3, 5, 10);
+
+		assert.strictEqual(emitter3.getMaxListeners(), listenersCount3 + 10, 'when devicesCount < concurrency, limit to devicesCount');
 	});
 
 	it('isDebugMode should return true if debug argument supplied', () => {
