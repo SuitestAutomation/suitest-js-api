@@ -94,36 +94,58 @@ describe('Window chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(window().toString(), 'Window chain');
-		assert.equal(
+		const untilData = {
+			toJSON: () => ({
+				request: {
+					condition: {
+						subject: {
+							type: 'location',
+						},
+					},
+				},
+			}),
+		};
+
+		assert.strictEqual(window().toString(), 'Window chain');
+		assert.strictEqual(
 			window().sendText('text string').toString(),
 			'Sending text "text string" to window'
 		);
-		assert.equal(
+		assert.strictEqual(
+			window().sendText('text string').repeat(3).toString(),
+			'Sending text "text string" to window, repeat 3 times'
+		);
+		assert.strictEqual(
+			window().sendText('text string').interval(3000).toString(),
+			'Sending text "text string" to window'
+		);
+		assert.strictEqual(
+			window().sendText('text string').interval(3000).repeat(2).toString(),
+			'Sending text "text string" to window, repeat 2 times every 3000 ms'
+		);
+		assert.strictEqual(
+			window().sendText('text string').interval(3000).repeat(2).until(untilData).toString(),
+			'Sending text "text string" to window, repeat 2 times every 3000 ms'
+		);
+		assert.strictEqual(
+			window().sendText('text string').until(untilData).toString(),
+			'Sending text "text string" to window'
+		);
+		assert.strictEqual(
 			window().sendText('text string').repeat(3).interval(4000).toString(),
 			'Sending text "text string" to window, repeat 3 times every 4000 ms'
 		);
-		assert.equal(
-			window().sendText('text string').repeat(3).interval(4000).until({
-				toJSON: () => ({
-					request: {
-						condition: {
-							subject: {
-								type: 'location',
-							},
-						},
-					},
-				}),
-			}).toString(),
+		assert.strictEqual(
+			window().sendText('text string').repeat(3).interval(4000).until(untilData).toString(),
 			'Sending text "text string" to window, repeat 3 times every 4000 ms'
 		);
-		assert.equal(window().refresh('').toString(), 'Refreshing browser page');
-		assert.equal(window().goBack('').toString(), 'Navigating back in browser history');
-		assert.equal(window().goForward('').toString(), 'Navigating forward in browser history');
-		assert.equal(window().dismissModal('').toString(), 'Dismissing modal dialog');
-		assert.equal(window().acceptModal().toString(), 'Accepting modal dialog');
-		assert.equal(window().acceptModal('text').toString(), 'Accepting modal dialog with \'text\' message');
-		assert.equal(window().setSize(10, 20).toString(), 'Setting browser window size to 10, 20');
+		assert.strictEqual(window().refresh('').toString(), 'Refreshing browser page');
+		assert.strictEqual(window().goBack('').toString(), 'Navigating back in browser history');
+		assert.strictEqual(window().goForward('').toString(), 'Navigating forward in browser history');
+		assert.strictEqual(window().dismissModal('').toString(), 'Dismissing modal dialog');
+		assert.strictEqual(window().acceptModal().toString(), 'Accepting modal dialog');
+		assert.strictEqual(window().acceptModal('text').toString(), 'Accepting modal dialog with \'text\' message');
+		assert.strictEqual(window().setSize(10, 20).toString(), 'Setting browser window size to 10, 20');
 	});
 
 	it('should have beforeSendMsg', () => {
@@ -141,7 +163,7 @@ describe('Window chain', () => {
 				type: 'browserCommand',
 				browserCommand: {type: void 0},
 			},
-		}, 'type testLine sendText');
+		}, 'type testLine browserCommand');
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
 			sendText: 'text',

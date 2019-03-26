@@ -10,16 +10,22 @@ import {
 
 export interface WindowChain extends
 	WindowBaseQueryChain<WindowChain>,
-	SendTextModifier<WindowRepeatIntervalChain>, // sendText
+	SendTextModifier<WindowRepeatIntervalUntilChain>, // sendText
 	WindowModifiers.ModalInterruct<WindowEmptyChain>, // acceptModal, dismissModal
 	WindowModifiers.Navigate<WindowEmptyChain>, // goForward, goBack
 	WindowModifiers.Refresh<WindowEmptyChain>, // refresh
 	WindowModifiers.SetSize<WindowEmptyChain> // setSize
 {}
 
+interface WindowRepeatIntervalUntilChain extends
+	WindowBaseEvalChain<WindowRepeatIntervalUntilChain>,
+	UntilModifier<WindowRepeatIntervalChain>,
+	Repeatable<WindowIntervalChain>,
+	Intervalable<WindowRepeatChain>
+{}
+
 interface WindowRepeatIntervalChain extends
 	WindowBaseEvalChain<WindowRepeatIntervalChain>,
-	UntilModifier<Repeatable<WindowIntervalChain> & Intervalable<WindowRepeatChain>>,
 	Repeatable<WindowIntervalChain>,
 	Intervalable<WindowRepeatChain>
 {}

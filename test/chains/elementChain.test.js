@@ -197,47 +197,47 @@ describe('Element chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(element('el-api-id').toString(), 'Getting properties of "el-api-id"');
-		assert.equal(element('el-api-id').exists().toString(), 'Checking if "el-api-id" exists');
-		assert.equal(element({
+		assert.strictEqual(element('el-api-id').toString(), 'Getting properties of "el-api-id"');
+		assert.strictEqual(element('el-api-id').exists().toString(), 'Checking if "el-api-id" exists');
+		assert.strictEqual(element({
 			css: 'body',
 			index: 1,
 		}).exists().toString(), 'Checking if "{"css":"body","index":1}" exists');
-		assert.equal(
+		assert.strictEqual(
 			element('el-api-id').matchesJS('function(el){return false}').toString(),
 			'Checking if "el-api-id" matches JS:\nfunction(el){return false}'
 		);
-		// assert.equal(
+		// assert.strictEqual(
 		// 	element('el-api-id').matchesBrightScript('function(el){return false}').toString(),
 		// 	'Checking if "el-api-id" matches BrightScript:\nfunction(el){return false}'
 		// );
-		assert.equal(
+		assert.strictEqual(
 			element('el-api-id').not().exists().toString(),
 			'Checking if "el-api-id" is missing'
 		);
-		assert.equal(
+		assert.strictEqual(
 			element('el-api-id').visible().toString(),
 			'Checking if "el-api-id" is visible'
 		);
-		assert.equal(
+		assert.strictEqual(
 			element('el-api-id').matches(ELEMENT_PROP.ID).toString(),
 			'Checking if "el-api-id" matches:\n' +
 			'  id = valueRepo'
 		);
-		assert.equal(
+		assert.strictEqual(
 			element('el-api-id').matches({name: ELEMENT_PROP.ID}).toString(),
 			'Checking if "el-api-id" matches:\n' +
 			'  id = valueRepo'
 		);
-		assert.equal(
+		assert.strictEqual(
 			element('el-api-id').click().toString(),
 			'Clicking on "el-api-id"'
 		);
-		assert.equal(
+		assert.strictEqual(
 			element('el-api-id').click().repeat(10).interval(2000).toString(),
 			'Clicking on "el-api-id", repeat 10 times every 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			element('el-api-id').click().repeat(10).interval(2000).until({
 				toJSON: () => ({
 					request: {
@@ -252,23 +252,27 @@ describe('Element chain', () => {
 				.toString(),
 			'Clicking on "el-api-id", repeat 10 times every 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			element('el-api-id').moveTo().toString(),
 			'Moving mouse to "el-api-id"'
 		);
-		assert.equal(
+		assert.strictEqual(
 			element('el-api-id').sendText('text string').toString(),
 			'Sending text "text string" to "el-api-id"'
 		);
-		assert.equal(
+		assert.strictEqual(
+			element('el-api-id').sendText('text string').repeat(3).toString(),
+			'Sending text "text string" to "el-api-id", repeat 3 times'
+		);
+		assert.strictEqual(
 			element('el-api-id').sendText('text string').repeat(10).interval(2000).toString(),
 			'Sending text "text string" to "el-api-id", repeat 10 times every 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			element('el-api-id').setText('text string').toString(),
 			'Setting text "text string" for "el-api-id"'
 		);
-		assert.equal(
+		assert.strictEqual(
 			element('el-api-id').setText('text string').repeat(10).interval(2000).toString(),
 			'Setting text "text string" for "el-api-id", repeat 10 times every 2000 ms'
 		);
