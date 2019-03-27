@@ -25,6 +25,22 @@ hasExitedApp.abandon();
 hasExitedApp.toString();
 hasExitedApp.toAssert();
 
+// should have sendText methods
+const sendTextToApp = application().sendText('some text');
+
+sendTextToApp.until(suitest.element({xpath: 'SomeElement'}));
+sendTextToApp.repeat(3);
+sendTextToApp.interval(200);
+sendTextToApp.repeat(3).interval(200);
+sendTextToApp.interval(400).repeat(2);
+sendTextToApp.interval(400).repeat(2);
+
+sendTextToApp.clone();
+sendTextToApp.then();
+sendTextToApp.abandon();
+sendTextToApp.toString();
+sendTextToApp.toAssert();
+
 // getters
 baseApp.it.should.with.times;
 baseApp.should.it.with.times;
