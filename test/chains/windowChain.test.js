@@ -136,6 +136,10 @@ describe('Window chain', () => {
 			'Sending text "text string" to window, repeat 3 times every 4000 ms'
 		);
 		assert.strictEqual(
+			window().sendText('text string').repeat(1).interval(1).toString(),
+			'Sending text "text string" to window, repeat 1 times every 1 ms'
+		);
+		assert.strictEqual(
 			window().sendText('text string').repeat(3).interval(4000).until(untilData).toString(),
 			'Sending text "text string" to window, repeat 3 times every 4000 ms'
 		);

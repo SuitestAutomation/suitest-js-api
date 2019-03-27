@@ -161,6 +161,9 @@ describe('Application chain', () => {
 		assert.strictEqual(
 			sendTextApp.repeat(3).interval(2222).toString(),
 			'Sending text "some text" to application, repeat 3 times every 2222 ms');
+		assert.strictEqual(
+			sendTextApp.repeat(1).interval(1).toString(),
+			'Sending text "some text" to application, repeat 1 times every 1 ms');
 		assert.strictEqual(sendTextApp.until(untilData).toString(), 'Sending text "some text" to application');
 	});
 
