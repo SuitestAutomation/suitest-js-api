@@ -85,4 +85,44 @@ describe('testLauncherHelper util', () => {
 
 		assert.strictEqual(emitter3.getMaxListeners(), listenersCount3 + 10, 'when devicesCount < concurrency, limit to devicesCount');
 	});
+
+	it('isDebugMode should return true if debug argument supplied', () => {
+		assert(testLauncherHelper.isDebugMode({inspectBrk: undefined, inspect: 'true'}));
+	});
+
+	it('isDebugMode should return false if debug argument is not supplied', () => {
+		assert.strictEqual(testLauncherHelper.isDebugMode({inspectBrk: undefined, inspect: undefined}), false);
+	});
+
+	it('isDebugMode should return true if process launched in debug mode', () => {
+		const execArgv = process.execArgv;
+
+		process.execArgv = ['--inspect=0'];
+		assert(testLauncherHelper.isDebugMode({inspectBrk: undefined, inspect: undefined}));
+		process.execArgv = execArgv;
+	});
+
+	it('getDebugOption should return false if no debug option is provided', () => {
+		assert.strictEqual(
+			testLauncherHelper.getDebugOption({inspectBrk: undefined, inspect: undefined}),
+			false
+		);
+	});
+
+	it('getDebugOption should return correct option if debug option is provided', () => {
+		assert.strictEqual(
+			testLauncherHelper.getDebugOption({inspectBrk: 9099, inspect: undefined}),
+			'--inspect-brk=9099'
+		);
+
+		assert.strictEqual(
+			testLauncherHelper.getDebugOption({inspectBrk: undefined, inspect: 'true'}),
+			'--inspect'
+		);
+
+		assert.strictEqual(
+			testLauncherHelper.getDebugOption({inspectBrk: undefined, inspect: true}),
+			'--inspect'
+		);
+	});
 });
