@@ -1,6 +1,6 @@
 import * as suitest from '../../index';
 
-const {element, PROP, VALUE, COMP, VISIBILITY_STATE} = suitest;
+const {element, PROP, VALUE, COMP, VISIBILITY_STATE, VIDEO_STATE} = suitest;
 
 const el = element({css: '.my-element'});
 // const brsCodeExample = (
@@ -18,6 +18,7 @@ el.setText('');
 el.timeout(1);
 el.exists();
 el.matches(PROP.IS_CHECKED, true);
+el.matches(PROP.VIDEO_STATE, VIDEO_STATE.UNDEFINED);
 el.then(e => e && e.backgroundColor);
 el.then(e => e && e.text);
 el.then(e => e && e.id);
