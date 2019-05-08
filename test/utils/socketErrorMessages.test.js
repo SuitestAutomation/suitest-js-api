@@ -114,6 +114,7 @@ describe('Socket error messages', () => {
 			],
 			[basePayload('serverError'), 'Server error occurred. Chain description.'],
 			[basePayload('invalidCredentials'), 'Credentials for this device were changed.'],
+			[basePayload('networkControlDisabled'), 'Network control is disabled on device. To continue using this device, enable network control.'],
 			[basePayload('syntaxError'), 'Test command received invalid input. Chain description.'],
 			[basePayload('syntaxError', 'WrongDelay'), 'Test command received invalid input. Delay value is invalid. Chain description.'],
 			[basePayload('syntaxError', 'wrongBody'), 'Body field value is exceeding 4KB limit. Chain description.'],
