@@ -16,6 +16,7 @@ el.moveTo();
 el.sendText('');
 el.setText('');
 el.timeout(1);
+el.isLoaded();
 el.exists();
 el.matches(PROP.IS_CHECKED, true);
 el.then(e => e && e.backgroundColor);
