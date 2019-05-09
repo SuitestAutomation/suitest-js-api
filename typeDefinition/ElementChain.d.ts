@@ -4,6 +4,7 @@ import {
 	MatchJSModifiers,
 	// MatchBrightScriptModifiers,
 	ExistsModifiers,
+	IsLoadedModifier,
 	ElementMatchModifiers,
 	Timeout,
 	Clickable,
@@ -92,7 +93,8 @@ interface ElementEvalModifiers<T> extends
 	MatchJSModifiers<T>,
 	// MatchBrightScriptModifiers<T>,
 	ExistsModifiers<T>,
-	ElementMatchModifiers<T>
+	ElementMatchModifiers<T>,
+	IsLoadedModifier<T>
 {}
 
 interface ElementEvalModifiersWithNegation<T> extends

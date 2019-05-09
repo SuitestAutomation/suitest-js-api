@@ -96,6 +96,10 @@ export interface ExistsModifiers<T> {
 	exists(): T;
 }
 
+export interface IsLoadedModifier<T> {
+	isLoaded(): T;
+}
+
 export interface WasMadeModifier<T> {
 	wasMade(): T;
 }

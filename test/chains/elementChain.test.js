@@ -24,6 +24,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.isNot, 'function');
 		assert.strictEqual(typeof chain.exist, 'function');
 		assert.strictEqual(typeof chain.exists, 'function');
+		assert.strictEqual(typeof chain.isLoaded, 'function');
 		assert.strictEqual(typeof chain.match, 'function');
 		assert.strictEqual(typeof chain.matches, 'function');
 		assert.strictEqual(typeof chain.matchRepo, 'function');
