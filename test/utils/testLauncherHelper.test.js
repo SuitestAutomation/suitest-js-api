@@ -1,6 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const validation = require('../../lib/validataion');
+const EventEmitter = require('events');
 
 const SuitestError = require('../../lib/utils/SuitestError');
 const {snippets: log} = require('../../lib/testLauncher/launcherLogger');
@@ -46,15 +47,6 @@ describe('testLauncherHelper util', () => {
 		assert(process.exit.calledWith(0));
 	});
 
-	it('should merge two configs correctly', () => {
-		assert.deepStrictEqual(testLauncherHelper.mergeConfigs({a: false}, {}), {a: false});
-		assert.deepStrictEqual(testLauncherHelper.mergeConfigs({a: false}, {a: undefined}), {a: false});
-		assert.deepStrictEqual(testLauncherHelper.mergeConfigs({a: false}, {a: null}), {a: false});
-		assert.deepStrictEqual(testLauncherHelper.mergeConfigs({a: undefined}, {a: null}), {a: undefined});
-		assert.deepStrictEqual(testLauncherHelper.mergeConfigs({a: undefined}, {a: false}), {a: false});
-		assert.deepStrictEqual(testLauncherHelper.mergeConfigs({a: true}, {a: false}), {a: false});
-	});
-
 	it('should validateInput correctly', () => {
 		const validate = sinon.stub(validation, 'validate');
 		const argsValidationError = sinon.stub(log, 'argsValidationError');
@@ -69,5 +61,68 @@ describe('testLauncherHelper util', () => {
 		assert.ok(argsValidationError.firstCall.args[0].message.includes('Invalid input'));
 		assert.ok(process.exit.calledWith(1), 'exit called with 1');
 		argsValidationError.restore();
+	});
+
+	it('should increaseMaxListeners correctly', () => {
+		const emitter1 = new EventEmitter();
+		const listenersCount1 = emitter1.getMaxListeners();
+
+		testLauncherHelper.increaseMaxListeners(emitter1, 5, 3);
+
+		assert.strictEqual(emitter1.getMaxListeners(), listenersCount1 + 6, 'when devicesCount > concurrency allowed, limit to concurrency');
+
+		const emitter2 = new EventEmitter();
+		const listenersCount2 = emitter2.getMaxListeners();
+
+		testLauncherHelper.increaseMaxListeners(emitter2, 5, 0);
+
+		assert.strictEqual(emitter2.getMaxListeners(), listenersCount2 + 10, 'when concurrency is 0, limit to devicesCount');
+
+		const emitter3 = new EventEmitter();
+		const listenersCount3 = emitter3.getMaxListeners();
+
+		testLauncherHelper.increaseMaxListeners(emitter3, 5, 10);
+
+		assert.strictEqual(emitter3.getMaxListeners(), listenersCount3 + 10, 'when devicesCount < concurrency, limit to devicesCount');
+	});
+
+	it('isDebugMode should return true if debug argument supplied', () => {
+		assert(testLauncherHelper.isDebugMode({inspectBrk: undefined, inspect: 'true'}));
+	});
+
+	it('isDebugMode should return false if debug argument is not supplied', () => {
+		assert.strictEqual(testLauncherHelper.isDebugMode({inspectBrk: undefined, inspect: undefined}), false);
+	});
+
+	it('isDebugMode should return true if process launched in debug mode', () => {
+		const execArgv = process.execArgv;
+
+		process.execArgv = ['--inspect=0'];
+		assert(testLauncherHelper.isDebugMode({inspectBrk: undefined, inspect: undefined}));
+		process.execArgv = execArgv;
+	});
+
+	it('getDebugOption should return false if no debug option is provided', () => {
+		assert.strictEqual(
+			testLauncherHelper.getDebugOption({inspectBrk: undefined, inspect: undefined}),
+			false
+		);
+	});
+
+	it('getDebugOption should return correct option if debug option is provided', () => {
+		assert.strictEqual(
+			testLauncherHelper.getDebugOption({inspectBrk: 9099, inspect: undefined}),
+			'--inspect-brk=9099'
+		);
+
+		assert.strictEqual(
+			testLauncherHelper.getDebugOption({inspectBrk: undefined, inspect: 'true'}),
+			'--inspect'
+		);
+
+		assert.strictEqual(
+			testLauncherHelper.getDebugOption({inspectBrk: undefined, inspect: true}),
+			'--inspect'
+		);
 	});
 });

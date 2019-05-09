@@ -18,6 +18,7 @@ video().doesNot();
 video().isNot();
 video().exist();
 video().exists();
+video().visible();
 video().then();
 video().timeout(10);
 video().toString();
@@ -28,15 +29,20 @@ video().matches(suitest.PROP.ID).toString();
 video().click().toString();
 video().click().repeat(10).interval(2000).toString();
 video().moveTo().toString();
-video().sendText('text').toString();
-video().sendText('text').repeat(10).interval(2000).toString();
-video().sendText('text').repeat(10).interval(2000).toAssert();
 
 // getters
 video().it.should.with.times;
 video().should.it.with.times;
 video().with.should.it.times;
 video().times.should.with.it;
+
+video().isPaused();
+video().isStopped();
+video().isPlaying();
+video().isStopped().toAssert();
+video().toAssert().isStopped();
+video().isStopped().timeout(10);
+video().timeout(1).isStopped();
 
 async function videoTest() {
 	await video().timeout(10).not();

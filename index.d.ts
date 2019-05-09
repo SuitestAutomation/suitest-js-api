@@ -100,7 +100,7 @@ declare namespace suitest {
 		application(): ApplicationChain;
 		clearAppData(): ClearAppDataChain;
 		cookie(cookieName: string): CookieChain;
-		element(elementSelector: ElementSelector): ElementChain;
+		element(elementSelector: ElementSelector | string): ElementChain;
 		video(): VideoChain;
 		executeCommand(jsCode: string): ExecuteCommandChain;
 		executeCommand(jsCode: Function): ExecuteCommandChain;
@@ -205,9 +205,10 @@ declare namespace suitest {
 	}
 
 	interface ConfigureOptions {
-		logLevel?: 'silent'|'normal'|'verbose'|'debug';
+		logLevel?: 'silent'|'normal'|'verbose'|'debug'|'silly';
 		disallowCrashReports?: boolean;
 		continueOnFatalError?: boolean;
+		defaultTimeout?: number;
 	}
 
 	interface ResponseError {

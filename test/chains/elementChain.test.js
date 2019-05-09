@@ -24,6 +24,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.isNot, 'function');
 		assert.strictEqual(typeof chain.exist, 'function');
 		assert.strictEqual(typeof chain.exists, 'function');
+		assert.strictEqual(typeof chain.visible, 'function');
 		assert.strictEqual(typeof chain.isLoaded, 'function');
 		assert.strictEqual(typeof chain.match, 'function');
 		assert.strictEqual(typeof chain.matches, 'function');
@@ -39,6 +40,10 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.interval, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'function');
 		assert.strictEqual(typeof chain.sendText, 'function');
+		assert.strictEqual(typeof chain.setText, 'function');
+		assert.strictEqual(typeof chain.isPlaying, 'function');
+		assert.strictEqual(typeof chain.isStopped, 'function');
+		assert.strictEqual(typeof chain.isPaused, 'function');
 
 		assert.strictEqual(chain.with, chain);
 		assert.strictEqual(chain.it, chain);
@@ -51,6 +56,7 @@ describe('Element chain', () => {
 
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
 		assert.strictEqual(typeof chain.match, 'undefined');
 		assert.strictEqual(typeof chain.matches, 'undefined');
 		assert.strictEqual(typeof chain.matchRepo, 'undefined');
@@ -62,6 +68,10 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.click, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
+		assert.strictEqual(typeof chain.setText, 'undefined');
+		assert.strictEqual(typeof chain.isPlaying, 'undefined');
+		assert.strictEqual(typeof chain.isPaused, 'undefined');
+		assert.strictEqual(typeof chain.isStopped, 'undefined');
 	});
 
 	it('should have only allowed modifiers after click is applied', () => {
@@ -69,6 +79,7 @@ describe('Element chain', () => {
 
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
 		assert.strictEqual(typeof chain.match, 'undefined');
 		assert.strictEqual(typeof chain.matches, 'undefined');
 		assert.strictEqual(typeof chain.matchRepo, 'undefined');
@@ -82,9 +93,13 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
+		assert.strictEqual(typeof chain.setText, 'undefined');
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
 		assert.strictEqual(typeof chain.isNot, 'undefined');
+		assert.strictEqual(typeof chain.isPlaying, 'undefined');
+		assert.strictEqual(typeof chain.isStopped, 'undefined');
+		assert.strictEqual(typeof chain.isPaused, 'undefined');
 	});
 
 	it('should have only allowed modifiers after moveTo is applied', () => {
@@ -92,6 +107,7 @@ describe('Element chain', () => {
 
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
 		assert.strictEqual(typeof chain.match, 'undefined');
 		assert.strictEqual(typeof chain.matches, 'undefined');
 		assert.strictEqual(typeof chain.matchRepo, 'undefined');
@@ -105,13 +121,42 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
+		assert.strictEqual(typeof chain.setText, 'undefined');
+		assert.strictEqual(typeof chain.not, 'undefined');
+		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
+		assert.strictEqual(typeof chain.isPaused, 'undefined');
+		assert.strictEqual(typeof chain.isPlaying, 'undefined');
+		assert.strictEqual(typeof chain.isStopped, 'undefined');
+	});
+
+	it('should have only allowed modifiers after sendText is applied', () => {
+		const chain = element('element').sendText('text');
+
+		assert.strictEqual(typeof chain.exist, 'undefined');
+		assert.strictEqual(typeof chain.exists, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
+		assert.strictEqual(typeof chain.match, 'undefined');
+		assert.strictEqual(typeof chain.matches, 'undefined');
+		assert.strictEqual(typeof chain.matchRepo, 'undefined');
+		assert.strictEqual(typeof chain.matchesRepo, 'undefined');
+		assert.strictEqual(typeof chain.matchJS, 'undefined');
+		assert.strictEqual(typeof chain.matchesJS, 'undefined');
+		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.repeat, 'function');
+		assert.strictEqual(typeof chain.interval, 'function');
+		assert.strictEqual(typeof chain.moveTo, 'undefined');
+		assert.strictEqual(typeof chain.click, 'undefined');
+		assert.strictEqual(typeof chain.sendText, 'undefined');
+		assert.strictEqual(typeof chain.setText, 'undefined');
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
 		assert.strictEqual(typeof chain.isNot, 'undefined');
 	});
 
-	it('should have only allowed modifiers after sendText is applied', () => {
-		const chain = element('element').sendText('text');
+	it('should have only allowed modifiers after setText is applied', () => {
+		const chain = element('element').setText('text');
 
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
@@ -128,9 +173,13 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
+		assert.strictEqual(typeof chain.setText, 'undefined');
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
 		assert.strictEqual(typeof chain.isNot, 'undefined');
+		assert.strictEqual(typeof chain.isPlaying, 'undefined');
+		assert.strictEqual(typeof chain.isStopped, 'undefined');
+		assert.strictEqual(typeof chain.isPaused, 'undefined');
 	});
 
 	it('should have only allowed modifiers after matchJS is applied', () => {
@@ -145,6 +194,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
 		assert.strictEqual(typeof chain.isNot, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
 	});
 
 	it('should convert to string with meaningful message', () => {
@@ -165,6 +215,10 @@ describe('Element chain', () => {
 		assert.equal(
 			element('el-api-id').not().exists().toString(),
 			'Checking if "el-api-id" is missing'
+		);
+		assert.equal(
+			element('el-api-id').visible().toString(),
+			'Checking if "el-api-id" is visible'
 		);
 		assert.equal(
 			element('el-api-id').matches(ELEMENT_PROP.ID).toString(),
@@ -210,6 +264,14 @@ describe('Element chain', () => {
 		assert.equal(
 			element('el-api-id').sendText('text string').repeat(10).interval(2000).toString(),
 			'Sending text "text string" to "el-api-id", repeat 10 times every 2000 ms'
+		);
+		assert.equal(
+			element('el-api-id').setText('text string').toString(),
+			'Setting text "text string" for "el-api-id"'
+		);
+		assert.equal(
+			element('el-api-id').setText('text string').repeat(10).interval(2000).toString(),
+			'Setting text "text string" for "el-api-id", repeat 10 times every 2000 ms'
 		);
 	});
 
@@ -358,6 +420,21 @@ describe('Element chain', () => {
 			},
 		}, 'testLine sendText until');
 		assert.deepStrictEqual(toJSON({
+			isAssert: true,
+			setText: 'text',
+			selector: {apiId: 'apiId'},
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'setText',
+				target: {
+					type: 'element',
+					apiId: 'apiId',
+				},
+				val: 'text',
+			},
+		}, 'testLine setText until');
+		assert.deepStrictEqual(toJSON({
 			isNegated: true,
 			comparator: {
 				type: SUBJ_COMPARATOR.EXIST,
@@ -378,6 +455,26 @@ describe('Element chain', () => {
 				timeout: 2000,
 			},
 		}, 'element does not exist testLine');
+		assert.deepStrictEqual(toJSON({
+			comparator: {
+				type: SUBJ_COMPARATOR.VISIBLE,
+			},
+			selector: {apiId: 'apiId'},
+			timeout: 2000,
+		}), {
+			type: 'eval',
+			request: {
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'element',
+						apiId: 'apiId',
+					},
+					type: 'visible',
+				},
+				timeout: 2000,
+			},
+		}, 'element visible testLine');
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
 			comparator: {

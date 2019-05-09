@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {getOwnArgs, hideOwnArgs} = require('../../lib/testLauncher/processArgs');
+const {getOwnArgs, hideOwnArgs, parseOptions} = require('../../lib/testLauncher/processArgs');
 
 let argv = [];
 
@@ -101,6 +101,99 @@ describe('process-args', () => {
 			getOwnArgs(),
 			['automated', '--k', 'key', '--p', 'password'],
 			'hidden lib arguments',
+		);
+	});
+
+	it('parseOptions when inspect is Boolean', () => {
+		const argv = [
+			'/Users/aaa/bin/iojs',
+			'/Users/aaa/bin/suitest.js',
+			'automated',
+			'--inspect=true',
+		];
+
+		assert.deepEqual(
+			parseOptions(argv),
+			{
+				_: [
+					'/Users/aaa/bin/iojs',
+					'/Users/aaa/bin/suitest.js',
+					'automated',
+				],
+				inspect: true,
+			},
+			'inspect is boolean',
+		);
+	});
+
+	it('parseOptions when inspect is Number', () => {
+		const argv = [
+			'/Users/aaa/bin/iojs',
+			'/Users/aaa/bin/suitest.js',
+			'automated',
+			'--inspect=9099',
+		];
+
+		assert.deepEqual(
+			parseOptions(argv),
+			{
+				_: [
+					'/Users/aaa/bin/iojs',
+					'/Users/aaa/bin/suitest.js',
+					'automated',
+				],
+				inspect: 9099,
+			},
+			'inspect is number',
+		);
+	});
+
+	it('parseOptions when inspect used without value', () => {
+		const argv = [
+			'/Users/aaa/bin/iojs',
+			'/Users/aaa/bin/suitest.js',
+			'automated',
+			'--inspect',
+			'node',
+		];
+
+		assert.deepEqual(
+			parseOptions(argv),
+			{
+				_: [
+					'/Users/aaa/bin/iojs',
+					'/Users/aaa/bin/suitest.js',
+					'automated',
+					'node',
+				],
+				inspect: true,
+			},
+			'inspect is true when no value provided',
+		);
+	});
+
+	it('parseOptions when inspect-brk used without value', () => {
+		const argv = [
+			'/Users/aaa/bin/iojs',
+			'/Users/aaa/bin/suitest.js',
+			'automated',
+			'--inspect-brk',
+			'node',
+		];
+
+		assert.deepEqual(
+			parseOptions(argv),
+			{
+				_: [
+					'/Users/aaa/bin/iojs',
+					'/Users/aaa/bin/suitest.js',
+					'automated',
+					'node',
+				],
+				inspectBrk: true,
+				'inspect-brk': true,
+			},
+			'inspect-brk is true when no value provided',
 		);
 	});
 });

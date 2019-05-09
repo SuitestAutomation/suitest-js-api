@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const helpers = require('../../lib/utils/socketChainHelper');
 const logger = require('../../lib/utils/logger');
 const SuitestError = require('../../lib/utils/SuitestError');
-const {PROP_COMPARATOR, SUBJ_COMPARATOR, ELEMENT_PROP} = require('../../lib/mappings');
+const {SUBJ_COMPARATOR} = require('../../lib/mappings');
 const {toString: elementToString} = require('../../lib/chains/elementChain');
 
 describe('socket chain helpers', () => {

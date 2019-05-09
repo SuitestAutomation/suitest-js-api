@@ -9,11 +9,14 @@ import {
 	Timeout,
 	Clickable,
 	SendTextModifier,
+	SetTextModifier,
 	MoveToModifier,
 	Repeatable,
 	Intervalable,
 	BaseChain,
 	UntilModifier,
+	VisibleModifier,
+	VideoStateModifiers,
 } from './modifiers';
 import {ElementProps} from "./constants/ElementProps";
 
@@ -23,8 +26,10 @@ export interface ElementChain extends
 	Timeout<ElementWithoutTimeout>, // timeout
 	ElementEvalModifiers<ElementWithoutEvalChain>,
 	SendTextModifier<ElementRepeatIntervalChain>, // sendText
+	SetTextModifier<ElementEmptyChain>, // setText
 	Clickable<ElementRepeatIntervalChain>, // click
-	MoveToModifier<ElementEmptyChain> // moveTo
+	MoveToModifier<ElementEmptyChain>, // moveTo
+	VisibleModifier<ElementWithoutEvalChain>
 {}
 
 // -matchers +timeout +negation
@@ -90,6 +95,7 @@ interface ElementRepeatChain extends
 {}
 
 interface ElementEvalModifiers<T> extends
+	VideoStateModifiers<T>,
 	MatchJSModifiers<T>,
 	// MatchBrightScriptModifiers<T>,
 	ExistsModifiers<T>,
