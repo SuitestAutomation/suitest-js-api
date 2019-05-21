@@ -272,7 +272,7 @@ describe('Socket error messages', () => {
 			[basePayload('networkError'), 'Chain description.'],
 			[basePayload('noHasLines'), 'No assertion properties defined. Chain description.'],
 			[basePayload('appCrashed'), 'App seems to have crashed. Chain description.'],
-			[basePayload('timeLimitExceeded'), 'Time limit has been exceeded. Chain description.'],
+			[basePayload('timeLimitExceeded'), 'Test execution limit exceeded (based on your subscription). Chain description.'],
 			[basePayload('notResponding'), 'Device stopped responding.'],
 			[basePayload('suitestifyError'), 'Suitestify failed to start. Check your Suitestify settings.'],
 			[basePayload('suitestifyRequired'), 'This assertion only works with Suitestify. You can configure your app to use Suitestify in the app settings. Please note that Suitestify is not available for all platforms.'],
