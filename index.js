@@ -39,6 +39,7 @@ const VIDEO_STATE = require('./lib/constants/videoState');
 const CONTENT_MODE = require('./lib/constants/contentMode');
 const ELEMENT_STATE = require('./lib/constants/elementState');
 const TEXT_ALIGNMENT = require('./lib/constants/textAlignment');
+const IMAGE_LOAD_STATE = require('./lib/constants/imageLoadState');
 const BORDER_STYLE = require('./lib/constants/borderStyle');
 const VISIBILITY_STATE = require('./lib/constants/visibilityState');
 const VRC = require('./lib/constants/vrc');
@@ -98,6 +99,7 @@ class SUITEST_API {
 		this.CONTENT_MODE = CONTENT_MODE;
 		this.ELEMENT_STATE = ELEMENT_STATE;
 		this.TEXT_ALIGNMENT = TEXT_ALIGNMENT;
+		this.IMAGE_LOAD_STATE = IMAGE_LOAD_STATE;
 		this.BORDER_STYLE = BORDER_STYLE;
 		this.VRC = VRC;
 		this.KEY = KEY;

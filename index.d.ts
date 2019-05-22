@@ -27,6 +27,7 @@ import {ElementState} from './typeDefinition/constants/ElementState';
 import {TextAlignment} from './typeDefinition/constants/TextAlignment';
 import {BorderStyle} from './typeDefinition/constants/BorderStyle';
 import {ReplOptions} from './typeDefinition/InteractiveCommandChain';
+import {ImageLoadState} from './typeDefinition/constants/ImageLoadState';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -80,6 +81,7 @@ declare namespace suitest {
 		CONTENT_MODE: ContentMode;
 		ELEMENT_STATE: ElementState;
 		TEXT_ALIGNMENT: TextAlignment;
+		IMAGE_LOAD_STATE: ImageLoadState;
 		BORDER_STYLE: BorderStyle;
 		KEY: Keys;
 		NETWORK_PROP: NetworkProp;

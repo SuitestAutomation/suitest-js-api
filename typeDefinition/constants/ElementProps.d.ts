@@ -72,6 +72,7 @@ export type ElementProps = {
 	selectedImageTintColor:  string,
 	state:                   string,
 	textAlignment:           string,
+	imageLoadState:          string,
 	leftAbsolute:            number,
 	topAbsolute:             number,
 	tintColor:               string,
