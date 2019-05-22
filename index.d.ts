@@ -27,7 +27,7 @@ import {ElementState} from './typeDefinition/constants/ElementState';
 import {TextAlignment} from './typeDefinition/constants/TextAlignment';
 import {BorderStyle} from './typeDefinition/constants/BorderStyle';
 import {ReplOptions} from './typeDefinition/InteractiveCommandChain';
-import {ImageLoadState} from './typeDefinition/constants/imageLoadState';
+import {ImageLoadState} from './typeDefinition/constants/ImageLoadState';
 
 // --------------- Suitest Interface ---------------------- //
 
