@@ -77,6 +77,7 @@ export type ElementPropTypes = {
 	SELECTED_IMAGE_TINT_COLOR: 'selectedImageTintColor',
 	STATE:                     'state',
 	TEXT_ALIGNMENT:            'textAlignment',
+	IMAGE_LOAD_STATE:          'imageLoadState',
 	LEFT_ABSOLUTE:             'leftAbsolute',
 	TAG_INT:                   'tagInt',
 	TINT_COLOR:                'tintColor',
