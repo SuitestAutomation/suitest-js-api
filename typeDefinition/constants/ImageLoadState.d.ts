@@ -3,5 +3,5 @@ export type ImageLoadState = {
     LOADING: 'loading',
     ERROR: 'error',
     UNKNOWN: 'unknown',
-    EMPTY: 'empty',
+    EMPTY: '',
 }
