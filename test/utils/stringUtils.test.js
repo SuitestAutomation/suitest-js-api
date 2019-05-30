@@ -5,6 +5,7 @@ const {
 	arrToString,
 	stripAnsiChars,
 	appendDot,
+	placeholdEmpty,
 } = require('../../lib/utils/stringUtils');
 
 describe('stringUtils util', () => {
@@ -23,5 +24,15 @@ describe('stringUtils util', () => {
 		assert.equal(appendDot(''), '.');
 		assert.equal(appendDot('test'), 'test.');
 		assert.equal(appendDot('test.'), 'test.');
+	});
+
+	it('placeholdEmpty should transform empty strings properly', () => {
+		assert.equal(
+			placeholdEmpty('\'\' "" `` \' \' " " ` ` "\t\n"'),
+			'[EMPTY] [EMPTY] [EMPTY] [EMPTY] [EMPTY] [EMPTY] [EMPTY]',
+			'properly replaced'
+		);
+		assert.equal(placeholdEmpty(' hello world '), ' hello world ', 'not changed');
+		assert.equal(placeholdEmpty(1), 1, 'non string not changed');
 	});
 });
