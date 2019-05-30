@@ -84,4 +84,12 @@ describe('logger util', () => {
 
 		assert(log.firstCall.args[0].includes('MyDevice'), 'device short display name is included in left rail');
 	});
+
+	it('should display empty strings properly', () => {
+		logger.log('\'\' "" `` \' \' " " ` ` "\t\n"');
+		assert(
+			log.firstCall.args[0].includes('[EMPTY] [EMPTY] [EMPTY] [EMPTY] [EMPTY] [EMPTY] [EMPTY]'),
+			'empty string replace with placeholder'
+		);
+	});
 });
