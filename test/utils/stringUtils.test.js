@@ -27,12 +27,8 @@ describe('stringUtils util', () => {
 	});
 
 	it('placeholdEmpty should transform empty strings properly', () => {
-		assert.equal(
-			placeholdEmpty('\'\' "" `` \' \' " " ` ` "\t\n"'),
-			'[EMPTY] [EMPTY] [EMPTY] [EMPTY] [EMPTY] [EMPTY] [EMPTY]',
-			'properly replaced'
-		);
-		assert.equal(placeholdEmpty(' hello world '), ' hello world ', 'not changed');
-		assert.equal(placeholdEmpty(1), 1, 'non string not changed');
+		assert.equal(placeholdEmpty(''), '[EMPTY]');
+		assert.equal(placeholdEmpty(' '), ' ');
+		assert.equal(placeholdEmpty(1), 1);
 	});
 });
