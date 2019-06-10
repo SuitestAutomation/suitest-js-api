@@ -35,23 +35,23 @@ describe('Press button chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(
+		assert.strictEqual(
 			pressButton(buttonTypes.BACK).toString(),
 			'Pressing button BACK'
 		);
-		assert.equal(
+		assert.strictEqual(
 			pressButton([buttonTypes.BLUE, buttonTypes.DOWN]).toString(),
 			'Pressing buttons BLUE, DOWN'
 		);
-		assert.equal(
+		assert.strictEqual(
 			pressButton(buttonTypes.BLUE).repeat(10).toString(),
-			'Pressing button BLUE, repeat 10 times every 500 ms'
+			'Pressing button BLUE, repeat 10 times'
 		);
-		assert.equal(
+		assert.strictEqual(
 			pressButton(buttonTypes.BLUE).repeat(10).interval(2000).toString(),
 			'Pressing button BLUE, repeat 10 times every 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			pressButton(buttonTypes.BLUE)
 				.until({
 					toJSON: () => ({
