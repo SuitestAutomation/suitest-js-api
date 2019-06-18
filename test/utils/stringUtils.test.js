@@ -5,6 +5,7 @@ const {
 	arrToString,
 	stripAnsiChars,
 	appendDot,
+	placeholdEmpty,
 } = require('../../lib/utils/stringUtils');
 
 describe('stringUtils util', () => {
@@ -23,5 +24,11 @@ describe('stringUtils util', () => {
 		assert.equal(appendDot(''), '.');
 		assert.equal(appendDot('test'), 'test.');
 		assert.equal(appendDot('test.'), 'test.');
+	});
+
+	it('placeholdEmpty should transform empty strings properly', () => {
+		assert.equal(placeholdEmpty(''), '[EMPTY]');
+		assert.equal(placeholdEmpty(' '), ' ');
+		assert.equal(placeholdEmpty(1), 1);
 	});
 });
