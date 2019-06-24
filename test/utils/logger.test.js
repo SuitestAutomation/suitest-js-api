@@ -166,12 +166,12 @@ describe('logger util', () => {
 				},
 				children: [{
 					nodeType: 3,
-					nodeValue: 'text content',
+					nodeValue: '1'.repeat(100),
 				}],
 			}]]);
 			assert.strictEqual(
 				console.log.lastCall.args[0],
-				'<div class="menu" id="main">text content</div>',
+				`<div class="menu" id="main">${'1'.repeat(80)}...</div>`,
 				'el with text node child'
 			);
 
@@ -180,6 +180,9 @@ describe('logger util', () => {
 
 			logger.appOutput('log', [['element', {nodeType: 3, nodeValue: 'text'}]]);
 			assert.strictEqual(console.log.lastCall.args[0], '"text"', 'just text node');
+
+			logger.appOutput('log', [['element', {nodeType: 3, nodeValue: '1'.repeat(100)}]]);
+			assert.strictEqual(console.log.lastCall.args[0], `"${'1'.repeat(80)}..."`, 'text node trimmed');
 		});
 	});
 });
