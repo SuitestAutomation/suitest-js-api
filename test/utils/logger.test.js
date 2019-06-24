@@ -87,24 +87,31 @@ describe('logger util', () => {
 
 	describe('appOutput method', () => {
 		it('should display display data correctly', () => {
-			logger.appOutput('trace', [['trace', [
-				['funcName', 'fileName', 1],
-				['funcName', 'fileName', 2],
-			]]]);
+			logger.appOutput('log', [
+				1,
+				'text',
+				null,
+				false,
+				['array', [1, 3, 4]],
+				['object', {name: 1, age: 2}],
+				['function', 'funcName'],
+				['trace', [
+					['funcName', 'fileName', 1],
+					['funcName', 'fileName', 2],
+				]],
+			]);
+			assert.strictEqual(console.log.lastCall.args[0], 1);
+			assert.strictEqual(console.log.lastCall.args[1], 'text');
+			assert.strictEqual(console.log.lastCall.args[2], null);
+			assert.strictEqual(console.log.lastCall.args[3], false);
+			assert.deepEqual(console.log.lastCall.args[4], [1, 3, 4]);
+			assert.deepEqual(console.log.lastCall.args[5], {name: 1, age: 2});
+			assert.strictEqual(console.log.lastCall.args[6], 'funcName');
 			assert.strictEqual(
-				console.log.lastCall.args[0],
+				console.log.lastCall.args[7],
 				'funcName @ fileName:1\nfuncName @ fileName:2',
 				'trace'
 			);
-
-			logger.appOutput('log', [['array', [1, 3, 4]], ['object', {name: 1, age: 2}]]);
-			assert.deepEqual(console.log.lastCall.args[0], {name: 1, age: 2});
-
-			logger.appOutput('log', [['array', [1, 3, 4]]]);
-			assert.deepEqual(console.log.lastCall.args[0], [1, 3, 4]);
-
-			logger.appOutput('log', [['function', 'funcName']]);
-			assert.strictEqual(console.log.lastCall.args[0], 'funcName');
 		});
 
 		it('should call correct console methods', () => {
@@ -172,7 +179,7 @@ describe('logger util', () => {
 			assert.strictEqual(console.log.lastCall.args[0], '<div>...</div>', 'el without child');
 
 			logger.appOutput('log', [['element', {nodeType: 3, nodeValue: 'text'}]]);
-			assert.strictEqual(console.log.lastCall.args[0], 'text', 'just text node');
+			assert.strictEqual(console.log.lastCall.args[0], '"text"', 'just text node');
 		});
 	});
 });
