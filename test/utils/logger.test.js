@@ -84,4 +84,105 @@ describe('logger util', () => {
 
 		assert(log.firstCall.args[0].includes('MyDevice'), 'device short display name is included in left rail');
 	});
+
+	describe('appOutput method', () => {
+		it('should display display data correctly', () => {
+			logger.appOutput('log', [
+				1,
+				'text',
+				null,
+				false,
+				['array', [1, 3, 4]],
+				['object', {name: 1, age: 2}],
+				['function', 'funcName'],
+				['trace', [
+					['funcName', 'fileName', 1],
+					['funcName', 'fileName', 2],
+				]],
+			]);
+			assert.strictEqual(console.log.lastCall.args[0], 1);
+			assert.strictEqual(console.log.lastCall.args[1], 'text');
+			assert.strictEqual(console.log.lastCall.args[2], null);
+			assert.strictEqual(console.log.lastCall.args[3], false);
+			assert.deepEqual(console.log.lastCall.args[4], [1, 3, 4]);
+			assert.deepEqual(console.log.lastCall.args[5], {name: 1, age: 2});
+			assert.strictEqual(console.log.lastCall.args[6], 'funcName');
+			assert.strictEqual(
+				console.log.lastCall.args[7],
+				'funcName @ fileName:1\nfuncName @ fileName:2',
+				'trace'
+			);
+		});
+
+		it('should call correct console methods', () => {
+			sinon.stub(console, 'assert');
+			sinon.stub(console, 'dir');
+			sinon.stub(console, 'table');
+
+			try {
+				logger.appOutput('assert');
+				logger.appOutput('dir');
+				logger.appOutput('table');
+
+				assert.strictEqual(console.assert.calledOnce, true);
+				assert.strictEqual(console.dir.calledOnce, true);
+				assert.strictEqual(console.table.calledOnce, true);
+			} finally {
+				console.assert.restore();
+				console.dir.restore();
+				console.table.restore();
+			}
+		});
+
+		it('should keep track of console timestamps', () => {
+			logger.appOutput('time', undefined, 100);
+			assert.strictEqual(logger.consoleTimestamps['default'], 100, 'added default timer');
+
+			logger.appOutput('time', 'timer1', 100);
+			assert.strictEqual(logger.consoleTimestamps['timer1'], 100, 'added custom timer');
+
+			logger.appOutput('timeLog', 'timer2', 200);
+			assert.strictEqual(
+				console.warn.lastCall.args[0],
+				'Timer \'timer2\' does not exist',
+				'warn when no timer found'
+			);
+
+			logger.appOutput('timeLog', 'timer1', 200);
+			assert.strictEqual(console.log.lastCall.args[0], 'timer1: 100ms', 'proper timeLog message');
+
+			logger.appOutput('timeEnd', 'timer1', 300);
+			assert.strictEqual(console.log.lastCall.args[0], 'timer1: 200ms', 'proper timeEnd message');
+			assert.strictEqual('timer1' in logger.consoleTimestamps, false, 'on timeEnd timer deleted');
+		});
+
+		it('should display DOM element correctly', () => {
+			logger.appOutput('log', [['element', {
+				nodeType: 1,
+				nodeName: 'div',
+				attributes: {
+					class: 'menu',
+					id: 'main',
+				},
+				children: [{
+					nodeType: 3,
+					nodeValue: '1'.repeat(100),
+				}],
+			}]]);
+			assert.strictEqual(
+				console.log.lastCall.args[0],
+				`<div class="menu" id="main">${'1'.repeat(79)}…</div>`,
+				'el with text node child'
+			);
+
+			logger.appOutput('log', [['element', {nodeType: 1, nodeName: 'div'}]]);
+			assert.strictEqual(console.log.lastCall.args[0], '<div>…</div>', 'el without child');
+
+			logger.appOutput('log', [['element', {nodeType: 3, nodeValue: 'text'}]]);
+			assert.strictEqual(console.log.lastCall.args[0], '"text"', 'just text node');
+
+			logger.appOutput('log', [['element', {nodeType: 3, nodeValue: '1'.repeat(100)}]]);
+			assert.strictEqual(console.log.lastCall.args[0], `"${'1'.repeat(79)}…"`, 'text node trimmed');
+		});
+	});
 });

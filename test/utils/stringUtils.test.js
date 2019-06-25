@@ -6,6 +6,7 @@ const {
 	stripAnsiChars,
 	appendDot,
 	placeholdEmpty,
+	truncate,
 } = require('../../lib/utils/stringUtils');
 
 describe('stringUtils util', () => {
@@ -30,5 +31,12 @@ describe('stringUtils util', () => {
 		assert.equal(placeholdEmpty(''), '[EMPTY]');
 		assert.equal(placeholdEmpty(' '), ' ');
 		assert.equal(placeholdEmpty(1), 1);
+	});
+
+	it('should truncate strings correctly', () => {
+		assert.strictEqual(truncate('12345', 5), '12345');
+		assert.strictEqual(truncate('123456', 5), '1234…');
+		assert.strictEqual(truncate('123   ', 5), '123…');
+		assert.strictEqual(truncate('123.  ', 5), '123…');
 	});
 });
