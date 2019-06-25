@@ -171,18 +171,18 @@ describe('logger util', () => {
 			}]]);
 			assert.strictEqual(
 				console.log.lastCall.args[0],
-				`<div class="menu" id="main">${'1'.repeat(80)}...</div>`,
+				`<div class="menu" id="main">${'1'.repeat(79)}…</div>`,
 				'el with text node child'
 			);
 
 			logger.appOutput('log', [['element', {nodeType: 1, nodeName: 'div'}]]);
-			assert.strictEqual(console.log.lastCall.args[0], '<div>...</div>', 'el without child');
+			assert.strictEqual(console.log.lastCall.args[0], '<div>…</div>', 'el without child');
 
 			logger.appOutput('log', [['element', {nodeType: 3, nodeValue: 'text'}]]);
 			assert.strictEqual(console.log.lastCall.args[0], '"text"', 'just text node');
 
 			logger.appOutput('log', [['element', {nodeType: 3, nodeValue: '1'.repeat(100)}]]);
-			assert.strictEqual(console.log.lastCall.args[0], `"${'1'.repeat(80)}..."`, 'text node trimmed');
+			assert.strictEqual(console.log.lastCall.args[0], `"${'1'.repeat(79)}…"`, 'text node trimmed');
 		});
 	});
 });
