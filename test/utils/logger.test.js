@@ -110,7 +110,7 @@ describe('logger util', () => {
 			assert.deepEqual(console.log.lastCall.args[4], [1, 3, 4]);
 			assert.deepEqual(console.log.lastCall.args[5], {name: 1, age: 2});
 			assert.strictEqual(console.log.lastCall.args[6], 'funcName');
-			assert.strictEqual(console.log.lastCall.args[7], 'at foo...\nat bar...', 'trace');
+			assert.strictEqual(console.log.lastCall.args[7], '\nat foo...\nat bar...', 'trace');
 			assert.strictEqual(console.log.lastCall.args[8], 'timer1: 42ms');
 			assert.strictEqual(console.log.lastCall.args[9], 'NaN');
 			assert.strictEqual(console.log.lastCall.args[10], 'undefined');
@@ -152,7 +152,7 @@ describe('logger util', () => {
 
 				logger.appOutput('trace', [['trace', ['at foo...', 'at bar...']]]);
 				assert.strictEqual(console.trace.called, false);
-				assert.strictEqual(console.log.lastCall.args[0], 'at foo...\nat bar...');
+				assert.strictEqual(console.log.lastCall.args[0], '\nat foo...\nat bar...');
 			} finally {
 				console.assert.restore();
 				console.dir.restore();
