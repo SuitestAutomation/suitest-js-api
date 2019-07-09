@@ -139,7 +139,6 @@ describe('logger util', () => {
 
 				logger.appOutput('time', [['time', 'timer', 42]]);
 				assert.strictEqual(console.time.called, false);
-				assert.strictEqual(console.log.called, false);
 
 				if (timeLogSupport) {
 					logger.appOutput('timeLog', [['time', 'timer', 42]]);
