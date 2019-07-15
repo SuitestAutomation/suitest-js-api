@@ -51,7 +51,7 @@ jobs:
           command: |
             yarn lint
             ./cc-test-reporter before-build
-            yarn coverage
+            npm run coverage
             ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
 
       - run:
