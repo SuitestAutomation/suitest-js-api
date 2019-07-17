@@ -86,6 +86,27 @@ describe('socket chain helpers', () => {
 		}, {stack: ''}), Error, 'execution error');
 
 		assert.throws(
+			() => helpers.processServerResponse(emptyString)({
+				contentType: 'eval',
+				result: 'fail',
+				errorType: 'invalidInput',
+				message: {
+					code: 'elementNotSupported',
+				},
+			}, {
+				stack: '',
+				type: 'element',
+				selector: {css: 'body'},
+				setText: 'simple text',
+			}),
+			new SuitestError(
+				'. .setText() is unsupported by this element.',
+				SuitestError.EVALUATION_ERROR,
+				{errorType: 'invalidInput', message: {code: 'elementNotSupported'}}
+			)
+		);
+
+		assert.throws(
 			() => helpers.processServerResponse(elementToString)({
 				errorType: 'queryFailed',
 				result: 'error',
