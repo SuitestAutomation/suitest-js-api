@@ -86,7 +86,7 @@ describe('logger util', () => {
 	});
 
 	describe('appOutput method', () => {
-		it('should display display data correctly', () => {
+		it('should display data correctly', () => {
 			logger.appOutput('log', [
 				1,
 				'text',
@@ -96,9 +96,12 @@ describe('logger util', () => {
 				['object', {name: 1, age: 2}],
 				['function', 'funcName'],
 				['trace', [
-					['funcName', 'fileName', 1],
-					['funcName', 'fileName', 2],
+					['at foo...'],
+					['at bar...'],
 				]],
+				['time', 'timer1', 42],
+				['NaN'],
+				['undefined'],
 			]);
 			assert.strictEqual(console.log.lastCall.args[0], 1);
 			assert.strictEqual(console.log.lastCall.args[1], 'text');
@@ -107,53 +110,60 @@ describe('logger util', () => {
 			assert.deepEqual(console.log.lastCall.args[4], [1, 3, 4]);
 			assert.deepEqual(console.log.lastCall.args[5], {name: 1, age: 2});
 			assert.strictEqual(console.log.lastCall.args[6], 'funcName');
-			assert.strictEqual(
-				console.log.lastCall.args[7],
-				'funcName @ fileName:1\nfuncName @ fileName:2',
-				'trace'
-			);
+			assert.strictEqual(console.log.lastCall.args[7], '\nat foo...\nat bar...', 'trace');
+			assert.strictEqual(console.log.lastCall.args[8], 'timer1: 42ms');
+			assert.strictEqual(console.log.lastCall.args[9], 'NaN');
+			assert.strictEqual(console.log.lastCall.args[10], 'undefined');
 		});
 
 		it('should call correct console methods', () => {
+			const timeLogSupport = 'timeLog' in console;
+
 			sinon.stub(console, 'assert');
 			sinon.stub(console, 'dir');
 			sinon.stub(console, 'table');
+			sinon.stub(console, 'time');
+			if (timeLogSupport) {
+				sinon.stub(console, 'timeLog');
+			}
+			sinon.stub(console, 'timeEnd');
+			sinon.stub(console, 'trace');
 
 			try {
 				logger.appOutput('assert');
 				logger.appOutput('dir');
 				logger.appOutput('table');
-
 				assert.strictEqual(console.assert.calledOnce, true);
 				assert.strictEqual(console.dir.calledOnce, true);
 				assert.strictEqual(console.table.calledOnce, true);
+
+				logger.appOutput('time', [['time', 'timer', 42]]);
+				assert.strictEqual(console.time.called, false);
+
+				if (timeLogSupport) {
+					logger.appOutput('timeLog', [['time', 'timer', 42]]);
+					assert.strictEqual(console.timeLog.called, false);
+					assert.strictEqual(console.log.lastCall.args[0], 'timer: 42ms');
+				}
+
+				logger.appOutput('timeEnd', [['time', 'default', null]]);
+				assert.strictEqual(console.timeEnd.called, false);
+				assert.strictEqual(console.warn.lastCall.args[0], 'Timer \'default\' does not exist');
+
+				logger.appOutput('trace', [['trace', ['at foo...', 'at bar...']]]);
+				assert.strictEqual(console.trace.called, false);
+				assert.strictEqual(console.log.lastCall.args[0], '\nat foo...\nat bar...');
 			} finally {
 				console.assert.restore();
 				console.dir.restore();
 				console.table.restore();
+				console.time.restore();
+				if (timeLogSupport) {
+					console.timeLog.restore();
+				}
+				console.timeEnd.restore();
+				console.trace.restore();
 			}
-		});
-
-		it('should keep track of console timestamps', () => {
-			logger.appOutput('time', undefined, 100);
-			assert.strictEqual(logger.consoleTimestamps['default'], 100, 'added default timer');
-
-			logger.appOutput('time', 'timer1', 100);
-			assert.strictEqual(logger.consoleTimestamps['timer1'], 100, 'added custom timer');
-
-			logger.appOutput('timeLog', 'timer2', 200);
-			assert.strictEqual(
-				console.warn.lastCall.args[0],
-				'Timer \'timer2\' does not exist',
-				'warn when no timer found'
-			);
-
-			logger.appOutput('timeLog', 'timer1', 200);
-			assert.strictEqual(console.log.lastCall.args[0], 'timer1: 100ms', 'proper timeLog message');
-
-			logger.appOutput('timeEnd', 'timer1', 300);
-			assert.strictEqual(console.log.lastCall.args[0], 'timer1: 200ms', 'proper timeEnd message');
-			assert.strictEqual('timer1' in logger.consoleTimestamps, false, 'on timeEnd timer deleted');
 		});
 
 		it('should display DOM element correctly', () => {
