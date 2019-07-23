@@ -391,8 +391,11 @@ describe('Socket error messages', () => {
 			[basePayload('applePairingError'), 'Failed to launch app: Pairing error - see https://suite.st/docs/devices/apple-tv/#pairing-error.'],
 			[basePayload('appleIosDeployError'), 'Failed to launch app: iOS Deploy not found error - see https://suite.st//docs/devices/apple-tv/#ios-deploy-not-found.'],
 			[basePayload('appleAppSignError'), 'Failed to launch app: App code sign error - see https://suite.st/docs/devices/apple-tv/#app-code-sign-error.'],
+			[basePayload('missingPSSDK'), 'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/devices/playstation.'],
+			[basePayload('targetManagerBusy'), 'Please try again in a few minutes.'],
+			[basePayload('missingDotNet'), 'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/devices/playstation.'],
 		].forEach(([payload, expectMessage]) => {
-			assert.equal(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
+			assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
 	});
 
@@ -442,6 +445,7 @@ describe('Socket error messages', () => {
 			'noActivePlan', 'candyBoxOffline', 'suitestDriveOffline', 'runningBootSequence',
 			'deviceInUse', 'deviceDisabled', 'deviceDeleted', 'internalError',
 			'notDefinedPlatform', 'lgWebosPlatformError', 'xboxPlatformError', 'androidPlatformError',
+			'missingPSSDK', 'targetManagerBusy', 'missingDotNet',
 		].sort();
 
 		assert.deepStrictEqual(Object.keys(notStartedReasons).sort(), reasonsCodes);
@@ -511,6 +515,18 @@ describe('Socket error messages', () => {
 		assert.strictEqual(
 			getNotStartedReasonMessage('androidPlatformError'),
 			'Cannot continue: Android driver failed.\nAndroid driver has misbehaved. Please verify that the device is online and it\'s current IP address is correctly specified in Suitest. If nothing helps try rebooting the device and restarting SuitestDrive.'
+		);
+		assert.strictEqual(
+			getNotStartedReasonMessage('missingPSSDK'),
+			'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/devices/playstation.',
+		);
+		assert.strictEqual(
+			getNotStartedReasonMessage('targetManagerBusy'),
+			'Please try again in a few minutes.',
+		);
+		assert.strictEqual(
+			getNotStartedReasonMessage('missingDotNet'),
+			'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/devices/playstation.'
 		);
 	});
 });
