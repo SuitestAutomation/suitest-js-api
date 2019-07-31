@@ -20,12 +20,11 @@ video().exist();
 video().exists();
 video().visible();
 video().then();
-video().timeout(10);
 video().toString();
 video().exists().toString();
 video().matchesJS('').toString();
 // video().matchesBrightScript(brsCodeExample).toString();
-video().matches(suitest.PROP.ID).toString();
+video().matches(suitest.PROP.VIDEO_STATE, suitest.VIDEO_STATE.PAUSED).toString();
 video().click().toString();
 video().click().repeat(10).interval(2000).toString();
 video().moveTo().toString();
@@ -55,7 +54,7 @@ async function videoTest() {
 
 	await video().matches({
 		name: suitest.PROP.TOP,
-		val: suitest.VALUE.REPO,
+		val: 400,
 		type: suitest.COMP.APPROX,
 		deviation: 20,
 	});

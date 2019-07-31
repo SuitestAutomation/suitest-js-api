@@ -28,6 +28,7 @@ import {TextAlignment} from './typeDefinition/constants/TextAlignment';
 import {BorderStyle} from './typeDefinition/constants/BorderStyle';
 import {ReplOptions} from './typeDefinition/InteractiveCommandChain';
 import {ImageLoadState} from './typeDefinition/constants/ImageLoadState';
+import {NativeVideoChain} from './typeDefinition/NativeVideoChain';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -55,6 +56,7 @@ declare namespace suitest {
 		cookie(cookieName: string): CookieChain;
 		element(elementSelector: ElementSelector | string): ElementChain;
 		video(): VideoChain;
+		nativeVideo(): NativeVideoChain;
 		executeCommand(jsCode: string): ExecuteCommandChain;
 		executeCommand(jsCode: Function): ExecuteCommandChain;
 		jsExpression(expression: string): JsExpressionChain;
@@ -104,6 +106,7 @@ declare namespace suitest {
 		cookie(cookieName: string): CookieChain;
 		element(elementSelector: ElementSelector | string): ElementChain;
 		video(): VideoChain;
+		nativeVideo(): NativeVideoChain;
 		executeCommand(jsCode: string): ExecuteCommandChain;
 		executeCommand(jsCode: Function): ExecuteCommandChain;
 		jsExpression(expression: string): JsExpressionChain;
@@ -253,5 +256,6 @@ declare namespace suitest {
 		color?: string,
 		index?: number,
 		video?: true,
+		nativeVideo?: true,
 	}
 }

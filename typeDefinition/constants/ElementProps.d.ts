@@ -78,3 +78,5 @@ export type ElementProps = {
 	tintColor:               string,
 	value:                   string,
 }
+
+export type NativeVideoProps = Pick<ElementProps, 'videoLength' | 'videoPos' | 'videoState' | 'videoUrl'>
