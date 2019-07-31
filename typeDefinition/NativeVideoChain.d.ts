@@ -5,7 +5,7 @@ import {
     BaseChain,
     VideoStateModifiers,
 } from './modifiers';
-import {ElementProps} from "./constants/ElementProps";
+import {NativeVideoProps} from "./constants/ElementProps";
 
 export interface NativeVideoChain extends
     NativeVideoBaseQueryChain<NativeVideoChain>,
@@ -45,5 +45,5 @@ interface NativeVideoBaseEvalChain<TSelf> extends
 
 interface NativeVideoAbandonedChain extends AbstractChain {}
 
-type NativeVideoQueryResult = ElementProps | void;
+type NativeVideoQueryResult = NativeVideoProps | void;
 type NativeVideoEvalResult = boolean | void;

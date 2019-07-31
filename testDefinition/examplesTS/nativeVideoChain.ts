@@ -4,9 +4,8 @@ const {nativeVideo} = suitest;
 nativeVideo().timeout(10);
 nativeVideo().abandon();
 nativeVideo().then();
-nativeVideo().timeout(10);
 nativeVideo().toString();
-nativeVideo().matches(suitest.PROP.ID).toString();
+nativeVideo().matches(suitest.PROP.VIDEO_STATE, suitest.VIDEO_STATE.PAUSED).toString();
 
 // getters
 nativeVideo().it.should.with.times;
@@ -24,21 +23,20 @@ nativeVideo().timeout(1).isStopped();
 
 async function videoTest() {
     await nativeVideo().timeout(10);
-    // Check if video's width and height match snapshot from video repo, top position as in repo +- 20px and custom background color
-    const videoEl = suitest.video();
+    const videoEl = suitest.nativeVideo();
 
-    await videoEl.matches(suitest.PROP.BG_COLOR, '#F00');
+    await videoEl.matches(suitest.PROP.VIDEO_LENGTH, 300);
 
-    await nativeVideo().matches(suitest.PROP.BG_COLOR, '#F00');
+    await nativeVideo().matches(suitest.PROP.VIDEO_LENGTH, 300);
 
     await nativeVideo().matches({
-        name: suitest.PROP.TOP,
-        val: suitest.VALUE.REPO,
+        name: suitest.PROP.VIDEO_POSITION,
+        val: 60,
         type: suitest.COMP.APPROX,
         deviation: 20,
     });
     await nativeVideo().matches({
-        name: suitest.PROP.BG_COLOR,
-        val: '#F00',
+        name: suitest.PROP.VIDEO_URL,
+        val: 'video/url',
     });
 }

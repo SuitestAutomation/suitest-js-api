@@ -4,6 +4,7 @@ const {
 	nativeVideoAssert,
 } = require('../../lib/chains/nativeVideoChain');
 const {ELEMENT_PROP} = require('../../lib/constants/element');
+const VIDEO_STATE = require('../../lib/constants/videoState');
 const {PROP_COMPARATOR} = require('../../lib/constants/comparator');
 
 describe('Native video chain', () => {
@@ -38,7 +39,7 @@ describe('Native video chain', () => {
 	});
 
 	it('should have only allowed modifiers after match is applied', () => {
-		const chain = nativeVideo().match(ELEMENT_PROP.ID, 'someId');
+		const chain = nativeVideo().match(ELEMENT_PROP.VIDEO_STATE, VIDEO_STATE.PAUSED);
 
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
@@ -59,14 +60,14 @@ describe('Native video chain', () => {
 	it('should convert to string with meaningful message', () => {
 		assert.strictEqual(nativeVideo().toString(), 'Getting properties of "native video"');
 		assert.strictEqual(
-			nativeVideo().matches(ELEMENT_PROP.ID, 'someId').toString(),
+			nativeVideo().matches(ELEMENT_PROP.VIDEO_URL, 'some/url').toString(),
 			'Checking if "native video" matches:\n' +
-			'  id = someId'
+			'  videoUrl = some/url'
 		);
 		assert.strictEqual(
-			nativeVideo().matches(ELEMENT_PROP.ID, 'someId').timeout(4000).toString(),
+			nativeVideo().matches(ELEMENT_PROP.VIDEO_URL, 'some/url').timeout(4000).toString(),
 			'Checking if "native video" matches:\n' +
-			'  id = someId'
+			'  videoUrl = some/url'
 		);
 	});
 
@@ -96,7 +97,7 @@ describe('Native video chain', () => {
 		it('for matching properties', () => {
 			assert.deepStrictEqual(
 				nativeVideo().match({
-					name: ELEMENT_PROP.WIDTH,
+					name: ELEMENT_PROP.VIDEO_LENGTH,
 					val: 300,
 					type: PROP_COMPARATOR.APPROX,
 					deviation: 20,
@@ -106,7 +107,7 @@ describe('Native video chain', () => {
 						condition: {
 							expression: [
 								{
-									property: 'width',
+									property: 'videoLength',
 									type: '+-',
 									val: 300,
 									deviation: 20,
@@ -130,7 +131,7 @@ describe('Native video chain', () => {
 
 			assert.deepStrictEqual(
 				nativeVideoAssert().match({
-					name: ELEMENT_PROP.WIDTH,
+					name: ELEMENT_PROP.VIDEO_LENGTH,
 					val: 300,
 					type: PROP_COMPARATOR.APPROX,
 					deviation: 20,
@@ -140,7 +141,7 @@ describe('Native video chain', () => {
 						condition: {
 							expression: [
 								{
-									property: 'width',
+									property: 'videoLength',
 									type: '+-',
 									val: 300,
 									deviation: 20,
@@ -182,7 +183,7 @@ describe('Native video chain', () => {
 			);
 			assert.deepStrictEqual(
 				nativeVideo().match({
-					name: ELEMENT_PROP.WIDTH,
+					name: ELEMENT_PROP.VIDEO_LENGTH,
 					val: 300,
 					type: PROP_COMPARATOR.APPROX,
 					deviation: 20,
@@ -193,7 +194,7 @@ describe('Native video chain', () => {
 							expression: [
 								{
 									deviation: 20,
-									property: 'width',
+									property: 'videoLength',
 									type: '+-',
 									val: 300,
 								},
@@ -214,7 +215,7 @@ describe('Native video chain', () => {
 			);
 			assert.deepStrictEqual(
 				nativeVideoAssert().match({
-					name: ELEMENT_PROP.WIDTH,
+					name: ELEMENT_PROP.VIDEO_LENGTH,
 					val: 300,
 					type: PROP_COMPARATOR.APPROX,
 					deviation: 20,
@@ -225,7 +226,7 @@ describe('Native video chain', () => {
 							expression: [
 								{
 									deviation: 20,
-									property: 'width',
+									property: 'videoLength',
 									type: '+-',
 									val: 300,
 								},

@@ -256,5 +256,6 @@ declare namespace suitest {
 		color?: string,
 		index?: number,
 		video?: true,
+		nativeVideo?: true,
 	}
 }
