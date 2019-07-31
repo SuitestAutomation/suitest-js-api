@@ -394,6 +394,7 @@ describe('Socket error messages', () => {
 			[basePayload('missingPSSDK'), 'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/devices/playstation.'],
 			[basePayload('targetManagerBusy'), 'Please try again in a few minutes.'],
 			[basePayload('missingDotNet'), 'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/devices/playstation.'],
+			[basePayload('psImplicitVideo'), 'The "video" subject on the PlayStation platform is inconsistent, we recommend using the "native video" or "element" subject instead. Read more in docs - ps4-support.psImplicitVideo.'],
 		].forEach(([payload, expectMessage]) => {
 			assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
