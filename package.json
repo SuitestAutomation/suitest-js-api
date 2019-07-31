@@ -67,7 +67,7 @@
     "nock": "^9.1.6",
     "nyc": "14.1.1",
     "sinon": "^6.3.4",
-    "typescript": "^3.3.3"
+    "typescript": "^3.5.3"
   },
   "dependencies": {
     "ajv": "^6.1.1",
