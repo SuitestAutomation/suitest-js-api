@@ -31,7 +31,7 @@ const {element, elementAssert} = require('./lib/chains/elementChain');
 const {networkRequest, networkRequestAssert} = require('./lib/chains/networkRequestChain');
 const {pollUrl, pollUrlAssert} = require('./lib/chains/pollUrlChain');
 const {video, videoAssert} = require('./lib/chains/videoChain');
-const {nativeVideo, nativeVideoAssert} = require('./lib/chains/nativeVideoChain');
+const {playstationVideo, playstationVideoAssert} = require('./lib/chains/playstationVideoChain');
 
 // Constants
 const {ELEMENT_PROP, VALUE} = require('./lib/constants/element');
@@ -89,7 +89,7 @@ class SUITEST_API {
 		// this.brightScriptExpression = brightScriptExpression;
 		this.element = element;
 		this.video = video;
-		this.nativeVideo = nativeVideo;
+		this.psVideo = playstationVideo;
 		this.networkRequest = networkRequest;
 		this.pollUrl = pollUrl;
 
@@ -135,7 +135,7 @@ class SUITEST_API {
 			pollUrl: pollUrlAssert,
 			networkRequest: networkRequestAssert,
 			video: videoAssert,
-			nativeVideo: nativeVideoAssert,
+			psVideo: playstationVideoAssert,
 		};
 	}
 }

@@ -79,4 +79,4 @@ export type ElementProps = {
 	value:                   string,
 }
 
-export type NativeVideoProps = Pick<ElementProps, 'videoLength' | 'videoPos' | 'videoState' | 'videoUrl'>
+export type PlayStationVideoProps = Pick<ElementProps, 'videoLength' | 'videoPos' | 'videoState' | 'videoUrl'>
