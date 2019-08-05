@@ -1,6 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
-const validation = require('../../lib/validataion');
+const validation = require('../../lib/validation');
 const EventEmitter = require('events');
 
 const SuitestError = require('../../lib/utils/SuitestError');

@@ -1,36 +1,41 @@
 const assert = require('assert');
 const {
-	nativeVideo,
-	nativeVideoAssert,
-} = require('../../lib/chains/nativeVideoChain');
+	playstationVideo,
+	playstationVideoAssert,
+} = require('../../lib/chains/playstationVideoChain');
 const {ELEMENT_PROP} = require('../../lib/constants/element');
 const VIDEO_STATE = require('../../lib/constants/videoState');
+const HAD_NO_ERROR = require('../../lib/constants/hadNoError');
 const {PROP_COMPARATOR} = require('../../lib/constants/comparator');
 
-describe('Native video chain', () => {
+describe('Playstation video chain', () => {
 	it('should have all necessary modifiers', () => {
-		const chain = nativeVideo();
+		const chain = playstationVideo();
 
+		// exists in playstationVideo
 		assert.strictEqual(typeof chain.clone, 'function');
 		assert.strictEqual(typeof chain.abandon, 'function');
 		assert.strictEqual(typeof chain.toString, 'function');
 		assert.strictEqual(typeof chain.then, 'function');
+		assert.strictEqual(typeof chain.match, 'function');
+		assert.strictEqual(typeof chain.matches, 'function');
+		assert.strictEqual(typeof chain.isPlaying, 'function');
+		assert.strictEqual(typeof chain.isStopped, 'function');
+		assert.strictEqual(typeof chain.isPaused, 'function');
+		assert.strictEqual(typeof chain.timeout, 'function');
+		assert.strictEqual(typeof chain.hadNoError, 'function');
+
+		// not exists in playstationVideo
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
 		assert.strictEqual(typeof chain.isNot, 'undefined');
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
 		assert.strictEqual(typeof chain.visible, 'undefined');
-		assert.strictEqual(typeof chain.match, 'function');
-		assert.strictEqual(typeof chain.matches, 'function');
 		assert.strictEqual(typeof chain.matchRepo, 'undefined');
 		assert.strictEqual(typeof chain.matchesRepo, 'undefined');
 		assert.strictEqual(typeof chain.matchJS, 'undefined');
 		assert.strictEqual(typeof chain.matchesJS, 'undefined');
-		assert.strictEqual(typeof chain.isPlaying, 'function');
-		assert.strictEqual(typeof chain.isStopped, 'function');
-		assert.strictEqual(typeof chain.isPaused, 'function');
-		assert.strictEqual(typeof chain.timeout, 'function');
 
 		assert.strictEqual(chain.with, chain);
 		assert.strictEqual(chain.it, chain);
@@ -39,7 +44,7 @@ describe('Native video chain', () => {
 	});
 
 	it('should have only allowed modifiers after match is applied', () => {
-		const chain = nativeVideo().match(ELEMENT_PROP.VIDEO_STATE, VIDEO_STATE.PAUSED);
+		const chain = playstationVideo().match(ELEMENT_PROP.VIDEO_STATE, VIDEO_STATE.PAUSED);
 
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
@@ -55,30 +60,67 @@ describe('Native video chain', () => {
 		assert.strictEqual(typeof chain.isPlaying, 'undefined');
 		assert.strictEqual(typeof chain.isPaused, 'undefined');
 		assert.strictEqual(typeof chain.isStopped, 'undefined');
+		assert.strictEqual(typeof chain.hadNoError, 'undefined');
+		assert.strictEqual(typeof chain.clone, 'function');
+		assert.strictEqual(typeof chain.abandon, 'function');
+		assert.strictEqual(typeof chain.toString, 'function');
+		assert.strictEqual(typeof chain.then, 'function');
+	});
+
+	it('should have only allowed modifiers after hadNoError is applied', () => {
+		const chain = playstationVideo().hadNoError();
+
+		assert.strictEqual(typeof chain.exist, 'undefined');
+		assert.strictEqual(typeof chain.exists, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
+		assert.strictEqual(typeof chain.match, 'undefined');
+		assert.strictEqual(typeof chain.matches, 'undefined');
+		assert.strictEqual(typeof chain.matchRepo, 'undefined');
+		assert.strictEqual(typeof chain.matchesRepo, 'undefined');
+		assert.strictEqual(typeof chain.matchJS, 'undefined');
+		assert.strictEqual(typeof chain.matchesJS, 'undefined');
+		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.isPlaying, 'undefined');
+		assert.strictEqual(typeof chain.isPaused, 'undefined');
+		assert.strictEqual(typeof chain.isStopped, 'undefined');
+		assert.strictEqual(typeof chain.hadNoError, 'undefined');
+		assert.strictEqual(typeof chain.clone, 'function');
+		assert.strictEqual(typeof chain.abandon, 'function');
+		assert.strictEqual(typeof chain.toString, 'function');
+		assert.strictEqual(typeof chain.then, 'function');
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.strictEqual(nativeVideo().toString(), 'Getting properties of "native video"');
+		assert.strictEqual(playstationVideo().toString(), 'Getting properties of "PlayStation WebMAF video"');
 		assert.strictEqual(
-			nativeVideo().matches(ELEMENT_PROP.VIDEO_URL, 'some/url').toString(),
-			'Checking if "native video" matches:\n' +
+			playstationVideo().matches(ELEMENT_PROP.VIDEO_URL, 'some/url').toString(),
+			'Checking if "PlayStation WebMAF video" matches:\n' +
 			'  videoUrl = some/url'
 		);
 		assert.strictEqual(
-			nativeVideo().matches(ELEMENT_PROP.VIDEO_URL, 'some/url').timeout(4000).toString(),
-			'Checking if "native video" matches:\n' +
+			playstationVideo().matches(ELEMENT_PROP.VIDEO_URL, 'some/url').timeout(4000).toString(),
+			'Checking if "PlayStation WebMAF video" matches:\n' +
 			'  videoUrl = some/url'
+		);
+		assert.strictEqual(
+			playstationVideo().hadNoError(HAD_NO_ERROR.CURRENT_URL).toString(),
+			'PlayStation WebMAF video had no errors for current video URL',
+		);
+		assert.strictEqual(
+			playstationVideo().hadNoError(HAD_NO_ERROR.ALL).toString(),
+			'PlayStation WebMAF video had no errors in entire video log',
 		);
 	});
 
 	describe('should generate proper JSON', () => {
 		it('for initial state', () => {
 			assert.deepStrictEqual(
-				nativeVideo().toJSON(),
+				playstationVideo().toJSON(),
 				{
 					subject: {
 						selector: {
-							nativeVideo: true,
+							psVideo: true,
 						},
 						type: 'elementProps',
 					},
@@ -88,7 +130,7 @@ describe('Native video chain', () => {
 			);
 
 			assert.deepStrictEqual(
-				nativeVideoAssert().toJSON(),
+				playstationVideoAssert().toJSON(),
 				{type: 'testLine'},
 				'generate JSON for asserted initial native video'
 			);
@@ -96,7 +138,7 @@ describe('Native video chain', () => {
 
 		it('for matching properties', () => {
 			assert.deepStrictEqual(
-				nativeVideo().match({
+				playstationVideo().match({
 					name: ELEMENT_PROP.VIDEO_LENGTH,
 					val: 300,
 					type: PROP_COMPARATOR.APPROX,
@@ -116,7 +158,7 @@ describe('Native video chain', () => {
 							subject: {
 								type: 'element',
 								val: {
-									nativeVideo: true,
+									psVideo: true,
 								},
 							},
 							type: 'has',
@@ -130,7 +172,7 @@ describe('Native video chain', () => {
 			);
 
 			assert.deepStrictEqual(
-				nativeVideoAssert().match({
+				playstationVideoAssert().match({
 					name: ELEMENT_PROP.VIDEO_LENGTH,
 					val: 300,
 					type: PROP_COMPARATOR.APPROX,
@@ -150,7 +192,7 @@ describe('Native video chain', () => {
 							subject: {
 								type: 'element',
 								val: {
-									nativeVideo: true,
+									psVideo: true,
 								},
 							},
 							type: 'has',
@@ -164,13 +206,60 @@ describe('Native video chain', () => {
 			);
 		});
 
+		it('for hadNoError', () => {
+			const hadNoErrorForCurrentUrl = {
+				request: {
+					condition: {
+						subject: {
+							type: 'element',
+							val: {
+								psVideo: true,
+							},
+						},
+						type: 'hadNoError',
+						searchStrategy: 'currentUrl',
+					},
+					timeout: 2000,
+					type: 'wait',
+				},
+				type: 'eval',
+			};
+
+			assert.deepStrictEqual(playstationVideo().hadNoError().toJSON(), hadNoErrorForCurrentUrl);
+			assert.deepStrictEqual(
+				playstationVideo().hadNoError(HAD_NO_ERROR.CURRENT_URL).toJSON(),
+				hadNoErrorForCurrentUrl
+			);
+
+			assert.deepStrictEqual(
+				playstationVideo().hadNoError(HAD_NO_ERROR.ALL).toJSON(),
+				{
+					request: {
+						condition: {
+							subject: {
+								type: 'element',
+								val: {
+									psVideo: true,
+								},
+							},
+							type: 'hadNoError',
+							searchStrategy: 'all',
+						},
+						timeout: 2000,
+						type: 'wait',
+					},
+					type: 'eval',
+				}
+			);
+		});
+
 		it('for timeout', () => {
 			assert.deepStrictEqual(
-				nativeVideo().timeout(3000).toJSON(),
+				playstationVideo().timeout(3000).toJSON(),
 				{
 					subject: {
 						selector: {
-							nativeVideo: true,
+							psVideo: true,
 						},
 						type: 'elementProps',
 					},
@@ -178,11 +267,11 @@ describe('Native video chain', () => {
 				},
 			);
 			assert.deepStrictEqual(
-				nativeVideoAssert().timeout(3000).toJSON(),
+				playstationVideoAssert().timeout(3000).toJSON(),
 				{type: 'testLine'},
 			);
 			assert.deepStrictEqual(
-				nativeVideo().match({
+				playstationVideo().match({
 					name: ELEMENT_PROP.VIDEO_LENGTH,
 					val: 300,
 					type: PROP_COMPARATOR.APPROX,
@@ -202,7 +291,7 @@ describe('Native video chain', () => {
 							subject: {
 								type: 'element',
 								val: {
-									nativeVideo: true,
+									psVideo: true,
 								},
 							},
 							type: 'has',
@@ -214,7 +303,7 @@ describe('Native video chain', () => {
 				},
 			);
 			assert.deepStrictEqual(
-				nativeVideoAssert().match({
+				playstationVideoAssert().match({
 					name: ELEMENT_PROP.VIDEO_LENGTH,
 					val: 300,
 					type: PROP_COMPARATOR.APPROX,
@@ -234,7 +323,7 @@ describe('Native video chain', () => {
 							subject: {
 								type: 'element',
 								val: {
-									nativeVideo: true,
+									psVideo: true,
 								},
 							},
 							type: 'has',
@@ -249,7 +338,7 @@ describe('Native video chain', () => {
 	});
 
 	it('should define assert function', () => {
-		const chain = nativeVideoAssert();
+		const chain = playstationVideoAssert();
 
 		assert.ok('toString' in chain);
 		assert.ok('then' in chain);
