@@ -1,11 +1,12 @@
 import * as suitest from '../../index';
-const {psVideo} = suitest;
+const {psVideo, HAD_NO_ERROR} = suitest;
 
 psVideo().timeout(10);
 psVideo().abandon();
 psVideo().then();
 psVideo().toString();
 psVideo().matches(suitest.PROP.VIDEO_STATE, suitest.VIDEO_STATE.PAUSED).toString();
+psVideo().hadNoError(HAD_NO_ERROR.ALL).toString();
 
 // getters
 psVideo().it.should.with.times;
@@ -39,4 +40,8 @@ async function videoTest() {
         name: suitest.PROP.VIDEO_URL,
         val: 'video/url',
     });
+
+    await psVideo().hadNoError().timeout(3000);
+    await psVideo().hadNoError(HAD_NO_ERROR.ALL);
+    await psVideo().hadNoError(HAD_NO_ERROR.CURRENT_URL);
 }

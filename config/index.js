@@ -8,7 +8,7 @@
 
 const logLevels = require('../lib/constants/logLevels');
 const timestamp = require('../lib/constants/timestamp');
-const {validate, validators} = require('../lib/validataion');
+const {validate, validators} = require('../lib/validation');
 const {invalidConfigObj} = require('../lib/texts');
 const {pickNonNil} = require('../lib/utils/common');
 

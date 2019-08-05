@@ -1,5 +1,5 @@
 import * as suitest from '../../index';
-const {psVideo} = suitest;
+const {psVideo, PROP} = suitest;
 
 // const brsCodeExample = (
 // `function test() as Boolean
@@ -23,3 +23,6 @@ psVideo().click().repeat(10).interval(2000).toString();
 psVideo().moveTo().toString();
 psVideo().matchesRepo('width');
 psVideo().timeout(10).not();
+psVideo().hadNoError('sdfdsf');
+psVideo().hadNoError().match();
+psVideo().match(PROP.VIDEO_LENGTH, 30).hadNoError();

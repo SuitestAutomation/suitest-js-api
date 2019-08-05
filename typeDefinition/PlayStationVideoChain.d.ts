@@ -4,6 +4,7 @@ import {
     Timeout,
     BaseChain,
     VideoStateModifiers,
+    HadNoErrorModifier,
 } from './modifiers';
 import {PlayStationVideoProps} from "./constants/ElementProps";
 
@@ -31,7 +32,8 @@ interface PlayStationVideoEmptyChain extends
 
 interface PlayStationVideoEvalModifiers<T> extends
     VideoStateModifiers<T>,
-    Omit<ElementMatchModifiers<T>, 'matchesRepo' | 'matchRepo'>
+    Omit<ElementMatchModifiers<T>, 'matchesRepo' | 'matchRepo'>,
+    HadNoErrorModifier<T>
 {}
 
 interface PlayStationVideoBaseQueryChain<TSelf> extends

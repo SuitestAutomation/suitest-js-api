@@ -46,6 +46,7 @@ const VISIBILITY_STATE = require('./lib/constants/visibilityState');
 const VRC = require('./lib/constants/vrc');
 const KEY = require('./lib/constants/keys');
 const {NETWORK_PROP, NETWORK_METHOD} = require('./lib/constants/networkRequest');
+const HAD_NO_ERROR = require('./lib/constants/hadNoError');
 
 // Network
 const webSockets = require('./lib/api/webSockets');
@@ -107,6 +108,7 @@ class SUITEST_API {
 		this.KEY = KEY;
 		this.NETWORK_PROP = NETWORK_PROP;
 		this.NETWORK_METHOD = NETWORK_METHOD;
+		this.HAD_NO_ERROR = HAD_NO_ERROR;
 
 		this.authContext = authContext;
 		this.appContext = appContext;
