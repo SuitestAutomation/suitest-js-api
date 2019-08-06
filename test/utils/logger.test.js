@@ -85,9 +85,9 @@ describe('logger util', () => {
 		assert(log.firstCall.args[0].includes('MyDevice'), 'device short display name is included in left rail');
 	});
 
-	describe('appOutput method', () => {
-		it('should display data correctly', () => {
-			logger.appOutput('log', [
+	describe('getAppOutput method', () => {
+		it('should process data correctly', () => {
+			const output = logger.getAppOutput('log', [
 				1,
 				'text',
 				null,
@@ -103,96 +103,90 @@ describe('logger util', () => {
 				['NaN'],
 				['undefined'],
 			]);
-			assert.strictEqual(console.log.lastCall.args[0], 1);
-			assert.strictEqual(console.log.lastCall.args[1], 'text');
-			assert.strictEqual(console.log.lastCall.args[2], null);
-			assert.strictEqual(console.log.lastCall.args[3], false);
-			assert.deepEqual(console.log.lastCall.args[4], [1, 3, 4]);
-			assert.deepEqual(console.log.lastCall.args[5], {name: 1, age: 2});
-			assert.strictEqual(console.log.lastCall.args[6], 'funcName');
-			assert.strictEqual(console.log.lastCall.args[7], '\nat foo...\nat bar...', 'trace');
-			assert.strictEqual(console.log.lastCall.args[8], 'timer1: 42ms');
-			assert.strictEqual(console.log.lastCall.args[9], 'NaN');
-			assert.strictEqual(console.log.lastCall.args[10], 'undefined');
+
+			assert.deepStrictEqual(output, {
+				color: undefined,
+				method: 'log',
+				args: [
+					1,
+					'text',
+					null,
+					false,
+					[1, 3, 4],
+					{name: 1, age: 2},
+					'funcName',
+					'\nat foo...\nat bar...',
+					'timer1: 42ms',
+					NaN,
+					undefined,
+				],
+			});
 		});
 
-		it('should call correct console methods', () => {
-			const timeLogSupport = 'timeLog' in console;
-
-			sinon.stub(console, 'assert');
-			sinon.stub(console, 'dir');
-			sinon.stub(console, 'table');
-			sinon.stub(console, 'time');
-			if (timeLogSupport) {
-				sinon.stub(console, 'timeLog');
-			}
-			sinon.stub(console, 'timeEnd');
-			sinon.stub(console, 'trace');
-
-			try {
-				logger.appOutput('assert');
-				logger.appOutput('dir');
-				logger.appOutput('table');
-				assert.strictEqual(console.assert.calledOnce, true);
-				assert.strictEqual(console.dir.calledOnce, true);
-				assert.strictEqual(console.table.calledOnce, true);
-
-				logger.appOutput('time', [['time', 'timer', 42]]);
-				assert.strictEqual(console.time.called, false);
-
-				if (timeLogSupport) {
-					logger.appOutput('timeLog', [['time', 'timer', 42]]);
-					assert.strictEqual(console.timeLog.called, false);
-					assert.strictEqual(console.log.lastCall.args[0], 'timer: 42ms');
-				}
-
-				logger.appOutput('timeEnd', [['time', 'default', null]]);
-				assert.strictEqual(console.timeEnd.called, false);
-				assert.strictEqual(console.warn.lastCall.args[0], 'Timer \'default\' does not exist');
-
-				logger.appOutput('trace', [['trace', ['at foo...', 'at bar...']]]);
-				assert.strictEqual(console.trace.called, false);
-				assert.strictEqual(console.log.lastCall.args[0], '\nat foo...\nat bar...');
-			} finally {
-				console.assert.restore();
-				console.dir.restore();
-				console.table.restore();
-				console.time.restore();
-				if (timeLogSupport) {
-					console.timeLog.restore();
-				}
-				console.timeEnd.restore();
-				console.trace.restore();
-			}
+		it('should return nothing', () => {
+			assert.strictEqual(logger.getAppOutput('assert', [true]), undefined);
+			assert.strictEqual(logger.getAppOutput('time'), undefined);
 		});
 
-		it('should display DOM element correctly', () => {
-			logger.appOutput('log', [['element', {
-				nodeType: 1,
-				nodeName: 'div',
-				attributes: {
-					class: 'menu',
-					id: 'main',
-				},
-				children: [{
-					nodeType: 3,
-					nodeValue: '1'.repeat(100),
-				}],
-			}]]);
+		it('should return correct console method and color', () => {
+			assert.strictEqual(logger.getAppOutput('assert', [false]).method, 'log');
+			assert.strictEqual(logger.getAppOutput('assert', [false]).color, logger.colors.errorColor);
+
+			assert.strictEqual(logger.getAppOutput('dir').method, 'dir');
+			assert.strictEqual(logger.getAppOutput('table').method, 'table');
+			assert.deepStrictEqual(
+				logger.getAppOutput('table', [['table', [[1, 2], null]]]).args,
+				[[1, 2], undefined]
+			);
+
+			assert.strictEqual(logger.getAppOutput('timeLog', [['time', 'timer', 42]]).method, 'log');
+			assert.deepStrictEqual(logger.getAppOutput('timeLog', [['time', 'timer', 42]]).args, ['timer: 42ms']);
+			assert.deepStrictEqual(
+				logger.getAppOutput('timeEnd', [['time', 'default', null]]).args,
+				['Timer \'default\' does not exist']
+			);
+
+			assert.deepStrictEqual(
+				logger.getAppOutput('trace', [['trace', ['at foo...', 'at bar...']]]).args,
+				['\nat foo...\nat bar...']
+			);
+		});
+
+		it('should process DOM element correctly', () => {
 			assert.strictEqual(
-				console.log.lastCall.args[0],
+				logger.getAppOutput('log', [['element', {
+					nodeType: 1,
+					nodeName: 'div',
+					attributes: {
+						class: 'menu',
+						id: 'main',
+					},
+					children: [{
+						nodeType: 3,
+						nodeValue: '1'.repeat(100),
+					}],
+				}]]).args[0],
 				`<div class="menu" id="main">${'1'.repeat(79)}…</div>`,
 				'el with text node child'
 			);
 
-			logger.appOutput('log', [['element', {nodeType: 1, nodeName: 'div'}]]);
-			assert.strictEqual(console.log.lastCall.args[0], '<div>…</div>', 'el without child');
+			assert.strictEqual(
+				logger.getAppOutput('log', [['element', {nodeType: 1, nodeName: 'div'}]]).args[0],
+				'<div>…</div>',
+				'el without child'
+			);
 
-			logger.appOutput('log', [['element', {nodeType: 3, nodeValue: 'text'}]]);
-			assert.strictEqual(console.log.lastCall.args[0], '"text"', 'just text node');
+			assert.strictEqual(
+				logger.getAppOutput('log', [['element', {nodeType: 3, nodeValue: 'text'}]]).args[0],
+				'"text"',
+				'just text node'
+			);
 
-			logger.appOutput('log', [['element', {nodeType: 3, nodeValue: '1'.repeat(100)}]]);
-			assert.strictEqual(console.log.lastCall.args[0], `"${'1'.repeat(79)}…"`, 'text node trimmed');
+			assert.strictEqual(
+				logger.getAppOutput('log', [['element', {nodeType: 3, nodeValue: '1'.repeat(100)}]]).args[0],
+				`"${'1'.repeat(79)}…"`,
+				'text node trimmed'
+			);
 		});
 	});
 });
