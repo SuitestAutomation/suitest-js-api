@@ -12,4 +12,5 @@ export type VideoState = {
 	PLAYBACK_COMPLETED: 'playback_completed',
 	UNKNOWN:            'unknown',
 	REVERSING:          'reversing',
+	UNDEFINED:          'undefined'
 };
