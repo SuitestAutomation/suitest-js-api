@@ -100,12 +100,13 @@ describe('logger util', () => {
 					['at bar...'],
 				]],
 				['time', 'timer1', 42],
-				['NaN'],
+				['number', 'NaN'],
+				['number', 'Infinity'],
+				['number', '-Infinity'],
 				['undefined'],
 			]);
 
 			assert.deepStrictEqual(output, {
-				color: undefined,
 				method: 'log',
 				args: [
 					1,
@@ -115,29 +116,26 @@ describe('logger util', () => {
 					[1, 3, 4],
 					{name: 1, age: 2},
 					'funcName',
-					'\nat foo...\nat bar...',
+					'at foo...\nat bar...',
 					'timer1: 42ms',
 					NaN,
+					Infinity,
+					-Infinity,
 					undefined,
 				],
 			});
 		});
 
 		it('should return nothing', () => {
-			assert.strictEqual(logger.getAppOutput('assert', [true]), undefined);
 			assert.strictEqual(logger.getAppOutput('time'), undefined);
 		});
 
 		it('should return correct console method and color', () => {
-			assert.strictEqual(logger.getAppOutput('assert', [false]).method, 'log');
-			assert.strictEqual(logger.getAppOutput('assert', [false]).color, logger.colors.errorColor);
+			assert.strictEqual(logger.getAppOutput('assert', [false]).method, 'assert');
 
 			assert.strictEqual(logger.getAppOutput('dir').method, 'dir');
 			assert.strictEqual(logger.getAppOutput('table').method, 'table');
-			assert.deepStrictEqual(
-				logger.getAppOutput('table', [['table', [[1, 2], null]]]).args,
-				[[1, 2], undefined]
-			);
+			assert.deepStrictEqual(logger.getAppOutput('table', [['table', [1, 2]]]).args, [[1, 2]]);
 
 			assert.strictEqual(logger.getAppOutput('timeLog', [['time', 'timer', 42]]).method, 'log');
 			assert.deepStrictEqual(logger.getAppOutput('timeLog', [['time', 'timer', 42]]).args, ['timer: 42ms']);
@@ -148,7 +146,7 @@ describe('logger util', () => {
 
 			assert.deepStrictEqual(
 				logger.getAppOutput('trace', [['trace', ['at foo...', 'at bar...']]]).args,
-				['\nat foo...\nat bar...']
+				['at foo...\nat bar...']
 			);
 		});
 
