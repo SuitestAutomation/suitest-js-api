@@ -361,6 +361,7 @@ describe('Socket error messages', () => {
 			[basePayload('IMENotAvailable'), 'IME was not available.'],
 			[basePayload('IMEEngineActivationFailed'), 'An IME engine could not be started.'],
 			[basePayload('InvalidSelector'), 'This selector is malformed. Chain description.'],
+			[basePayload('ElementNotInteractable'), 'Element is not currently interactable and may not be manipulated.'],
 			[basePayload('unknownWebDriverKey'), 'This key is not supported on the target device.'],
 			[basePayload('unfocusableElement'), 'Element Element name is not designed to receive any text input.'],
 			[basePayload('unclickableElement'), 'Cannot click on Element name because the element is obstructed by another element.'],
