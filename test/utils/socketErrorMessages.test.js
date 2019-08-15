@@ -269,6 +269,7 @@ describe('Socket error messages', () => {
 			[basePayload('queryFailed', 'orderErr'), 'Suitest instrumentation library should be placed as the first script in your HTML file. Loading the instrumentation library dynamically or after other scripts have loaded may cause many unusual errors.'],
 			[basePayload('queryFailed', 'updateAlert'), 'Suitest instrumentation library is outdated. Please download and install the newest version.'],
 			[basePayload('queryFailed', 'notFunction'), 'Specified code is not a function. Chain description.'],
+			[basePayload('queryFailed', 'psImplicitVideo'), 'The "video" subject on the PlayStation platform is inconsistent, we recommend using the "native video" or "element" subject instead. Read more in docs - ps4-support.psImplicitVideo.'],
 			[basePayload('networkError'), 'Chain description.'],
 			[basePayload('noHasLines'), 'No assertion properties defined. Chain description.'],
 			[basePayload('appCrashed'), 'App seems to have crashed. Chain description.'],
@@ -394,7 +395,6 @@ describe('Socket error messages', () => {
 			[basePayload('missingPSSDK'), 'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/devices/playstation.'],
 			[basePayload('targetManagerBusy'), 'Please try again in a few minutes.'],
 			[basePayload('missingDotNet'), 'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/devices/playstation.'],
-			[basePayload('psImplicitVideo'), 'The "video" subject on the PlayStation platform is inconsistent, we recommend using the "native video" or "element" subject instead. Read more in docs - ps4-support.psImplicitVideo.'],
 		].forEach(([payload, expectMessage]) => {
 			assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
