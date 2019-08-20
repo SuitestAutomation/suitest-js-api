@@ -2,7 +2,9 @@ const assert = require('assert');
 const {
 	video,
 	videoAssert,
+	toJSON,
 } = require('../../lib/chains/videoChain');
+const {PROP_COMPARATOR, SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {ELEMENT_PROP} = require('../../lib/constants/element');
 
 describe('Video chain', () => {
@@ -103,5 +105,123 @@ describe('Video chain', () => {
 		assert.ok('then' in chain);
 		assert.ok('clone' in chain);
 		assert.ok('abandon' in chain);
+	});
+
+	it('should convert to string with meaningful message', () => {
+		assert.strictEqual(video('el-api-id').toString(), 'Getting properties of "video"');
+		assert.strictEqual(video('el-api-id').exists().toString(), 'Checking if "video" exists');
+		assert.strictEqual(
+			video().matchesJS('function(el){return false}').toString(),
+			'Checking if "video" matches JS:\nfunction(el){return false}'
+		);
+		assert.strictEqual(
+			video().visible().toString(),
+			'Checking if "video" is visible'
+		);
+	});
+
+	it('should generate correct socket message based on data', () => {
+		assert.deepStrictEqual(toJSON({
+			selector: {video: true},
+		}), {
+			type: 'query',
+			subject: {
+				type: 'elementProps',
+				selector: {video: true},
+			},
+		}, 'query');
+		assert.deepStrictEqual(toJSON({
+			isNegated: true,
+			comparator: {
+				type: SUBJ_COMPARATOR.EXIST,
+			},
+			selector: {video: true},
+			timeout: 2000,
+		}), {
+			type: 'eval',
+			request: {
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'element',
+						val: {
+							video: true,
+						},
+					},
+					type: '!exists',
+				},
+				timeout: 2000,
+			},
+		}, 'video does not exist testLine');
+		assert.deepStrictEqual(toJSON({
+			comparator: {
+				type: SUBJ_COMPARATOR.VISIBLE,
+			},
+			selector: {video: true},
+			timeout: 2000,
+		}), {
+			type: 'eval',
+			request: {
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'element',
+						val: {
+							video: true,
+						},
+					},
+					type: 'visible',
+				},
+				timeout: 2000,
+			},
+		}, 'video visible testLine');
+		assert.deepStrictEqual(toJSON({
+			isAssert: true,
+			comparator: {
+				type: SUBJ_COMPARATOR.MATCH_JS,
+				val: '1+1',
+			},
+			selector: {video: true},
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'element',
+						val: {
+							video: true,
+						},
+					},
+					type: 'matches',
+					val: '1+1',
+				},
+				timeout: 2000,
+			},
+		}, 'video mathces js testLine');
+		assert.deepStrictEqual(toJSON({
+			isAssert: true,
+			comparator: {
+				type: SUBJ_COMPARATOR.MATCH_BRS,
+				val: '1+1',
+			},
+			selector: {video: true},
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'element',
+						val: {
+							video: true,
+						},
+					},
+					type: 'matchesBRS',
+					val: '1+1',
+				},
+				timeout: 2000,
+			},
+		}, 'video mathces bs testLine');
 	});
 });
