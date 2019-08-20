@@ -100,6 +100,9 @@ describe('logger util', () => {
 					['at bar...'],
 				]],
 				['time', 'timer1', 42],
+				['time', 'timer2', null],
+				['count', 'count1', 42],
+				['count', 'count2', null],
 				['number', 'NaN'],
 				['number', 'Infinity'],
 				['number', '-Infinity'],
@@ -118,6 +121,9 @@ describe('logger util', () => {
 					'funcName',
 					'at foo...\nat bar...',
 					'timer1: 42ms',
+					'Timer \'timer2\' does not exist',
+					'count1: 42',
+					'Count for \'count2\' does not exist',
 					NaN,
 					Infinity,
 					-Infinity,
@@ -131,7 +137,8 @@ describe('logger util', () => {
 		});
 
 		it('should return correct console method and color', () => {
-			assert.strictEqual(logger.getAppOutput('assert', [false]).method, 'assert');
+			assert.strictEqual(logger.getAppOutput('assert', []).method, 'log');
+			assert.deepStrictEqual(logger.getAppOutput('assert', [1]).args, ['Assertion failed:', 1]);
 
 			assert.strictEqual(logger.getAppOutput('dir').method, 'dir');
 			assert.strictEqual(logger.getAppOutput('table').method, 'table');
