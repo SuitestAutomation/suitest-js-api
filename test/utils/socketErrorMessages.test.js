@@ -391,6 +391,8 @@ describe('Socket error messages', () => {
 			[basePayload('applePairingError'), 'Failed to launch app: Pairing error - see https://suite.st/docs/devices/apple-tv/#pairing-error.'],
 			[basePayload('appleIosDeployError'), 'Failed to launch app: iOS Deploy not found error - see https://suite.st//docs/devices/apple-tv/#ios-deploy-not-found.'],
 			[basePayload('appleAppSignError'), 'Failed to launch app: App code sign error - see https://suite.st/docs/devices/apple-tv/#app-code-sign-error.'],
+			[basePayload('invalidPackage', 'appleTvSimPackageOnDevice'), 'An Apple TV app simulator package cannot be launched on real device.'],
+			[basePayload('invalidPackage', 'appleTvDevicePackageOnSim'), 'An Apple TV app package cannot be launched on simulator device.'],
 		].forEach(([payload, expectMessage]) => {
 			assert.equal(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
