@@ -143,10 +143,7 @@ describe('Video chain', () => {
 				type: 'wait',
 				condition: {
 					subject: {
-						type: 'element',
-						val: {
-							video: true,
-						},
+						type: 'video',
 					},
 					type: '!exists',
 				},
@@ -165,10 +162,7 @@ describe('Video chain', () => {
 				type: 'wait',
 				condition: {
 					subject: {
-						type: 'element',
-						val: {
-							video: true,
-						},
+						type: 'video',
 					},
 					type: 'visible',
 				},
@@ -188,10 +182,7 @@ describe('Video chain', () => {
 				type: 'wait',
 				condition: {
 					subject: {
-						type: 'element',
-						val: {
-							video: true,
-						},
+						type: 'video',
 					},
 					type: 'matches',
 					val: '1+1',
@@ -212,10 +203,7 @@ describe('Video chain', () => {
 				type: 'wait',
 				condition: {
 					subject: {
-						type: 'element',
-						val: {
-							video: true,
-						},
+						type: 'video',
 					},
 					type: 'matchesBRS',
 					val: '1+1',
