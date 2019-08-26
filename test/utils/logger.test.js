@@ -99,8 +99,6 @@ describe('logger util', () => {
 					['at foo...'],
 					['at bar...'],
 				]],
-				['time', 'timer1', 42],
-				['time', 'timer2', null],
 				['count', 'count1', 42],
 				['count', 'count2', null],
 				['number', 'NaN'],
@@ -120,8 +118,6 @@ describe('logger util', () => {
 					{name: 1, age: 2},
 					'funcName',
 					'at foo...\nat bar...',
-					'timer1: 42ms',
-					'Timer \'timer2\' does not exist',
 					'count1: 42',
 					'Count for \'count2\' does not exist',
 					NaN,
@@ -130,10 +126,16 @@ describe('logger util', () => {
 					undefined,
 				],
 			});
-		});
 
-		it('should return nothing', () => {
-			assert.strictEqual(logger.getAppOutput('time'), undefined);
+			assert.deepStrictEqual(logger.getAppOutput('time', [['time', 'timer', null]]), {
+				method: 'log',
+				args: ['Timer \'timer\' already exists'],
+			});
+
+			assert.deepStrictEqual(logger.getAppOutput('timeLog', [['time', 'timer', null]]), {
+				method: 'log',
+				args: ['Timer \'timer\' does not exist'],
+			});
 		});
 
 		it('should return correct console method and color', () => {
