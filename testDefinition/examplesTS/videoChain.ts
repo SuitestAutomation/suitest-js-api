@@ -20,15 +20,11 @@ video().exist();
 video().exists();
 video().visible();
 video().then();
-video().timeout(10);
 video().toString();
 video().exists().toString();
 video().matchesJS('').toString();
 // video().matchesBrightScript(brsCodeExample).toString();
 video().matches(suitest.PROP.ID).toString();
-video().click().toString();
-video().click().repeat(10).interval(2000).toString();
-video().moveTo().toString();
 
 // getters
 video().it.should.with.times;

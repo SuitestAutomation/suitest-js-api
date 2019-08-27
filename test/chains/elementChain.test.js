@@ -40,9 +40,6 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.moveTo, 'function');
 		assert.strictEqual(typeof chain.sendText, 'function');
 		assert.strictEqual(typeof chain.setText, 'function');
-		assert.strictEqual(typeof chain.isPlaying, 'function');
-		assert.strictEqual(typeof chain.isStopped, 'function');
-		assert.strictEqual(typeof chain.isPaused, 'function');
 
 		assert.strictEqual(chain.with, chain);
 		assert.strictEqual(chain.it, chain);
