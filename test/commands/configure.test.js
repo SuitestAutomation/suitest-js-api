@@ -2,7 +2,8 @@ const assert = require('assert');
 const sinon = require('sinon');
 
 const configure = require('../../lib/commands/configure');
-const {config, override} = require('../../config');
+const {config} = require('../../config');
+const {override} = require('../../config/override');
 const logger = require('../../lib/utils/logger');
 
 const cachedConfig = {...config};
@@ -23,7 +24,7 @@ describe('confugure', () => {
 			continueOnFatalError: true,
 			logLevel: 'verbose',
 		});
-		assert.deepEqual(config, {
+		assert.deepStrictEqual(config, {
 			...config,
 			disallowCrashReports: true,
 			continueOnFatalError: true,
