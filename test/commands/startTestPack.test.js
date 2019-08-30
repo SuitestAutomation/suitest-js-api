@@ -43,7 +43,7 @@ describe('startTestPack', () => {
 			assert.ok(false, 'success');
 		} catch (error) {
 			assert.ok(error, 'error');
-			assert.equal(error.code, SuitestError.AUTH_FAILED, 'error type');
+			assert.strictEqual(error.code, SuitestError.AUTH_FAILED, 'error type');
 		}
 	});
 
@@ -56,7 +56,7 @@ describe('startTestPack', () => {
 			assert.ok(false, 'success');
 		} catch (error) {
 			assert.ok(error, 'error');
-			assert.equal(error.code, SuitestError.AUTH_FAILED, 'error type');
+			assert.strictEqual(error.code, SuitestError.AUTH_FAILED, 'error type');
 		}
 	});
 
@@ -77,7 +77,7 @@ describe('startTestPack', () => {
 			assert.ok(testNock.isDone(), 'request');
 			assert.ok(res, 'response');
 			assert.strictEqual(authContext.context, sessionConstants.AUTOMATED, 'automated session context set');
-			assert.equal(res.deviceAccessToken, 'deviceAccessToken', 'deviceAccessToken');
+			assert.strictEqual(res.deviceAccessToken, 'deviceAccessToken', 'deviceAccessToken');
 		} catch (error) {
 			assert.ok(false, 'error');
 		}
@@ -99,7 +99,7 @@ describe('startTestPack', () => {
 			assert.ok(testNock.isDone(), 'request');
 			assert.ok(res, 'response');
 			assert.strictEqual(authContext.context, sessionConstants.AUTOMATED, 'automated session context set');
-			assert.equal(res.deviceAccessToken, 'deviceAccessToken', 'deviceAccessToken');
+			assert.strictEqual(res.deviceAccessToken, 'deviceAccessToken', 'deviceAccessToken');
 		} catch (error) {
 			assert.ok(false, 'error');
 		}
@@ -117,7 +117,7 @@ describe('startTestPack', () => {
 			assert.ok(false, 'success');
 		} catch (error) {
 			assert.ok(error, 'error');
-			assert.equal(error.code, 'ENOTFOUND', 'error code');
+			assert.strictEqual(error.code, 'ENOTFOUND', 'error code');
 		}
 	});
 
@@ -144,7 +144,7 @@ describe('startTestPack', () => {
 			assert.ok(false, 'success');
 		} catch (error) {
 			assert.ok(error, 'error');
-			assert.equal(error.code, SuitestError.AUTH_FAILED, 'error code');
+			assert.strictEqual(error.code, SuitestError.AUTH_FAILED, 'error code');
 		}
 	});
 });
