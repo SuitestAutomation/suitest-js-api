@@ -392,9 +392,9 @@ describe('Socket error messages', () => {
 			[basePayload('applePairingError'), 'Failed to launch app: Pairing error - see https://suite.st/docs/devices/apple-tv/#pairing-error.'],
 			[basePayload('appleIosDeployError'), 'Failed to launch app: iOS Deploy not found error - see https://suite.st//docs/devices/apple-tv/#ios-deploy-not-found.'],
 			[basePayload('appleAppSignError'), 'Failed to launch app: App code sign error - see https://suite.st/docs/devices/apple-tv/#app-code-sign-error.'],
-			[basePayload('missingPSSDK'), 'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/devices/playstation.'],
+			[basePayload('missingPSSDK'), 'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#playstation-sdk-not-installed.'],
 			[basePayload('targetManagerBusy'), 'Please try again in a few minutes.'],
-			[basePayload('missingDotNet'), 'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/devices/playstation.'],
+			[basePayload('missingDotNet'), 'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#net-framework-not-installed.'],
 		].forEach(([payload, expectMessage]) => {
 			assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
@@ -519,7 +519,7 @@ describe('Socket error messages', () => {
 		);
 		assert.strictEqual(
 			getNotStartedReasonMessage('missingPSSDK'),
-			'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/devices/playstation.',
+			'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#playstation-sdk-not-installed.',
 		);
 		assert.strictEqual(
 			getNotStartedReasonMessage('targetManagerBusy'),
@@ -527,7 +527,7 @@ describe('Socket error messages', () => {
 		);
 		assert.strictEqual(
 			getNotStartedReasonMessage('missingDotNet'),
-			'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/devices/playstation.'
+			'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#net-framework-not-installed.'
 		);
 	});
 });
