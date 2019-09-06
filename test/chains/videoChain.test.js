@@ -4,7 +4,7 @@ const {
 	videoAssert,
 	toJSON,
 } = require('../../lib/chains/videoChain');
-const {PROP_COMPARATOR, SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
+const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {ELEMENT_PROP} = require('../../lib/constants/element');
 
 describe('Video chain', () => {
