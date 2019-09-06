@@ -174,6 +174,7 @@ declare namespace suitest {
 		appVersion?: string;
 		vcsBranch?: string;
 		allowServiceCalls?: boolean;
+		includeChangelist?: boolean;
 	}
 
 	interface StartTestPackResult {

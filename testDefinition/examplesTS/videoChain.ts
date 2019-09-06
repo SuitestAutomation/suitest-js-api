@@ -25,9 +25,6 @@ video().exists().toString();
 video().matchesJS('').toString();
 // video().matchesBrightScript(brsCodeExample).toString();
 video().matches(suitest.PROP.VIDEO_STATE, suitest.VIDEO_STATE.PAUSED).toString();
-video().click().toString();
-video().click().repeat(10).interval(2000).toString();
-video().moveTo().toString();
 
 // getters
 video().it.should.with.times;

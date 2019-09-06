@@ -362,15 +362,11 @@ describe('Socket error messages', () => {
 			[basePayload('IMENotAvailable'), 'IME was not available.'],
 			[basePayload('IMEEngineActivationFailed'), 'An IME engine could not be started.'],
 			[basePayload('InvalidSelector'), 'This selector is malformed. Chain description.'],
+			[basePayload('ElementNotInteractable'), 'Element is not currently interactable and may not be manipulated.'],
 			[basePayload('unknownWebDriverKey'), 'This key is not supported on the target device.'],
 			[basePayload('unfocusableElement'), 'Element Element name is not designed to receive any text input.'],
 			[basePayload('unclickableElement'), 'Cannot click on Element name because the element is obstructed by another element.'],
-			[basePayload('appiumInstanceError'), 'Failed to initialize device control.'],
 			[basePayload('deviceConnectionError'), 'Failed to initialize device control.'],
-			[
-				set(lensPath(['response', 'message', 'info', 'currentLandingActivity']), 'some.android.activity', basePayload('landingActivityTimeoutError')),
-				'We have waited for the requested activity to open, but instead the some.android.activity was started. Please check the configuration settings.',
-			],
 			[
 				set(lensPath(['response']), {
 					executeThrowException: true,
@@ -388,9 +384,6 @@ describe('Socket error messages', () => {
 			[basePayload('signInRequired'), 'Account needs to be signed in on target device.'],
 			[basePayload('appleError65'), 'Failed to launch app: Apple ID account error - see https://suite.st/docs/devices/apple-tv/#apple-id-account-error.'],
 			[basePayload('appleError70'), 'Failed to launch app: Xcode error - see https://suite.st/docs/devices/apple-tv/#xcode-error.'],
-			[basePayload('appleEconnresetError'), 'Failed to launch app: Connection (ECONNRESET) error - see https://suite.st/docs/devices/apple-tv/#connection-econnreset-error.'],
-			[basePayload('applePairingError'), 'Failed to launch app: Pairing error - see https://suite.st/docs/devices/apple-tv/#pairing-error.'],
-			[basePayload('appleIosDeployError'), 'Failed to launch app: iOS Deploy not found error - see https://suite.st//docs/devices/apple-tv/#ios-deploy-not-found.'],
 			[basePayload('appleAppSignError'), 'Failed to launch app: App code sign error - see https://suite.st/docs/devices/apple-tv/#app-code-sign-error.'],
 			[basePayload('missingPSSDK'), 'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#playstation-sdk-not-installed.'],
 			[basePayload('targetManagerBusy'), 'Please try again in a few minutes.'],
