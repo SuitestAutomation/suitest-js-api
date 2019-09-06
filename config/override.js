@@ -1,5 +1,5 @@
 const {extend, overridableFields} = require('./index');
-const {validate, validators} = require('../lib/validataion');
+const {validate, validators} = require('../lib/validation');
 const {invalidConfigObj} = require('../lib/texts');
 const {pickNonNil} = require('../lib/utils/common');
 
