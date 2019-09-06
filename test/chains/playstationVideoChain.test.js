@@ -156,10 +156,7 @@ describe('Playstation video chain', () => {
 								},
 							],
 							subject: {
-								type: 'element',
-								val: {
-									psVideo: true,
-								},
+								type: 'psVideo',
 							},
 							type: 'has',
 						},
@@ -190,10 +187,7 @@ describe('Playstation video chain', () => {
 								},
 							],
 							subject: {
-								type: 'element',
-								val: {
-									psVideo: true,
-								},
+								type: 'psVideo',
 							},
 							type: 'has',
 						},
@@ -211,10 +205,7 @@ describe('Playstation video chain', () => {
 				request: {
 					condition: {
 						subject: {
-							type: 'element',
-							val: {
-								psVideo: true,
-							},
+							type: 'psVideo',
 						},
 						type: 'hadNoError',
 						searchStrategy: 'currentUrl',
@@ -237,10 +228,7 @@ describe('Playstation video chain', () => {
 					request: {
 						condition: {
 							subject: {
-								type: 'element',
-								val: {
-									psVideo: true,
-								},
+								type: 'psVideo',
 							},
 							type: 'hadNoError',
 							searchStrategy: 'all',
@@ -289,10 +277,7 @@ describe('Playstation video chain', () => {
 								},
 							],
 							subject: {
-								type: 'element',
-								val: {
-									psVideo: true,
-								},
+								type: 'psVideo',
 							},
 							type: 'has',
 						},
@@ -321,10 +306,7 @@ describe('Playstation video chain', () => {
 								},
 							],
 							subject: {
-								type: 'element',
-								val: {
-									psVideo: true,
-								},
+								type: 'psVideo',
 							},
 							type: 'has',
 						},
