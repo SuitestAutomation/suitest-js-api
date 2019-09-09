@@ -72,4 +72,8 @@ export type VrcConstants = {
 
 	// Roku
 	REPLAY: 'REPLAY',
+
+	// Playstation
+	CIRCLE: 'CIRCLE',
+	CROSS:  'CROSS',
 };

@@ -4,7 +4,7 @@ const {
 	videoAssert,
 	toJSON,
 } = require('../../lib/chains/videoChain');
-const {PROP_COMPARATOR, SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
+const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {ELEMENT_PROP} = require('../../lib/constants/element');
 
 describe('Video chain', () => {
@@ -81,9 +81,9 @@ describe('Video chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(video().toString(), 'Getting properties of "video"');
-		assert.equal(video().exists().toString(), 'Checking if "video" exists');
-		assert.equal(
+		assert.strictEqual(video().toString(), 'Getting properties of "video"');
+		assert.strictEqual(video().exists().toString(), 'Checking if "video" exists');
+		assert.strictEqual(
 			video().matchesJS('function(el){return false}').toString(),
 			'Checking if "video" matches JS:\nfunction(el){return false}'
 		);
@@ -91,7 +91,7 @@ describe('Video chain', () => {
 		// 	video().matchesBrightScript('function(el){return false}').toString(),
 		// 	'Checking if "video" matches BrightScript:\nfunction(el){return false}'
 		// );
-		assert.equal(
+		assert.strictEqual(
 			video().matches(ELEMENT_PROP.ID, 'someId').toString(),
 			'Checking if "video" matches:\n' +
 			'  id = someId'
