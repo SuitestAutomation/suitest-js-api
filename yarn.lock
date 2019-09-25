@@ -129,10 +129,10 @@
   resolved "https://registry.yarnpkg.com/@sinonjs/text-encoding/-/text-encoding-0.7.1.tgz#8da5c6530915653f3a1f38fd5f101d8c3f8079c5"
   integrity sha512-+iTbntw2IZPb/anVDbypzfQa+ay64MW0Zo8aJ8gZPWMMK6/OubMVb6lUPMagqjOPnmtauXnFCACVl3O7ogjeqQ==
 
-"@suitest/translate@^2.0.0-alpha.0":
-  version "2.0.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@suitest/translate/-/translate-2.0.0-alpha.0.tgz#ae91807712f5de6b3900aed72694da3023272a61"
-  integrity sha512-JyQt1CHI/r+NlONPyJzQDaEbNTRLuN5S+YP07Ngu0uecp0w27jVrLc8LvO1IeVIceGLE/49nNpCOJ/3ApWoQDw==
+"@suitest/translate@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@suitest/translate/-/translate-2.0.0.tgz#4ade61801399604de4025b0a88973be6f44439e6"
+  integrity sha512-wbDB0BWVk7HqwgbVLJFfsPNSER+extxRVtLKFz+UkqAMXAP7KndvDjByxs8cZLnTPBriwk6TaCvCNbFIv8zX5Q==
 
 abbrev@1:
   version "1.1.1"
