@@ -24,7 +24,7 @@ video().toString();
 video().exists().toString();
 video().matchesJS('').toString();
 // video().matchesBrightScript(brsCodeExample).toString();
-video().matches(suitest.PROP.ID).toString();
+video().matches(suitest.PROP.VIDEO_STATE, suitest.VIDEO_STATE.PAUSED).toString();
 
 // getters
 video().it.should.with.times;
@@ -51,7 +51,7 @@ async function videoTest() {
 
 	await video().matches({
 		name: suitest.PROP.TOP,
-		val: suitest.VALUE.REPO,
+		val: 400,
 		type: suitest.COMP.APPROX,
 		deviation: 20,
 	});

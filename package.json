@@ -1,6 +1,6 @@
 {
   "name": "suitest-js-api",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "main": "index.js",
   "repository": "git@github.com:SuitestAutomation/suitest-js-api.git",
   "author": "Suitest <hello@suite.st>",
@@ -67,7 +67,7 @@
     "nock": "^9.1.6",
     "nyc": "14.1.1",
     "sinon": "^6.3.4",
-    "typescript": "^3.3.3"
+    "typescript": "^3.5.3"
   },
   "dependencies": {
     "@suitest/translate": "^2.0.0-alpha.0",

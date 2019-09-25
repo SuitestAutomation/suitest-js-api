@@ -2,8 +2,8 @@ const assert = require('assert');
 const {
 	validatePositiveNumber,
 	validateNonEmptyStringOrUndefined,
-} = require('../../lib/validataion/validators');
-const {validate, validators} = require('../../lib/validataion');
+} = require('../../lib/validation/validators');
+const {validate, validators} = require('../../lib/validation');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('validators', () => {

@@ -78,3 +78,5 @@ export type ElementProps = {
 	tintColor:               string,
 	value:                   string,
 }
+
+export type PlayStationVideoProps = Pick<ElementProps, 'videoLength' | 'videoPos' | 'videoState' | 'videoUrl'>
