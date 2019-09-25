@@ -388,6 +388,7 @@ describe('Socket error messages', () => {
 			[basePayload('missingPSSDK'), 'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#playstation-sdk-not-installed.'],
 			[basePayload('targetManagerBusy'), 'Please try again in a few minutes.'],
 			[basePayload('missingDotNet'), 'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#net-framework-not-installed.'],
+			[basePayload('bootstrapAppNotDetected'), 'The Suitest bootstrap application was not detected.'],
 		].forEach(([payload, expectMessage]) => {
 			assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
