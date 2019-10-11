@@ -10,8 +10,6 @@ const {
 	getInfoErrorMessage,
 	responseMessageCode,
 	responseMessageInfo,
-	notStartedReasons,
-	getNotStartedReasonMessage,
 } = require('../../lib/utils/socketErrorMessages');
 const {NETWORK_PROP, NETWORK_METHOD} = require('../../lib/constants/networkRequest');
 
@@ -269,6 +267,7 @@ describe('Socket error messages', () => {
 			[basePayload('queryFailed', 'orderErr'), 'Suitest instrumentation library should be placed as the first script in your HTML file. Loading the instrumentation library dynamically or after other scripts have loaded may cause many unusual errors.'],
 			[basePayload('queryFailed', 'updateAlert'), 'Suitest instrumentation library is outdated. Please download and install the newest version.'],
 			[basePayload('queryFailed', 'notFunction'), 'Specified code is not a function. Chain description.'],
+			[basePayload('queryFailed', 'psImplicitVideo'), 'The "video" subject on the PlayStation platform is inconsistent, we recommend using the "native video" or "element" subject instead. Read more in docs - ps4-support.psImplicitVideo.'],
 			[basePayload('networkError'), 'Chain description.'],
 			[basePayload('noHasLines'), 'No assertion properties defined. Chain description.'],
 			[basePayload('appCrashed'), 'App seems to have crashed. Chain description.'],
@@ -365,12 +364,7 @@ describe('Socket error messages', () => {
 			[basePayload('unknownWebDriverKey'), 'This key is not supported on the target device.'],
 			[basePayload('unfocusableElement'), 'Element Element name is not designed to receive any text input.'],
 			[basePayload('unclickableElement'), 'Cannot click on Element name because the element is obstructed by another element.'],
-			[basePayload('appiumInstanceError'), 'Failed to initialize device control.'],
 			[basePayload('deviceConnectionError'), 'Failed to initialize device control.'],
-			[
-				set(lensPath(['response', 'message', 'info', 'currentLandingActivity']), 'some.android.activity', basePayload('landingActivityTimeoutError')),
-				'We have waited for the requested activity to open, but instead the some.android.activity was started. Please check the configuration settings.',
-			],
 			[
 				set(lensPath(['response']), {
 					executeThrowException: true,
@@ -388,12 +382,13 @@ describe('Socket error messages', () => {
 			[basePayload('signInRequired'), 'Account needs to be signed in on target device.'],
 			[basePayload('appleError65'), 'Failed to launch app: Apple ID account error - see https://suite.st/docs/devices/apple-tv/#apple-id-account-error.'],
 			[basePayload('appleError70'), 'Failed to launch app: Xcode error - see https://suite.st/docs/devices/apple-tv/#xcode-error.'],
-			[basePayload('appleEconnresetError'), 'Failed to launch app: Connection (ECONNRESET) error - see https://suite.st/docs/devices/apple-tv/#connection-econnreset-error.'],
-			[basePayload('applePairingError'), 'Failed to launch app: Pairing error - see https://suite.st/docs/devices/apple-tv/#pairing-error.'],
-			[basePayload('appleIosDeployError'), 'Failed to launch app: iOS Deploy not found error - see https://suite.st//docs/devices/apple-tv/#ios-deploy-not-found.'],
 			[basePayload('appleAppSignError'), 'Failed to launch app: App code sign error - see https://suite.st/docs/devices/apple-tv/#app-code-sign-error.'],
+			[basePayload('missingPSSDK'), 'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#playstation-sdk-not-installed.'],
+			[basePayload('targetManagerBusy'), 'Please try again in a few minutes.'],
+			[basePayload('missingDotNet'), 'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#net-framework-not-installed.'],
+			[basePayload('bootstrapAppNotDetected'), 'The Suitest bootstrap application was not detected.'],
 		].forEach(([payload, expectMessage]) => {
-			assert.equal(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
+			assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
 	});
 
@@ -435,83 +430,5 @@ describe('Socket error messages', () => {
 		);
 
 		assert.strictEqual(msg4, 'prefix message' + EOL + '\tat line1');
-	});
-
-	it('test notStartedReasons keys', () => {
-		const reasonsCodes = [
-			'blasterError', 'bootstrappedPlatformError', 'testQueued', 'noAvailableAutomatedMinutes',
-			'noActivePlan', 'candyBoxOffline', 'suitestDriveOffline', 'runningBootSequence',
-			'deviceInUse', 'deviceDisabled', 'deviceDeleted', 'internalError',
-			'notDefinedPlatform', 'lgWebosPlatformError', 'xboxPlatformError', 'androidPlatformError',
-		].sort();
-
-		assert.deepStrictEqual(Object.keys(notStartedReasons).sort(), reasonsCodes);
-	});
-
-	it('test getNotStartedReasonMessage', () => {
-		assert.strictEqual(
-			getNotStartedReasonMessage('blasterError'),
-			'Cannot continue: IR blaster missing or incorrectly attached.\nInfrared blaster assigned to the device is missing or malfunctioning. Check the wiring, replace the blaster or assign another working CandyBox port to this device.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('bootstrappedPlatformError'),
-			'Cannot continue: Suitest bootstrap app is not running.\nSuitest tried to start the bootstrap application on this device but failed several times and will try no more. Please connect to the device and start the bootstrap app manually, then disconnect and the scheduled test will continue. If you have configured the Suitest channel, tune the TV to this channel and verify that Suitest badge is displayed on TV in the top right corner. If you have not configured the Suitest channel, please contact support.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('testQueued'),
-			'Execution will start as soon as other tests queued on this device will finish execution.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('noAvailableAutomatedMinutes'),
-			'Cannot continue: you\'ve used up all of your testing minutes.\nYou testing a lot! How about getting a bigger subscription https://the.suite.st/preferences/billing? Or, if you would like to purchase more testing minutes for the current billing cycle, please contact sales@suite.st. Your testing minutes will renew.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('noActivePlan'),
-			'Cannot continue: Your subscription has expired.\nYour subscription has expired, to continue using Suitest please renew your subscription (https://the.suite.st/preferences/billing).'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('candyBoxOffline'),
-			'Cannot continue: CandyBox controlling this device is offline.\nCheck that the cable plugged into the CandyBox delivers Internet connection or reboot the CandyBox and allow about 5 minutes for it to initialize.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('suitestDriveOffline'),
-			'Cannot continue: SuitestDrive controlling this device is offline.\nSuitestDrive controlling this device is not currently running or is offline. Please verify that the host computer has Internet connection and that SuitestDrive is running.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('runningBootSequence'),
-			'Trying to open Suitest bootstrap application.\nTest will start after the Suitest bootstrap application will open. Suitest will attempt to open the app in a number of ways. After each attempt it will wait for 60 seconds for the app to respond. If it will not, Suitest will try the next available method. Current methods are: 1) Sending EXIT key to the device, 2) Executing user defined boot sequence, 3) turning the TV on and off 4) Turning the TV on again. If starting the test takes a long time, you should configure a better boot sequence.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('deviceInUse'),
-			'A user is currently connected to this device. Execution will continue after the user disconnects.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('deviceDisabled'),
-			'This device is disabled. For the execution to continue please enable the device.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('deviceDeleted'),
-			'Cannot continue: Device is deleted.\nThe device on which the execution was scheduled has been deleted. Please cancel the test and schedule it on another available device.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('internalError'),
-			'Cannot continue: Internal error occurred.\nWe are very sorry, but some fishy error occurred when Suitest was trying to execute your test. Our developers have been notified and are already working hard to resolve the problem.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('notDefinedPlatform'),
-			'Cannot continue: Device does not support this platform.\nYou have scheduled the test execution with a configuration that depends on a platform, which this device does not currently support. You should either configure the platform on the device or cancel the test run.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('lgWebosPlatformError'),
-			'Cannot continue: LG WebOS driver failed.\nLG WebOS driver has misbehaved. Please verify that the device is online and it\'s current IP address is correctly specified in Suitest. Then doublecheck if the Development mode is enabled on the device. If nothing helps try rebooting the device and/or the CandyBox.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('xboxPlatformError'),
-			'Cannot continue: Xbox driver failed.\nXbox driver has misbehaved. Please verify that the device is online and it\'s current IP address and developer credentials are correctly specified in Suitest. If nothing helps try rebooting the device and restarting SuitestDrive.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('androidPlatformError'),
-			'Cannot continue: Android driver failed.\nAndroid driver has misbehaved. Please verify that the device is online and it\'s current IP address is correctly specified in Suitest. If nothing helps try rebooting the device and restarting SuitestDrive.'
-		);
 	});
 });

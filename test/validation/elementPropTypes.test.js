@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const {ELEMENT_PROP_TYPES} = require('../../lib/validataion/elementPropTypes');
+const {ELEMENT_PROP_TYPES} = require('../../lib/validation/elementPropTypes');
 const {ELEMENT_PROP} = require('../../lib/constants/element');
 
 describe('Testing elementPropTypes.', () => {
