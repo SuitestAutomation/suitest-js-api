@@ -153,7 +153,7 @@ declare namespace suitest {
 		}>;
 		codeOverrides?: object;
 		configVariables?: Array<{
-			name: string;
+			key: string;
 			value: string;
 		}>;
 		openAppOverrideTest?: string;
