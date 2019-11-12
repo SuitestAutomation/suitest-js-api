@@ -30,4 +30,15 @@ describe('validators', () => {
 			message: 'Invalid input \'disallowCrashReports\' should be boolean.',
 		}, 'invalid configuration object');
 	});
+
+	it('should validate configOverride', () => {
+		testInputErrorSync(validate, [validators.CONFIG_OVERRIDE, {
+			configVariables: [{
+				value: 'string',
+				name: 'string',
+			}],
+		}], {
+			message: 'Invalid input should have required property \'key\'',
+		}, 'invalid configOverride object');
+	});
 });
