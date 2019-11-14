@@ -2,8 +2,8 @@ const assert = require('assert');
 const {
 	validatePositiveNumber,
 	validateNonEmptyStringOrUndefined,
-} = require('../../lib/validataion/validators');
-const {validate, validators} = require('../../lib/validataion');
+} = require('../../lib/validation/validators');
+const {validate, validators} = require('../../lib/validation');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('validators', () => {
@@ -29,5 +29,16 @@ describe('validators', () => {
 		testInputErrorSync(validate, [validators.CONFIGURE, {disallowCrashReports: 'false'}], {
 			message: 'Invalid input \'disallowCrashReports\' should be boolean.',
 		}, 'invalid configuration object');
+	});
+
+	it('should validate configOverride', () => {
+		testInputErrorSync(validate, [validators.CONFIG_OVERRIDE, {
+			configVariables: [{
+				value: 'string',
+				name: 'string',
+			}],
+		}], {
+			message: 'Invalid input should have required property \'key\'',
+		}, 'invalid configOverride object');
 	});
 });

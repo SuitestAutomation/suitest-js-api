@@ -1,6 +1,6 @@
 {
   "name": "suitest-js-api",
-  "version": "1.10.0",
+  "version": "1.14.2",
   "main": "index.js",
   "repository": "git@github.com:SuitestAutomation/suitest-js-api.git",
   "author": "Suitest <hello@suite.st>",
@@ -65,16 +65,12 @@
     "mock-socket": "^7.1.0",
     "mock-spawn": "^0.2.6",
     "nock": "^9.1.6",
-    "nyc": "^11.4.1",
+    "nyc": "14.1.1",
     "sinon": "^6.3.4",
-    "stryker": "^0.29.5",
-    "stryker-api": "^0.21.2",
-    "stryker-javascript-mutator": "^0.11.0",
-    "stryker-mocha-framework": "^0.12.3",
-    "stryker-mocha-runner": "^0.14.3",
-    "typescript": "^3.3.3"
+    "typescript": "^3.5.3"
   },
   "dependencies": {
+    "@suitest/translate": "^2.0.1",
     "ajv": "^6.1.1",
     "ansi-regex": "^3.0.0",
     "chokidar": "^2.0.4",
@@ -87,7 +83,7 @@
     "node-fetch": "^2.0.0",
     "package-json": "^5.0.0",
     "prettyjson": "^1.2.1",
-    "ramda": "^0.25.0",
+    "ramda": "^0.26.1",
     "raven": "^2.6.2",
     "rc": "^1.2.6",
     "read": "^1.0.7",

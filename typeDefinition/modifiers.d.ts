@@ -177,6 +177,10 @@ export declare namespace WindowModifiers {
 	}
 }
 
+export interface HadNoErrorModifier<T> {
+	hadNoError(searchStrategy?: 'all' | 'currentUrl'): T;
+}
+
 export type PropertyValue = string | number | symbol | boolean;
 export type PropertyObjectDefinition = {
 	name: PropNameType,
