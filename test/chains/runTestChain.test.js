@@ -35,11 +35,11 @@ describe('Run test chain', () => {
 	it('should convert to string with meaningful message', () => {
 		assert.strictEqual(
 			runTest('testId').toString(),
-			'Running test by id "testId"'
+			'Running test by ID "testId"'
 		);
 		assert.strictEqual(
 			runTest('testId').repeat(10).toString(),
-			'Running test by id "testId", repeat 10 times'
+			'Running test by ID "testId", repeat 10 times'
 		);
 		assert.strictEqual(
 			runTest('testId')
@@ -55,7 +55,7 @@ describe('Run test chain', () => {
 					}),
 				})
 				.repeat(10).toString(),
-			'Running test by id "testId", repeat 10 times'
+			'Running test by ID "testId", repeat 10 times'
 		);
 	});
 
