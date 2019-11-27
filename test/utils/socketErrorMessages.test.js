@@ -387,6 +387,14 @@ describe('Socket error messages', () => {
 			[basePayload('targetManagerBusy'), 'Please try again in a few minutes.'],
 			[basePayload('missingDotNet'), 'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#net-framework-not-installed.'],
 			[basePayload('bootstrapAppNotDetected'), 'The Suitest bootstrap application was not detected.'],
+			[
+				set(lensPath(['chainData', 'testId']), 'testId', basePayload('testSnippetError')),
+				'Test run by ID "testId" failed.',
+			],
+			[
+				set(lensPath(['chainData', 'testId']), 'testId', basePayload('invalidReference')),
+				'Test with ID "testId" does not exist.',
+			],
 		].forEach(([payload, expectMessage]) => {
 			assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});

@@ -22,6 +22,7 @@ const {cookie, cookieAssert} = require('./lib/chains/cookieChain');
 const {sleep, sleepAssert} = require('./lib/chains/sleepChain');
 const {pressButton, pressButtonAssert} = require('./lib/chains/pressButtonChain');
 const {position, positionAssert} = require('./lib/chains/positionChain');
+const {runTestAssert} = require('./lib/chains/runTestChain');
 const {window, windowAssert} = require('./lib/chains/windowChain');
 const {executeCommand, executeCommandAssert} = require('./lib/chains/executeCommandChain');
 // const {executeBrightScript, executeBrightScriptAssert} = require('./lib/chains/executeBrightScriptChain');
@@ -135,6 +136,7 @@ class SUITEST_API {
 			cookie: cookieAssert,
 			element: elementAssert,
 			pollUrl: pollUrlAssert,
+			runTest: runTestAssert,
 			networkRequest: networkRequestAssert,
 			video: videoAssert,
 			psVideo: playstationVideoAssert,

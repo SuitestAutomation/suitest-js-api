@@ -15,6 +15,7 @@ import {PollUrlChain} from './typeDefinition/PollUrl';
 import {PositionChain} from './typeDefinition/PositionChain';
 import {PressButtonChain} from './typeDefinition/PressButton';
 import {VrcConstants} from './typeDefinition/constants/Vrc';
+import {RunTestChain} from './typeDefinition/RunTestChain';
 import {SleepChain} from './typeDefinition/SleepChain';
 import {VideoChain} from './typeDefinition/VideoChain';
 import {WindowChain} from './typeDefinition/WindowChain';
@@ -122,6 +123,7 @@ declare namespace suitest {
 		position(x: number, y: number): PositionChain;
 		press(key: string): PressButtonChain;
 		press(keys: string[]): PressButtonChain;
+		runTest(testId: string): RunTestChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
 	}
