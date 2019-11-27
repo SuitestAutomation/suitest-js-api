@@ -1,7 +1,7 @@
 import * as suitest from '../../index';
 
 async function sleepTest() {
-	const sampleSleep = suitest.sleep(10);
+	const sampleSleep = suitest.sleep(null);
 
 	await sampleSleep;
 

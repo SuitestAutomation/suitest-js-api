@@ -88,7 +88,6 @@ describe('Sleep chain', () => {
 
 	it('should throw error in case of invalid input', () => {
 		testInputErrorSync(sleep, []);
-		testInputErrorSync(sleep, ['text']);
 		testInputErrorSync(sleep, [-1]);
 	});
 });
