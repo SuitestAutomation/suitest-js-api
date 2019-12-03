@@ -387,6 +387,8 @@ describe('Socket error messages', () => {
 			[basePayload('targetManagerBusy'), 'Please try again in a few minutes.'],
 			[basePayload('missingDotNet'), 'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#net-framework-not-installed.'],
 			[basePayload('bootstrapAppNotDetected'), 'The Suitest bootstrap application was not detected.'],
+			[basePayload('activationExpired'), 'Could not open the app because the DevKit/TestKit expired.'],
+			[basePayload('missingCpp'), 'Make sure you have Microsoft Visual C++ Redistributable installed. Please see our docs - https://suite.st/docs/devices/playstation.'],
 			[
 				set(lensPath(['chainData', 'testId']), 'testId', basePayload('testSnippetError')),
 				'Test run by ID "testId" failed.',
