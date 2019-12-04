@@ -154,16 +154,28 @@ describe('Application chain', () => {
 			}),
 		};
 
-		assert.strictEqual(application().toString(), 'Application has exited');
-		assert.strictEqual(sendTextApp.toString(), 'Sending text "some text" to application');
-		assert.strictEqual(sendTextApp.repeat(2).toString(), 'Sending text "some text" to application, repeat 2 times');
-		assert.strictEqual(sendTextApp.interval(2222).toString(), 'Sending text "some text" to application');
+		assert.throws(() => application().toString(), 'SuitestError: Invalid input - application command is malformed');
+		assert.strictEqual(application().hasExited().toString(), 'Application has exited');
+		assert.strictEqual(
+			sendTextApp.toString(),
+			'Sending text "some text" to application, repeat 1 times every 1 ms'
+		);
+		assert.strictEqual(
+			sendTextApp.repeat(2).toString(),
+			'Sending text "some text" to application, repeat 2 times every 1 ms'
+		);
+		assert.strictEqual(
+			sendTextApp.interval(2222).toString(),
+			'Sending text "some text" to application, repeat 1 times every 2222 ms'
+		);
 		assert.strictEqual(
 			sendTextApp.repeat(3).interval(2222).toString(),
-			'Sending text "some text" to application, repeat 3 times every 2222 ms');
+			'Sending text "some text" to application, repeat 3 times every 2222 ms'
+		);
 		assert.strictEqual(
 			sendTextApp.repeat(1).interval(1).toString(),
-			'Sending text "some text" to application, repeat 1 times every 1 ms');
+			'Sending text "some text" to application, repeat 1 times every 1 ms'
+		);
 		assert.strictEqual(sendTextApp.until(untilData).toString(), 'Sending text "some text" to application');
 	});
 
