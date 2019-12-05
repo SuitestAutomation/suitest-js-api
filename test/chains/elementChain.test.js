@@ -37,6 +37,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.click, 'function');
 		assert.strictEqual(typeof chain.repeat, 'undefined');
 		assert.strictEqual(typeof chain.interval, 'undefined');
+		assert.strictEqual(typeof chain.until, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'function');
 		assert.strictEqual(typeof chain.sendText, 'function');
 		assert.strictEqual(typeof chain.setText, 'function');
@@ -86,6 +87,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
 		assert.strictEqual(typeof chain.repeat, 'function');
 		assert.strictEqual(typeof chain.interval, 'function');
+		assert.strictEqual(typeof chain.until, 'function');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
@@ -114,6 +116,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
 		assert.strictEqual(typeof chain.repeat, 'undefined');
 		assert.strictEqual(typeof chain.interval, 'undefined');
+		assert.strictEqual(typeof chain.until, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
@@ -142,6 +145,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
 		assert.strictEqual(typeof chain.repeat, 'function');
 		assert.strictEqual(typeof chain.interval, 'function');
+		assert.strictEqual(typeof chain.until, 'function');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
@@ -164,8 +168,9 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.matchesJS, 'undefined');
 		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
 		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
-		assert.strictEqual(typeof chain.repeat, 'function');
-		assert.strictEqual(typeof chain.interval, 'function');
+		assert.strictEqual(typeof chain.repeat, 'undefined');
+		assert.strictEqual(typeof chain.interval, 'undefined');
+		assert.strictEqual(typeof chain.until, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
@@ -195,6 +200,10 @@ describe('Element chain', () => {
 
 	it('should convert to string with meaningful message', () => {
 		assert.strictEqual(element('el-api-id').toString(), 'Getting properties of "el-api-id"');
+		assert.strictEqual(
+			element({css: 'test', xpath: 'test', index: 4}).toString(),
+			'Getting properties of "{"css":"test","xpath":"test","index":4}"'
+		);
 		assert.strictEqual(element('el-api-id').exists().toString(), 'Checking if "el-api-id" exists');
 		assert.strictEqual(element({
 			css: 'body',
@@ -227,8 +236,23 @@ describe('Element chain', () => {
 			'  id = valueRepo'
 		);
 		assert.strictEqual(
+			element('el-api-id')
+				.matches({name: ELEMENT_PROP.ID, val: 'testId', type: PROP_COMPARATOR.CONTAIN})
+				.toString(),
+			'Checking if "el-api-id" matches:\n  id ~ testId'
+		);
+		assert.strictEqual(
+			element('el-api-id')
+				.matches([
+					{name: ELEMENT_PROP.ID, val: 'testId', type: PROP_COMPARATOR.CONTAIN},
+					{name: ELEMENT_PROP.HEIGHT, val: 10, type: PROP_COMPARATOR.GREATER, deviation: 4},
+				])
+				.toString(),
+			'Checking if "el-api-id" matches:\n  id ~ testId,\n  height > 10'
+		);
+		assert.strictEqual(
 			element('el-api-id').click().toString(),
-			'Clicking on "el-api-id"'
+			'Clicking on "el-api-id", repeat 1 times every 1 ms'
 		);
 		assert.strictEqual(
 			element('el-api-id').click().repeat(10).interval(2000).toString(),
@@ -255,11 +279,11 @@ describe('Element chain', () => {
 		);
 		assert.strictEqual(
 			element('el-api-id').sendText('text string').toString(),
-			'Sending text "text string" to "el-api-id"'
+			'Sending text "text string" to "el-api-id", repeat 1 times every 1 ms'
 		);
 		assert.strictEqual(
 			element('el-api-id').sendText('text string').repeat(3).toString(),
-			'Sending text "text string" to "el-api-id", repeat 3 times'
+			'Sending text "text string" to "el-api-id", repeat 3 times every 1 ms'
 		);
 		assert.strictEqual(
 			element('el-api-id').sendText('text string').repeat(10).interval(2000).toString(),
@@ -268,10 +292,6 @@ describe('Element chain', () => {
 		assert.strictEqual(
 			element('el-api-id').setText('text string').toString(),
 			'Setting text "text string" for "el-api-id"'
-		);
-		assert.strictEqual(
-			element('el-api-id').setText('text string').repeat(10).interval(2000).toString(),
-			'Setting text "text string" for "el-api-id", repeat 10 times every 2000 ms'
 		);
 	});
 
