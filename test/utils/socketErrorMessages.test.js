@@ -391,7 +391,7 @@ describe('Socket error messages', () => {
 			[basePayload('missingCpp'), 'Make sure you have Microsoft Visual C++ Redistributable installed. Please see our docs - https://suite.st/docs/devices/playstation.'],
 			[
 				set(lensPath(['chainData', 'testId']), 'testId', basePayload('testSnippetError')),
-				'Test run by ID "testId" failed.',
+				'Chain description.',
 			],
 			[
 				set(lensPath(['chainData', 'testId']), 'testId', basePayload('invalidReference')),

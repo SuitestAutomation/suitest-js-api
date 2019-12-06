@@ -8,6 +8,7 @@ const sessionConstants = require('../../lib/constants/session');
 const {setAppConfig} = require('../../lib/commands/setAppConfig');
 const SuitestError = require('../../lib/utils/SuitestError');
 const webSockets = require('../../lib/api/webSockets');
+const mockWebSocket = require('../../lib/utils/testHelpers/mockWebSocket');
 const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
 const logger = require('../../lib/utils/logger');
 
@@ -19,10 +20,16 @@ describe('setAppConfig', () => {
 		await testServer.start();
 		await webSockets.connect();
 	});
+
 	beforeEach(() => {
 		appContext.clear();
 		authContext.clear();
 	});
+
+	afterEach(() => {
+		mockWebSocket.restoreResponse();
+	});
+
 	after(async() => {
 		logger.log.restore();
 		logger.json.restore();
@@ -50,12 +57,19 @@ describe('setAppConfig', () => {
 	});
 
 	it('should set correct app config', async() => {
+		mockWebSocket.mockResponse({
+			appId: 'appId',
+			versionId: 'versionId',
+		});
+
 		authContext.setContext(sessionConstants.AUTOMATED, 'deviceId');
 		await setAppConfig('configId', {url: 'url'});
 
 		assert.deepEqual(appContext.context, {
 			configId: 'configId',
 			configOverride: {url: 'url'},
+			appId: 'appId',
+			versionId: 'versionId',
 		});
 	});
 });
