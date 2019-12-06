@@ -44,7 +44,7 @@ describe('Sleep chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(toString({milliseconds: 10}), 'Sleeping for 10ms');
+		assert.equal(toString({timeout: 10}), 'Sleeping for 10ms');
 	});
 
 	it('should have beforeSendMsg', () => {
