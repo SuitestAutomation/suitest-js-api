@@ -37,15 +37,15 @@ describe('Press button chain', () => {
 	it('should convert to string with meaningful message', () => {
 		assert.strictEqual(
 			pressButton(buttonTypes.BACK).toString(),
-			'Pressing button BACK'
+			'Pressing button BACK, repeat 1 times every 1 ms'
 		);
 		assert.strictEqual(
 			pressButton([buttonTypes.BLUE, buttonTypes.DOWN]).toString(),
-			'Pressing buttons BLUE, DOWN'
+			'Pressing buttons BLUE, DOWN, repeat 1 times every 1 ms'
 		);
 		assert.strictEqual(
 			pressButton(buttonTypes.BLUE).repeat(10).toString(),
-			'Pressing button BLUE, repeat 10 times'
+			'Pressing button BLUE, repeat 10 times every 1 ms'
 		);
 		assert.strictEqual(
 			pressButton(buttonTypes.BLUE).repeat(10).interval(2000).toString(),
