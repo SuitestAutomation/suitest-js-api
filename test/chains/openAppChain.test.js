@@ -55,8 +55,8 @@ describe('Open app chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(toString({}), 'Opening app at homepage');
-		assert.equal(toString({relativeURL: '/test'}), 'Opening app at /test');
+		assert.strictEqual(toString({}), 'Opening app at homepage');
+		assert.strictEqual(toString({relativeURL: '/test'}), 'Opening app at /test');
 	});
 
 	it('should have beforeSendMsg', () => {
