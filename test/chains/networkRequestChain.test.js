@@ -53,23 +53,23 @@ describe('Network request chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').wasMade().toString(),
 			'Checking if a network request\nto URL: http://suite.st/test\nwas made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').not().wasMade().toString(),
 			'Checking if a network request\nto URL: http://suite.st/test\nwas NOT made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').wasMade().toString(),
 			'Checking if a network request\nmatching: test\nwas made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').not().wasMade().toString(),
 			'Checking if a network request\nmatching: test\nwas NOT made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').requestMatches({
 				name: 'test',
 				val: 'test',
@@ -80,7 +80,7 @@ describe('Network request chain', () => {
 			'  test: test\n' +
 			'was made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').requestMatches({
 				name: 'test',
 				val: 'test',
@@ -91,7 +91,7 @@ describe('Network request chain', () => {
 			'  test: test\n' +
 			'was NOT made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').requestMatches({
 				name: 'test',
 				val: 'test',
@@ -102,7 +102,7 @@ describe('Network request chain', () => {
 			'  test: test\n' +
 			'was made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').requestMatches({
 				name: 'headerName',
 				val: 'headerVal',
@@ -113,31 +113,31 @@ describe('Network request chain', () => {
 			'  headerName: headerVal\n' +
 			'was NOT made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').willBeMade().toString(),
 			'Checking if a network request\n' +
 			'to URL: http://suite.st/test\n' +
 			'will made during the next 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').not().willBeMade().toString(),
 			'Checking if a network request\n' +
 			'to URL: http://suite.st/test\n' +
 			'will NOT be made during the next 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').willBeMade().toString(),
 			'Checking if a network request\n' +
 			'matching: test\n' +
 			'will made during the next 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').not().willBeMade().toString(),
 			'Checking if a network request\n' +
 			'matching: test\n' +
 			'will NOT be made during the next 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').requestMatches({
 				name: 'headerName',
 				val: 'headerVal',
@@ -148,7 +148,7 @@ describe('Network request chain', () => {
 			'  headerName: headerVal\n' +
 			'will made during the next 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').requestMatches({
 				name: 'headerName',
 				val: 'headerVal',
@@ -159,7 +159,7 @@ describe('Network request chain', () => {
 			'  headerName: headerVal\n' +
 			'will NOT be made during the next 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').requestMatches({
 				name: 'headerName',
 				val: 'headerVal',
@@ -170,7 +170,7 @@ describe('Network request chain', () => {
 			'  headerName: headerVal\n' +
 			'will made during the next 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').requestMatches({
 				name: 'headerName',
 				val: 'headerVal',
