@@ -55,7 +55,7 @@ describe('Open URL chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(toString({absoluteURL: '/test'}), 'Opening /test');
+		assert.strictEqual(toString({url: '/test'}), 'Opening /test');
 	});
 
 	it('should have beforeSendMsg', () => {

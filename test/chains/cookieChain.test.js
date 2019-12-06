@@ -4,7 +4,7 @@ const {
 	cookie,
 	cookieAssert,
 	getComposers,
-	toString2: toString,
+	toString,
 	toJSON,
 	beforeSendMsg,
 } = require('../../lib/chains/cookieChain');
