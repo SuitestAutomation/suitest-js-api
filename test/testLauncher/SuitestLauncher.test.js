@@ -63,8 +63,7 @@ describe('SuitestLauncher', () => {
 		}
 	});
 
-	it('should throw correct error on invalid json schema', async function() {
-		this.timeout(3000);
+	it('should throw correct error on invalid json schema', async() => {
 		const suitestAotomatedLauncher = new TestLauncher({
 			tokenKey: 1,
 			tokenPassword: 1,
