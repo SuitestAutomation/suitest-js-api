@@ -43,7 +43,7 @@ describe('Poll URL chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(toString({
+		assert.strictEqual(toString({
 			url: 'url',
 			response: true,
 		}), 'Will poll "url" every 500ms until response equals "true"');
