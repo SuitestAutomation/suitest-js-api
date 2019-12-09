@@ -60,13 +60,10 @@ describe('Position chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(
-			position(1, 1).toString(),
-			'Position 1, 1'
-		);
+		testInputErrorSync(position(1, 1).toString);
 		assert.equal(
 			position(1, 1).click().toString(),
-			'Clicking at [1, 1]'
+			'Clicking at [1, 1], repeat 1 times every 1 ms'
 		);
 		assert.equal(
 			position(1, 2).click().repeat(10).interval(2000).toString(),
