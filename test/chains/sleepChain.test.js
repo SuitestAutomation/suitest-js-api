@@ -8,7 +8,7 @@ const {
 	beforeSendMsg,
 } = require('../../lib/chains/sleepChain');
 const composers = require('../../lib/constants/composer');
-const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
+const {bySymbol, getComposerTypes, assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const sinon = require('sinon');
 
@@ -49,9 +49,10 @@ describe('Sleep chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({milliseconds: 10});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains({milliseconds: 10}, 'Launcher E Sleeping for 10ms');
+		beforeSendMsgContains({milliseconds: 10, isAssert: true}, 'Launcher A Sleeping for 10ms');
 		log.restore();
 	});
 

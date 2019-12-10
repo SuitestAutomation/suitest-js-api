@@ -12,6 +12,7 @@ const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const sinon = require('sinon');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 const allCookieComposers = [
 	composers.TO_STRING,
@@ -166,9 +167,20 @@ describe('Cookie chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({cookieName: 'cookieName'});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains({cookieName: 'cookieName'}, 'Launcher E Getting "cookieName" cookie');
+		beforeSendMsgContains(
+			{
+				isAssert: true,
+				isNegated: true,
+				comparator: {
+					type: SUBJ_COMPARATOR.EXIST,
+					val: 'val',
+				},
+				cookieName: 'suiteCookie',
+				timeout: 1000,
+			}, 'Launcher A Checking if "suiteCookie" cookie is missing');
 		log.restore();
 	});
 

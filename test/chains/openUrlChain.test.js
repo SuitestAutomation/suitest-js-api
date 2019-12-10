@@ -9,7 +9,7 @@ const {
 	beforeSendMsg,
 } = require('../../lib/chains/openUrlChain');
 const composers = require('../../lib/constants/composer');
-const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
+const {bySymbol, getComposerTypes, assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
 
 describe('Open URL chain', () => {
@@ -59,11 +59,12 @@ describe('Open URL chain', () => {
 	});
 
 	it('should have beforeSendMsg', () => {
-		const info = sinon.stub(console, 'log');
+		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({absoluteURL: '/'});
-		assert.ok(info.firstCall.args[0], 'beforeSendMsg exists');
-		info.restore();
+		beforeSendMsgContains({absoluteURL: '/'}, 'Launcher E Opening /');
+		beforeSendMsgContains({absoluteURL: '/', isAssert: true}, 'Launcher A Opening /');
+		log.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

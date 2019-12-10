@@ -6,6 +6,7 @@ const {
 	toJSON,
 	beforeSendMsg,
 } = require('../../lib/chains/positionChain');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
 
 describe('Position chain', () => {
@@ -93,12 +94,29 @@ describe('Position chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({coordinates: {
-			x: 10,
-			y: 20,
-		}});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains(
+			{
+				coordinates: {
+					x: 10,
+					y: 20,
+				},
+				isClick: true,
+			},
+			'Launcher E Clicking at [10, 20], repeat 1 times every 1 ms'
+		);
+		beforeSendMsgContains(
+			{
+				coordinates: {
+					x: 10,
+					y: 20,
+				},
+				isAssert: true,
+				isClick: true,
+			},
+			'Launcher A Clicking at [10, 20], repeat 1 times every 1 ms'
+		);
 		log.restore();
 	});
 

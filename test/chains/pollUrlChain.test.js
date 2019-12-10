@@ -8,7 +8,7 @@ const {
 	beforeSendMsg,
 } = require('../../lib/chains/pollUrlChain');
 const composers = require('../../lib/constants/composer');
-const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
+const {bySymbol, getComposerTypes, assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
 
 describe('Poll URL chain', () => {
@@ -51,9 +51,16 @@ describe('Poll URL chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({url: ''});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains(
+			{url: 'testUrl', response: 'testResponse'},
+			'Launcher E Will poll "testUrl" every 500ms until response equals "testResponse"'
+		);
+		beforeSendMsgContains(
+			{url: 'testUrl', response: 'testResponse', isAssert: true},
+			'Launcher A Will poll "testUrl" every 500ms until response equals "testResponse"'
+		);
 		log.restore();
 	});
 

@@ -5,9 +5,9 @@ const {
 	toJSON,
 	beforeSendMsg,
 } = require('../../lib/chains/locationChain');
-const comparatorTypes = require('../../lib/constants/comparator');
 const {SUBJ_COMPARATOR} = require('../../lib/mappings');
 const sinon = require('sinon');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 describe('Location chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -153,9 +153,35 @@ describe('Location chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains(
+			{
+				type: 'query',
+				subject: {type: 'location'},
+			},
+			'Launcher E Getting current location'
+		);
+		beforeSendMsgContains(
+			{
+				comparator: {
+					type: '=',
+					val: 'val',
+				},
+			},
+			'Launcher E Checking if current location equals "val"'
+		);
+		beforeSendMsgContains(
+			{
+				isAssert: true,
+				comparator: {
+					type: '=',
+					val: 'val',
+				},
+			},
+			'Launcher A Checking if current location equals "val"'
+		);
+
 		log.restore();
 	});
 
@@ -184,7 +210,7 @@ describe('Location chain', () => {
 		}, 'chain wait');
 		assert.deepStrictEqual(toJSON({
 			comparator: {
-				type: comparatorTypes.EQUAL,
+				type: '=',
 				val: 'val',
 			},
 			timeout: 0,
@@ -194,7 +220,7 @@ describe('Location chain', () => {
 				type: 'assert',
 				condition: {
 					subject: {type: 'location'},
-					type: SUBJ_COMPARATOR[comparatorTypes.EQUAL],
+					type: '=',
 					val: 'val',
 				},
 			},

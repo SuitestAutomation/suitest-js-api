@@ -13,6 +13,7 @@ const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const {SUBJ_COMPARATOR, PROP_COMPARATOR} = require('../../lib/constants/comparator');
 const {NETWORK_PROP, NETWORK_METHOD} = require('../../lib/constants/networkRequest');
 const sinon = require('sinon');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 describe('Network request chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -185,9 +186,29 @@ describe('Network request chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({comparator: {val: 'http://example.net'}});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains(
+			{
+				wasMade: true,
+				comparator: {
+					type: '=',
+					val: 'http://example.net',
+				},
+			},
+			'Launcher E Checking if a network request',
+		);
+		beforeSendMsgContains(
+			{
+				wasMade: true,
+				comparator: {
+					type: '=',
+					val: 'http://example.net',
+				},
+				isAssert: true,
+			},
+			'Launcher A Checking if a network request',
+		);
 		log.restore();
 	});
 

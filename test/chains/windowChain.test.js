@@ -5,6 +5,7 @@ const {
 	toJSON,
 	beforeSendMsg,
 } = require('../../lib/chains/windowChain');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
 
 function testAllowedModifiers(chain) {
@@ -154,9 +155,16 @@ describe('Window chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({sendText: 'text'});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains(
+			{sendText: 'text'},
+			'Launcher E Sending text "text" to window, repeat 1 times every 1 ms'
+		);
+		beforeSendMsgContains(
+			{sendText: 'text', isAssert: true},
+			'Launcher A Sending text "text" to window, repeat 1 times every 1 ms'
+		);
 		log.restore();
 	});
 

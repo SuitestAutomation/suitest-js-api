@@ -1,5 +1,6 @@
 const assert = require('assert');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const {
 	element,
 	elementAssert,
@@ -297,9 +298,22 @@ describe('Element chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({selector: {}});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains({
+			isAssert: true,
+			isClick: true,
+			selector: {apiId: 'apiId'},
+			repeat: 2,
+			interval: 2000,
+		}, 'Launcher A Clicking on "apiId", repeat 2 times every 2000 ms');
+		beforeSendMsgContains({
+			isClick: true,
+			selector: {apiId: 'apiId'},
+			repeat: 2,
+			interval: 2000,
+		}, 'Launcher E Clicking on "apiId", repeat 2 times every 2000 ms');
+
 		log.restore();
 	});
 

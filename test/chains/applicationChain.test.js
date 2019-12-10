@@ -11,6 +11,7 @@ const composers = require('../../lib/constants/composer');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 describe('Application chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -181,9 +182,19 @@ describe('Application chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg();
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains(
+			{comparator: {type: SUBJ_COMPARATOR.HAS_EXITED}},
+			'Launcher E Application has exited'
+		);
+		beforeSendMsgContains(
+			{
+				isAssert: true,
+				sendText: 'text',
+			},
+			'Launcher A Sending text "text" to application'
+		);
 		log.restore();
 	});
 
