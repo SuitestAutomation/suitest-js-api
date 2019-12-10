@@ -55,6 +55,11 @@ describe('Open URL chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
+		// passing generated json message
+		assert.strictEqual(toString({
+			request: {url: '/test'},
+		}), 'Opening /test');
+		// passing raw json definition
 		assert.strictEqual(toString({url: '/test'}), 'Opening /test');
 	});
 

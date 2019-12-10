@@ -64,7 +64,10 @@ describe('toString Composer', () => {
 			Object.defineProperties(chain, makeToStringComposer(toString, toJSON)({}, chain));
 			chain.toString();
 
-			assert.deepStrictEqual(toString.firstCall.args[0], {testingData: true});
+			assert.deepStrictEqual(toString.firstCall.args[0], {
+				type: 'eval',
+				request: {testingData: true},
+			});
 		});
 
 		it('"eval" message', () => {
@@ -78,7 +81,10 @@ describe('toString Composer', () => {
 			Object.defineProperties(chain, makeToStringComposer(toString, toJSON)({}, chain));
 			chain.toString();
 
-			assert.deepStrictEqual(toString.firstCall.args[0], {testingData: true});
+			assert.deepStrictEqual(toString.firstCall.args[0], {
+				type: 'testLine',
+				request: {testingData: true},
+			});
 		});
 	});
 });

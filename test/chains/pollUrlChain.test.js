@@ -43,6 +43,14 @@ describe('Poll URL chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
+		// pass generated json message
+		assert.strictEqual(toString({
+			request: {
+				url: 'url',
+				response: true,
+			},
+		}), 'Will poll "url" every 500ms until response equals "true"'),
+		// pass raw command json definition
 		assert.strictEqual(toString({
 			url: 'url',
 			response: true,

@@ -55,6 +55,15 @@ describe('Open app chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
+		assert.strictEqual(toString({
+			request: {},
+		}), 'Opening app at homepage');
+		assert.strictEqual(toString({
+			request: {
+				relativeUrl: '/test',
+			},
+		}), 'Opening app at /test');
+		// should convert to string with meaningful message with raw json definition
 		assert.strictEqual(toString({}), 'Opening app at homepage');
 		assert.strictEqual(toString({relativeUrl: '/test'}), 'Opening app at /test');
 	});

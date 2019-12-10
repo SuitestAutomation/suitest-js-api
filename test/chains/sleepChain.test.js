@@ -44,6 +44,9 @@ describe('Sleep chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
+		// pass json message
+		assert.equal(toString({request: {timeout: 10}}), 'Sleeping for 10ms');
+		// pass raw command json definition
 		assert.equal(toString({timeout: 10}), 'Sleeping for 10ms');
 	});
 

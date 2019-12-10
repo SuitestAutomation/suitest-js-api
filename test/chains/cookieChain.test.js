@@ -86,6 +86,7 @@ describe('Cookie chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
+		// pass generated json message
 		assert.strictEqual(toString({
 			type: 'query',
 			subject: {
@@ -94,63 +95,94 @@ describe('Cookie chain', () => {
 			},
 		}), 'Getting "cookieName" cookie');
 		assert.strictEqual(toString({
-			type: 'wait',
-			condition: {
-				subject: {
-					type: 'cookie',
-					val: 'cookieName',
+			type: 'testLine',
+			request: {
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'cookie',
+						val: 'cookieName',
+					},
+					type: 'exists',
 				},
-				type: 'exists',
+				timeout: 2000,
 			},
-			timeout: 2000,
 		}), 'Checking if "cookieName" cookie exists');
 		assert.strictEqual(toString({
-			type: 'wait',
-			condition: {
-				subject: {
-					type: 'cookie',
-					val: 'cookieName',
+			type: 'testLine',
+			request: {
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'cookie',
+						val: 'cookieName',
+					},
+					type: '!exists',
 				},
-				type: '!exists',
+				timeout: 2000,
 			},
-			timeout: 2000,
 		}), 'Checking if "cookieName" cookie is missing');
 		assert.strictEqual(toString({
-			type: 'wait',
-			condition: {
-				subject: {
-					type: 'cookie',
-					val: 'cookieName',
+			type: 'testLine',
+			request: {
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'cookie',
+						val: 'cookieName',
+					},
+					type: 'matches',
+					val: 'function(cookie){}',
 				},
-				type: 'matches',
-				val: 'function(cookie){}',
+				timeout: 2000,
 			},
-			timeout: 2000,
 		}), 'Checking if "cookieName" cookie matches JS:\nfunction(cookie){}');
 		assert.strictEqual(toString({
-			type: 'wait',
-			condition: {
-				subject: {
-					type: 'cookie',
-					val: 'cookieName',
+			type: 'testLine',
+			request: {
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'cookie',
+						val: 'cookieName',
+					},
+					type: '!matches',
+					val: 'function(cookie){}',
 				},
-				type: '!matches',
-				val: 'function(cookie){}',
+				timeout: 2000,
 			},
-			timeout: 2000,
 		}), 'Checking if "cookieName" cookie does not match JS:\nfunction(cookie){}');
 		assert.strictEqual(toString({
-			type: 'wait',
-			condition: {
-				subject: {
-					type: 'cookie',
-					val: 'cookieName',
+			type: 'testLine',
+			request: {
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'cookie',
+						val: 'cookieName',
+					},
+					type: '=',
+					val: 'test',
 				},
-				type: '=',
-				val: 'test',
+				timeout: 2000,
 			},
-			timeout: 2000,
 		}), 'Checking if "cookieName" cookie equals test');
+		assert.strictEqual(toString({
+			type: 'testLine',
+			request: {
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'cookie',
+						val: 'cookieName',
+					},
+					type: '!=',
+					val: 'test',
+				},
+				timeout: 2000,
+			},
+		}), 'Checking if "cookieName" cookie does not equal test');
+		// pass raw line definition json
 		assert.strictEqual(toString({
 			type: 'wait',
 			condition: {

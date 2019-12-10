@@ -6,7 +6,6 @@ const {
 	toJSON,
 	beforeSendMsg,
 } = require('../../lib/chains/brightScriptExpressionChain');
-const {SUBJ_COMPARATOR} = require('../../lib/mappings');
 const sinon = require('sinon');
 const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
