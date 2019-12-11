@@ -70,7 +70,7 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
-    "@suitest/translate": "^2.0.1",
+    "@suitest/translate": "next",
     "ajv": "^6.1.1",
     "ansi-regex": "^3.0.0",
     "chokidar": "^2.0.4",
