@@ -31,8 +31,9 @@ const sendTextToApp = application().sendText('some text');
 sendTextToApp.until(suitest.element({xpath: 'SomeElement'}));
 sendTextToApp.repeat(3);
 sendTextToApp.interval(200);
+sendTextToApp.interval('<%variable%>');
 sendTextToApp.repeat(3).interval(200);
-sendTextToApp.interval(400).repeat(2);
+sendTextToApp.interval(400).repeat('<%variable%>');
 sendTextToApp.interval(400).repeat(2);
 
 sendTextToApp.clone();

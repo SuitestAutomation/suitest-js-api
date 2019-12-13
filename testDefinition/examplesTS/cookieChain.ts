@@ -24,6 +24,7 @@ baseCookie.startsWith('');
 baseCookie.endWith('');
 baseCookie.endsWith('');
 baseCookie.timeout(10);
+baseCookie.timeout('<%variable%>');
 baseCookie.clone();
 baseCookie.abandon();
 baseCookie.toString();
@@ -94,6 +95,7 @@ cookie('cookieName').not().timeout(10).equal('');
 cookie('cookieName').timeout(10).not().endsWith('test');
 cookie('cookieName').timeout(10).endWith('test').not();
 cookie('cookieName').timeout(10).endWith('test').not().toAssert();
+cookie('cookieName').timeout('<%variable%>').endWith('test').not().toAssert();
 
 // getters
 cookie('cookieName').it.should.with.times;
