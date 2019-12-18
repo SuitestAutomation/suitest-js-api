@@ -11,6 +11,7 @@ baseJSExpression.not();
 baseJSExpression.doesNot();
 baseJSExpression.isNot();
 baseJSExpression.timeout(10);
+baseJSExpression.timeout('<%variable%>');
 baseJSExpression.equal('');
 baseJSExpression.equals('');
 baseJSExpression.contain('');
