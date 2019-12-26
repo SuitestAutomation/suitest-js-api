@@ -1,10 +1,11 @@
 const assert = require('assert');
 const sinon = require('sinon');
-const helpers = require('../../lib/utils/socketChainHelper');
+const {processServerResponse} = require('../../lib/utils/socketChainHelper');
+const {getTimeoutValue} = require('../../lib/utils/chainUtils');
 const logger = require('../../lib/utils/logger');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {SUBJ_COMPARATOR} = require('../../lib/mappings');
-const {toString: elementToString} = require('../../lib/chains/elementChain');
+const {toString: elementToString, toJSON} = require('../../lib/chains/elementChain');
 
 describe('socket chain helpers', () => {
 	before(() => {
@@ -15,78 +16,78 @@ describe('socket chain helpers', () => {
 	});
 
 	it('should provide a method to get user defined or default timeout out of data', () => {
-		assert.strictEqual(helpers.getTimeoutValue({}), 2000, 'default value');
-		assert.strictEqual(helpers.getTimeoutValue({timeout: 1000}), 1000, 'user value');
+		assert.strictEqual(getTimeoutValue({}), 2000, 'default value');
+		assert.strictEqual(getTimeoutValue({timeout: 1000}), 1000, 'user value');
 	});
 
 	it('should provide a method to handle server chain web sockets response', () => {
 		const emptyString = () => '';
 
 		// query
-		assert.throws(() => helpers.processServerResponse(emptyString)({
+		assert.throws(() => processServerResponse(emptyString)({
 			contentType: 'query',
-		}, {stack: ''}), SuitestError, 'query fail');
-		assert.strictEqual(helpers.processServerResponse(emptyString)({
+		}, {stack: ''}, {}), SuitestError, 'query fail');
+		assert.strictEqual(processServerResponse(emptyString)({
 			contentType: 'query',
 			cookieExists: true,
-		}, {stack: ''}), true, 'query cookie exists');
-		assert.strictEqual(helpers.processServerResponse(emptyString)({
+		}, {stack: ''}, {}), true, 'query cookie exists');
+		assert.strictEqual(processServerResponse(emptyString)({
 			contentType: 'query',
 			cookieValue: 'cookie',
-		}, {stack: ''}), 'cookie', 'query cookie value');
-		assert.strictEqual(helpers.processServerResponse(emptyString)({
+		}, {stack: ''}, {}), 'cookie', 'query cookie value');
+		assert.strictEqual(processServerResponse(emptyString)({
 			contentType: 'query',
 			elementProps: 'props',
-		}, {stack: ''}), 'props', 'query element props');
-		assert.strictEqual(helpers.processServerResponse(emptyString)({
+		}, {stack: ''}, {}), 'props', 'query element props');
+		assert.strictEqual(processServerResponse(emptyString)({
 			contentType: 'query',
 			elementExists: false,
-		}, {stack: ''}), undefined, 'query element not found');
-		assert.strictEqual(helpers.processServerResponse(emptyString)({
+		}, {stack: ''}, {}), undefined, 'query element not found');
+		assert.strictEqual(processServerResponse(emptyString)({
 			contentType: 'query',
 			execute: 'val',
-		}, {stack: ''}), 'val', 'query js expression');
+		}, {stack: ''}, {}), 'val', 'query js expression');
 		// eval
-		assert.strictEqual(helpers.processServerResponse(emptyString)({
+		assert.strictEqual(processServerResponse(emptyString)({
 			contentType: 'eval',
 			result: 'success',
 			errorType: 'error',
-		}, {stack: ''}), true, 'evals success');
-		assert.strictEqual(helpers.processServerResponse(emptyString)({
+		}, {stack: ''}, {}), true, 'evals success');
+		assert.strictEqual(processServerResponse(emptyString)({
 			contentType: 'eval',
 			result: 'fail',
 			errorType: 'queryFailed',
-		}, {stack: ''}), false, 'eval fail');
+		}, {stack: ''}, {}), false, 'eval fail');
 		// test line
-		assert.strictEqual(helpers.processServerResponse(emptyString)({
+		assert.strictEqual(processServerResponse(emptyString)({
 			contentType: 'testLine',
 			result: 'success',
-		}, {stack: ''}), undefined, 'testLine success');
-		assert.throws(() => helpers.processServerResponse(emptyString)({
+		}, {stack: ''}, {}), undefined, 'testLine success');
+		assert.throws(() => processServerResponse(emptyString)({
 			contentType: 'testLine',
 			result: 'fail',
 			errorType: 'queryFailed',
-		}, {stack: ''}), assert.AssertionError, 'testLine fail');
-		assert.throws(() => helpers.processServerResponse(emptyString)({
+		}, {stack: ''}, {}), assert.AssertionError, 'testLine fail');
+		assert.throws(() => processServerResponse(emptyString)({
 			contentType: 'testLine',
 			result: 'fail',
 			errorType: 'queryFailed',
 			errors: {},
-		}, {stack: ''}), assert.AssertionError, 'testLine fail');
+		}, {stack: ''}, {}), assert.AssertionError, 'testLine fail');
 		// all other
-		assert.throws(() => helpers.processServerResponse(emptyString)({
+		assert.throws(() => processServerResponse(emptyString)({
 			result: 'fail',
-		}, {stack: ''}), Error, 'testLine fail');
-		assert.throws(() => helpers.processServerResponse(emptyString)({
+		}, {stack: ''}, {}), Error, 'testLine fail');
+		assert.throws(() => processServerResponse(emptyString)({
 			result: 'error',
-		}, {stack: ''}), Error, 'testLine fail');
+		}, {stack: ''}, {}), Error, 'testLine fail');
 		// execution error
-		assert.throws(() => helpers.processServerResponse(emptyString)({
+		assert.throws(() => processServerResponse(emptyString)({
 			executionError: 'appNotRunning',
-		}, {stack: ''}), Error, 'execution error');
+		}, {stack: ''}, {}), Error, 'execution error');
 
 		assert.throws(
-			() => helpers.processServerResponse(emptyString)({
+			() => processServerResponse(emptyString)({
 				contentType: 'eval',
 				result: 'fail',
 				errorType: 'invalidInput',
@@ -98,6 +99,18 @@ describe('socket chain helpers', () => {
 				type: 'element',
 				selector: {css: 'body'},
 				setText: 'simple text',
+			}, {
+				type: 'eval',
+				request: {
+					type: 'setText',
+					target: {
+						type: 'element',
+						val: {
+							css: 'test',
+						},
+					},
+					val: 'set text value',
+				},
 			}),
 			new SuitestError(
 				'. .setText() is unsupported by this element.',
@@ -107,7 +120,7 @@ describe('socket chain helpers', () => {
 		);
 
 		assert.throws(
-			() => helpers.processServerResponse(elementToString)({
+			() => processServerResponse(elementToString)({
 				errorType: 'queryFailed',
 				result: 'error',
 				contentType: 'testLine',
@@ -127,12 +140,34 @@ describe('socket chain helpers', () => {
 				},
 				isAssert: true,
 				stack: '',
+			}, {
+				type: 'testLine',
+				request: {
+					type: 'wait',
+					condition: {
+						subject: {
+							type: 'element',
+							val: {
+								css: 'body',
+							},
+						},
+						type: 'has',
+						expression: [
+							{
+								property: 'height',
+								type: '=',
+								val: 100,
+							},
+						],
+					},
+					timeout: 2000,
+				},
 			}),
 			err => err instanceof assert.AssertionError
 		);
 
 		assert.throws(
-			() => helpers.processServerResponse(emptyString)(
+			() => processServerResponse(emptyString)(
 				{
 					result: 'fail',
 					errorType: 'queryFailed',
@@ -141,6 +176,7 @@ describe('socket chain helpers', () => {
 					contentType: 'testLine',
 				},
 				{stack: ''},
+				{},
 			),
 			err => err instanceof assert.AssertionError &&
 				err.message.includes('× http://url/index-hbbtv.html (actual)') &&
@@ -148,7 +184,7 @@ describe('socket chain helpers', () => {
 		);
 
 		assert.throws(
-			() => helpers.processServerResponse(emptyString)(
+			() => processServerResponse(emptyString)(
 				{
 					result: 'fail',
 					expression: [
@@ -193,6 +229,34 @@ describe('socket chain helpers', () => {
 					isAssert: true,
 					stack: '',
 				},
+				{
+					type: 'testLine',
+					request: {
+						type: 'wait',
+						condition: {
+							subject: {
+								type: 'element',
+								val: {
+									css: 'body',
+								},
+							},
+							type: 'has',
+							expression: [
+								{
+									property: 'height',
+									type: '=',
+									val: 100,
+								},
+								{
+									property: 'width',
+									type: '=',
+									val: 200,
+								},
+							],
+						},
+						timeout: 2000,
+					},
+				},
 			),
 			err => err instanceof assert.AssertionError &&
 				err.message.includes('× height: 720 (actual)') &&
@@ -202,7 +266,7 @@ describe('socket chain helpers', () => {
 		);
 
 		assert.throws(
-			() => helpers.processServerResponse(emptyString)(
+			() => processServerResponse(emptyString)(
 				{
 					result: 'fail',
 					expression: [{
@@ -229,7 +293,36 @@ describe('socket chain helpers', () => {
 					},
 					isAssert: true,
 					stack: '',
+					isClick: true,
 				},
+				{
+					type: 'testLine',
+					request: {
+						type: 'click',
+						target: {
+							type: 'element',
+							val: {
+								css: 'body',
+							},
+						},
+						clicks: [
+							{
+								type: 'single',
+								button: 'left',
+							},
+						],
+						count: 1,
+						delay: 1,
+						condition: {
+							expression: [
+								{
+									property: 'prop',
+									val: 100,
+								},
+							],
+						},
+					},
+				}
 			),
 			err => err instanceof assert.AssertionError &&
 				err.message.includes('× prop: 200 (actual)') &&
@@ -237,8 +330,8 @@ describe('socket chain helpers', () => {
 		);
 
 		assert.throws(
-			() => helpers.processServerResponse(() => '')(
-				{result: 'fatal'}, {stack: ''}
+			() => processServerResponse(() => '')(
+				{result: 'fatal'}, {stack: ''}, {}
 			), err => err.message.includes('Fatal'),
 			'Fatal error thrown correctly'
 		);
@@ -246,11 +339,11 @@ describe('socket chain helpers', () => {
 		sinon.stub(logger, 'warn');
 
 		try {
-			assert.strictEqual(helpers.processServerResponse(emptyString)({
+			assert.strictEqual(processServerResponse(emptyString)({
 				contentType: 'eval',
 				result: 'warning',
 				errorType: 'error',
-			}, {stack: ''}), true, 'eval warning');
+			}, {stack: ''}, {}), true, 'eval warning');
 			assert.strictEqual(logger.warn.called, true, 'warning bumped');
 		} finally {
 			logger.warn.restore();

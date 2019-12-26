@@ -435,51 +435,54 @@ describe('Network request chain', () => {
 
 	it('toString should return correct string', () => {
 		assert.deepStrictEqual(toString({
-			comparator: {
-				type: SUBJ_COMPARATOR.EQUAL,
-				val: 'test',
-			},
+			type: 'eval',
 			request: {
-				type: SUBJ_COMPARATOR.REQUEST_MATCHES,
-				props: [
-					{
-						name: NETWORK_PROP.METHOD,
-						val: NETWORK_METHOD.GET,
-						compare: PROP_COMPARATOR.EQUAL,
-					},
-					{
-						name: NETWORK_PROP.BODY,
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'network',
+						compare: '=',
 						val: 'test',
-						compare: PROP_COMPARATOR.EQUAL,
+						requestInfo: [
+							{
+								name: '@method',
+								val: 'GET',
+								compare: '=',
+							},
+							{
+								name: '@body',
+								val: 'test',
+								compare: '=',
+							},
+							{
+								name: 'header',
+								val: 'test',
+								compare: '=',
+							},
+						],
+						responseInfo: [
+							{
+								name: '@status',
+								val: 500,
+								compare: '=',
+							},
+							{
+								name: '@body',
+								val: 'test',
+								compare: '=',
+							},
+							{
+								name: 'header',
+								val: 'test',
+								compare: '=',
+							},
+						],
 					},
-					{
-						name: 'header',
-						val: 'test',
-						compare: PROP_COMPARATOR.EQUAL,
-					},
-				],
+					type: 'made',
+					searchStrategy: 'all',
+				},
+				timeout: 2000,
 			},
-			response: {
-				type: SUBJ_COMPARATOR.RESPONSE_MATCHES,
-				props: [
-					{
-						name: NETWORK_PROP.STATUS,
-						val: 500,
-						compare: PROP_COMPARATOR.EQUAL,
-					},
-					{
-						name: NETWORK_PROP.BODY,
-						val: 'test',
-						compare: PROP_COMPARATOR.EQUAL,
-					},
-					{
-						name: 'header',
-						val: 'test',
-						compare: PROP_COMPARATOR.EQUAL,
-					},
-				],
-			},
-			wasMade: true,
 		}), ['Checking if a network request',
 			'to URL: test',
 			'With request headers: ',
