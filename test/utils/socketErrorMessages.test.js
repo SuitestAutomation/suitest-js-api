@@ -554,11 +554,25 @@ describe('Socket error messages', () => {
 			[basePayload('activationExpired'), 'Could not open the app because the DevKit/TestKit expired.'],
 			[basePayload('missingCpp'), 'Make sure you have Microsoft Visual C++ Redistributable installed. Please see our docs - https://suite.st/docs/devices/playstation.'],
 			[
-				set(lensPath(['chainData', 'testId']), 'testId', basePayload('testSnippetError')),
+				{
+					...basePayload('testSnippetError'),
+					jsonMessage: {
+						request: {
+							val: 'testId',
+						},
+					},
+				},
 				'Test run by ID "testId" failed.',
 			],
 			[
-				set(lensPath(['chainData', 'testId']), 'testId', basePayload('invalidReference')),
+				{
+					...basePayload('invalidReference'),
+					jsonMessage: {
+						request: {
+							val: 'testId',
+						},
+					},
+				},
 				'Test with ID "testId" does not exist.',
 			],
 		].forEach(([payload, expectMessage]) => {
