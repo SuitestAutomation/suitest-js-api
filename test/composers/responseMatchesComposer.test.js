@@ -136,8 +136,6 @@ describe('Network Response Match Composer', () => {
 		testInputErrorSync(chain.responseMatch, [Symbol('unknown'), 'test']);
 		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.STATUS, 200, Symbol('=')]);
 		testInputErrorSync(chain.responseMatch, ['Content-Type', 500]);
-		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.STATUS, '200']);
-		testInputErrorSync(chain.responseMatch, [{[NETWORK_PROP.STATUS]: '200'}]);
 	});
 
 	it('should accept array of property definitions as a shortcut', () => {

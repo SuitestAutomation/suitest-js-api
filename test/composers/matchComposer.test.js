@@ -141,8 +141,6 @@ describe('Match Composer', () => {
 		testInputErrorSync(chain.match, [Symbol('height')]);
 		testInputErrorSync(chain.match, [ELEMENT_PROP.LEFT, 500, Symbol('>')]);
 		testInputErrorSync(chain.match, ['Content-Type', 500]);
-		testInputErrorSync(chain.match, [ELEMENT_PROP.LEFT, 500, PROP_COMPARATOR.APPROX, '20']);
-		testInputErrorSync(chain.match, [ELEMENT_PROP.LEFT, '10']);
 		testInputErrorSync(chain.match, [ELEMENT_PROP.BG_COLOR, 10]);
 		testInputErrorSync(chain.match, [ELEMENT_PROP.URL, 10]);
 		testInputErrorSync(chain.match, [ELEMENT_PROP.BG_COLOR, VALUE.REPO]);

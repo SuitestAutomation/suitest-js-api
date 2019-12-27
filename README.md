@@ -41,7 +41,7 @@ Suitest currently supports the following types of devices:
 the currently available Smart TV's like Samsung, LG, Philips, Panasonic, Sony
 etc.
 - TV's and set-top boxes running Android TV 4.4 and later
-- Microsoft Xbox One console
+- Microsoft Xbox One and Sony PlayStation 4 consoles
 - Locally installed Chrome, Firefox and Edge
 - Apple TV
 - Roku
@@ -55,6 +55,7 @@ Suitest supports automating end-to-end testing of:
 - Android TV apps
 - tvOS apps
 - Xbox One apps
+- PlayStation 4 apps
 - Roku apps
 - Traditional websites and web apps for desktop browsers.
 

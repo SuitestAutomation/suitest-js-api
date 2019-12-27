@@ -61,6 +61,7 @@ timeoutLoc.toString();
 const notLoc = location().not();
 
 notLoc.timeout(10);
+notLoc.timeout('<%variable%>');
 notLoc.equal('');
 notLoc.equals('');
 notLoc.contain('');
