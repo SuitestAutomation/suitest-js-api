@@ -104,6 +104,14 @@ describe('Application chain', () => {
 			composers.INTERVAL,
 			composers.REPEAT,
 		].sort(bySymbol), 'chain with sendText');
+		assert.deepStrictEqual(getComposerTypes(getComposers({
+			sendText: '',
+		})), [
+			...commonSendTextModifiers,
+			composers.UNTIL,
+			composers.INTERVAL,
+			composers.REPEAT,
+		].sort(bySymbol), 'chain with sendText for empty string');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
 			sendText: 'some text',
@@ -155,6 +163,7 @@ describe('Application chain', () => {
 		};
 
 		assert.strictEqual(application().toString(), 'Application has exited');
+		assert.strictEqual(application().sendText('').toString(), 'Sending text "" to application');
 		assert.strictEqual(sendTextApp.toString(), 'Sending text "some text" to application');
 		assert.strictEqual(sendTextApp.repeat(2).toString(), 'Sending text "some text" to application, repeat 2 times');
 		assert.strictEqual(sendTextApp.interval(2222).toString(), 'Sending text "some text" to application');
@@ -239,7 +248,21 @@ describe('Application chain', () => {
 				delay: 1,
 				val: 'text',
 			},
-		}, 'application sendText');
+		}, 'asserted application sendText');
+
+		assert.deepStrictEqual(toJSON({
+			isAssert: true,
+			sendText: '',
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'sendText',
+				target: {type: 'window'},
+				count: 1,
+				delay: 1,
+				val: '',
+			},
+		}, 'application sendText with empty string');
 
 		assert.deepStrictEqual(toJSON({
 			sendText: 'text',
