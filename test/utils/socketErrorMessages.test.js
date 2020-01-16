@@ -30,11 +30,18 @@ describe('Socket error messages', () => {
 		const chainData = {};
 		const response = {};
 
-		for (const handler of Object.values(errorMap)) {
+		for (const key of Object.keys(errorMap)) {
+			const handler = errorMap[key];
 			const message = handler({
 				chainData,
 				toString,
-				response,
+				response: key === 'adbError' ? {
+					message: {
+						info: {
+							reason: 'reason',
+						},
+					},
+				} : response,
 			});
 
 			assert.ok(typeof message === 'string');
@@ -150,10 +157,7 @@ describe('Socket error messages', () => {
 			[basePayload('illegalButton'), 'Specified buttons are not supported on this device. Chain description.'],
 			[basePayload('unsupportedButton'), 'Specified buttons are not supported on this device. Chain description.'],
 			[basePayload('aborted'), 'Test execution was aborted. Chain description.'],
-			[
-				set(lensPath(['response', 'message', 'info', 'reason']), 'manualActionRequired', basePayload('aborted')),
-				'Manual actions are not supported.',
-			],
+			[basePayload('aborted', undefined, 'manualActionRequired'), 'Manual actions are not supported.'],
 			[
 				set(lensPath(['chainData']), {
 					type: 'press',
@@ -397,6 +401,7 @@ describe('Socket error messages', () => {
 				set(lensPath(['chainData', 'testId']), 'testId', basePayload('invalidReference')),
 				'Test with ID "testId" does not exist.',
 			],
+			[basePayload('adbError', undefined, 'testReason'), 'testReason'],
 		].forEach(([payload, expectMessage]) => {
 			assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
