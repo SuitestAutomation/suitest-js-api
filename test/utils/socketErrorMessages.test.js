@@ -401,6 +401,7 @@ describe('Socket error messages', () => {
 				set(lensPath(['chainData', 'testId']), 'testId', basePayload('invalidReference')),
 				'Test with ID "testId" does not exist.',
 			],
+			[basePayload('outdatedLibraryWarning'), 'We have detected that your instrumentation library is outdated, the package can still be opened. Consider updating.'],
 			[basePayload('adbError', undefined, 'testReason'), 'testReason'],
 		].forEach(([payload, expectMessage]) => {
 			assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
