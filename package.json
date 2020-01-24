@@ -30,7 +30,7 @@
     "suitest": "bin/suitest"
   },
   "scripts": {
-    "test": "mocha --exit",
+    "test": "mocha --exit --timeout 5000",
     "test-definitions": "cd ./testDefinition && mocha --no-timeouts definition.test.js",
     "test-watch": "yarn test -- -w",
     "coverage": "nyc --reporter=lcov yarn test",

@@ -1,8 +1,11 @@
 const assert = require('assert');
+const sinon = require('sinon');
 const {
 	playstationVideo,
 	playstationVideoAssert,
+	beforeSendMsg,
 } = require('../../lib/chains/playstationVideoChain');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const {ELEMENT_PROP} = require('../../lib/constants/element');
 const VIDEO_STATE = require('../../lib/constants/videoState');
 const HAD_NO_ERROR = require('../../lib/constants/hadNoError');
@@ -111,6 +114,28 @@ describe('Playstation video chain', () => {
 			playstationVideo().hadNoError(HAD_NO_ERROR.ALL).toString(),
 			'PlayStation WebMAF video had no errors in entire video log',
 		);
+	});
+
+	it('should have beforeSendMsg', () => {
+		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
+
+		beforeSendMsgContains({}, 'Launcher E Getting properties of "PlayStation WebMAF video"');
+		beforeSendMsgContains(
+			{
+				comparator: {type: 'hadNoError'},
+				searchStrategy: 'all',
+			},
+			'Launcher E PlayStation WebMAF video had no errors in entire video log');
+		beforeSendMsgContains(
+			{
+				comparator: {type: 'hadNoError'},
+				searchStrategy: 'all',
+				isAssert: true,
+			},
+			'Launcher A PlayStation WebMAF video had no errors in entire video log'
+		);
+		log.restore();
 	});
 
 	describe('should generate proper JSON', () => {

@@ -11,6 +11,7 @@ const composers = require('../../lib/constants/composer');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 describe('Application chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -162,25 +163,47 @@ describe('Application chain', () => {
 			}),
 		};
 
-		assert.strictEqual(application().toString(), 'Application has exited');
-		assert.strictEqual(application().sendText('').toString(), 'Sending text "" to application');
-		assert.strictEqual(sendTextApp.toString(), 'Sending text "some text" to application');
-		assert.strictEqual(sendTextApp.repeat(2).toString(), 'Sending text "some text" to application, repeat 2 times');
-		assert.strictEqual(sendTextApp.interval(2222).toString(), 'Sending text "some text" to application');
+		assert.throws(() => application().toString(), 'SuitestError: Invalid input - application command is malformed');
+		assert.strictEqual(application().hasExited().toString(), 'Application has exited');
+		assert.strictEqual(application().sendText('').toString(), 'Sending text "" to application, repeat 1 times every 1 ms');
+		assert.strictEqual(
+			sendTextApp.toString(),
+			'Sending text "some text" to application, repeat 1 times every 1 ms'
+		);
+		assert.strictEqual(
+			sendTextApp.repeat(2).toString(),
+			'Sending text "some text" to application, repeat 2 times every 1 ms'
+		);
+		assert.strictEqual(
+			sendTextApp.interval(2222).toString(),
+			'Sending text "some text" to application, repeat 1 times every 2222 ms'
+		);
 		assert.strictEqual(
 			sendTextApp.repeat(3).interval(2222).toString(),
-			'Sending text "some text" to application, repeat 3 times every 2222 ms');
+			'Sending text "some text" to application, repeat 3 times every 2222 ms'
+		);
 		assert.strictEqual(
 			sendTextApp.repeat(1).interval(1).toString(),
-			'Sending text "some text" to application, repeat 1 times every 1 ms');
+			'Sending text "some text" to application, repeat 1 times every 1 ms'
+		);
 		assert.strictEqual(sendTextApp.until(untilData).toString(), 'Sending text "some text" to application');
 	});
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg();
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains(
+			{comparator: {type: SUBJ_COMPARATOR.HAS_EXITED}},
+			'Launcher E Application has exited'
+		);
+		beforeSendMsgContains(
+			{
+				isAssert: true,
+				sendText: 'text',
+			},
+			'Launcher A Sending text "text" to application'
+		);
 		log.restore();
 	});
 

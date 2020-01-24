@@ -9,7 +9,7 @@ const {
 	beforeSendMsg,
 } = require('../../lib/chains/openAppChain');
 const composers = require('../../lib/constants/composer');
-const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
+const {bySymbol, getComposerTypes, assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
 
 describe('Open app chain', () => {
@@ -55,15 +55,25 @@ describe('Open app chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(toString({}), 'Opening app at homepage');
-		assert.equal(toString({relativeURL: '/test'}), 'Opening app at /test');
+		assert.strictEqual(toString({
+			request: {},
+		}), 'Opening app at homepage');
+		assert.strictEqual(toString({
+			request: {
+				relativeUrl: '/test',
+			},
+		}), 'Opening app at /test');
+		// should convert to string with meaningful message with raw json definition
+		assert.strictEqual(toString({}), 'Opening app at homepage');
+		assert.strictEqual(toString({relativeUrl: '/test'}), 'Opening app at /test');
 	});
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains({}, 'Launcher E Opening app at homepage');
+		beforeSendMsgContains({isAssert: true}, 'Launcher A Opening app at homepage');
 		log.restore();
 	});
 

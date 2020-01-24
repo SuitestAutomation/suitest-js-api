@@ -5,6 +5,7 @@ const {
 	toJSON,
 	beforeSendMsg,
 } = require('../../lib/chains/windowChain');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
 
 function testAllowedModifiers(chain) {
@@ -115,18 +116,18 @@ describe('Window chain', () => {
 		};
 
 		assert.strictEqual(window().toString(), 'Window chain');
-		assert.strictEqual(window().sendText('').toString(), 'Sending text "" to window');
+		assert.strictEqual(window().sendText('').toString(), 'Sending text "" to window, repeat 1 times every 1 ms');
 		assert.strictEqual(
 			window().sendText('text string').toString(),
-			'Sending text "text string" to window'
+			'Sending text "text string" to window, repeat 1 times every 1 ms'
 		);
 		assert.strictEqual(
 			window().sendText('text string').repeat(3).toString(),
-			'Sending text "text string" to window, repeat 3 times'
+			'Sending text "text string" to window, repeat 3 times every 1 ms'
 		);
 		assert.strictEqual(
 			window().sendText('text string').interval(3000).toString(),
-			'Sending text "text string" to window'
+			'Sending text "text string" to window, repeat 1 times every 3000 ms'
 		);
 		assert.strictEqual(
 			window().sendText('text string').interval(3000).repeat(2).toString(),
@@ -138,7 +139,7 @@ describe('Window chain', () => {
 		);
 		assert.strictEqual(
 			window().sendText('text string').until(untilData).toString(),
-			'Sending text "text string" to window'
+			'Sending text "text string" to window, repeat 1 times every 1 ms'
 		);
 		assert.strictEqual(
 			window().sendText('text string').repeat(3).interval(4000).toString(),
@@ -163,11 +164,20 @@ describe('Window chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({sendText: 'text'});
-		beforeSendMsg({sendText: ''});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
-		assert.ok(log.secondCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains(
+			{sendText: 'text'},
+			'Launcher E Sending text "text" to window, repeat 1 times every 1 ms'
+		);
+		beforeSendMsgContains(
+			{sendText: ''},
+			'Launcher E Sending text "" to window, repeat 1 times every 1 ms'
+		);
+		beforeSendMsgContains(
+			{sendText: 'assered text', isAssert: true},
+			'Launcher A Sending text "assered text" to window, repeat 1 times every 1 ms'
+		);
 		log.restore();
 	});
 

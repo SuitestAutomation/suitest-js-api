@@ -6,9 +6,8 @@ const {
 	toJSON,
 	beforeSendMsg,
 } = require('../../lib/chains/brightScriptExpressionChain');
-const {SUBJ_COMPARATOR} = require('../../lib/mappings');
-const comparatorTypes = require('../../lib/constants/comparator');
 const sinon = require('sinon');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 describe('BrightScript expression chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -126,8 +125,26 @@ describe('BrightScript expression chain', () => {
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
 
-		beforeSendMsg('1+1');
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
+
+		beforeSendMsgContains({expression: '1+1'}, 'Launcher E Evaluating BrightScript:');
+		beforeSendMsgContains({
+			isAssert: true,
+			isNegated: true,
+			expression: '1+1',
+			comparator: {
+				type: '=',
+				val: '2',
+			},
+		}, 'Launcher A Check if BrightScript expression');
+		beforeSendMsgContains({
+			isNegated: true,
+			expression: '1+1',
+			comparator: {
+				type: '=',
+				val: '2',
+			},
+		}, 'Launcher E Check if BrightScript expression');
 		log.restore();
 	});
 
@@ -146,7 +163,7 @@ describe('BrightScript expression chain', () => {
 			isNegated: true,
 			expression: '1+1',
 			comparator: {
-				type: comparatorTypes.EQUAL,
+				type: '=',
 				val: '2',
 			},
 		}), {
@@ -158,7 +175,7 @@ describe('BrightScript expression chain', () => {
 						type: 'brightscript',
 						val: '1+1',
 					},
-					type: '!' + SUBJ_COMPARATOR[comparatorTypes.EQUAL],
+					type: '!=',
 					val: '2',
 				},
 				timeout: 2000,
@@ -169,7 +186,7 @@ describe('BrightScript expression chain', () => {
 			timeout: 0,
 			expression: '1+1',
 			comparator: {
-				type: comparatorTypes.START_WITH,
+				type: '^', // startWith
 				val: '2',
 			},
 		}), {
@@ -181,7 +198,7 @@ describe('BrightScript expression chain', () => {
 						type: 'brightscript',
 						val: '1+1',
 					},
-					type: SUBJ_COMPARATOR[comparatorTypes.START_WITH],
+					type: '^', // startWith
 					val: '2',
 				},
 			},
@@ -190,7 +207,7 @@ describe('BrightScript expression chain', () => {
 			timeout: 2000,
 			expression: '1+1',
 			comparator: {
-				type: comparatorTypes.START_WITH,
+				type: '^', // startWith
 				val: '2',
 			},
 		}), {
@@ -202,7 +219,7 @@ describe('BrightScript expression chain', () => {
 						type: 'brightscript',
 						val: '1+1',
 					},
-					type: SUBJ_COMPARATOR[comparatorTypes.START_WITH],
+					type: '^', // startWith
 					val: '2',
 				},
 				timeout: 2000,
