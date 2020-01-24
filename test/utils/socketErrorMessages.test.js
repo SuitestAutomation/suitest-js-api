@@ -11,7 +11,6 @@ const {
 	responseMessageCode,
 	responseMessageInfo,
 } = require('../../lib/utils/socketErrorMessages');
-const {NETWORK_PROP, NETWORK_METHOD} = require('../../lib/constants/networkRequest');
 
 describe('Socket error messages', () => {
 	it('test response message getters', () => {
@@ -30,10 +29,17 @@ describe('Socket error messages', () => {
 		const response = {};
 		const jsonMessage = {};
 
-		for (const handler of Object.values(errorMap)) {
+		for (const key of Object.keys(errorMap)) {
+			const handler = errorMap[key];
 			const message = handler({
 				toString,
-				response,
+				response: key === 'adbError' ? {
+					message: {
+						info: {
+							reason: 'reason',
+						},
+					},
+				} : response,
 				jsonMessage,
 			});
 
@@ -193,10 +199,7 @@ describe('Socket error messages', () => {
 			[basePayload('illegalButton'), 'Specified buttons are not supported on this device. Chain description.'],
 			[basePayload('unsupportedButton'), 'Specified buttons are not supported on this device. Chain description.'],
 			[basePayload('aborted'), 'Test execution was aborted. Chain description.'],
-			[
-				set(lensPath(['response', 'message', 'info', 'reason']), 'manualActionRequired', basePayload('aborted')),
-				'Manual actions are not supported.',
-			],
+			[basePayload('aborted', undefined, 'manualActionRequired'), 'Manual actions are not supported.'],
 			[
 				{
 					...basePayload('queryFailed'),
@@ -575,6 +578,8 @@ describe('Socket error messages', () => {
 				},
 				'Test with ID "testId" does not exist.',
 			],
+			[basePayload('outdatedLibraryWarning'), 'We have detected that your instrumentation library is outdated, the package can still be opened. Consider updating.'],
+			[basePayload('adbError', undefined, 'testReason'), 'testReason'],
 		].forEach(([payload, expectMessage]) => {
 			it(expectMessage, () => {
 				assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));

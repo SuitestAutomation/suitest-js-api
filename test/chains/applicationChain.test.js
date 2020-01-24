@@ -105,6 +105,14 @@ describe('Application chain', () => {
 			composers.INTERVAL,
 			composers.REPEAT,
 		].sort(bySymbol), 'chain with sendText');
+		assert.deepStrictEqual(getComposerTypes(getComposers({
+			sendText: '',
+		})), [
+			...commonSendTextModifiers,
+			composers.UNTIL,
+			composers.INTERVAL,
+			composers.REPEAT,
+		].sort(bySymbol), 'chain with sendText for empty string');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
 			sendText: 'some text',
@@ -157,6 +165,7 @@ describe('Application chain', () => {
 
 		assert.throws(() => application().toString(), 'SuitestError: Invalid input - application command is malformed');
 		assert.strictEqual(application().hasExited().toString(), 'Application has exited');
+		assert.strictEqual(application().sendText('').toString(), 'Sending text "" to application, repeat 1 times every 1 ms');
 		assert.strictEqual(
 			sendTextApp.toString(),
 			'Sending text "some text" to application, repeat 1 times every 1 ms'
@@ -262,7 +271,21 @@ describe('Application chain', () => {
 				delay: 1,
 				val: 'text',
 			},
-		}, 'application sendText');
+		}, 'asserted application sendText');
+
+		assert.deepStrictEqual(toJSON({
+			isAssert: true,
+			sendText: '',
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'sendText',
+				target: {type: 'window'},
+				count: 1,
+				delay: 1,
+				val: '',
+			},
+		}, 'application sendText with empty string');
 
 		assert.deepStrictEqual(toJSON({
 			sendText: 'text',

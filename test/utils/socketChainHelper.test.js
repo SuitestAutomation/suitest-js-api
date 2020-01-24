@@ -4,8 +4,9 @@ const {processServerResponse} = require('../../lib/utils/socketChainHelper');
 const {getTimeoutValue} = require('../../lib/utils/chainUtils');
 const logger = require('../../lib/utils/logger');
 const SuitestError = require('../../lib/utils/SuitestError');
+const helpers = require('../../lib/utils/socketChainHelper');
 const {SUBJ_COMPARATOR} = require('../../lib/mappings');
-const {toString: elementToString, toJSON} = require('../../lib/chains/elementChain');
+const {toString: elementToString} = require('../../lib/chains/elementChain');
 
 describe('socket chain helpers', () => {
 	before(() => {
@@ -348,5 +349,40 @@ describe('socket chain helpers', () => {
 		} finally {
 			logger.warn.restore();
 		}
+	});
+
+	describe('testing getRequestType helper', () => {
+		it('should return testLine type', () => {
+			assert.strictEqual(
+				helpers.getRequestType({isAssert: true}),
+				'testLine'
+			);
+			assert.strictEqual(
+				helpers.getRequestType({
+					isAssert: true,
+					comparator: '=',
+					isClick: true,
+					isMoveTo: true,
+					setText: '',
+					sendText: 'text',
+				}),
+				'testLine'
+			);
+		});
+
+		it('should return eval type', () => {
+			assert.strictEqual(helpers.getRequestType({}, false), 'eval')
+			assert.strictEqual(helpers.getRequestType({comparator: '='}), 'eval');
+			assert.strictEqual(helpers.getRequestType({isClick: true}), 'eval');
+			assert.strictEqual(helpers.getRequestType({isMoveTo: true}), 'eval');
+			assert.strictEqual(helpers.getRequestType({setText: 'text'}), 'eval');
+			assert.strictEqual(helpers.getRequestType({setText: ''}), 'eval');
+			assert.strictEqual(helpers.getRequestType({sendText: 'text'}), 'eval');
+			assert.strictEqual(helpers.getRequestType({sendText: ''}), 'eval');
+		});
+
+		it('should return query type', () => {
+			assert.strictEqual(helpers.getRequestType({}), 'query');
+		});
 	});
 });
