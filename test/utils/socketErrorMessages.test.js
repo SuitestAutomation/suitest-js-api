@@ -578,7 +578,12 @@ describe('Socket error messages', () => {
 				},
 				'Test with ID "testId" does not exist.',
 			],
-			[basePayload('outdatedLibraryWarning'), 'We have detected that your instrumentation library is outdated, the package can still be opened. Consider updating.'],
+			[basePayload('outdatedLibrary'), 'We have detected that your instrumentation library is outdated and the package cannot be opened. Update required.'],
+			[basePayload('outdatedLibrary', 'major'), 'We have detected that your instrumentation library is outdated and the package cannot be opened. Update required.'],
+			[basePayload('outdatedLibrary', 'minor'), 'We have detected that your instrumentation library is outdated, the package can still be opened. Consider updating.'],
+			[basePayload('outdatedLibraryConnected'), 'We have detected that your instrumentation library is outdated. Update required.'],
+			[basePayload('outdatedLibraryConnected', 'major'), 'We have detected that your instrumentation library is outdated. Update required.'],
+			[basePayload('outdatedLibraryConnected', 'minor'), 'We have detected that your instrumentation library is outdated, the package can still be opened. Consider updating.'],
 			[basePayload('adbError', undefined, 'testReason'), 'testReason'],
 		].forEach(([payload, expectMessage]) => {
 			it(expectMessage, () => {
