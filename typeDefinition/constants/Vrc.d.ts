@@ -79,4 +79,10 @@ export type VrcConstants = {
 	// Playstation
 	CIRCLE: 'CIRCLE',
 	CROSS:  'CROSS',
+	// android
+	TV:           'TV',
+	BUTTON_10:    'BUTTON_10',
+	BUTTON_11:    'BUTTON_11',
+	BUTTON_12:    'BUTTON_12',
+	D_PAD_CENTER: 'D_PAD_CENTER'
 };
