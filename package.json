@@ -1,6 +1,6 @@
 {
   "name": "suitest-js-api",
-  "version": "1.16.0",
+  "version": "1.16.4",
   "main": "index.js",
   "repository": "git@github.com:SuitestAutomation/suitest-js-api.git",
   "author": "Suitest <hello@suite.st>",
@@ -30,7 +30,7 @@
     "suitest": "bin/suitest"
   },
   "scripts": {
-    "test": "mocha --exit",
+    "test": "mocha --exit --timeout 5000",
     "test-definitions": "cd ./testDefinition && mocha --no-timeouts definition.test.js",
     "test-watch": "yarn test -- -w",
     "coverage": "nyc --reporter=lcov yarn test",

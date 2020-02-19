@@ -11,7 +11,6 @@ const {
 	responseMessageCode,
 	responseMessageInfo,
 } = require('../../lib/utils/socketErrorMessages');
-const {NETWORK_PROP, NETWORK_METHOD} = require('../../lib/constants/networkRequest');
 
 describe('Socket error messages', () => {
 	it('test response message getters', () => {
@@ -27,13 +26,12 @@ describe('Socket error messages', () => {
 
 	it('All errorMap handlers should returns string', () => {
 		const toString = () => '';
-		const chainData = {};
 		const response = {};
+		const jsonMessage = {};
 
 		for (const key of Object.keys(errorMap)) {
 			const handler = errorMap[key];
 			const message = handler({
-				chainData,
 				toString,
 				response: key === 'adbError' ? {
 					message: {
@@ -42,6 +40,7 @@ describe('Socket error messages', () => {
 						},
 					},
 				} : response,
+				jsonMessage,
 			});
 
 			assert.ok(typeof message === 'string');
@@ -56,12 +55,12 @@ describe('Socket error messages', () => {
 	it('Error message getter should return default messages', () => {
 		const response = {errorType: 'unknownError'};
 		const toString = () => 'Chain description';
-		const chainData = {};
+		const jsonMessage = {};
 
 		assert.equal(getErrorMessage({
 			response,
 			toString,
-			chainData,
+			jsonMessage,
 		}), 'unknownError: "Chain description."');
 
 		assert.equal(getErrorMessage({
@@ -70,18 +69,18 @@ describe('Socket error messages', () => {
 				errors: 'Some errors',
 			},
 			toString,
-			chainData,
+			jsonMessage,
 		}), `unknownError: "Chain description."${EOL}errors: "Some errors"`);
 	});
 
-	it('Error message should return specific messages', () => {
-		const toString = (data, nameOnly) => nameOnly ? 'Element name' : 'Chain description';
-		const chainData = {};
+	describe('Error message should return specific messages', () => {
+		const toString = (jsonMessage, nameOnly) => nameOnly ? 'Element name' : 'Chain description';
+		const jsonMessage = {};
 		const basePayload = (errorType, code, reason) => {
 			let payload = {
 				response: {errorType},
 				toString,
-				chainData,
+				jsonMessage,
 			};
 
 			if (code !== void 0) {
@@ -126,23 +125,66 @@ describe('Socket error messages', () => {
 			[basePayload('invalidInput'), 'Test command received invalid input. Chain description.'],
 			[basePayload('invalidInput', 'lineTypeNotSupported'), 'This test command is not supported by the current app configuration. Chain description.'],
 			[
-				set(lensPath(['chainData']), {
-					isClick: true,
-				}, basePayload('invalidInput', 'elementNotSupported')),
+				{
+					...basePayload('invalidInput', 'elementNotSupported'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'click',
+							target: {
+								type: 'element',
+								val: {
+									css: 'test',
+								},
+							},
+							clicks: [
+								{
+									type: 'single',
+									button: 'left',
+								},
+							],
+							count: 1,
+							delay: 1,
+						},
+					},
+				},
 				'Chain description. .click() is unsupported by this element.',
 			],
 			[
-				set(lensPath(['chainData']), {
-					setText: true,
-				}, basePayload('invalidInput', 'elementNotSupported')),
+				{
+					...basePayload('invalidInput', 'elementNotSupported'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'setText',
+							target: {
+								type: 'element',
+								val: {
+									css: 'test',
+								},
+							},
+							val: 'set text value',
+						},
+					},
+				},
 				'Chain description. .setText() is unsupported by this element.',
 			],
 			[basePayload('ActionNotAvailable'), 'This test command is not supported by the current app configuration. Chain description.'],
 			[
-				set(lensPath(['chainData']), {
-					type: 'press',
-					repeat: 4,
-				}, basePayload('conditionNotSatisfied')),
+				{
+					...basePayload('conditionNotSatisfied'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'button',
+							ids: [
+								'ENTER',
+							],
+							count: 4,
+							delay: 1,
+						},
+					},
+				},
 				'Maximum amount of key presses 4 reached. Condition was not satisfied. Chain description.',
 			],
 			[basePayload('deviceError'), 'Internal error occurred. Chain description.'],
@@ -159,10 +201,20 @@ describe('Socket error messages', () => {
 			[basePayload('aborted'), 'Test execution was aborted. Chain description.'],
 			[basePayload('aborted', undefined, 'manualActionRequired'), 'Manual actions are not supported.'],
 			[
-				set(lensPath(['chainData']), {
-					type: 'press',
-					repeat: 4,
-				}, basePayload('queryFailed')),
+				{
+					...basePayload('queryFailed'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'button',
+							ids: [
+								'ENTER',
+							],
+							count: 4,
+							delay: 1,
+						},
+					},
+				},
 				'Maximum amount of key presses 4 reached. Condition was not satisfied. Chain description.',
 			],
 			[basePayload('queryFailed'), 'queryFailed: "Chain description."'],
@@ -188,9 +240,23 @@ describe('Socket error messages', () => {
 						errorType: 'queryFailed',
 						errors: [{'type': 'noUriFound'}],
 					},
-					chainData: {
-						type: 'networkRequest',
-						comparator: {val: 'test'},
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'wait',
+							condition: {
+								subject: {
+									type: 'network',
+									compare: '=',
+									val: 'test',
+									requestInfo: [],
+									responseInfo: [],
+								},
+								type: 'made',
+								searchStrategy: 'all',
+							},
+							timeout: 2000,
+						},
 					},
 				},
 				'queryFailed: "Chain description."'
@@ -225,25 +291,40 @@ describe('Socket error messages', () => {
 							name: 'not in chain data, will be ignored',
 						}],
 					},
-					chainData: {
-						type: 'networkRequest',
+					jsonMessage: {
+						type: 'eval',
 						request: {
-							props: [{
-								name: 'testHeader',
-								val: 'testExpectedVal',
-							}, {
-								name: NETWORK_PROP.METHOD,
-								val: NETWORK_METHOD.GET,
-							}],
-						},
-						response: {
-							props: [{
-								name: NETWORK_PROP.BODY,
-								val: 'testBody',
-							}, {
-								name: NETWORK_PROP.STATUS,
-								val: 200,
-							}],
+							type: 'wait',
+							condition: {
+								subject: {
+									type: 'network',
+									compare: '=',
+									val: 'test',
+									requestInfo: [
+										{
+											name: 'testHeader',
+											val: 'testExpectedVal',
+										},
+										{
+											name: '@method',
+											val: 'GET',
+										},
+									],
+									responseInfo: [
+										{
+											name: '@body',
+											val: 'testBody',
+										},
+										{
+											name: '@status',
+											val: 200,
+										},
+									],
+								},
+								type: 'made',
+								searchStrategy: 'all',
+							},
+							timeout: 2000,
 						},
 					},
 				},
@@ -272,6 +353,54 @@ describe('Socket error messages', () => {
 			[basePayload('queryFailed', 'updateAlert'), 'Suitest instrumentation library is outdated. Please download and install the newest version.'],
 			[basePayload('queryFailed', 'notFunction'), 'Specified code is not a function. Chain description.'],
 			[basePayload('queryFailed', 'psImplicitVideo'), 'The "video" subject on the PlayStation platform is inconsistent, we recommend using the "native video" or "element" subject instead. Read more in docs - ps4-support.psImplicitVideo.'],
+			[
+				{
+					...basePayload('queryFailed', 'missingSubject'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'click',
+							target: {
+								type: 'element',
+								val: {
+									css: 'test',
+								},
+							},
+							clicks: [
+								{
+									type: 'single',
+									button: 'left',
+								},
+							],
+							count: 1,
+							delay: 1,
+						},
+					},
+				},
+				'Element Element name was not found.',
+			],
+			[
+				{
+					...basePayload('queryFailed', 'missingSubject'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'wait',
+							condition: {
+								subject: {
+									type: 'element',
+									val: {
+										css: 'test',
+									},
+								},
+								type: 'exists',
+							},
+							timeout: 2000,
+						},
+					},
+				},
+				'Element Element name was not found.',
+			],
 			[basePayload('networkError'), 'Chain description.'],
 			[basePayload('noHasLines'), 'No assertion properties defined. Chain description.'],
 			[basePayload('appCrashed'), 'App seems to have crashed. Chain description.'],
@@ -290,10 +419,20 @@ describe('Socket error messages', () => {
 			],
 			[basePayload('appRunning'), 'App is still running.'],
 			[
-				set(lensPath(['chainData']), {
-					type: 'press',
-					repeat: 4,
-				}, basePayload('appRunning')),
+				{
+					...basePayload('appRunning'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'button',
+							ids: [
+								'ENTER',
+							],
+							count: 4,
+							delay: 1,
+						},
+					},
+				},
 				'Maximum amount of key presses 4 reached. Condition was not satisfied. Chain description.',
 			],
 			[basePayload('appNotRunning'), 'Application is not running.'],
@@ -304,20 +443,43 @@ describe('Socket error messages', () => {
 			[basePayload('bootstrapPageNotDetected'), 'App seems to have exited correctly but something went wrong when loading the Suitest channel autostart application.'],
 			[basePayload('wrongAppDetected'), 'App seems to have exited correctly, however another app has been opened.'],
 			[
-				set(lensPath(['chainData', 'url']), 'some-url', basePayload('notExpectedResponse')),
+				{
+					...basePayload('notExpectedResponse'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'openUrl',
+							url: 'some-url',
+						},
+					},
+				},
 				'Unexpected response received while polling some-url. Chain description.',
 			],
 			[
-				set(lensPath(['chainData', 'url']), 'some-url', basePayload('noConnection')),
+				{
+					...basePayload('noConnection'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'openUrl',
+							url: 'some-url',
+						},
+					},
+				},
 				'Could not connect to server while polling some-url. Chain description.',
 			],
 			[
-				set(lensPath(['chainData', 'url']), 'some-url', basePayload('invalidResult')),
+				{
+					...basePayload('invalidResult'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'openUrl',
+							url: 'some-url',
+						},
+					},
+				},
 				'Unexpected response received while polling some-url. Chain description.',
-			],
-			[
-				set(lensPath(['chainData', 'url']), 'some-url', basePayload('invalidResult', 'resultTooLong')),
-				'Response exceeded the size limit of 4KB while polling some-url. Chain description.',
 			],
 			[basePayload('lateManualLaunch'), 'In this configuration the "open app" commands inside the test are not supported. You may however start the test with "open app" command.'],
 			[basePayload('launchExpired'), 'Identical scheduling aborted.'],
@@ -394,17 +556,34 @@ describe('Socket error messages', () => {
 			[basePayload('activationExpired'), 'Could not open the app because the DevKit/TestKit expired.'],
 			[basePayload('missingCpp'), 'Make sure you have Microsoft Visual C++ Redistributable installed. Please see our docs - https://suite.st/docs/devices/playstation.'],
 			[
-				set(lensPath(['chainData', 'testId']), 'testId', basePayload('testSnippetError')),
+				{
+					...basePayload('testSnippetError'),
+					jsonMessage: {
+						request: {
+							val: 'testId',
+						},
+					},
+				},
 				'Test run by ID "testId" failed.',
 			],
 			[
-				set(lensPath(['chainData', 'testId']), 'testId', basePayload('invalidReference')),
+				{
+					...basePayload('invalidReference'),
+					jsonMessage: {
+						request: {
+							val: 'testId',
+						},
+					},
+				},
 				'Test with ID "testId" does not exist.',
 			],
+			[basePayload('outdatedLibraryWarning'), 'We have detected that your instrumentation library is outdated, the package can still be opened. Consider updating.'],
 			[basePayload('adbError', undefined, 'testReason'), 'testReason'],
 			[basePayload('outOfMemory'), 'Failed to open the app. Device is out of memory, please restart the device.'],
 		].forEach(([payload, expectMessage]) => {
-			assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
+			it(expectMessage, () => {
+				assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
+			});
 		});
 	});
 

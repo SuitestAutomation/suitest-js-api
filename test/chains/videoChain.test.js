@@ -1,11 +1,14 @@
 const assert = require('assert');
+const sinon = require('sinon');
 const {
 	video,
 	videoAssert,
 	toJSON,
+	beforeSendMsg,
 } = require('../../lib/chains/videoChain');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {ELEMENT_PROP} = require('../../lib/constants/element');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 describe('Video chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -105,6 +108,32 @@ describe('Video chain', () => {
 		assert.ok('then' in chain);
 		assert.ok('clone' in chain);
 		assert.ok('abandon' in chain);
+	});
+
+	it('should have beforeSendMsg', () => {
+		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
+
+		beforeSendMsgContains({selector: {video: true}}, 'Launcher E Getting properties of "video"');
+		beforeSendMsgContains(
+			{
+				comparator: {
+					type: SUBJ_COMPARATOR.EXIST,
+				},
+				selector: {video: true},
+			},
+			'Launcher E Checking if "video" exists');
+		beforeSendMsgContains(
+			{
+				isAssert: true,
+				comparator: {
+					type: SUBJ_COMPARATOR.EXIST,
+				},
+				selector: {video: true},
+			},
+			'Launcher A Checking if "video" exists'
+		);
+		log.restore();
 	});
 
 	it('should convert to string with meaningful message', () => {
