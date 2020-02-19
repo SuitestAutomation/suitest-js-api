@@ -402,6 +402,7 @@ describe('Socket error messages', () => {
 				'Test with ID "testId" does not exist.',
 			],
 			[basePayload('adbError', undefined, 'testReason'), 'testReason'],
+			[basePayload('outOfMemory'), 'Failed to open the app. Device is out of memory, please restart the device.'],
 		].forEach(([payload, expectMessage]) => {
 			assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
 		});
