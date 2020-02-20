@@ -327,7 +327,6 @@ describe('Socket error messages', () => {
 							timeout: 2000,
 						},
 					},
-
 				},
 				'queryFailed: "Chain description."'
 				+ `${EOL}\tFailing checks:`
@@ -580,6 +579,7 @@ describe('Socket error messages', () => {
 			],
 			[basePayload('outdatedLibraryWarning'), 'We have detected that your instrumentation library is outdated, the package can still be opened. Consider updating.'],
 			[basePayload('adbError', undefined, 'testReason'), 'testReason'],
+			[basePayload('outOfMemory'), 'Failed to open the app. Device is out of memory, please restart the device.'],
 		].forEach(([payload, expectMessage]) => {
 			it(expectMessage, () => {
 				assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
