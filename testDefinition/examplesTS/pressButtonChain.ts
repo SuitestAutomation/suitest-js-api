@@ -20,4 +20,8 @@ async function testPressButton() {
 	pressOk.should.it.with.times;
 	pressOk.with.should.it.times;
 	pressOk.times.should.with.it;
+
+	await suitest.press('ENTER').until(
+		suitest.video().exist()
+	)
 }
