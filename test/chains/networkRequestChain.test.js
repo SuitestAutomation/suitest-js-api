@@ -13,6 +13,7 @@ const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const {SUBJ_COMPARATOR, PROP_COMPARATOR} = require('../../lib/constants/comparator');
 const {NETWORK_PROP, NETWORK_METHOD} = require('../../lib/constants/networkRequest');
 const sinon = require('sinon');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 describe('Network request chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -53,23 +54,23 @@ describe('Network request chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').wasMade().toString(),
 			'Checking if a network request\nto URL: http://suite.st/test\nwas made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').not().wasMade().toString(),
 			'Checking if a network request\nto URL: http://suite.st/test\nwas NOT made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').wasMade().toString(),
 			'Checking if a network request\nmatching: test\nwas made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').not().wasMade().toString(),
 			'Checking if a network request\nmatching: test\nwas NOT made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').requestMatches({
 				name: 'test',
 				val: 'test',
@@ -80,7 +81,7 @@ describe('Network request chain', () => {
 			'  test: test\n' +
 			'was made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').requestMatches({
 				name: 'test',
 				val: 'test',
@@ -91,7 +92,7 @@ describe('Network request chain', () => {
 			'  test: test\n' +
 			'was NOT made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').requestMatches({
 				name: 'test',
 				val: 'test',
@@ -102,7 +103,7 @@ describe('Network request chain', () => {
 			'  test: test\n' +
 			'was made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').requestMatches({
 				name: 'headerName',
 				val: 'headerVal',
@@ -113,31 +114,31 @@ describe('Network request chain', () => {
 			'  headerName: headerVal\n' +
 			'was NOT made'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').willBeMade().toString(),
 			'Checking if a network request\n' +
 			'to URL: http://suite.st/test\n' +
 			'will made during the next 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').not().willBeMade().toString(),
 			'Checking if a network request\n' +
 			'to URL: http://suite.st/test\n' +
 			'will NOT be made during the next 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').willBeMade().toString(),
 			'Checking if a network request\n' +
 			'matching: test\n' +
 			'will made during the next 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').not().willBeMade().toString(),
 			'Checking if a network request\n' +
 			'matching: test\n' +
 			'will NOT be made during the next 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').requestMatches({
 				name: 'headerName',
 				val: 'headerVal',
@@ -148,7 +149,7 @@ describe('Network request chain', () => {
 			'  headerName: headerVal\n' +
 			'will made during the next 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().equals('http://suite.st/test').requestMatches({
 				name: 'headerName',
 				val: 'headerVal',
@@ -159,7 +160,7 @@ describe('Network request chain', () => {
 			'  headerName: headerVal\n' +
 			'will NOT be made during the next 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').requestMatches({
 				name: 'headerName',
 				val: 'headerVal',
@@ -170,7 +171,7 @@ describe('Network request chain', () => {
 			'  headerName: headerVal\n' +
 			'will made during the next 2000 ms'
 		);
-		assert.equal(
+		assert.strictEqual(
 			networkRequest().contains('test').requestMatches({
 				name: 'headerName',
 				val: 'headerVal',
@@ -185,9 +186,29 @@ describe('Network request chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({comparator: {val: 'http://example.net'}});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains(
+			{
+				wasMade: true,
+				comparator: {
+					type: '=',
+					val: 'http://example.net',
+				},
+			},
+			'Launcher E Checking if a network request',
+		);
+		beforeSendMsgContains(
+			{
+				wasMade: true,
+				comparator: {
+					type: '=',
+					val: 'http://example.net',
+				},
+				isAssert: true,
+			},
+			'Launcher A Checking if a network request',
+		);
 		log.restore();
 	});
 
@@ -414,51 +435,54 @@ describe('Network request chain', () => {
 
 	it('toString should return correct string', () => {
 		assert.deepStrictEqual(toString({
-			comparator: {
-				type: SUBJ_COMPARATOR.EQUAL,
-				val: 'test',
-			},
+			type: 'eval',
 			request: {
-				type: SUBJ_COMPARATOR.REQUEST_MATCHES,
-				props: [
-					{
-						name: NETWORK_PROP.METHOD,
-						val: NETWORK_METHOD.GET,
-						compare: PROP_COMPARATOR.EQUAL,
-					},
-					{
-						name: NETWORK_PROP.BODY,
+				type: 'wait',
+				condition: {
+					subject: {
+						type: 'network',
+						compare: '=',
 						val: 'test',
-						compare: PROP_COMPARATOR.EQUAL,
+						requestInfo: [
+							{
+								name: '@method',
+								val: 'GET',
+								compare: '=',
+							},
+							{
+								name: '@body',
+								val: 'test',
+								compare: '=',
+							},
+							{
+								name: 'header',
+								val: 'test',
+								compare: '=',
+							},
+						],
+						responseInfo: [
+							{
+								name: '@status',
+								val: 500,
+								compare: '=',
+							},
+							{
+								name: '@body',
+								val: 'test',
+								compare: '=',
+							},
+							{
+								name: 'header',
+								val: 'test',
+								compare: '=',
+							},
+						],
 					},
-					{
-						name: 'header',
-						val: 'test',
-						compare: PROP_COMPARATOR.EQUAL,
-					},
-				],
+					type: 'made',
+					searchStrategy: 'all',
+				},
+				timeout: 2000,
 			},
-			response: {
-				type: SUBJ_COMPARATOR.RESPONSE_MATCHES,
-				props: [
-					{
-						name: NETWORK_PROP.STATUS,
-						val: 500,
-						compare: PROP_COMPARATOR.EQUAL,
-					},
-					{
-						name: NETWORK_PROP.BODY,
-						val: 'test',
-						compare: PROP_COMPARATOR.EQUAL,
-					},
-					{
-						name: 'header',
-						val: 'test',
-						compare: PROP_COMPARATOR.EQUAL,
-					},
-				],
-			},
-			wasMade: true,
 		}), ['Checking if a network request',
 			'to URL: test',
 			'With request headers: ',

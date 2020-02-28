@@ -11,6 +11,8 @@ async function testPressButton() {
 		.repeat(10)
 		.interval(10000);
 
+	await suitest.press(suitest.VRC.BUTTON_10);
+	await suitest.press(suitest.VRC.D_PAD_CENTER);
 	// getters
 	const pressOk = suitest.press(suitest.VRC.OK);
 
@@ -18,4 +20,8 @@ async function testPressButton() {
 	pressOk.should.it.with.times;
 	pressOk.with.should.it.times;
 	pressOk.times.should.with.it;
+
+	await suitest.press('ENTER').until(
+		suitest.video().exist()
+	)
 }

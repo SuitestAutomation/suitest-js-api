@@ -15,6 +15,7 @@ import {PollUrlChain} from './typeDefinition/PollUrl';
 import {PositionChain} from './typeDefinition/PositionChain';
 import {PressButtonChain} from './typeDefinition/PressButton';
 import {VrcConstants} from './typeDefinition/constants/Vrc';
+import {RunTestChain} from './typeDefinition/RunTestChain';
 import {SleepChain} from './typeDefinition/SleepChain';
 import {VideoChain} from './typeDefinition/VideoChain';
 import {WindowChain} from './typeDefinition/WindowChain';
@@ -28,6 +29,8 @@ import {TextAlignment} from './typeDefinition/constants/TextAlignment';
 import {BorderStyle} from './typeDefinition/constants/BorderStyle';
 import {ReplOptions} from './typeDefinition/InteractiveCommandChain';
 import {ImageLoadState} from './typeDefinition/constants/ImageLoadState';
+import {PlayStationVideoChain} from './typeDefinition/PlayStationVideoChain';
+import {HadNoError} from './typeDefinition/constants/HadNoError';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -55,6 +58,7 @@ declare namespace suitest {
 		cookie(cookieName: string): CookieChain;
 		element(elementSelector: ElementSelector | string): ElementChain;
 		video(): VideoChain;
+		psVideo(): PlayStationVideoChain;
 		executeCommand(jsCode: string): ExecuteCommandChain;
 		executeCommand(jsCode: Function): ExecuteCommandChain;
 		jsExpression(expression: string): JsExpressionChain;
@@ -86,6 +90,7 @@ declare namespace suitest {
 		KEY: Keys;
 		NETWORK_PROP: NetworkProp;
 		NETWORK_METHOD: NetworkMethod;
+		HAD_NO_ERROR: HadNoError;
 
 		authContext: AuthContext;
 		appContext: Context;
@@ -104,6 +109,7 @@ declare namespace suitest {
 		cookie(cookieName: string): CookieChain;
 		element(elementSelector: ElementSelector | string): ElementChain;
 		video(): VideoChain;
+		psVideo(): PlayStationVideoChain;
 		executeCommand(jsCode: string): ExecuteCommandChain;
 		executeCommand(jsCode: Function): ExecuteCommandChain;
 		jsExpression(expression: string): JsExpressionChain;
@@ -117,6 +123,7 @@ declare namespace suitest {
 		position(x: number, y: number): PositionChain;
 		press(key: string): PressButtonChain;
 		press(keys: string[]): PressButtonChain;
+		runTest(testId: string): RunTestChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
 	}
@@ -148,7 +155,7 @@ declare namespace suitest {
 		}>;
 		codeOverrides?: object;
 		configVariables?: Array<{
-			name: string;
+			key: string;
 			value: string;
 		}>;
 		openAppOverrideTest?: string;
@@ -169,6 +176,7 @@ declare namespace suitest {
 		appVersion?: string;
 		vcsBranch?: string;
 		allowServiceCalls?: boolean;
+		includeChangelist?: boolean;
 	}
 
 	interface StartTestPackResult {
@@ -253,5 +261,6 @@ declare namespace suitest {
 		color?: string,
 		index?: number,
 		video?: true,
+		psVideo?: true,
 	}
 }

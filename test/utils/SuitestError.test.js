@@ -4,6 +4,11 @@ const SuitestError = require('../../lib/utils/SuitestError');
 const logger = require('../../lib/utils/logger');
 const suitest = require('../../index');
 const {API_CONSTRUCTOR_NAME, API_LIB_PATH_IDENTIFIERS} = require('../../lib/constants');
+const {config} = require('../../config');
+const {override} = require('../../config/override');
+const logLevels = require('../../lib/constants/logLevels');
+
+const cachedConfig = {...config};
 
 describe('SuitestError', () => {
 	before(() => {
@@ -38,16 +43,51 @@ describe('SuitestError', () => {
 		assert.ok(err.info.source, 'source');
 	});
 
-	it('should have stack filtered from suitest code errors', async() => {
-		try {
-			await suitest.closeSession();
-		} catch (err) {
-			assert.ok(err, 'error');
-			assert.ok(err.stack, 'stack');
-			assert.strictEqual(err.stack.split('\n').some(l => {
-				return l.includes(API_CONSTRUCTOR_NAME) || l.includes(API_LIB_PATH_IDENTIFIERS[0]);
-			}), false);
+	describe('stack message', () => {
+		afterEach(() => {
+			override(cachedConfig);
+		});
+
+		const logLevelsValues = Object.values(logLevels);
+
+		// remove debug from the list
+		logLevelsValues.splice(logLevelsValues.indexOf(logLevels.debug), 1);
+
+		for (const logLevel of logLevelsValues) {
+			it(`should have stack filtered from suitest code errors if logLevel not debug (${logLevel})`, async() => {
+				override({
+					...cachedConfig,
+					logLevel,
+				});
+				assert.strictEqual(config.logLevel, logLevel);
+				try {
+					await suitest.closeSession();
+				} catch (err) {
+					assert.ok(err, 'error');
+					assert.ok(err.stack, 'stack');
+					assert.strictEqual(err.stack.split('\n').some(l => {
+						return l.includes(API_CONSTRUCTOR_NAME) || l.includes(API_LIB_PATH_IDENTIFIERS[0]);
+					}), false);
+				}
+			});
 		}
+
+		it('should have original stack including suitest code errors if logLevel debug)', async() => {
+			override({
+				...cachedConfig,
+				logLevel: logLevels.debug,
+			});
+			assert.strictEqual(config.logLevel, logLevels.debug);
+			try {
+				await suitest.closeSession();
+			} catch (err) {
+				assert.ok(err, 'error');
+				assert.ok(err.stack, 'stack');
+				assert.strictEqual(err.stack.split('\n').some(l => {
+					return l.includes(API_CONSTRUCTOR_NAME) || l.includes(API_LIB_PATH_IDENTIFIERS[0]);
+				}), true);
+			}
+		});
 	});
 
 	it('should have exit method', () => {
@@ -76,7 +116,7 @@ describe('SuitestError', () => {
 	it('unknown error', () => {
 		const err = new SuitestError();
 
-		assert.equal(err.code, SuitestError.UNKNOWN_ERROR);
-		assert.equal(err.message, 'Unknown error occurred. If you keep getting this error please get in touch with support@suite.st. If you haven\'t turned off automatic error reporting (the disallowCrashReports option in config) we are already working hard to fix the issue.');
+		assert.strictEqual(err.code, SuitestError.UNKNOWN_ERROR);
+		assert.strictEqual(err.message, 'Unknown error occurred. If you keep getting this error please get in touch with support@suite.st. If you haven\'t turned off automatic error reporting (the disallowCrashReports option in config) we are already working hard to fix the issue.');
 	});
 });

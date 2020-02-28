@@ -57,5 +57,10 @@ describe('Until Composer', () => {
 			toJSON: () => ({request: {}}),
 		}], {message: 'Invalid input Until condition chain requires valid modifier and should be one of the following types:\n' +
 			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video()'});
+
+		// must not throw any error
+		chain.until({
+			toJSON: () => ({request: {condition: {subject: {type: 'video'}}}}),
+		});
 	});
 });

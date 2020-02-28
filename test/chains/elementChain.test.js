@@ -1,5 +1,6 @@
 const assert = require('assert');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const {
 	element,
 	elementAssert,
@@ -37,12 +38,10 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.click, 'function');
 		assert.strictEqual(typeof chain.repeat, 'undefined');
 		assert.strictEqual(typeof chain.interval, 'undefined');
+		assert.strictEqual(typeof chain.until, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'function');
 		assert.strictEqual(typeof chain.sendText, 'function');
 		assert.strictEqual(typeof chain.setText, 'function');
-		assert.strictEqual(typeof chain.isPlaying, 'function');
-		assert.strictEqual(typeof chain.isStopped, 'function');
-		assert.strictEqual(typeof chain.isPaused, 'function');
 
 		assert.strictEqual(chain.with, chain);
 		assert.strictEqual(chain.it, chain);
@@ -89,6 +88,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
 		assert.strictEqual(typeof chain.repeat, 'function');
 		assert.strictEqual(typeof chain.interval, 'function');
+		assert.strictEqual(typeof chain.until, 'function');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
@@ -117,6 +117,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
 		assert.strictEqual(typeof chain.repeat, 'undefined');
 		assert.strictEqual(typeof chain.interval, 'undefined');
+		assert.strictEqual(typeof chain.until, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
@@ -129,56 +130,74 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.isStopped, 'undefined');
 	});
 
-	it('should have only allowed modifiers after sendText is applied', () => {
-		const chain = element('element').sendText('text');
-
-		assert.strictEqual(typeof chain.exist, 'undefined');
-		assert.strictEqual(typeof chain.exists, 'undefined');
-		assert.strictEqual(typeof chain.visible, 'undefined');
-		assert.strictEqual(typeof chain.match, 'undefined');
-		assert.strictEqual(typeof chain.matches, 'undefined');
-		assert.strictEqual(typeof chain.matchRepo, 'undefined');
-		assert.strictEqual(typeof chain.matchesRepo, 'undefined');
-		assert.strictEqual(typeof chain.matchJS, 'undefined');
-		assert.strictEqual(typeof chain.matchesJS, 'undefined');
-		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
-		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
-		assert.strictEqual(typeof chain.repeat, 'function');
-		assert.strictEqual(typeof chain.interval, 'function');
+	describe('should have only allowed modifiers after sendText is applied', () => {
+		function testElementSendTextModifiers(chain) {
+			assert.strictEqual(typeof chain.exist, 'undefined');
+			assert.strictEqual(typeof chain.exists, 'undefined');
+			assert.strictEqual(typeof chain.visible, 'undefined');
+			assert.strictEqual(typeof chain.match, 'undefined');
+			assert.strictEqual(typeof chain.matches, 'undefined');
+			assert.strictEqual(typeof chain.matchRepo, 'undefined');
+			assert.strictEqual(typeof chain.matchesRepo, 'undefined');
+			assert.strictEqual(typeof chain.matchJS, 'undefined');
+			assert.strictEqual(typeof chain.matchesJS, 'undefined');
+			assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
+			assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
+			assert.strictEqual(typeof chain.repeat, 'function');
+			assert.strictEqual(typeof chain.interval, 'function');
+			assert.strictEqual(typeof chain.until, 'function');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
-		assert.strictEqual(typeof chain.click, 'undefined');
-		assert.strictEqual(typeof chain.sendText, 'undefined');
-		assert.strictEqual(typeof chain.setText, 'undefined');
-		assert.strictEqual(typeof chain.not, 'undefined');
-		assert.strictEqual(typeof chain.doesNot, 'undefined');
-		assert.strictEqual(typeof chain.isNot, 'undefined');
+			assert.strictEqual(typeof chain.click, 'undefined');
+			assert.strictEqual(typeof chain.sendText, 'undefined');
+			assert.strictEqual(typeof chain.setText, 'undefined');
+			assert.strictEqual(typeof chain.not, 'undefined');
+			assert.strictEqual(typeof chain.doesNot, 'undefined');
+			assert.strictEqual(typeof chain.isNot, 'undefined');
+		}
+
+		it('with empty string as value', () => {
+			testElementSendTextModifiers(element('element').sendText(''));
+		});
+
+		it('with not empty string as a value', () => {
+			testElementSendTextModifiers(element('element').sendText('text'));
+		});
 	});
 
-	it('should have only allowed modifiers after setText is applied', () => {
-		const chain = element('element').setText('text');
+	describe('should have only allowed modifiers after setText is applied', () => {
+		function testElementSetTextModifiers(chain) {
+			assert.strictEqual(typeof chain.exist, 'undefined');
+			assert.strictEqual(typeof chain.exists, 'undefined');
+			assert.strictEqual(typeof chain.match, 'undefined');
+			assert.strictEqual(typeof chain.matches, 'undefined');
+			assert.strictEqual(typeof chain.matchRepo, 'undefined');
+			assert.strictEqual(typeof chain.matchesRepo, 'undefined');
+			assert.strictEqual(typeof chain.matchJS, 'undefined');
+			assert.strictEqual(typeof chain.matchesJS, 'undefined');
+			assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
+			assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
+			assert.strictEqual(typeof chain.repeat, 'undefined');
+			assert.strictEqual(typeof chain.interval, 'undefined');
+			assert.strictEqual(typeof chain.until, 'undefined');
+			assert.strictEqual(typeof chain.moveTo, 'undefined');
+			assert.strictEqual(typeof chain.click, 'undefined');
+			assert.strictEqual(typeof chain.sendText, 'undefined');
+			assert.strictEqual(typeof chain.setText, 'undefined');
+			assert.strictEqual(typeof chain.not, 'undefined');
+			assert.strictEqual(typeof chain.doesNot, 'undefined');
+			assert.strictEqual(typeof chain.isNot, 'undefined');
+			assert.strictEqual(typeof chain.isPlaying, 'undefined');
+			assert.strictEqual(typeof chain.isStopped, 'undefined');
+			assert.strictEqual(typeof chain.isPaused, 'undefined');
+		}
 
-		assert.strictEqual(typeof chain.exist, 'undefined');
-		assert.strictEqual(typeof chain.exists, 'undefined');
-		assert.strictEqual(typeof chain.match, 'undefined');
-		assert.strictEqual(typeof chain.matches, 'undefined');
-		assert.strictEqual(typeof chain.matchRepo, 'undefined');
-		assert.strictEqual(typeof chain.matchesRepo, 'undefined');
-		assert.strictEqual(typeof chain.matchJS, 'undefined');
-		assert.strictEqual(typeof chain.matchesJS, 'undefined');
-		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
-		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
-		assert.strictEqual(typeof chain.repeat, 'function');
-		assert.strictEqual(typeof chain.interval, 'function');
-		assert.strictEqual(typeof chain.moveTo, 'undefined');
-		assert.strictEqual(typeof chain.click, 'undefined');
-		assert.strictEqual(typeof chain.sendText, 'undefined');
-		assert.strictEqual(typeof chain.setText, 'undefined');
-		assert.strictEqual(typeof chain.not, 'undefined');
-		assert.strictEqual(typeof chain.doesNot, 'undefined');
-		assert.strictEqual(typeof chain.isNot, 'undefined');
-		assert.strictEqual(typeof chain.isPlaying, 'undefined');
-		assert.strictEqual(typeof chain.isStopped, 'undefined');
-		assert.strictEqual(typeof chain.isPaused, 'undefined');
+		it('for empty string as a value', () => {
+			testElementSetTextModifiers(element('element').setText(''));
+		});
+
+		it('for not empty string as a value', () => {
+			testElementSetTextModifiers(element('element').setText('text'));
+		});
 	});
 
 	it('should have only allowed modifiers after matchJS is applied', () => {
@@ -198,6 +217,10 @@ describe('Element chain', () => {
 
 	it('should convert to string with meaningful message', () => {
 		assert.strictEqual(element('el-api-id').toString(), 'Getting properties of "el-api-id"');
+		assert.strictEqual(
+			element({css: 'test', xpath: 'test', index: 4}).toString(),
+			'Getting properties of "{"css":"test","xpath":"test","index":4}"'
+		);
 		assert.strictEqual(element('el-api-id').exists().toString(), 'Checking if "el-api-id" exists');
 		assert.strictEqual(element({
 			css: 'body',
@@ -230,8 +253,23 @@ describe('Element chain', () => {
 			'  id = valueRepo'
 		);
 		assert.strictEqual(
+			element('el-api-id')
+				.matches({name: ELEMENT_PROP.ID, val: 'testId', type: PROP_COMPARATOR.CONTAIN})
+				.toString(),
+			'Checking if "el-api-id" matches:\n  id ~ testId'
+		);
+		assert.strictEqual(
+			element('el-api-id')
+				.matches([
+					{name: ELEMENT_PROP.ID, val: 'testId', type: PROP_COMPARATOR.CONTAIN},
+					{name: ELEMENT_PROP.HEIGHT, val: 10, type: PROP_COMPARATOR.GREATER, deviation: 4},
+				])
+				.toString(),
+			'Checking if "el-api-id" matches:\n  id ~ testId,\n  height > 10'
+		);
+		assert.strictEqual(
 			element('el-api-id').click().toString(),
-			'Clicking on "el-api-id"'
+			'Clicking on "el-api-id", repeat 1 times every 1 ms'
 		);
 		assert.strictEqual(
 			element('el-api-id').click().repeat(10).interval(2000).toString(),
@@ -257,32 +295,49 @@ describe('Element chain', () => {
 			'Moving mouse to "el-api-id"'
 		);
 		assert.strictEqual(
+			element('el-api-id').sendText('').toString(),
+			'Sending text "" to "el-api-id", repeat 1 times every 1 ms'
+		);
+		assert.strictEqual(
 			element('el-api-id').sendText('text string').toString(),
-			'Sending text "text string" to "el-api-id"'
+			'Sending text "text string" to "el-api-id", repeat 1 times every 1 ms'
 		);
 		assert.strictEqual(
 			element('el-api-id').sendText('text string').repeat(3).toString(),
-			'Sending text "text string" to "el-api-id", repeat 3 times'
+			'Sending text "text string" to "el-api-id", repeat 3 times every 1 ms'
 		);
 		assert.strictEqual(
 			element('el-api-id').sendText('text string').repeat(10).interval(2000).toString(),
 			'Sending text "text string" to "el-api-id", repeat 10 times every 2000 ms'
 		);
 		assert.strictEqual(
-			element('el-api-id').setText('text string').toString(),
-			'Setting text "text string" for "el-api-id"'
+			element('el-api-id').setText('').toString(),
+			'Setting text "" for "el-api-id"'
 		);
 		assert.strictEqual(
-			element('el-api-id').setText('text string').repeat(10).interval(2000).toString(),
-			'Setting text "text string" for "el-api-id", repeat 10 times every 2000 ms'
+			element('el-api-id').setText('text string').toString(),
+			'Setting text "text string" for "el-api-id"'
 		);
 	});
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({selector: {}});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains({
+			isAssert: true,
+			isClick: true,
+			selector: {apiId: 'apiId'},
+			repeat: 2,
+			interval: 2000,
+		}, 'Launcher A Clicking on "apiId", repeat 2 times every 2000 ms');
+		beforeSendMsgContains({
+			isClick: true,
+			selector: {apiId: 'apiId'},
+			repeat: 2,
+			interval: 2000,
+		}, 'Launcher E Clicking on "apiId", repeat 2 times every 2000 ms');
+
 		log.restore();
 	});
 
@@ -384,6 +439,25 @@ describe('Element chain', () => {
 		}, 'eval moveTo');
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
+			sendText: '',
+			selector: {apiId: 'apiId'},
+			repeat: 2,
+			interval: 2000,
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'sendText',
+				count: 2,
+				delay: 2000,
+				target: {
+					type: 'element',
+					apiId: 'apiId',
+				},
+				val: '',
+			},
+		}, 'testLine sendText for empty string');
+		assert.deepStrictEqual(toJSON({
+			isAssert: true,
 			sendText: 'text',
 			selector: {apiId: 'apiId'},
 			repeat: 2,
@@ -424,6 +498,21 @@ describe('Element chain', () => {
 		}, 'testLine sendText until');
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
+			setText: '',
+			selector: {apiId: 'apiId'},
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'setText',
+				target: {
+					type: 'element',
+					apiId: 'apiId',
+				},
+				val: '',
+			},
+		}, 'testLine setText with empty string');
+		assert.deepStrictEqual(toJSON({
+			isAssert: true,
 			setText: 'text',
 			selector: {apiId: 'apiId'},
 		}), {
@@ -436,7 +525,7 @@ describe('Element chain', () => {
 				},
 				val: 'text',
 			},
-		}, 'testLine setText until');
+		}, 'testLine setText');
 		assert.deepStrictEqual(toJSON({
 			isNegated: true,
 			comparator: {

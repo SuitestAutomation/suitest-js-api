@@ -17,6 +17,7 @@ baseBRSExpression.not();
 baseBRSExpression.doesNot();
 baseBRSExpression.isNot();
 baseBRSExpression.timeout(10);
+baseBRSExpression.timeout('<%variable%>');
 baseBRSExpression.equal('');
 baseBRSExpression.equals('');
 baseBRSExpression.contain('');
