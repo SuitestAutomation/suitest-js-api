@@ -253,6 +253,11 @@ describe('socket chain helpers', () => {
 									type: '=',
 									val: 200,
 								},
+								{
+									property: 'visibility',
+									type: '=',
+									val: 'invisible',
+								},
 							],
 						},
 						timeout: 2000,
@@ -264,6 +269,73 @@ describe('socket chain helpers', () => {
 				err.message.includes('~ height: 100 (expected)') &&
 				err.message.includes('× width: 1282 (actual)') &&
 				err.message.includes('~ width: 200 (expected)')
+		);
+
+		assert.throws(
+			() => processServerResponse(emptyString)(
+				{
+					result: 'fail',
+					expression: [
+						{
+							result: 'fail',
+							errorType: 'queryFailed',
+							message: {
+								code: 'missingProperty',
+								info: {},
+							},
+						},
+					],
+					errorType: 'queryFailed',
+					contentType: 'testLine',
+				},
+				{
+					type: 'element',
+					selector: {css: 'body'},
+					comparator:
+						{
+							type: 'has',
+							props:
+								[
+									{
+										name: 'visibility',
+										val: 'invisible',
+										type: '=',
+										deviation: undefined,
+									},
+								],
+						},
+					isAssert: true,
+					stack: '',
+				},
+				{
+					type: 'testLine',
+					request: {
+						type: 'wait',
+						condition: {
+							subject: {
+								type: 'element',
+								val: {
+									css: 'body',
+								},
+							},
+							type: 'has',
+							expression: [
+								{
+									property: 'visibility',
+									type: '=',
+									val: 'invisible',
+								},
+							],
+						},
+						timeout: 2000,
+					},
+				},
+			),
+			err => err instanceof assert.AssertionError &&
+				err.message.includes('~ visibility: invisible (expected)') &&
+				err.message.includes('× visibility: property missing (actual)'),
+			'Should display proper error message for missingProperty that can be received ' +
+			'when running device platform does not support specified property.'
 		);
 
 		assert.throws(
