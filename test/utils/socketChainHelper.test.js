@@ -253,11 +253,6 @@ describe('socket chain helpers', () => {
 									type: '=',
 									val: 200,
 								},
-								{
-									property: 'visibility',
-									type: '=',
-									val: 'invisible',
-								},
 							],
 						},
 						timeout: 2000,
