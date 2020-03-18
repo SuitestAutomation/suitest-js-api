@@ -15,7 +15,12 @@ el.visible();
 el.moveTo();
 el.sendText('');
 el.setText('');
-el.timeout(1);
+el.timeout(1).then(props => {
+	if (props) {
+		// check that ts allow access to video properties
+		console.log(props.width, props.automationName, props.text);
+	}
+});
 el.exists();
 el.matches(PROP.IS_CHECKED, true);
 el.matches(PROP.VIDEO_STATE, VIDEO_STATE.UNDEFINED);
