@@ -30,7 +30,7 @@ interface VideoWithoutEvalChain extends
 
 // +mathces -timeout +negation
 interface VideoWithoutTimeout extends
-	VideoBaseEvalChain<VideoWithoutTimeout>,
+	VideoBaseQueryChain<VideoWithoutTimeout>,
 	Negatable<VideoEvalChain>,
 	VideoEvalModifiers<VideoNegationChain>
 {}

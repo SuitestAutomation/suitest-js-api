@@ -22,7 +22,7 @@ interface PlayStationVideoWithoutEvalChain extends
 
 // +matches -timeout
 interface PlayStationVideoWithoutTimeout extends
-    PlayStationVideoBaseEvalChain<PlayStationVideoWithoutTimeout>,
+    PlayStationVideoBaseQueryChain<PlayStationVideoWithoutTimeout>,
     PlayStationVideoEvalModifiers<PlayStationVideoEmptyChain>
 {}
 
