@@ -173,7 +173,7 @@ describe('JavaScript expression chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'javascript',
@@ -217,7 +217,7 @@ describe('JavaScript expression chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'javascript',

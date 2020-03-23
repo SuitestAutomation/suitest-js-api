@@ -203,7 +203,7 @@ describe('Location chain', () => {
 		assert.deepStrictEqual(toJSON({isAssert: true}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {subject: {type: 'location'}},
 				timeout: 2000,
 			},
