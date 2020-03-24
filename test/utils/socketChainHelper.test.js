@@ -452,4 +452,40 @@ describe('socket chain helpers', () => {
 			assert.strictEqual(helpers.getRequestType({}), 'query');
 		});
 	});
+
+	describe('Handler processed messages related to takeScreenshot lines', () => {
+		const processTakeScreenshotResponse = processServerResponse(() => '');
+
+		it('for success', () => {
+			const res = processTakeScreenshotResponse({
+				contentType: 'takeScreenshot',
+				result: 'success',
+				buffer: Buffer.from([1, 2, 3]),
+			}, {
+				type: 'takeScreenshot',
+				stack: '',
+			}, {
+				type: 'takeScreenshot',
+			});
+
+			assert.deepStrictEqual(res, Buffer.from([1, 2, 3]));
+		});
+
+		it('for error', () => {
+			assert.throws(
+				() => processTakeScreenshotResponse({
+					contentType: 'takeScreenshot',
+					result: 'error',
+				}, {
+					type: 'takeScreenshot',
+					stack: '',
+				}, {
+					type: 'takeScreenshot',
+				}),
+				err => err instanceof SuitestError &&
+					err.code === SuitestError.EVALUATION_ERROR &&
+					err.message.includes('Screenshot taking failed')
+			);
+		});
+	});
 });

@@ -69,7 +69,7 @@ describe('suitest typescripts declarations tests', () => {
 		'openUrlChain', 'pollUrlChain', 'positionChain',
 		'pressButtonChain', 'sleepChain', 'windowChain',
 		'videoChain', 'playstationVideoChain', 'indexTest',
-		'runTestChain',
+		'runTestChain', 'takeScreenshotChain',
 		// 'executeBrightScriptChain', 'brightScriptExpressionChain',
 	].forEach(fileName => {
 		it(`should compile example ${fileName}`, (done) => {

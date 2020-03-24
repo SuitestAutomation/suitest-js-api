@@ -33,6 +33,7 @@ const {networkRequest, networkRequestAssert} = require('./lib/chains/networkRequ
 const {pollUrl, pollUrlAssert} = require('./lib/chains/pollUrlChain');
 const {video, videoAssert} = require('./lib/chains/videoChain');
 const {playstationVideo, playstationVideoAssert} = require('./lib/chains/playstationVideoChain');
+const {takeScreenshot} = require('./lib/chains/takeScreenshotChain');
 
 // Constants
 const {ELEMENT_PROP, VALUE} = require('./lib/constants/element');
@@ -94,6 +95,7 @@ class SUITEST_API {
 		this.psVideo = playstationVideo;
 		this.networkRequest = networkRequest;
 		this.pollUrl = pollUrl;
+		this.takeScreenshot = takeScreenshot;
 
 		this.PROP = ELEMENT_PROP;
 		this.COMP = PROP_COMPARATOR;

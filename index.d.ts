@@ -31,6 +31,7 @@ import {ReplOptions} from './typeDefinition/InteractiveCommandChain';
 import {ImageLoadState} from './typeDefinition/constants/ImageLoadState';
 import {PlayStationVideoChain} from './typeDefinition/PlayStationVideoChain';
 import {HadNoError} from './typeDefinition/constants/HadNoError';
+import {TakeScreenshotChain} from './typeDefinition/TakeScreenshotChain';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -74,6 +75,7 @@ declare namespace suitest {
 		press(keys: string[]): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
+		takeScreenshot(): TakeScreenshotChain;
 
 		// constants
 		PROP: elementTypes.ElementPropTypes;
