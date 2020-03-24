@@ -243,7 +243,7 @@ describe('Socket error messages', () => {
 					jsonMessage: {
 						type: 'eval',
 						request: {
-							type: 'wait',
+							type: 'assert',
 							condition: {
 								subject: {
 									type: 'network',
@@ -294,7 +294,7 @@ describe('Socket error messages', () => {
 					jsonMessage: {
 						type: 'eval',
 						request: {
-							type: 'wait',
+							type: 'assert',
 							condition: {
 								subject: {
 									type: 'network',
@@ -385,7 +385,7 @@ describe('Socket error messages', () => {
 					jsonMessage: {
 						type: 'eval',
 						request: {
-							type: 'wait',
+							type: 'assert',
 							condition: {
 								subject: {
 									type: 'element',
