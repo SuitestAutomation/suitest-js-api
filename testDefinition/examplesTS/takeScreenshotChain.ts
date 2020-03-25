@@ -6,8 +6,14 @@ const {takeScreenshot} = suitest;
 const takeScreenshotChain = takeScreenshot();
 
 takeScreenshotChain.toString();
-takeScreenshotChain.then(buffer => {
+takeScreenshotChain.then((buffer: Buffer) => {
 	console.log(buffer.entries());
+});
+takeScreenshot('raw').then((buffer: Buffer) => {
+	console.log(buffer.entries());
+});
+takeScreenshot('base64').then((base64String: string) => {
+	console.log(base64String);
 });
 takeScreenshotChain.abandon();
 

@@ -4,12 +4,10 @@ import {
 	Thenable
 } from './modifiers';
 
-export interface TakeScreenshotChain extends
+export interface TakeScreenshotChain<TResult> extends
 	AbstractChain,
 	Abandable<TakeScreenshotAbandonedChain>,
-	Thenable<TakeScreenshotChainEvalResult>
+	Thenable<TResult>
 {}
 
 interface TakeScreenshotAbandonedChain extends AbstractChain {}
-
-type TakeScreenshotChainEvalResult = Buffer;

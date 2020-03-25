@@ -1,5 +1,6 @@
 const assert = require('assert');
 const {
+	takeScreenshot,
 	getComposers,
 	toString,
 	toJSON,
@@ -9,6 +10,7 @@ const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
 const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
+const SuitestError = require('../../lib/utils/SuitestError');
 
 describe('Take screenshot chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -39,5 +41,28 @@ describe('Take screenshot chain', () => {
 
 		assertBeforeSendMsg(beforeSendMsg, log, undefined, 'Launcher E Take screenshot');
 		log.restore();
+	});
+
+	describe('testing takeScreenshot with different arguments', () => {
+		it('should handle not empty string or undefined', () => {
+			assert.doesNotThrow(() => takeScreenshot());
+			assert.doesNotThrow(() => takeScreenshot('raw'));
+			assert.doesNotThrow(() => takeScreenshot('base64'));
+			assert.doesNotThrow(() => takeScreenshot('any/path/image.png'));
+		});
+
+		it('should throw error when passing invalid arguments', () => {
+			function isSuitestErrorInvalidInput(err) {
+				return err instanceof SuitestError &&
+					err.code === SuitestError.INVALID_INPUT &&
+					err.message.includes('Invalid input provided for .takeScreenshot function');
+			}
+			assert.throws(() => takeScreenshot(''), isSuitestErrorInvalidInput);
+			assert.throws(() => takeScreenshot(null), isSuitestErrorInvalidInput);
+			assert.throws(() => takeScreenshot([]), isSuitestErrorInvalidInput);
+			assert.throws(() => takeScreenshot(() => void 0), isSuitestErrorInvalidInput);
+			assert.throws(() => takeScreenshot(111), isSuitestErrorInvalidInput);
+			assert.throws(() => takeScreenshot(Symbol('any')), isSuitestErrorInvalidInput);
+		});
 	});
 });
