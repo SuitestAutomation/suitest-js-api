@@ -78,19 +78,19 @@ declare namespace suitest {
 		/**
 		 * @description return PromiseLike object with Buffer as value
 		 */
-		takeScreenshot(format?: 'raw'): TakeScreenshotChain<Buffer>;
+		takeScreenshot(dataFormat?: 'raw'): TakeScreenshotChain<Buffer>;
 
 		/**
 		 * @description return PromiseLike object with base64 string as value
 		 */
-		takeScreenshot(format: 'base64'): TakeScreenshotChain<string>;
+		takeScreenshot(dataFormat: 'base64'): TakeScreenshotChain<string>;
 
 		/**
 		 * @description the complete path to the file name where the screenshot should be saved.
 		 * @example
-		 * suitest.takeScreenshot('/path/to/file.png');
+		 * suitest.saveScreenshot('/path/to/file.png');
 		 */
-		takeScreenshot(path: string): TakeScreenshotChain<void>;
+		saveScreenshot(fileName: string): TakeScreenshotChain<void>;
 
 		// constants
 		PROP: elementTypes.ElementPropTypes;

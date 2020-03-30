@@ -45,10 +45,8 @@ describe('Take screenshot chain', () => {
 
 	describe('testing takeScreenshot with different arguments', () => {
 		it('should handle not empty string or undefined', () => {
-			assert.doesNotThrow(() => takeScreenshot());
 			assert.doesNotThrow(() => takeScreenshot('raw'));
 			assert.doesNotThrow(() => takeScreenshot('base64'));
-			assert.doesNotThrow(() => takeScreenshot('any/path/image.png'));
 		});
 
 		it('should throw error when passing invalid arguments', () => {
@@ -58,6 +56,7 @@ describe('Take screenshot chain', () => {
 					err.message.includes('Invalid input provided for .takeScreenshot function');
 			}
 			assert.throws(() => takeScreenshot(''), isSuitestErrorInvalidInput);
+			assert.throws(() => takeScreenshot('any/path/image.png'), isSuitestErrorInvalidInput);
 			assert.throws(() => takeScreenshot(null), isSuitestErrorInvalidInput);
 			assert.throws(() => takeScreenshot([]), isSuitestErrorInvalidInput);
 			assert.throws(() => takeScreenshot(() => void 0), isSuitestErrorInvalidInput);
