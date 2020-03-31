@@ -502,15 +502,15 @@ describe('socket chain helpers', () => {
 				}),
 				err => err instanceof SuitestError &&
 					err.code === SuitestError.EVALUATION_ERROR &&
-					err.message.includes('Getting screenshot data failed')
+					err.message.includes('Failed to take screenshot')
 			);
 		});
 	});
 
-	it('Handle processed message for saveScreenshot line', () => {
-		const writeFileSyncStub = sinon.stub(fs, 'writeFileSync');
+	it('Handle processed message for saveScreenshot line', async() => {
+		const writeFileStub = sinon.stub(fs.promises, 'writeFile');
 
-		const res = processServerResponse(() => '')({
+		const res = await processServerResponse(() => '')({
 			contentType: 'takeScreenshot',
 			result: 'success',
 			buffer: Buffer.from([1, 2, 3]),
@@ -525,11 +525,11 @@ describe('socket chain helpers', () => {
 		try {
 			assert.strictEqual(res, undefined);
 			assert.deepStrictEqual(
-				writeFileSyncStub.firstCall.args,
+				writeFileStub.firstCall.args,
 				['/path/to/file.png', Buffer.from([1, 2, 3])]
 			);
 		} finally {
-			writeFileSyncStub.restore();
+			writeFileStub.restore();
 		}
 	});
 });

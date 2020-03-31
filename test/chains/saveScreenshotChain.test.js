@@ -33,13 +33,13 @@ describe('Save screenshot chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(toString(), 'Save screenshot');
+		assert.equal(toString(), 'Saving screenshot');
 	});
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
 
-		assertBeforeSendMsg(beforeSendMsg, log, undefined, 'Launcher E Save screenshot');
+		assertBeforeSendMsg(beforeSendMsg, log, undefined, 'Launcher E Saving screenshot');
 		log.restore();
 	});
 
