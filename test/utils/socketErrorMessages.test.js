@@ -549,6 +549,8 @@ describe('Socket error messages', () => {
 			[basePayload('appleError65'), 'Failed to launch app: Apple ID account error - see https://suite.st/docs/devices/apple-tv/#apple-id-account-error.'],
 			[basePayload('appleError70'), 'Failed to launch app: Xcode error - see https://suite.st/docs/devices/apple-tv/#xcode-error.'],
 			[basePayload('appleAppSignError'), 'Failed to launch app: App code sign error - see https://suite.st/docs/devices/apple-tv/#app-code-sign-error.'],
+			[basePayload('invalidPackage', 'appleTvSimPackageOnDevice'), 'An Apple TV app simulator package cannot be launched on real device.'],
+			[basePayload('invalidPackage', 'appleTvDevicePackageOnSim'), 'An Apple TV app package cannot be launched on simulator device.'],
 			[basePayload('missingPSSDK'), 'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#playstation-sdk-not-installed.'],
 			[basePayload('targetManagerBusy'), 'Please try again in a few minutes.'],
 			[basePayload('missingDotNet'), 'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#net-framework-not-installed.'],

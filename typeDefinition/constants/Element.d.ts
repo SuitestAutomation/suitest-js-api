@@ -82,6 +82,10 @@ export type ElementPropTypes = {
 	TAG_INT:                   'tagInt',
 	TINT_COLOR:                'tintColor',
 	TOP_ABSOLUTE:              'topAbsolute',
+	CHILDREN:                  'children',
+	EXTENDS:                   'extends',
+	UI_ELEMENT_ID:             'uiElementId',
+	INDEX:                     'index',
 };
 
 // Element properties comparators

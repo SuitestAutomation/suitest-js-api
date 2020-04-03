@@ -39,7 +39,7 @@ interface ElementWithoutEvalChain extends
 
 // +mathces -timeout +negation
 interface ElementWithoutTimeout extends
-	ElementBaseEvalChain<ElementWithoutTimeout>,
+	ElementBaseQueryChain<ElementWithoutTimeout>,
 	Negatable<ElementEvalChain>,
 	ElementEvalModifiers<ElementNegationChain>
 {}
