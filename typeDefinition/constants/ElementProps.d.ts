@@ -77,6 +77,10 @@ export type ElementProps = {
 	topAbsolute:             number,
 	tintColor:               string,
 	value:                   string,
+	children:                number,
+	extends:                 string,
+	uiElementId:             string,
+	index:                   number,
 }
 
 export type PlayStationVideoProps = Pick<ElementProps, 'videoLength' | 'videoPos' | 'videoState' | 'videoUrl'>
