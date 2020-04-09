@@ -71,7 +71,7 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
-    "@suitest/translate": "^2.0.5",
+    "@suitest/translate": "^2.1.3",
     "ajv": "^6.1.1",
     "ansi-regex": "^3.0.0",
     "chokidar": "^2.0.4",
