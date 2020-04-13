@@ -8,6 +8,9 @@
 
 const logLevels = require('../lib/constants/logLevels');
 const timestamp = require('../lib/constants/timestamp');
+const {validate, validators} = require('../lib/validation');
+const {invalidConfigObj} = require('../lib/texts');
+const {pickNonNil} = require('../lib/utils/common');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
 const DEFAULT_TIMEOUT = 2000;
@@ -21,8 +24,8 @@ const overridableFields = [
 const main = Object.freeze({
 	apiUrl: 'https://the.suite.st/api/public/v3',
 	continueOnFatalError: false,
-	disallowCrashReports: false,
-	logLevel: logLevels.normal,
+	disallowCrashReports: true,
+	logLevel: logLevels.debug,
 	sentryDsn,
 	timestamp: timestamp.default,
 	defaultTimeout: DEFAULT_TIMEOUT,
@@ -40,19 +43,38 @@ const test = Object.freeze({
 	wsUrl: 'ws://localhost:3000/',
 });
 
-const config = {...(global._suitestTesting ? test : main)};
+const configFactory = () => {
+	const config = {...(global._suitestTesting ? test : main)};
 
-/**
- * Override config directly without user input validation
- * Not to be used for user input
- * @param ext
- */
-function extend(ext) {
-	Object.assign(config, ext);
-}
+	/**
+	 * Override config directly without user input validation
+	 * Not to be used for user input
+	 * @param ext
+	 */
+	function extend(ext) {
+		Object.assign(config, ext);
+	}
+
+	/**
+	 * Override config object
+	 * @param {Object} overrideObj
+	 */
+	function override(overrideObj = {}) {
+		const _overrideObj = pickNonNil(overridableFields, overrideObj);
+
+		validate(validators.CONFIGURE, _overrideObj, invalidConfigObj());
+		extend(_overrideObj);
+	}
+
+	return {
+		config,
+		overridableFields,
+		extend,
+		override,
+	};
+};
 
 module.exports = {
-	config,
-	overridableFields,
-	extend,
+	configFactory,
+	...configFactory(),
 };

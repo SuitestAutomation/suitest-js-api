@@ -9,7 +9,6 @@ const releaseDevice = require('./lib/commands/releaseDevice');
 const {setAppConfig} = require('./lib/commands/setAppConfig');
 const startTest = require('./lib/commands/startTest');
 const endTest = require('./lib/commands/endTest');
-const configure = require('./lib/commands/configure');
 const interactive = require('./lib/commands/interactive');
 
 // Chains
@@ -58,21 +57,28 @@ const ipcServer = require('./lib/testLauncher/ipc/server');
 // Contexts
 const Context = require('./lib/utils/Context');
 const AuthContext = require('./lib/utils/AuthContext');
+const {configFactory} = require('./config');
 
 const {warnLauncherAndLibHasDiffVersions} = require('./lib/utils/packageMetadataHelper');
+const {createLogger} = require('./lib/utils/logger');
 
 // Publicly available API goes here
 class SUITEST_API {
 	constructor(exitOnError, instanceDependencies) {
-		// default
+		// default instance dependencies
 		this.authContext = new AuthContext();
 		this.appContext = new Context();
 		this.pairedDeviceContext = new Context();
 		this.testContext = new Context();
-		this.webSockets = webSocketsFactory();
-		this.unusedExpressionWatchers = unusedExpressionWatchersFactory();
+		this.configuration = configFactory();
+		this.config = this.configuration.config;
 		// override default by provided
 		Object.assign(this, instanceDependencies);
+
+		// creating methods based on instance dependencies
+		this.logger = createLogger(this.config, this.pairedDeviceContext);
+		this.unusedExpressionWatchers = unusedExpressionWatchersFactory(this);
+		this.webSockets = webSocketsFactory(this);
 
 		this.openSession = (...args) => openSession(this, ...args);
 		this.pairDevice = (...args) => pairDevice(this, ...args);
@@ -82,8 +88,7 @@ class SUITEST_API {
 		this.startTest = (...args) => startTest(this, ...args);
 		this.endTest = (...args) => endTest(this, ...args);
 		this.releaseDevice = (...args) => releaseDevice(this, ...args);
-		this.configure = configure; // TODO can we remove it as it is deprecated???
-		this.interactive = interactive; // todo how it should work with multisession???
+		this.interactive = interactive(this);
 
 		this.openApp = openAppFactory(this).openApp;
 		this.openUrl = openUrlFactory(this).openUrl;
@@ -157,7 +162,7 @@ class SUITEST_API {
 			this.unusedExpressionWatchers.warnUnusedLeaves();
 
 			// warn about that launcher and library have different versions
-			warnLauncherAndLibHasDiffVersions();
+			warnLauncherAndLibHasDiffVersions(this.logger, this.config);
 			// Do not force process exit, because this will interfere with other libs (e.g. Mocha)
 			// that user might be using. Instead make sure there are no event listeners left on our side
 			// to keep process running
