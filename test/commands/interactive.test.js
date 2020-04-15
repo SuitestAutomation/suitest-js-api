@@ -1,12 +1,11 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const path = require('path');
+const suitest = require('../../index');
 
-const logger = require('../../lib/utils/logger');
-const interactive = require('../../lib/commands/interactive');
 const repl = require('../../lib/testLauncher/repl');
 const texts = require('../../lib/texts');
-const {authContext} = require('../../lib/context');
+const {authContext, logger, interactive} = suitest;
 
 const stubbed = {};
 

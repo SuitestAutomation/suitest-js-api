@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {matchBrightScriptComposer} = require('../../lib/composers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
@@ -10,7 +11,7 @@ describe('Match BrightScript Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchBrightScriptComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchBrightScriptComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.matchBrightScript, 'function');
 		assert.strictEqual(typeof chain.matchesBrightScript, 'function');
@@ -32,7 +33,7 @@ describe('Match BrightScript Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchBrightScriptComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchBrightScriptComposer(suitest, data, chain, makeChain));
 
 		chain.matchBrightScript('test');
 

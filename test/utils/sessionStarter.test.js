@@ -2,12 +2,12 @@ const assert = require('assert');
 const sinon = require('sinon');
 const uuid = require('uuid/v1');
 
-const {bootstrapSession} = require('../../lib/utils/sessionStarter');
 const testServer = require('../../lib/utils/testServer');
 const webSockets = require('../../lib/api/webSockets');
-const {pairedDeviceContext, authContext, appContext, testContext} = require('../../lib/context');
+const suitest = require('../../index');
+const {pairedDeviceContext, authContext, appContext, testContext, logger} = suitest;
+const bootstrapSession = (...args) => require('../../lib/utils/sessionStarter').bootstrapSession({...suitest, webSockets}, ...args);
 const sessionConstants = require('../../lib/constants/session');
-const logger = require('../../lib/utils/logger');
 const nock = require('nock');
 const stubDeviceInfoFeed = require('../../lib/utils/testHelpers/mockDeviceInfo');
 

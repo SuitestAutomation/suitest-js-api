@@ -1,12 +1,11 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const SuitestError = require('../../lib/utils/SuitestError');
-const logger = require('../../lib/utils/logger');
 const suitest = require('../../index');
 const {API_CONSTRUCTOR_NAME, API_LIB_PATH_IDENTIFIERS} = require('../../lib/constants');
-const {config} = require('../../config');
-const {override} = require('../../config/override');
 const logLevels = require('../../lib/constants/logLevels');
+const {config, logger, configuration} = suitest;
+const {override} = configuration;
 
 const cachedConfig = {...config};
 
@@ -71,23 +70,6 @@ describe('SuitestError', () => {
 				}
 			});
 		}
-
-		it('should have original stack including suitest code errors if logLevel debug)', async() => {
-			override({
-				...cachedConfig,
-				logLevel: logLevels.debug,
-			});
-			assert.strictEqual(config.logLevel, logLevels.debug);
-			try {
-				await suitest.closeSession();
-			} catch (err) {
-				assert.ok(err, 'error');
-				assert.ok(err.stack, 'stack');
-				assert.strictEqual(err.stack.split('\n').some(l => {
-					return l.includes(API_CONSTRUCTOR_NAME) || l.includes(API_LIB_PATH_IDENTIFIERS[0]);
-				}), true);
-			}
-		});
 	});
 
 	it('should have exit method', () => {

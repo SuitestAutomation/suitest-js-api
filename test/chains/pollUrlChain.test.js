@@ -1,4 +1,5 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {
 	pollUrl,
 	pollUrlAssert,
@@ -6,7 +7,7 @@ const {
 	toString,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/pollUrlChain');
+} = require('../../lib/chains/pollUrlChain')(suitest);
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes, assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');

@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {repeatComposer} = require('../../lib/composers');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
@@ -9,7 +10,7 @@ describe('Repeat Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, repeatComposer(data, chain, makeChain));
+		Object.defineProperties(chain, repeatComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.repeat, 'function');
 
@@ -25,7 +26,7 @@ describe('Repeat Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, repeatComposer(data, chain, makeChain));
+		Object.defineProperties(chain, repeatComposer(suitest, data, chain, makeChain));
 
 		chain.repeat(10);
 
@@ -37,7 +38,7 @@ describe('Repeat Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, repeatComposer(data, chain, makeChain));
+		Object.defineProperties(chain, repeatComposer(suitest, data, chain, makeChain));
 
 		testInputErrorSync(chain.repeat, [-3]);
 		testInputErrorSync(chain.repeat, [null]);

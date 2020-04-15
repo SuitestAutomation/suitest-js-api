@@ -4,14 +4,14 @@ const nock = require('nock');
 
 const testServer = require('../../lib/utils/testServer');
 const sinon = require('sinon');
+const suitest = require('../../index');
 
 const sessionConstants = require('../../lib/constants/session');
-const {authContext, pairedDeviceContext} = require('../../lib/context');
-const {pairDevice} = require('../../lib/commands/pairDevice');
-const SuitestError = require('../../lib/utils/SuitestError');
 const webSockets = require('../../lib/api/webSockets');
+const {authContext, pairedDeviceContext, logger} = suitest;
+const pairDevice = (...args) => require('../../lib/commands/pairDevice').pairDevice({...suitest, webSockets}, ...args);
+const SuitestError = require('../../lib/utils/SuitestError');
 const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
-const logger = require('../../lib/utils/logger');
 const stubDeviceInfoFeed = require('../../lib/utils/testHelpers/mockDeviceInfo');
 
 describe('pairDevice', () => {

@@ -21,11 +21,13 @@ const overridableFields = [
 	'logLevel', 'logDir', 'timestamp', 'configFile', 'continueOnFatalError', 'disallowCrashReports', 'defaultTimeout', // launcher common
 ];
 
+const configurableFields = ['logLevel', 'logDir', 'timestamp', 'configFile', 'continueOnFatalError', 'disallowCrashReports', 'defaultTimeout'];
+
 const main = Object.freeze({
 	apiUrl: 'https://the.suite.st/api/public/v3',
 	continueOnFatalError: false,
-	disallowCrashReports: true,
-	logLevel: logLevels.debug,
+	disallowCrashReports: false,
+	logLevel: logLevels.normal,
 	sentryDsn,
 	timestamp: timestamp.default,
 	defaultTimeout: DEFAULT_TIMEOUT,
@@ -69,6 +71,7 @@ const configFactory = () => {
 	return {
 		config,
 		overridableFields,
+		configurableFields,
 		extend,
 		override,
 	};
@@ -76,5 +79,6 @@ const configFactory = () => {
 
 module.exports = {
 	configFactory,
-	...configFactory(),
+	// for testing
+	...(global._suitestTesting ? test : main),
 };

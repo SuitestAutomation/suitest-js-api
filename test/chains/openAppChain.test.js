@@ -1,4 +1,5 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	openApp,
@@ -7,7 +8,7 @@ const {
 	toString,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/openAppChain');
+} = require('../../lib/chains/openAppChain')(suitest);
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes, assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');

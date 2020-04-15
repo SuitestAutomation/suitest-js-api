@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {equalComposer} = require('../../lib/composers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
@@ -10,7 +11,7 @@ describe('Equal Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, equalComposer(data, chain, makeChain));
+		Object.defineProperties(chain, equalComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.equal, 'function');
 		assert.strictEqual(typeof chain.equals, 'function');
@@ -32,7 +33,7 @@ describe('Equal Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, equalComposer(data, chain, makeChain));
+		Object.defineProperties(chain, equalComposer(suitest, data, chain, makeChain));
 
 		chain.equals('test');
 
@@ -49,7 +50,7 @@ describe('Equal Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, equalComposer(data, chain, makeChain));
+		Object.defineProperties(chain, equalComposer(suitest, data, chain, makeChain));
 
 		testInputErrorSync(chain.equals, [1]);
 		testInputErrorSync(chain.equals, []);

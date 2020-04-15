@@ -1,11 +1,12 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	runTest,
 	runTestAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/runTestChain');
+} = require('../../lib/chains/runTestChain')(suitest);
 const sinon = require('sinon');
 
 describe('Run test chain', () => {

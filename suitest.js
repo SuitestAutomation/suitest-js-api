@@ -49,8 +49,8 @@ const {NETWORK_PROP, NETWORK_METHOD} = require('./lib/constants/networkRequest')
 const HAD_NO_ERROR = require('./lib/constants/hadNoError');
 
 // Network
-const {webSocketsFactory} = require('./lib/api/webSockets');
-const {unusedExpressionWatchersFactory} = require('./lib/utils/unusedExpressionWatchers');
+const webSocketsFactory = require('./lib/api/webSockets');
+const unusedExpressionWatchersFactory = require('./lib/utils/unusedExpressionWatchers');
 const ipcClient = require('./lib/testLauncher/ipc/client');
 const ipcServer = require('./lib/testLauncher/ipc/server');
 
@@ -58,27 +58,29 @@ const ipcServer = require('./lib/testLauncher/ipc/server');
 const Context = require('./lib/utils/Context');
 const AuthContext = require('./lib/utils/AuthContext');
 const {configFactory} = require('./config');
-
+const {setUpRaven} = require('./lib/utils/sentry/Raven');
 const {warnLauncherAndLibHasDiffVersions} = require('./lib/utils/packageMetadataHelper');
 const {createLogger} = require('./lib/utils/logger');
 
 // Publicly available API goes here
-class SUITEST_API {
-	constructor(exitOnError, instanceDependencies) {
-		// default instance dependencies
+class Suitest {
+	constructor({exitOnError}) {
+		// instance dependencies
 		this.authContext = new AuthContext();
 		this.appContext = new Context();
 		this.pairedDeviceContext = new Context();
 		this.testContext = new Context();
 		this.configuration = configFactory();
 		this.config = this.configuration.config;
-		// override default by provided
-		Object.assign(this, instanceDependencies);
+		this.configuration.configurableFields.map(fieldName => {
+			this[`set${fieldName[0].toUpperCase()}${fieldName.slice(1)}`] = (val) => this.configuration.override({[fieldName]: val});
+		});
 
 		// creating methods based on instance dependencies
 		this.logger = createLogger(this.config, this.pairedDeviceContext);
 		this.unusedExpressionWatchers = unusedExpressionWatchersFactory(this);
 		this.webSockets = webSocketsFactory(this);
+		setUpRaven(this.config, this.authContext);
 
 		this.openSession = (...args) => openSession(this, ...args);
 		this.pairDevice = (...args) => pairDevice(this, ...args);
@@ -204,4 +206,4 @@ class SUITEST_API {
 }
 
 // Export public API
-module.exports = SUITEST_API;
+module.exports = Suitest;

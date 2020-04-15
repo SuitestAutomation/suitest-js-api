@@ -1,11 +1,12 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	pressButton,
 	pressButtonAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/pressButtonChain');
+} = require('../../lib/chains/pressButtonChain')(suitest);
 const buttonTypes = require('../../lib/constants/vrc');
 const {VRC} = require('../../lib/mappings');
 const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
