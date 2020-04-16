@@ -21,7 +21,7 @@ const overridableFields = [
 	'logLevel', 'logDir', 'timestamp', 'configFile', 'continueOnFatalError', 'disallowCrashReports', 'defaultTimeout', // launcher common
 ];
 
-const configurableFields = ['logLevel', 'logDir', 'timestamp', 'configFile', 'continueOnFatalError', 'disallowCrashReports', 'defaultTimeout'];
+const configurableFields = ['logLevel', 'continueOnFatalError', 'disallowCrashReports', 'defaultTimeout'];
 
 const main = Object.freeze({
 	apiUrl: 'https://the.suite.st/api/public/v3',
