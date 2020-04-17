@@ -63,7 +63,7 @@ const {createLogger} = require('./lib/utils/logger');
 
 // Publicly available API goes here
 class Suitest {
-	constructor({exitOnError}) {
+	constructor({exitOnError} = {}) {
 		// instance dependencies
 		this.authContext = new AuthContext();
 		this.appContext = new Context();
