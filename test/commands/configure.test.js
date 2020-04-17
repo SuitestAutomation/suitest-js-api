@@ -1,7 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 
-const {logger, config, configuration, setDefaultTimeout, setContinueOnFatalError, setLogLevel} = require('../../index');
+const {logger, config, configuration, setDefaultTimeout, setLogLevel} = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 const cachedConfig = {...config};
@@ -18,15 +18,10 @@ describe('configure', () => {
 
 	it('should set config override', async() => {
 		setDefaultTimeout(4000);
-		assert.equal(config.defaultTimeout, 4000, 'setDefaultTimeout');
-		setContinueOnFatalError(true);
-		assert.equal(config.continueOnFatalError, true, 'setContinueOnFatalError true');
-		setContinueOnFatalError(false);
-		assert.equal(config.continueOnFatalError, false, 'setContinueOnFatalError false');
+		assert.equal(configuration.config.defaultTimeout, 4000, 'setDefaultTimeout');
 		setLogLevel('debug');
-		assert.equal(config.logLevel, 'debug', 'setLogLevel');
+		assert.equal(configuration.config.logLevel, 'debug', 'setLogLevel');
 		testInputErrorSync(setLogLevel, ['errror']);
-		testInputErrorSync(setContinueOnFatalError, [3]);
 		testInputErrorSync(setDefaultTimeout, [true]);
 	});
 });

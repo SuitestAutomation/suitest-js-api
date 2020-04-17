@@ -5,7 +5,8 @@ const suitest = require('../../index');
 
 const repl = require('../../lib/testLauncher/repl');
 const texts = require('../../lib/texts');
-const {authContext, logger, interactive} = suitest;
+const {authContext, logger} = suitest;
+const interactive = require('../../lib/commands/interactive')
 
 const stubbed = {};
 

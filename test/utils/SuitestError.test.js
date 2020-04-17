@@ -58,7 +58,7 @@ describe('SuitestError', () => {
 					...cachedConfig,
 					logLevel,
 				});
-				assert.strictEqual(config.logLevel, logLevel);
+				assert.strictEqual(configuration.config.logLevel, logLevel);
 				try {
 					await suitest.closeSession();
 				} catch (err) {

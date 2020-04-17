@@ -9,7 +9,6 @@ const releaseDevice = require('./lib/commands/releaseDevice');
 const {setAppConfig} = require('./lib/commands/setAppConfig');
 const startTest = require('./lib/commands/startTest');
 const endTest = require('./lib/commands/endTest');
-const interactive = require('./lib/commands/interactive');
 
 // Chains
 const openAppFactory = require('./lib/chains/openAppChain');
@@ -71,16 +70,15 @@ class Suitest {
 		this.pairedDeviceContext = new Context();
 		this.testContext = new Context();
 		this.configuration = configFactory();
-		this.config = this.configuration.config;
 		this.configuration.configurableFields.map(fieldName => {
 			this[`set${fieldName[0].toUpperCase()}${fieldName.slice(1)}`] = (val) => this.configuration.override({[fieldName]: val});
 		});
 
 		// creating methods based on instance dependencies
-		this.logger = createLogger(this.config, this.pairedDeviceContext);
+		this.logger = createLogger(this.configuration.config, this.pairedDeviceContext);
 		this.unusedExpressionWatchers = unusedExpressionWatchersFactory(this);
 		this.webSockets = webSocketsFactory(this);
-		setUpRaven(this.config, this.authContext);
+		setUpRaven(this.configuration.config, this.authContext);
 
 		this.openSession = (...args) => openSession(this, ...args);
 		this.pairDevice = (...args) => pairDevice(this, ...args);
@@ -90,27 +88,45 @@ class Suitest {
 		this.startTest = (...args) => startTest(this, ...args);
 		this.endTest = (...args) => endTest(this, ...args);
 		this.releaseDevice = (...args) => releaseDevice(this, ...args);
-		this.interactive = interactive(this);
 
-		this.openApp = openAppFactory(this).openApp;
-		this.openUrl = openUrlFactory(this).openUrl;
-		this.application = applicationFactory(this).application;
-		this.clearAppData = clearAppDataFactory(this).clearAppData;
-		this.location = locationFactory(this).location;
-		this.cookie = cookieFactory(this).cookie;
-		this.sleep = sleepFactory(this).sleep;
-		this.press = pressButtonFactory(this).pressButton;
-		this.position = positionFactory(this).position;
-		this.window = windowFactory(this).window;
-		this.executeCommand = executeCommandFactory(this).executeCommand;
+		const {openApp, openAppAssert} = openAppFactory(this);
+		const {openUrl, openUrlAssert} = openUrlFactory(this);
+		const {application, applicationAssert} = applicationFactory(this);
+		const {clearAppData, clearAppDataAssert} = clearAppDataFactory(this);
+		const {location, locationAssert} = locationFactory(this);
+		const {cookie, cookieAssert} = cookieFactory(this);
+		const {sleep, sleepAssert} = sleepFactory(this);
+		const {pressButton, pressButtonAssert} = pressButtonFactory(this);
+		const {position, positionAssert} = positionFactory(this);
+		const {window, windowAssert} = windowFactory(this);
+		const {executeCommand, executeCommandAssert} = executeCommandFactory(this);
+		const {jsExpression, jsExpressionAssert} = jsExpressionFactory(this);
+		const {element, elementAssert} = elementFactory(this);
+		const {networkRequest, networkRequestAssert} = networkRequestFactory(this);
+		const {video, videoAssert} = videoFactory(this);
+		const {playstationVideo, playstationVideoAssert} = playstationVideoFactory(this);
+		const {pollUrl, pollUrlAssert} = pollUrlFactory(this);
+		const {runTestAssert} = runTestFactory(this);
+
+		this.openApp = openApp;
+		this.openUrl = openUrl;
+		this.application = application;
+		this.clearAppData = clearAppData;
+		this.location = location;
+		this.cookie = cookie;
+		this.sleep = sleep;
+		this.press = pressButton;
+		this.position = position;
+		this.window = window;
+		this.executeCommand = executeCommand;
 		// this.executeBrightScript = executeBrightScriptFactory(this).executeBrightScript;
-		this.jsExpression = jsExpressionFactory(this).jsExpression;
+		this.jsExpression = jsExpression;
 		// this.brightScriptExpression = brightScriptExpressionFactory(this).brightScriptExpression;
-		this.element = elementFactory(this).element;
-		this.networkRequest = networkRequestFactory(this).networkRequest;
-		this.video = videoFactory(this).video;
-		this.psVideo = playstationVideoFactory(this).playstationVideo;
-		this.pollUrl = pollUrlFactory(this).pollUrl;
+		this.element = element;
+		this.networkRequest = networkRequest;
+		this.video = video;
+		this.psVideo = playstationVideo;
+		this.pollUrl = pollUrl;
 
 		this.PROP = ELEMENT_PROP;
 		this.COMP = PROP_COMPARATOR;
@@ -129,26 +145,26 @@ class Suitest {
 		this.HAD_NO_ERROR = HAD_NO_ERROR;
 
 		this.assert = {
-			application: applicationFactory(this).applicationAssert,
-			clearAppData: clearAppDataFactory(this).clearAppDataAssert,
-			openApp: openAppFactory(this).openAppAssert,
-			openUrl: openUrlFactory(this).openUrlAssert,
-			location: locationFactory(this).locationAssert,
-			cookie: cookieFactory(this).cookieAssert,
-			sleep: sleepFactory(this).sleepAssert,
-			press: pressButtonFactory(this).pressButtonAssert,
-			position: positionFactory(this).positionAssert,
-			window: windowFactory(this).windowAssert,
-			executeCommand: executeCommandFactory(this).executeCommandAssert,
+			application: applicationAssert,
+			clearAppData: clearAppDataAssert,
+			openApp: openAppAssert,
+			openUrl: openUrlAssert,
+			location: locationAssert,
+			cookie: cookieAssert,
+			sleep: sleepAssert,
+			press: pressButtonAssert,
+			position: positionAssert,
+			window: windowAssert,
+			executeCommand: executeCommandAssert,
 			// executeBrightScript: executeBrightScriptFactory(this).executeBrightScriptAssert,
-			jsExpression: jsExpressionFactory(this).jsExpressionAssert,
+			jsExpression: jsExpressionAssert,
 			// brightScriptExpression: brightScriptExpressionFactory(this).brightScriptExpressionAssert,
-			element: elementFactory(this).elementAssert,
-			pollUrl: pollUrlFactory(this).pollUrlAssert,
-			runTest: runTestFactory(this).runTestAssert,
-			networkRequest: networkRequestFactory(this).networkRequestAssert,
-			video: videoFactory(this).videoAssert,
-			psVideo: playstationVideoFactory(this).playstationVideoAssert,
+			element: elementAssert,
+			pollUrl: pollUrlAssert,
+			runTest: runTestAssert,
+			networkRequest: networkRequestAssert,
+			video: videoAssert,
+			psVideo: playstationVideoAssert,
 		};
 
 		// Listen to process events to trigger websocket termination and dump warnings, if any
@@ -202,6 +218,10 @@ class Suitest {
 			process.on('uncaughtException', exit);
 			process.on('unhandledRejection', exit);
 		}
+	}
+
+	get config() {
+		return {...this.configuration.config};
 	}
 }
 
