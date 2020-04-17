@@ -1,11 +1,12 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	brightScriptExpression,
 	brightScriptExpressionAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/brightScriptExpressionChain');
+} = require('../../lib/chains/brightScriptExpressionChain')(suitest);
 const sinon = require('sinon');
 const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 

@@ -1,10 +1,8 @@
 const assert = require('assert');
 const sinon = require('sinon');
-const logger = require('../../lib/utils/logger');
-const {extend, config} = require('../../config');
+const {configuration, config, logger, pairedDeviceContext} = require('../../index');
 const timestamp = require('../../lib/utils/timestamp');
-const {pairedDeviceContext} = require('../../lib/context');
-
+const {extend} = configuration;
 let cachedConfig;
 let log;
 
@@ -54,7 +52,7 @@ describe('logger util', () => {
 	});
 
 	it('should log operation type', () => {
-		sinon.stub(timestamp, 'formatDate').returns('timestamp');
+		sinon.stub(timestamp, 'formatDate').returns(() => 'timestamp');
 
 		try {
 			logger.log('|A|', 'operation');

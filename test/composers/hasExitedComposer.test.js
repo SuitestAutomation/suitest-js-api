@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {hasExitedComposer} = require('../../lib/composers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 
@@ -9,7 +10,7 @@ describe('Has Exited Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, hasExitedComposer(data, chain, makeChain));
+		Object.defineProperties(chain, hasExitedComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.hasExited, 'function');
 
@@ -25,7 +26,7 @@ describe('Has Exited Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, hasExitedComposer(data, chain, makeChain));
+		Object.defineProperties(chain, hasExitedComposer(suitest, data, chain, makeChain));
 
 		chain.hasExited();
 

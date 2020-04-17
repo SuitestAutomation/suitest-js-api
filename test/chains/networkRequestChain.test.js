@@ -1,4 +1,5 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	networkRequest,
@@ -7,7 +8,7 @@ const {
 	getComposers,
 	beforeSendMsg,
 	toString,
-} = require('../../lib/chains/networkRequestChain');
+} = require('../../lib/chains/networkRequestChain')(suitest);
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const {SUBJ_COMPARATOR, PROP_COMPARATOR} = require('../../lib/constants/comparator');

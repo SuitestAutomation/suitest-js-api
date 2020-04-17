@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {dismissModalComposer} = require('../../lib/composers');
 
 describe('dismissModal composer', () => {
@@ -8,7 +9,7 @@ describe('dismissModal composer', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, dismissModalComposer(data, chain, makeChain));
+		Object.defineProperties(chain, dismissModalComposer(suitest, data, chain, makeChain));
 
 		const dismissModalPropertyDescriptor = Object.getOwnPropertyDescriptor(chain, 'dismissModal');
 
@@ -23,7 +24,7 @@ describe('dismissModal composer', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, dismissModalComposer(data, chain, makeChain));
+		Object.defineProperties(chain, dismissModalComposer(suitest, data, chain, makeChain));
 
 		chain.dismissModal();
 

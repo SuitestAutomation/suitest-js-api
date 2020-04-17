@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {identity} = require('ramda');
 const {makeToStringComposer} = require('../../lib/composers');
 
@@ -10,7 +11,7 @@ describe('toString Composer', () => {
 		const toString = sinon.spy();
 		const toJSON = sinon.spy();
 
-		Object.defineProperties(chain, makeToStringComposer(toString, toJSON)(data, chain));
+		Object.defineProperties(chain, makeToStringComposer(toString, toJSON)(suitest, data, chain));
 
 		assert.strictEqual(typeof chain.toString, 'function');
 
@@ -27,7 +28,7 @@ describe('toString Composer', () => {
 		const toString = sinon.spy(identity);
 		const toJSON = sinon.spy(identity);
 
-		Object.defineProperties(chain, makeToStringComposer(toString, toJSON)(data, chain));
+		Object.defineProperties(chain, makeToStringComposer(toString, toJSON)(suitest, data, chain));
 
 		chain.toString();
 
@@ -44,7 +45,7 @@ describe('toString Composer', () => {
 			}));
 			const toString = sinon.spy();
 
-			Object.defineProperties(chain, makeToStringComposer(toString, toJSON)({}, chain));
+			Object.defineProperties(chain, makeToStringComposer(toString, toJSON)(suitest, {}, chain));
 			chain.toString();
 
 			assert.deepStrictEqual(toString.firstCall.args[0], {
@@ -61,7 +62,7 @@ describe('toString Composer', () => {
 			}));
 			const toString = sinon.spy();
 
-			Object.defineProperties(chain, makeToStringComposer(toString, toJSON)({}, chain));
+			Object.defineProperties(chain, makeToStringComposer(toString, toJSON)(suitest, {}, chain));
 			chain.toString();
 
 			assert.deepStrictEqual(toString.firstCall.args[0], {
@@ -78,7 +79,7 @@ describe('toString Composer', () => {
 			}));
 			const toString = sinon.spy();
 
-			Object.defineProperties(chain, makeToStringComposer(toString, toJSON)({}, chain));
+			Object.defineProperties(chain, makeToStringComposer(toString, toJSON)(suitest, {}, chain));
 			chain.toString();
 
 			assert.deepStrictEqual(toString.firstCall.args[0], {

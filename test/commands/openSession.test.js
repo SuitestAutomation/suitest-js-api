@@ -1,16 +1,16 @@
 const assert = require('assert');
 const nock = require('nock');
 const sinon = require('sinon');
+const suitest = require('../../index');
 
 const testServer = require('../../lib/utils/testServer');
-const {authContext} = require('../../lib/context');
+const webSockets = require('../../lib/api/webSockets');
+const {authContext, config, logger} = suitest;
 const sessionConstants = require('../../lib/constants/session');
-const {openSession} = require('../../lib/commands/openSession');
+const openSession = (...arg) => require('../../lib/commands/openSession').openSession({...suitest, webSockets}, ...arg);
 const endpoints = require('../../lib/api/endpoints');
 const SuitestError = require('../../lib/utils/SuitestError');
-const {config} = require('../../config');
 const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
-const logger = require('../../lib/utils/logger');
 
 describe('openSession', () => {
 	before(async() => {

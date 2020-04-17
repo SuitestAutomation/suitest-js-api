@@ -1,6 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {assertComposer} = require('../../lib/composers');
+const suitest = require('../../index');
 
 describe('Assert composer', () => {
 	it('should define toAssert method', () => {
@@ -8,7 +9,7 @@ describe('Assert composer', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, assertComposer(data, chain, makeChain));
+		Object.defineProperties(chain, assertComposer(suitest, data, chain, makeChain));
 
 		const abandonPropertyDescriptor = Object.getOwnPropertyDescriptor(chain, 'toAssert');
 
@@ -23,7 +24,7 @@ describe('Assert composer', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, assertComposer(data, chain, makeChain));
+		Object.defineProperties(chain, assertComposer(suitest, data, chain, makeChain));
 
 		chain.toAssert();
 

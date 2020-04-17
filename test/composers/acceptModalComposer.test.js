@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {acceptModalComposer} = require('../../lib/composers');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
@@ -9,7 +10,7 @@ describe('Accept Modal Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, acceptModalComposer(data, chain, makeChain));
+		Object.defineProperties(chain, acceptModalComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.acceptModal, 'function');
 
@@ -25,7 +26,7 @@ describe('Accept Modal Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, acceptModalComposer(data, chain, makeChain));
+		Object.defineProperties(chain, acceptModalComposer(suitest, data, chain, makeChain));
 
 		chain.acceptModal();
 
@@ -40,7 +41,7 @@ describe('Accept Modal Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, acceptModalComposer(data, chain, makeChain));
+		Object.defineProperties(chain, acceptModalComposer(suitest, data, chain, makeChain));
 
 		chain.acceptModal('message');
 
@@ -55,7 +56,7 @@ describe('Accept Modal Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, acceptModalComposer(data, chain, makeChain));
+		Object.defineProperties(chain, acceptModalComposer(suitest, data, chain, makeChain));
 
 		testInputErrorSync(chain.acceptModal, [1]);
 	});
