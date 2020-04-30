@@ -132,8 +132,8 @@ describe('Network Request Match Composer', () => {
 				type: SUBJ_COMPARATOR.REQUEST_MATCHES,
 				props: [
 					{
-						name: NETWORK_PROP.BODY,
-						val: 'test',
+						name: NETWORK_PROP.METHOD,
+						val: 'POST',
 						compare: PROP_COMPARATOR.NOT_EQUAL,
 					},
 				],
