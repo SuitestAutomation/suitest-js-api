@@ -123,8 +123,8 @@ describe('Network Request Match Composer', () => {
 		});
 
 		chain.requestMatch({
-			name: NETWORK_PROP.BODY,
-			val: 'test',
+			name: NETWORK_PROP.METHOD,
+			val: 'POST',
 			type: PROP_COMPARATOR.NOT_EQUAL,
 		});
 		assert.deepStrictEqual(makeChain.lastCall.args[0], {
