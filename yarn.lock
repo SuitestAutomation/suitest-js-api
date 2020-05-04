@@ -136,10 +136,18 @@
   resolved "https://registry.yarnpkg.com/@sinonjs/text-encoding/-/text-encoding-0.7.1.tgz#8da5c6530915653f3a1f38fd5f101d8c3f8079c5"
   integrity sha512-+iTbntw2IZPb/anVDbypzfQa+ay64MW0Zo8aJ8gZPWMMK6/OubMVb6lUPMagqjOPnmtauXnFCACVl3O7ogjeqQ==
 
-"@suitest/translate@^2.0.5":
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/@suitest/translate/-/translate-2.0.5.tgz#56343887cdc9d7d2e604606b70f2db41bf115447"
-  integrity sha512-JlLtnK6gnaHnw6LtxxAPsbnpkfWBcGdjkDBwtEU4GFLXt/Nmt1gUYD62/vVUV3GLPc+snj9ekZ3Rc5azLsCl9g==
+"@suitest/translate@^2.1.3":
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/@suitest/translate/-/translate-2.1.3.tgz#5c83fc3e2b421562237dbe3d771e0ad3721256b7"
+  integrity sha512-I7ySXi+TBCpSJS5TpgJBqfafUfbcMfdr95IHkzFp+MMZVv0zkG5Rbx2eKhz3+SXRN9Lk+jT38L/cScKLMaNS6Q==
+  dependencies:
+    "@suitest/types" "^2.1.2"
+    unist-builder "^2.0.3"
+
+"@suitest/types@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@suitest/types/-/types-2.1.2.tgz#1dced98bf3c44b8345ef535731b32c8227dd28d4"
+  integrity sha512-o9YbIBfYRO1z+zftzcHeeXCsdQyM7RHJbHoEQ2rCNxNtJh6GgiU9OVolvzIj1hZXCNnswoHNVro8ql9weiBHWw==
 
 "@types/node@^13.9.3":
   version "13.9.3"
@@ -3811,6 +3819,11 @@ union-value@^1.0.0:
     get-value "^2.0.6"
     is-extendable "^0.1.1"
     set-value "^2.0.1"
+
+unist-builder@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/unist-builder/-/unist-builder-2.0.3.tgz#77648711b5d86af0942f334397a33c5e91516436"
+  integrity sha512-f98yt5pnlMWlzP539tPc4grGMsFaQQlP/vM396b00jngsiINumNmsY8rkXjfoi1c6QaM8nQ3vaGDuoKWbe/1Uw==
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"

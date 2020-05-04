@@ -100,7 +100,6 @@ describe('Socket error messages', () => {
 			[basePayload('outdatedLibrary'), 'We have detected that your instrumentation library is outdated and the package cannot be opened. Update required.'],
 			[basePayload('initPlatformFailed'), 'Failed to start Suitest bootstrap application on this device.'],
 			[basePayload('packageNotFound'), 'There is nothing to test, because the selected configuration does not contain an app package. Upload a package on your app\'s configuration page before continuing.'],
-			[basePayload('missingPackage'), 'There is nothing to test, because the selected configuration does not contain an app package. Upload a package on your app\'s configuration page before continuing.'],
 			[basePayload('internalError'), 'Internal error occurred. Chain description.'],
 			[basePayload('ILInternalError'), 'Internal error occurred. Chain description.'],
 			[basePayload('queryTimeout'), 'Application did not respond for 60 seconds. Executing "Chain description.".'],
@@ -582,6 +581,8 @@ describe('Socket error messages', () => {
 			[basePayload('outdatedLibraryWarning'), 'We have detected that your instrumentation library is outdated, the package can still be opened. Consider updating.'],
 			[basePayload('adbError', undefined, 'testReason'), 'testReason'],
 			[basePayload('outOfMemory'), 'Failed to open the app. Device is out of memory, please restart the device.'],
+			[basePayload('configuratorError'), 'Make sure that Apple Configurator 2 and Automation Tools are installed. Please see our docs.'],
+			[basePayload('appStoreBuild'), 'Can’t install App Store distribution build.'],
 		].forEach(([payload, expectMessage]) => {
 			it(expectMessage, () => {
 				assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
