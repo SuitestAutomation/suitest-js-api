@@ -489,21 +489,64 @@ describe('socket chain helpers', () => {
 			assert.deepStrictEqual(res, Buffer.from([1, 2, 3]).toString('base64'));
 		});
 
-		it('for error', () => {
-			assert.throws(
-				() => processTakeScreenshotResponse({
-					contentType: 'takeScreenshot',
-					result: 'error',
-				}, {
-					type: 'takeScreenshot',
-					stack: '',
-				}, {
-					type: 'takeScreenshot',
-				}),
-				err => err instanceof SuitestError &&
-					err.code === SuitestError.EVALUATION_ERROR &&
-					err.message.includes('Failed to take screenshot')
-			);
+		describe('handle errors', () => {
+			it('without specified "errorType" and "error" in response', () => {
+				assert.throws(
+					() => processTakeScreenshotResponse({
+						contentType: 'takeScreenshot',
+						result: 'error',
+					}, {
+						type: 'takeScreenshot',
+						stack: '',
+					}, {
+						type: 'takeScreenshot',
+					}),
+					err => err instanceof SuitestError &&
+						err.code === SuitestError.EVALUATION_ERROR &&
+						err.message.includes('Failed to take screenshot')
+				);
+			});
+			it('with specified "error"', () => {
+				assert.throws(
+					() => processTakeScreenshotResponse({
+						contentType: 'takeScreenshot',
+						result: 'error',
+						error: 'Some error related to making screenshot fail',
+					}, {
+						type: 'takeScreenshot',
+						stack: '',
+					}, {
+						type: 'takeScreenshot',
+					}),
+					err => err instanceof SuitestError &&
+						err.code === SuitestError.EVALUATION_ERROR &&
+						err.message.includes('Some error related to making screenshot fail')
+				);
+			});
+			[
+				['notSupportedDriver', 'Screenshots not supported by the device driver.'],
+				['notSupportedIL', 'Screenshots not supported by the running IL.'],
+				['timeout', 'Timeout during creating screenshot.'],
+				['generalError', 'Failure during creating screenshot.'],
+			].forEach(([errorType, expectedMessage]) => {
+				it(`for "${errorType}" expected message: "${expectedMessage}"`, () => {
+					assert.throws(
+						() => processTakeScreenshotResponse({
+							contentType: 'takeScreenshot',
+							result: 'error',
+							errorType,
+						}, {
+							type: 'takeScreenshot',
+							stack: '',
+						}, {
+							type: 'takeScreenshot',
+						}),
+						err => err instanceof SuitestError &&
+							err.code === SuitestError.EVALUATION_ERROR &&
+							err.message.includes(expectedMessage)
+					);
+				});
+			});
 		});
 	});
 
