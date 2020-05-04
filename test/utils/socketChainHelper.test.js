@@ -524,10 +524,10 @@ describe('socket chain helpers', () => {
 				);
 			});
 			[
-				['notSupportedDriver', 'Screenshots not supported by the device driver.'],
-				['notSupportedIL', 'Screenshots not supported by the running IL.'],
-				['timeout', 'Timeout during creating screenshot.'],
-				['generalError', 'Failure during creating screenshot.'],
+				['notSupportedPlatform', 'Screenshots are not supported on this device.'],
+				['notSupportedIL', 'Screenshots are not supported with this instrumentation library version.'],
+				['timeout', 'Failed to take a screenshot due to timeout.'],
+				['generalError', 'Failed to take a screenshot.'],
 			].forEach(([errorType, expectedMessage]) => {
 				it(`for "${errorType}" expected message: "${expectedMessage}"`, () => {
 					assert.throws(
