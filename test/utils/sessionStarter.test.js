@@ -5,7 +5,7 @@ const uuid = require('uuid/v1');
 const {bootstrapSession} = require('../../lib/utils/sessionStarter');
 const testServer = require('../../lib/utils/testServer');
 const webSockets = require('../../lib/api/webSockets');
-const {pairedDeviceContext, authContext, appContext, testContext} = require('../../lib/context');
+const {pairedDeviceContext, authContext, appContext} = require('../../lib/context');
 const sessionConstants = require('../../lib/constants/session');
 const logger = require('../../lib/utils/logger');
 const nock = require('nock');
@@ -29,7 +29,6 @@ describe('sessionStarter util', () => {
 		pairedDeviceContext.clear();
 		authContext.clear();
 		appContext.clear();
-		testContext.clear();
 	});
 
 	after(async() => {
@@ -43,7 +42,6 @@ describe('sessionStarter util', () => {
 		pairedDeviceContext.clear();
 		authContext.clear();
 		appContext.clear();
-		testContext.clear();
 	});
 
 	afterEach(() => {

@@ -46,7 +46,7 @@ declare namespace suitest {
 		setAppConfig(configId: string, options?: ConfigOverride): Promise<void|SuitestError>;
 		pairDevice(deviceId: string): Promise<DeviceData|SuitestError>;
 		releaseDevice(): Promise<void|SuitestError>;
-		startTest(clientTestId: string, options?: StartTestOptions): Promise<void|SuitestError>;
+		startTest(_?: string, __?: any): Promise<void|SuitestError>;
 		endTest(): Promise<void|SuitestError>;
 		configure(config: ConfigureOptions): Promise<void|SuitestError>;
 		interactive(options: ReplOptions): Promise<void>;
@@ -95,7 +95,6 @@ declare namespace suitest {
 		authContext: AuthContext;
 		appContext: Context;
 		pairedDeviceContext: Context;
-		testContext: Context;
 	}
 
 	export interface ISuitest extends ISuitestBase {
@@ -207,11 +206,6 @@ declare namespace suitest {
 	interface OpenSessionResult {
 		deviceAccessToken: string;
 		tokenValidUntil: string;
-	}
-
-	interface StartTestOptions {
-		name?: string;
-		description?: string;
 	}
 
 	interface ConfigureOptions {

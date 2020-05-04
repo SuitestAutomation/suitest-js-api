@@ -55,7 +55,7 @@ const ipcClient = require('./lib/testLauncher/ipc/client');
 const ipcServer = require('./lib/testLauncher/ipc/server');
 
 // Contexts
-const {authContext, appContext, pairedDeviceContext, testContext} = require('./lib/context');
+const {authContext, appContext, pairedDeviceContext} = require('./lib/context');
 
 const {connectToIpcAndBootstrapSession} = require('./lib/utils/sessionStarter');
 const {warnUnusedLeaves} = require('./lib/utils/unusedExpressionWatchers');
@@ -114,7 +114,6 @@ class SUITEST_API {
 		this.authContext = authContext;
 		this.appContext = appContext;
 		this.pairedDeviceContext = pairedDeviceContext;
-		this.testContext = testContext;
 
 		// For testing
 		this.webSockets = webSockets;
