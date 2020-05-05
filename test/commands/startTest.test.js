@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const testServer = require('../../lib/utils/testServer');
 
 const sessionConstants = require('../../lib/constants/session');
-const {authContext} = require('../../lib/context');
+const {authContext, testContext} = require('../../lib/context');
 const startTest = require('../../lib/commands/startTest');
 const SuitestError = require('../../lib/utils/SuitestError');
 const webSockets = require('../../lib/api/webSockets');
@@ -18,6 +18,7 @@ describe('startTest', () => {
 	});
 
 	beforeEach(() => {
+		testContext.clear();
 		authContext.clear();
 	});
 
@@ -25,8 +26,15 @@ describe('startTest', () => {
 		logger.info.restore();
 		logger.delayed.restore();
 		await testServer.stop();
+		testContext.clear();
 		authContext.clear();
 		webSockets.disconnect();
+	});
+
+	it('should not allow startTest with invalid input', async() => {
+		await testInputErrorAsync(startTest, []);
+		await testInputErrorAsync(startTest, [1]);
+		await testInputErrorAsync(startTest, [null, {}]);
 	});
 
 	it('should not allow startTest command in guest, access token contexts', async() => {
@@ -62,6 +70,7 @@ describe('startTest', () => {
 			const res = await startTest(newTest.clientTestId, newTest);
 
 			assert.ok(!res, 'response void');
+			assert.deepEqual(newTest, testContext.context, 'testContext');
 		} catch (error) {
 			assert.ok(!error, 'error');
 		}
@@ -72,6 +81,7 @@ describe('startTest', () => {
 			const res = await startTest(newTest.clientTestId, newTest);
 
 			assert.ok(!res, 'response void');
+			assert.deepEqual(newTest, testContext.context, 'testContext');
 		} catch (error) {
 			assert.ok(!error, 'error');
 		}

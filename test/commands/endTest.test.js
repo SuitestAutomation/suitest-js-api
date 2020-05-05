@@ -3,7 +3,7 @@ const testServer = require('../../lib/utils/testServer');
 const sinon = require('sinon');
 
 const sessionConstants = require('../../lib/constants/session');
-const {authContext} = require('../../lib/context');
+const {authContext, testContext} = require('../../lib/context');
 const endTest = require('../../lib/commands/endTest');
 const SuitestError = require('../../lib/utils/SuitestError');
 const webSockets = require('../../lib/api/webSockets');
@@ -17,6 +17,7 @@ describe('endTest', () => {
 	});
 
 	beforeEach(() => {
+		testContext.clear();
 		authContext.clear();
 	});
 
@@ -24,6 +25,7 @@ describe('endTest', () => {
 		logger.log.restore();
 		logger.delayed.restore();
 		await testServer.stop();
+		testContext.clear();
 		authContext.clear();
 		webSockets.disconnect();
 	});
@@ -53,6 +55,7 @@ describe('endTest', () => {
 		try {
 			res = await endTest();
 			assert.ok(!res, 'response void');
+			assert.ok(!testContext.context, 'response void');
 		} catch (error) {
 			assert.ok(!error, 'error');
 		}
@@ -62,6 +65,7 @@ describe('endTest', () => {
 		try {
 			res = await endTest();
 			assert.ok(!res, 'response void');
+			assert.ok(!testContext.context, 'response void');
 		} catch (error) {
 			assert.ok(!error, 'error');
 		}
