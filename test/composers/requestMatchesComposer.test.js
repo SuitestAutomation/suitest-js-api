@@ -125,6 +125,24 @@ describe('Network Request Match Composer', () => {
 
 		chain.requestMatch({
 			name: NETWORK_PROP.METHOD,
+			val: 'POST',
+			type: PROP_COMPARATOR.NOT_EQUAL,
+		});
+		assert.deepStrictEqual(makeChain.lastCall.args[0], {
+			request: {
+				type: SUBJ_COMPARATOR.REQUEST_MATCHES,
+				props: [
+					{
+						name: NETWORK_PROP.METHOD,
+						val: 'POST',
+						compare: PROP_COMPARATOR.NOT_EQUAL,
+					},
+				],
+			},
+		});
+
+		chain.requestMatch({
+			name: NETWORK_PROP.METHOD,
 			val: NETWORK_METHOD.GET,
 		});
 		assert.deepStrictEqual(makeChain.lastCall.args[0], {

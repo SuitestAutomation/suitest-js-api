@@ -232,7 +232,7 @@ declare namespace suitest {
 	}
 
 	interface Context {
-		context: symbol;
+		context: any;
 		setContext(context: symbol): void;
 		clear(): void;
 	}

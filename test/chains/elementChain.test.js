@@ -426,6 +426,18 @@ describe('Element chain', () => {
 			},
 		}, 'eval click');
 		assert.deepStrictEqual(toJSON({
+			selector: {
+				css: 'css',
+				index: 2,
+			},
+		}), {
+			type: 'query',
+			subject: {
+				type: 'elementProps',
+				selector: {css: 'css', ifMultipleFoundReturn: 2},
+			},
+		}, 'query with index');
+		assert.deepStrictEqual(toJSON({
 			isMoveTo: true,
 			selector: {apiId: 'apiId'},
 		}), {
