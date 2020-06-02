@@ -36,6 +36,16 @@
     "coverage": "nyc --reporter=lcov yarn test",
     "lint": "eslint lib/ test/ --quiet"
   },
+  "files": [
+    "config",
+    "lib",
+    "typeDefinition",
+    "index.d.ts",
+    "index.js",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "LICENSE"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "yarn lint",
