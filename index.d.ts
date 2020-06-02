@@ -31,6 +31,7 @@ import {ReplOptions} from './typeDefinition/InteractiveCommandChain';
 import {ImageLoadState} from './typeDefinition/constants/ImageLoadState';
 import {PlayStationVideoChain} from './typeDefinition/PlayStationVideoChain';
 import {HadNoError} from './typeDefinition/constants/HadNoError';
+import {TakeScreenshotChain} from './typeDefinition/TakeScreenshotChain';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -74,6 +75,22 @@ declare namespace suitest {
 		press(keys: string[]): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
+		/**
+		 * @description return PromiseLike object with Buffer as value
+		 */
+		takeScreenshot(dataFormat?: 'raw'): TakeScreenshotChain<Buffer>;
+
+		/**
+		 * @description return PromiseLike object with base64 string as value
+		 */
+		takeScreenshot(dataFormat: 'base64'): TakeScreenshotChain<string>;
+
+		/**
+		 * @description the complete path to the file name where the screenshot should be saved.
+		 * @example
+		 * suitest.saveScreenshot('/path/to/file.png');
+		 */
+		saveScreenshot(fileName: string): TakeScreenshotChain<void>;
 
 		// constants
 		PROP: elementTypes.ElementPropTypes;

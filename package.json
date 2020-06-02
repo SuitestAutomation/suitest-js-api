@@ -82,6 +82,7 @@
   },
   "dependencies": {
     "@suitest/translate": "^2.1.3",
+    "@types/node": "^13.9.3",
     "ajv": "^6.1.1",
     "ansi-regex": "^3.0.0",
     "chokidar": "^2.0.4",
