@@ -1,5 +1,5 @@
 const assert = require('assert');
-const uuid = require('uuid/v1');
+const {v1: uuid} = require('uuid');
 const nock = require('nock');
 
 const testServer = require('../../lib/utils/testServer');
