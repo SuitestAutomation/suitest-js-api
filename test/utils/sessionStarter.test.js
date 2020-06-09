@@ -1,6 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
-const uuid = require('uuid/v1');
+const {v1: uuid} = require('uuid');
 
 const {bootstrapSession} = require('../../lib/utils/sessionStarter');
 const testServer = require('../../lib/utils/testServer');

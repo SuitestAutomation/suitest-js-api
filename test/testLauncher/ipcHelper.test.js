@@ -1,3 +1,4 @@
+const {has} = require('ramda');
 const sinon = require('sinon');
 const assert = require('assert');
 
@@ -20,7 +21,7 @@ describe('ipcHelper', () => {
 		const state = {listeners: {id: () => void 0}};
 
 		ipcHelper.removeListener(state)('id');
-		assert.strictEqual(state.listeners.hasOwnProperty('id'), false);
+		assert.strictEqual(has('id', state.listeners), false);
 	});
 
 	it('ipcHelper.write should call write method on socket with stringified data', () => {
