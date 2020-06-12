@@ -79,6 +79,14 @@ export type VrcConstants = {
 	// Playstation
 	CIRCLE: 'CIRCLE',
 	CROSS:  'CROSS',
+	SQUARE: 'SQUARE',
+	TRIANGLE: 'TRIANGLE',
+	OPTIONS: 'OPTIONS',
+	SHARE: 'SHARE',
+	L1: 'L1',
+	L2: 'L2',
+	R1: 'R1',
+	R2: 'R2',
 	// android
 	TV:           'TV',
 	BUTTON_10:    'BUTTON_10',
