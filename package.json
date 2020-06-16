@@ -37,6 +37,7 @@
     "lint": "eslint lib/ test/ --quiet"
   },
   "files": [
+    "bin",
     "config",
     "lib",
     "typeDefinition",
