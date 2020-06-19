@@ -584,6 +584,7 @@ describe('Socket error messages', () => {
 			[basePayload('outOfMemory'), 'Failed to open the app. Device is out of memory, please restart the device.'],
 			[basePayload('configuratorError'), 'Make sure that Apple Configurator 2 and Automation Tools are installed. Please see our docs.'],
 			[basePayload('appStoreBuild'), 'Can’t install App Store distribution build.'],
+			[basePayload('MoveTargetOutOfBounds'), 'Element is outside of the visible area of the screen.'],
 		].forEach(([payload, expectMessage]) => {
 			it(expectMessage, () => {
 				assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
