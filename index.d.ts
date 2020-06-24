@@ -94,16 +94,16 @@ declare namespace suitest {
 
 		getPairedDevice(): null | {
 			deviceId: string,
-			manufacturer?: string,
-			model?: string,
-			owner?: string,
-			firmware?: string,
-			isShared?: boolean,
-			modelId?: string,
-			platforms?: string[],
+			manufacturer: string,
+			model: string,
+			owner: string,
+			firmware: string,
+			isShared: boolean,
+			modelId: string,
+			platforms: string[],
 			customName?: string,
 			inactivityTimeout?: number,
-			status?: string,
+			status: string,
 			displayName?: string,
 			shortDisplayName?: string
 		}
