@@ -5,7 +5,7 @@ const obj = {};
 
 describe('getPairedDevice', () => {
 	afterEach(() => {
-		suitest.pairedDeviceContext.setContext(null);
+		suitest.pairedDeviceContext.clear();
 	});
 
 	it('should have getPairedDevice', () => {
