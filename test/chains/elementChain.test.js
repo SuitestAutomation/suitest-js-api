@@ -318,6 +318,8 @@ describe('Element chain', () => {
 			element('el-api-id').setText('text string').toString(),
 			'Setting text "text string" for "el-api-id"'
 		);
+		assert.strictEqual(elementAssert({css: 'any'}).toString(), '');
+		assert.strictEqual(elementAssert({css: 'any'}).exist().toString(), 'Checking if "{"css":"any"}" exists');
 	});
 
 	it('should have beforeSendMsg', () => {
