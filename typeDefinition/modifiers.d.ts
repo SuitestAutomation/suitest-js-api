@@ -4,6 +4,7 @@ export interface Thenable <R> {
 }
 
 export interface AbstractChain {
+	// May throw SuitestError if chain is malformed
 	toString(): String;
 }
 
