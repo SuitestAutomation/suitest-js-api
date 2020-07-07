@@ -92,6 +92,22 @@ declare namespace suitest {
 		 */
 		saveScreenshot(fileName: string): TakeScreenshotChain<void>;
 
+		getPairedDevice(): null | {
+			deviceId: string,
+			manufacturer: string,
+			model: string,
+			owner: string,
+			firmware: string,
+			isShared: boolean,
+			modelId: string,
+			platforms: string[],
+			customName?: string,
+			inactivityTimeout?: number,
+			status: string,
+			displayName?: string,
+			shortDisplayName?: string
+		}
+
 		// constants
 		PROP: elementTypes.ElementPropTypes;
 		COMP: elementTypes.PropComparators;

@@ -118,6 +118,7 @@ class SUITEST_API {
 		this.authContext = authContext;
 		this.appContext = appContext;
 		this.pairedDeviceContext = pairedDeviceContext;
+		this.getPairedDevice = () => this.pairedDeviceContext.context;
 		this.testContext = testContext;
 
 		// For testing
