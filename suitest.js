@@ -70,6 +70,8 @@ class Suitest {
 		this.pairedDeviceContext = new Context();
 		this.testContext = new Context();
 		this.configuration = configFactory();
+		this.config = this.configuration.config;
+		this.configure = config => this.configuration.override(config);
 		this.configuration.configurableFields.map(fieldName => {
 			this[`set${fieldName[0].toUpperCase()}${fieldName.slice(1)}`] = (val) => this.configuration.override({[fieldName]: val});
 		});
@@ -220,7 +222,7 @@ class Suitest {
 		}
 	}
 
-	get config() {
+	getConfig() {
 		return {...this.configuration.config};
 	}
 }

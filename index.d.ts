@@ -51,7 +51,12 @@ declare namespace suitest {
 		interactive(options: ReplOptions): Promise<void>;
 
 		// config
-		config: ConfigureOptions;
+		getConfig(): ConfigureOptions;
+
+		/**
+		 * @deprecated use separate methods for changing configuration properties
+		 */
+		configure(config: Partial<ConfigureOptions>): void;
 		setDefaultTimeout(timeout: ConfigureOptions['defaultTimeout']): void;
 		setContinueOnFatalError(continueOnFatalError: ConfigureOptions['continueOnFatalError']): void;
 		setDisallowCrashReports(disallowCrashReports: ConfigureOptions['disallowCrashReports']): void;
@@ -266,5 +271,7 @@ declare namespace suitest {
 		size?: string,
 		color?: string,
 		index?: number,
+		video?: true,
+		psVideo?: true,
 	}
 }
