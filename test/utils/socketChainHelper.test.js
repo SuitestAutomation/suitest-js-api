@@ -7,7 +7,7 @@ const suitest = require('../../index');
 const SuitestError = require('../../lib/utils/SuitestError');
 const helpers = require('../../lib/utils/socketChainHelper');
 const {SUBJ_COMPARATOR} = require('../../lib/mappings');
-const {toString: elementToString} = require('../../lib/chains/elementChain')(suitest);
+const {toString: elementToString} = require('../../lib/chains/elementChain')(suitest, suitest.video);
 const {logger} = suitest;
 
 describe('socket chain helpers', () => {
@@ -456,7 +456,7 @@ describe('socket chain helpers', () => {
 	});
 
 	describe('Handle processed messages related to takeScreenshot lines', () => {
-		const processTakeScreenshotResponse = processServerResponse(() => '');
+		const processTakeScreenshotResponse = processServerResponse(console);
 
 		it('success for "raw" dataFormat', () => {
 			const res = processTakeScreenshotResponse({

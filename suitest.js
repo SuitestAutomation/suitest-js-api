@@ -1,4 +1,6 @@
 require('./lib/utils/sentry/Raven');
+const util = require('util');
+const texts = require('./lib/texts');
 
 // Commands
 const {openSession} = require('./lib/commands/openSession');
@@ -12,6 +14,8 @@ const endTest = require('./lib/commands/endTest');
 
 // Chains
 const openAppFactory = require('./lib/chains/openAppChain');
+const takeScreenshotFactory = require('./lib/chains/takeScreenshotChain');
+const saveScreenshotFactory = require('./lib/chains/saveScreenshotChain');
 const openUrlFactory = require('./lib/chains/openUrlChain');
 const locationFactory = require('./lib/chains/locationChain');
 const applicationFactory = require('./lib/chains/applicationChain');
@@ -71,7 +75,7 @@ class Suitest {
 		this.testContext = new Context();
 		this.configuration = configFactory();
 		this.config = this.configuration.config;
-		this.configure = config => this.configuration.override(config);
+		this.configure = util.deprecate(this.configuration.override, texts.warnConfigureDeprecation());
 		this.configuration.configurableFields.map(fieldName => {
 			this[`set${fieldName[0].toUpperCase()}${fieldName.slice(1)}`] = (val) => this.configuration.override({[fieldName]: val});
 		});
@@ -103,12 +107,14 @@ class Suitest {
 		const {window, windowAssert} = windowFactory(this);
 		const {executeCommand, executeCommandAssert} = executeCommandFactory(this);
 		const {jsExpression, jsExpressionAssert} = jsExpressionFactory(this);
-		const {element, elementAssert} = elementFactory(this);
 		const {networkRequest, networkRequestAssert} = networkRequestFactory(this);
 		const {video, videoAssert} = videoFactory(this);
+		const {element, elementAssert} = elementFactory(this, video);
 		const {playstationVideo, playstationVideoAssert} = playstationVideoFactory(this);
 		const {pollUrl, pollUrlAssert} = pollUrlFactory(this);
 		const {runTestAssert} = runTestFactory(this);
+		const {takeScreenshot} = takeScreenshotFactory(this);
+		const {saveScreenshot} = saveScreenshotFactory(this);
 
 		this.openApp = openApp;
 		this.openUrl = openUrl;
@@ -124,11 +130,13 @@ class Suitest {
 		// this.executeBrightScript = executeBrightScriptFactory(this).executeBrightScript;
 		this.jsExpression = jsExpression;
 		// this.brightScriptExpression = brightScriptExpressionFactory(this).brightScriptExpression;
-		this.element = element;
 		this.networkRequest = networkRequest;
+		this.element = element;
 		this.video = video;
 		this.psVideo = playstationVideo;
 		this.pollUrl = pollUrl;
+		this.takeScreenshot = takeScreenshot;
+		this.saveScreenshot = saveScreenshot;
 
 		this.PROP = ELEMENT_PROP;
 		this.COMP = PROP_COMPARATOR;
