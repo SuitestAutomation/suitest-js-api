@@ -1,3 +1,4 @@
+const fs = require('fs');
 const assert = require('assert');
 const sinon = require('sinon');
 const {processServerResponse} = require('../../lib/utils/socketChainHelper');
@@ -439,7 +440,7 @@ describe('socket chain helpers', () => {
 		});
 
 		it('should return eval type', () => {
-			assert.strictEqual(helpers.getRequestType({}, false), 'eval')
+			assert.strictEqual(helpers.getRequestType({}, false), 'eval');
 			assert.strictEqual(helpers.getRequestType({comparator: '='}), 'eval');
 			assert.strictEqual(helpers.getRequestType({isClick: true}), 'eval');
 			assert.strictEqual(helpers.getRequestType({isMoveTo: true}), 'eval');
@@ -452,5 +453,127 @@ describe('socket chain helpers', () => {
 		it('should return query type', () => {
 			assert.strictEqual(helpers.getRequestType({}), 'query');
 		});
+	});
+
+	describe('Handle processed messages related to takeScreenshot lines', () => {
+		const processTakeScreenshotResponse = processServerResponse(() => '');
+
+		it('success for "raw" dataFormat', () => {
+			const res = processTakeScreenshotResponse({
+				contentType: 'takeScreenshot',
+				result: 'success',
+				buffer: Buffer.from([1, 2, 3]),
+			}, {
+				type: 'takeScreenshot',
+				stack: '',
+				dataFormat: 'raw',
+			}, {
+				type: 'takeScreenshot',
+			});
+
+			assert.deepStrictEqual(res, Buffer.from([1, 2, 3]));
+		});
+
+		it('success for "base64" dataFormat', () => {
+			const res = processTakeScreenshotResponse({
+				contentType: 'takeScreenshot',
+				result: 'success',
+				buffer: Buffer.from([1, 2, 3]),
+			}, {
+				type: 'takeScreenshot',
+				stack: '',
+				dataFormat: 'base64',
+			}, {
+				type: 'takeScreenshot',
+			});
+
+			assert.deepStrictEqual(res, Buffer.from([1, 2, 3]).toString('base64'));
+		});
+
+		describe('handle errors', () => {
+			it('without specified "errorType" and "error" in response', () => {
+				assert.throws(
+					() => processTakeScreenshotResponse({
+						contentType: 'takeScreenshot',
+						result: 'error',
+					}, {
+						type: 'takeScreenshot',
+						stack: '',
+					}, {
+						type: 'takeScreenshot',
+					}),
+					err => err instanceof SuitestError &&
+						err.code === SuitestError.EVALUATION_ERROR &&
+						err.message.includes('Failed to take screenshot')
+				);
+			});
+			it('with specified "error"', () => {
+				assert.throws(
+					() => processTakeScreenshotResponse({
+						contentType: 'takeScreenshot',
+						result: 'error',
+						error: 'Some error related to making screenshot fail',
+					}, {
+						type: 'takeScreenshot',
+						stack: '',
+					}, {
+						type: 'takeScreenshot',
+					}),
+					err => err instanceof SuitestError &&
+						err.code === SuitestError.EVALUATION_ERROR &&
+						err.message.includes('Some error related to making screenshot fail')
+				);
+			});
+			[
+				['notSupportedDriver', 'Screenshots are not supported on this device.'],
+				['notSupportedIL', 'Screenshots are not supported with this instrumentation library version.'],
+				['timeout', 'Failed to take a screenshot due to timeout.'],
+				['generalError', 'Failed to take a screenshot.'],
+			].forEach(([errorType, expectedMessage]) => {
+				it(`for "${errorType}" expected message: "${expectedMessage}"`, () => {
+					assert.throws(
+						() => processTakeScreenshotResponse({
+							contentType: 'takeScreenshot',
+							result: 'error',
+							errorType,
+						}, {
+							type: 'takeScreenshot',
+							stack: '',
+						}, {
+							type: 'takeScreenshot',
+						}),
+						err => err instanceof SuitestError &&
+							err.code === SuitestError.EVALUATION_ERROR &&
+							err.message.includes(expectedMessage)
+					);
+				});
+			});
+		});
+	});
+
+	it('Handle processed message for saveScreenshot line', async() => {
+		const writeFileStub = sinon.stub(fs.promises, 'writeFile');
+
+		const res = await processServerResponse(() => '')({
+			contentType: 'takeScreenshot',
+			result: 'success',
+			buffer: Buffer.from([1, 2, 3]),
+		}, {
+			type: 'takeScreenshot',
+			stack: '',
+			fileName: '/path/to/file.png',
+		}, {
+			type: 'takeScreenshot',
+		});
+
+		try {
+			assert.strictEqual(res, undefined);
+			assert.deepStrictEqual(
+				writeFileStub.firstCall.args,
+				['/path/to/file.png', Buffer.from([1, 2, 3])]
+			);
+		} finally {
+			writeFileStub.restore();
+		}
 	});
 });

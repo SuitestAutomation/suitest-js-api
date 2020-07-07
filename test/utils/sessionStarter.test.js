@@ -1,6 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
-const uuid = require('uuid/v1');
+const {v1: uuid} = require('uuid');
 
 const testServer = require('../../lib/utils/testServer');
 const webSockets = require('../../lib/api/webSockets');

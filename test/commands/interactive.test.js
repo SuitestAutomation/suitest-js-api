@@ -29,6 +29,7 @@ describe('interactive command', () => {
 		let startRepl;
 		let replCalls = 0;
 
+		// eslint-disable-next-line no-async-promise-executor
 		return new Promise(async resolve => {
 			startRepl = sinon.stub(repl, 'startRepl').callsFake(async() => {
 				await interactive();
