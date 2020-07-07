@@ -72,6 +72,7 @@ class Suitest {
 		this.authContext = new AuthContext();
 		this.appContext = new Context();
 		this.pairedDeviceContext = new Context();
+		this.getPairedDevice = () => this.pairedDeviceContext.context;
 		this.testContext = new Context();
 		this.configuration = configFactory();
 		this.config = this.configuration.config;
