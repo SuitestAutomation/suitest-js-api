@@ -580,6 +580,7 @@ describe('Socket error messages', () => {
 			],
 			[basePayload('outdatedLibraryWarning'), 'We have detected that your instrumentation library is outdated, the package can still be opened. Consider updating.'],
 			[basePayload('adbError', undefined, 'testReason'), 'testReason'],
+			[basePayload('adbError', 'certificateError'), 'Unable to parse the application signing certificate. Make sure your app package is signed and the certificate is valid.'],
 			[basePayload('adbError'), 'ADB communication with the device has failed. Make sure your device is set up correctly and it can be connected to using ADB.'],
 			[basePayload('outOfMemory'), 'Failed to open the app. Device is out of memory, please restart the device.'],
 			[basePayload('configuratorError'), 'Make sure that Apple Configurator 2 and Automation Tools are installed. Please see our docs.'],
