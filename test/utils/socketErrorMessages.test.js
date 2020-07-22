@@ -584,6 +584,9 @@ describe('Socket error messages', () => {
 			[basePayload('outOfMemory'), 'Failed to open the app. Device is out of memory, please restart the device.'],
 			[basePayload('configuratorError'), 'Make sure that Apple Configurator 2 and Automation Tools are installed. Please see our docs.'],
 			[basePayload('appStoreBuild'), 'Can’t install App Store distribution build.'],
+			[basePayload('ioError'), 'Problem with storing data. Please check that there is enough disk space and that permissions are not limited. Contact support (mailto:support@suite.st) if problem persists.'],
+			[basePayload('netError'), 'Downloading of the driver failed, please check your internet connection and try again later. Contact support (mailto:support@suite.st) if problem persists.'],
+			[basePayload('sdComponentFailed'), 'Downloading of the driver failed, please try again later. Contact support (mailto:support@suite.st) if problem persists.'],
 			[basePayload('MoveTargetOutOfBounds'), 'Move target is outside of the visible area of the screen.'],
 			[basePayload('ElementClickIntercepted'), 'Click on the element was intercepted by another element.'],
 		].forEach(([payload, expectMessage]) => {
