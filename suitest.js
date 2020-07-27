@@ -66,7 +66,7 @@ const {warnLauncherAndLibHasDiffVersions} = require('./lib/utils/packageMetadata
 const {createLogger} = require('./lib/utils/logger');
 
 // Publicly available API goes here
-class Suitest {
+class SUITEST_API {
 	constructor({exitOnError} = {}) {
 		// instance dependencies
 		this.authContext = new AuthContext();
@@ -237,4 +237,4 @@ class Suitest {
 }
 
 // Export public API
-module.exports = Suitest;
+module.exports = SUITEST_API;
