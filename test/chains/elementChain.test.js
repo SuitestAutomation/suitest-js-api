@@ -550,7 +550,7 @@ describe('Element chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'element',
@@ -570,7 +570,7 @@ describe('Element chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'element',
@@ -591,7 +591,7 @@ describe('Element chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'element',
@@ -613,7 +613,7 @@ describe('Element chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'element',
@@ -664,7 +664,7 @@ describe('Element chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'element',

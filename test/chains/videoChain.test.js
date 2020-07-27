@@ -169,7 +169,7 @@ describe('Video chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'video',
@@ -188,7 +188,7 @@ describe('Video chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'video',
@@ -208,7 +208,7 @@ describe('Video chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'video',
@@ -229,7 +229,7 @@ describe('Video chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'video',

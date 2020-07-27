@@ -213,7 +213,7 @@ describe('Application chain', () => {
 		assert.deepStrictEqual(toJSON(defaultData), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'application',
@@ -248,7 +248,7 @@ describe('Application chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'application',

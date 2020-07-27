@@ -222,7 +222,7 @@ describe('Network request chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				timeout: 2000,
 				condition: {
 					subject: {
@@ -247,7 +247,7 @@ describe('Network request chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				timeout: 2000,
 				condition: {
 					subject: {
@@ -273,7 +273,7 @@ describe('Network request chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				timeout: 2000,
 				condition: {
 					subject: {
@@ -363,7 +363,7 @@ describe('Network request chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				timeout: 2000,
 				condition: {
 					subject: {
@@ -437,7 +437,7 @@ describe('Network request chain', () => {
 		assert.deepStrictEqual(toString({
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'network',
