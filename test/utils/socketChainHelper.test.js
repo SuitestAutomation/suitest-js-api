@@ -146,7 +146,7 @@ describe('socket chain helpers', () => {
 			}, {
 				type: 'testLine',
 				request: {
-					type: 'wait',
+					type: 'assert',
 					condition: {
 						subject: {
 							type: 'element',
@@ -235,7 +235,7 @@ describe('socket chain helpers', () => {
 				{
 					type: 'testLine',
 					request: {
-						type: 'wait',
+						type: 'assert',
 						condition: {
 							subject: {
 								type: 'element',
@@ -307,7 +307,7 @@ describe('socket chain helpers', () => {
 				{
 					type: 'testLine',
 					request: {
-						type: 'wait',
+						type: 'assert',
 						condition: {
 							subject: {
 								type: 'element',

@@ -98,7 +98,7 @@ describe('Cookie chain', () => {
 		assert.strictEqual(toString({
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',
@@ -112,7 +112,7 @@ describe('Cookie chain', () => {
 		assert.strictEqual(toString({
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',
@@ -126,7 +126,7 @@ describe('Cookie chain', () => {
 		assert.strictEqual(toString({
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',
@@ -141,7 +141,7 @@ describe('Cookie chain', () => {
 		assert.strictEqual(toString({
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',
@@ -156,7 +156,7 @@ describe('Cookie chain', () => {
 		assert.strictEqual(toString({
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',
@@ -171,7 +171,7 @@ describe('Cookie chain', () => {
 		assert.strictEqual(toString({
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',
@@ -185,7 +185,7 @@ describe('Cookie chain', () => {
 		}), 'Checking if "cookieName" cookie does not equal test');
 		// pass raw line definition json
 		assert.strictEqual(toString({
-			type: 'wait',
+			type: 'assert',
 			condition: {
 				subject: {
 					type: 'cookie',
@@ -243,7 +243,7 @@ describe('Cookie chain', () => {
 		assert.deepStrictEqual(toJSON({isAssert: true}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {subject: {type: 'cookie'}},
 				timeout: 2000,
 			},
@@ -254,7 +254,7 @@ describe('Cookie chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {subject: {type: 'cookie'}},
 				timeout: 1000,
 			},
@@ -288,7 +288,7 @@ describe('Cookie chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',
