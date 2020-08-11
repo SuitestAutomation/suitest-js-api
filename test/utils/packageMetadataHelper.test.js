@@ -1,6 +1,6 @@
 const assert = require('assert');
 const nock = require('nock');
-const logger = require('../../lib/utils/logger');
+const logger = require('../../index').logger;
 const sinon = require('sinon');
 const texts = require('../../lib/texts');
 
@@ -41,10 +41,10 @@ describe('packageMetadataHelper util', () => {
 		const {warnWhenDiffVersions} = packageMetadataHelper;
 
 		sinon.stub(logger, 'warn');
-		warnWhenDiffVersions('1.0.0', '1.0.0');
+		warnWhenDiffVersions(logger, '1.0.0', '1.0.0');
 		assert.equal(logger.warn.callCount, 0);
 
-		warnWhenDiffVersions('1.0.0', '1.0.1');
+		warnWhenDiffVersions(logger, '1.0.0', '1.0.1');
 		assert.equal(logger.warn.callCount, 1);
 		assert.ok(logger.warn.calledWith(texts['tl.differentLauncherAndLibVersions']('1.0.0', '1.0.1')));
 	});
@@ -54,11 +54,11 @@ describe('packageMetadataHelper util', () => {
 
 		sinon.stub(logger, 'warn');
 		warnNewVersionAvailable();
-		warnNewVersionAvailable('');
-		warnNewVersionAvailable('', '');
+		warnNewVersionAvailable(logger, '');
+		warnNewVersionAvailable(logger, '', '');
 		assert.equal(logger.warn.callCount, 0);
 
-		warnNewVersionAvailable('1.0.0', '1.1.1');
+		warnNewVersionAvailable(logger, '1.0.0', '1.1.1');
 		assert.equal(logger.warn.callCount, 1);
 		assert.ok(logger.warn.calledWith(texts['tl.newVersionAvailable']('1.1.1')));
 	});

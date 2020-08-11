@@ -1,11 +1,12 @@
 const assert = require('assert');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
+const suitest = require('../../index');
 const {
 	jsExpression,
 	jsExpressionAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/javascriptExpressionChain');
+} = require('../../lib/chains/javascriptExpressionChain')(suitest);
 const {SUBJ_COMPARATOR} = require('../../lib/mappings');
 const comparatorTypes = require('../../lib/constants/comparator');
 const sinon = require('sinon');

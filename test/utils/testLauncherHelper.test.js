@@ -5,7 +5,7 @@ const EventEmitter = require('events');
 
 const SuitestError = require('../../lib/utils/SuitestError');
 const {snippets: log} = require('../../lib/testLauncher/launcherLogger');
-const launcherLogger = require('../../lib/utils/logger');
+const launcherLogger = require('../../index').logger;
 const testLauncherHelper = require('../../lib/utils/testLauncherHelper');
 
 describe('testLauncherHelper util', () => {

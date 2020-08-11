@@ -3,7 +3,7 @@ const assert = require('assert');
 const sessionConstants = require('../../lib/constants/session');
 const SuitestError = require('../../lib/utils/SuitestError');
 const endpoints = require('../../lib/api/endpoints');
-const {authContext} = require('../../lib/context');
+const {authContext} = require('../../index');
 
 describe('authContext', () => {
 	it('should have context getter, setContext and authorize methods', () => {

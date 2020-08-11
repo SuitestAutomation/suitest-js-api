@@ -1,11 +1,12 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {
 	saveScreenshot,
 	getComposers,
 	toString,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/saveScreenshotChain');
+} = require('../../lib/chains/saveScreenshotChain')(suitest);
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');

@@ -4,7 +4,7 @@ const sinon = require('sinon');
 const chokidar = require('chokidar');
 const EventEmitter = require('events');
 
-const logger = require('../../lib/utils/logger');
+const logger = require('../../index').logger;
 const envVars = require('../../lib/constants/enviroment');
 const suitestRepl = require('../../lib/testLauncher/repl');
 const ipcClient = require('../../lib/testLauncher/ipc/client');

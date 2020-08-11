@@ -43,6 +43,7 @@
     "typeDefinition",
     "index.d.ts",
     "index.js",
+    "suitest.js",
     "CODE_OF_CONDUCT.md",
     "CONTRIBUTING.md",
     "LICENSE"

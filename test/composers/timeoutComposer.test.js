@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {
 	timeoutComposer,
 } = require('../../lib/composers');
@@ -10,7 +11,7 @@ describe('Timeout Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, timeoutComposer(data, chain, makeChain));
+		Object.defineProperties(chain, timeoutComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.timeout, 'function');
 
@@ -26,7 +27,7 @@ describe('Timeout Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, timeoutComposer(data, chain, makeChain));
+		Object.defineProperties(chain, timeoutComposer(suitest, data, chain, makeChain));
 
 		chain.timeout(3000);
 

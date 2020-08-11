@@ -1,4 +1,5 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const {
@@ -6,7 +7,7 @@ const {
 	elementAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/elementChain');
+} = require('../../lib/chains/elementChain')(suitest, suitest.video);
 const {VALUE, ELEMENT_PROP} = require('../../lib/constants/element');
 const VISIBILITY_STATE = require('../../lib/constants/visibilityState');
 const {PROP_COMPARATOR, SUBJ_COMPARATOR} = require('../../lib/constants/comparator');

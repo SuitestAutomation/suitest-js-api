@@ -4,6 +4,7 @@ const {
 	makeMethodComposer,
 	makeModifierComposer,
 } = require('../../lib/utils/makeComposer');
+const suitest = require('../../index');
 
 const DUMMY_COMPOSER = Symbol('dummyComposer');
 
@@ -56,11 +57,11 @@ describe('makeMethodComposer util', () => {
 
 		const composer = makeMethodComposer(DUMMY_COMPOSER, ['test'], callback);
 
-		Object.defineProperties(chain, composer(data));
+		Object.defineProperties(chain, composer(suitest, data));
 
 		chain.test('testArgument');
 
-		assert(callback.calledWith(data, 'testArgument'));
+		assert(callback.calledWith(suitest, data, 'testArgument'));
 		assert(callback.calledOn(undefined));
 	});
 });
@@ -109,19 +110,19 @@ describe('makeModifierComposer util', () => {
 
 	it('should call provided callback with data as first argument followed by passed args', () => {
 		const data = {test: 0};
-		const data2 = {test: 1}
+		const data2 = {test: 1};
 		const callback = sinon.spy(() => data2);
 		const chain = {};
 		const makeChain = sinon.spy(() => 'I am new chain');
 
 		const composer = makeModifierComposer(DUMMY_COMPOSER, ['test'], callback);
 
-		Object.defineProperties(chain, composer(data, chain, makeChain));
+		Object.defineProperties(chain, composer(suitest, data, chain, makeChain));
 
 		const res = chain.test('testArgument');
 
 		assert.strictEqual(res, 'I am new chain');
-		assert(callback.calledWith(data, 'testArgument'));
+		assert(callback.calledWith(suitest, data, 'testArgument'));
 		assert(callback.calledOn(undefined));
 		assert(makeChain.calledWith(data2));
 		assert(makeChain.calledOn(undefined));

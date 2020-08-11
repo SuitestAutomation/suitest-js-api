@@ -49,8 +49,19 @@ declare namespace suitest {
 		releaseDevice(): Promise<void|SuitestError>;
 		startTest(clientTestId: string, options?: StartTestOptions): Promise<void|SuitestError>;
 		endTest(): Promise<void|SuitestError>;
-		configure(config: ConfigureOptions): Promise<void|SuitestError>;
 		interactive(options: ReplOptions): Promise<void>;
+
+		// config
+		getConfig(): ConfigureOptions;
+
+		/**
+		 * @deprecated use separate methods for changing configuration properties
+		 */
+		configure(config: Partial<ConfigureOptions>): void;
+		setDefaultTimeout(timeout: ConfigureOptions['defaultTimeout']): void;
+		setContinueOnFatalError(continueOnFatalError: ConfigureOptions['continueOnFatalError']): void;
+		setDisallowCrashReports(disallowCrashReports: ConfigureOptions['disallowCrashReports']): void;
+		setLogLevel(logLevel: ConfigureOptions['logLevel']): void;
 
 		// subjects
 		location(): LocationChain;
@@ -248,10 +259,10 @@ declare namespace suitest {
 	}
 
 	interface ConfigureOptions {
-		logLevel?: 'silent'|'normal'|'verbose'|'debug'|'silly';
-		disallowCrashReports?: boolean;
-		continueOnFatalError?: boolean;
-		defaultTimeout?: number;
+		logLevel: 'silent'|'normal'|'verbose'|'debug'|'silly';
+		disallowCrashReports: boolean;
+		continueOnFatalError: boolean;
+		defaultTimeout: number;
 	}
 
 	interface ResponseError {
