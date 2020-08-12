@@ -9,7 +9,12 @@ const {video} = suitest;
 // end function`
 // );
 
-video().timeout(10);
+video().timeout(10).then(videoProps => {
+	if (videoProps) {
+		// check that ts allow access to video properties
+		console.log(videoProps.videoLength, videoProps.isFocused);
+	}
+});
 video().abandon();
 video().matchesJS(() => true);
 video().matchJS('() => true');

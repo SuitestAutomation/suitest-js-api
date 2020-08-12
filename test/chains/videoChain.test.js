@@ -1,11 +1,15 @@
 const assert = require('assert');
+const suitest = require('../../index');
+const sinon = require('sinon');
 const {
 	video,
 	videoAssert,
 	toJSON,
-} = require('../../lib/chains/videoChain');
+	beforeSendMsg,
+} = require('../../lib/chains/videoChain')(suitest);
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {ELEMENT_PROP} = require('../../lib/constants/element');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 describe('Video chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -107,6 +111,32 @@ describe('Video chain', () => {
 		assert.ok('abandon' in chain);
 	});
 
+	it('should have beforeSendMsg', () => {
+		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
+
+		beforeSendMsgContains({selector: {video: true}}, 'Launcher E Getting properties of "video"');
+		beforeSendMsgContains(
+			{
+				comparator: {
+					type: SUBJ_COMPARATOR.EXIST,
+				},
+				selector: {video: true},
+			},
+			'Launcher E Checking if "video" exists');
+		beforeSendMsgContains(
+			{
+				isAssert: true,
+				comparator: {
+					type: SUBJ_COMPARATOR.EXIST,
+				},
+				selector: {video: true},
+			},
+			'Launcher A Checking if "video" exists'
+		);
+		log.restore();
+	});
+
 	it('should convert to string with meaningful message', () => {
 		assert.strictEqual(video('el-api-id').toString(), 'Getting properties of "video"');
 		assert.strictEqual(video('el-api-id').exists().toString(), 'Checking if "video" exists');
@@ -140,7 +170,7 @@ describe('Video chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'video',
@@ -159,7 +189,7 @@ describe('Video chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'video',
@@ -179,7 +209,7 @@ describe('Video chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'video',
@@ -200,7 +230,7 @@ describe('Video chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'video',

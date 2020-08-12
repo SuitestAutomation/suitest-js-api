@@ -1,4 +1,5 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {
 	pollUrl,
 	pollUrlAssert,
@@ -6,9 +7,9 @@ const {
 	toString,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/pollUrlChain');
+} = require('../../lib/chains/pollUrlChain')(suitest);
 const composers = require('../../lib/constants/composer');
-const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
+const {bySymbol, getComposerTypes, assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
 
 describe('Poll URL chain', () => {
@@ -43,7 +44,15 @@ describe('Poll URL chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(toString({
+		// pass generated json message
+		assert.strictEqual(toString({
+			request: {
+				url: 'url',
+				response: true,
+			},
+		}), 'Will poll "url" every 500ms until response equals "true"'),
+		// pass raw command json definition
+		assert.strictEqual(toString({
 			url: 'url',
 			response: true,
 		}), 'Will poll "url" every 500ms until response equals "true"');
@@ -51,9 +60,16 @@ describe('Poll URL chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({url: ''});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains(
+			{url: 'testUrl', response: 'testResponse'},
+			'Launcher E Will poll "testUrl" every 500ms until response equals "testResponse"'
+		);
+		beforeSendMsgContains(
+			{url: 'testUrl', response: 'testResponse', isAssert: true},
+			'Launcher A Will poll "testUrl" every 500ms until response equals "testResponse"'
+		);
 		log.restore();
 	});
 

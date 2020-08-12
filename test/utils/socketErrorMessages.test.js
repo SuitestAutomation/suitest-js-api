@@ -10,10 +10,7 @@ const {
 	getInfoErrorMessage,
 	responseMessageCode,
 	responseMessageInfo,
-	notStartedReasons,
-	getNotStartedReasonMessage,
 } = require('../../lib/utils/socketErrorMessages');
-const {NETWORK_PROP, NETWORK_METHOD} = require('../../lib/constants/networkRequest');
 
 describe('Socket error messages', () => {
 	it('test response message getters', () => {
@@ -29,14 +26,21 @@ describe('Socket error messages', () => {
 
 	it('All errorMap handlers should returns string', () => {
 		const toString = () => '';
-		const chainData = {};
 		const response = {};
+		const jsonMessage = {};
 
-		for (const handler of Object.values(errorMap)) {
+		for (const key of Object.keys(errorMap)) {
+			const handler = errorMap[key];
 			const message = handler({
-				chainData,
 				toString,
-				response,
+				response: key === 'adbError' ? {
+					message: {
+						info: {
+							reason: 'reason',
+						},
+					},
+				} : response,
+				jsonMessage,
 			});
 
 			assert.ok(typeof message === 'string');
@@ -51,12 +55,12 @@ describe('Socket error messages', () => {
 	it('Error message getter should return default messages', () => {
 		const response = {errorType: 'unknownError'};
 		const toString = () => 'Chain description';
-		const chainData = {};
+		const jsonMessage = {};
 
 		assert.equal(getErrorMessage({
 			response,
 			toString,
-			chainData,
+			jsonMessage,
 		}), 'unknownError: "Chain description."');
 
 		assert.equal(getErrorMessage({
@@ -65,18 +69,18 @@ describe('Socket error messages', () => {
 				errors: 'Some errors',
 			},
 			toString,
-			chainData,
+			jsonMessage,
 		}), `unknownError: "Chain description."${EOL}errors: "Some errors"`);
 	});
 
-	it('Error message should return specific messages', () => {
-		const toString = (data, nameOnly) => nameOnly ? 'Element name' : 'Chain description';
-		const chainData = {};
+	describe('Error message should return specific messages', () => {
+		const toString = (jsonMessage, nameOnly) => nameOnly ? 'Element name' : 'Chain description';
+		const jsonMessage = {};
 		const basePayload = (errorType, code, reason) => {
 			let payload = {
 				response: {errorType},
 				toString,
-				chainData,
+				jsonMessage,
 			};
 
 			if (code !== void 0) {
@@ -96,7 +100,6 @@ describe('Socket error messages', () => {
 			[basePayload('outdatedLibrary'), 'We have detected that your instrumentation library is outdated and the package cannot be opened. Update required.'],
 			[basePayload('initPlatformFailed'), 'Failed to start Suitest bootstrap application on this device.'],
 			[basePayload('packageNotFound'), 'There is nothing to test, because the selected configuration does not contain an app package. Upload a package on your app\'s configuration page before continuing.'],
-			[basePayload('missingPackage'), 'There is nothing to test, because the selected configuration does not contain an app package. Upload a package on your app\'s configuration page before continuing.'],
 			[basePayload('internalError'), 'Internal error occurred. Chain description.'],
 			[basePayload('ILInternalError'), 'Internal error occurred. Chain description.'],
 			[basePayload('queryTimeout'), 'Application did not respond for 60 seconds. Executing "Chain description.".'],
@@ -121,23 +124,66 @@ describe('Socket error messages', () => {
 			[basePayload('invalidInput'), 'Test command received invalid input. Chain description.'],
 			[basePayload('invalidInput', 'lineTypeNotSupported'), 'This test command is not supported by the current app configuration. Chain description.'],
 			[
-				set(lensPath(['chainData']), {
-					isClick: true,
-				}, basePayload('invalidInput', 'elementNotSupported')),
+				{
+					...basePayload('invalidInput', 'elementNotSupported'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'click',
+							target: {
+								type: 'element',
+								val: {
+									css: 'test',
+								},
+							},
+							clicks: [
+								{
+									type: 'single',
+									button: 'left',
+								},
+							],
+							count: 1,
+							delay: 1,
+						},
+					},
+				},
 				'Chain description. .click() is unsupported by this element.',
 			],
 			[
-				set(lensPath(['chainData']), {
-					setText: true,
-				}, basePayload('invalidInput', 'elementNotSupported')),
+				{
+					...basePayload('invalidInput', 'elementNotSupported'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'setText',
+							target: {
+								type: 'element',
+								val: {
+									css: 'test',
+								},
+							},
+							val: 'set text value',
+						},
+					},
+				},
 				'Chain description. .setText() is unsupported by this element.',
 			],
 			[basePayload('ActionNotAvailable'), 'This test command is not supported by the current app configuration. Chain description.'],
 			[
-				set(lensPath(['chainData']), {
-					type: 'press',
-					repeat: 4,
-				}, basePayload('conditionNotSatisfied')),
+				{
+					...basePayload('conditionNotSatisfied'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'button',
+							ids: [
+								'ENTER',
+							],
+							count: 4,
+							delay: 1,
+						},
+					},
+				},
 				'Maximum amount of key presses 4 reached. Condition was not satisfied. Chain description.',
 			],
 			[basePayload('deviceError'), 'Internal error occurred. Chain description.'],
@@ -152,15 +198,22 @@ describe('Socket error messages', () => {
 			[basePayload('illegalButton'), 'Specified buttons are not supported on this device. Chain description.'],
 			[basePayload('unsupportedButton'), 'Specified buttons are not supported on this device. Chain description.'],
 			[basePayload('aborted'), 'Test execution was aborted. Chain description.'],
+			[basePayload('aborted', undefined, 'manualActionRequired'), 'Manual actions are not supported.'],
 			[
-				set(lensPath(['response', 'message', 'info', 'reason']), 'manualActionRequired', basePayload('aborted')),
-				'Manual actions are not supported.',
-			],
-			[
-				set(lensPath(['chainData']), {
-					type: 'press',
-					repeat: 4,
-				}, basePayload('queryFailed')),
+				{
+					...basePayload('queryFailed'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'button',
+							ids: [
+								'ENTER',
+							],
+							count: 4,
+							delay: 1,
+						},
+					},
+				},
 				'Maximum amount of key presses 4 reached. Condition was not satisfied. Chain description.',
 			],
 			[basePayload('queryFailed'), 'queryFailed: "Chain description."'],
@@ -186,9 +239,23 @@ describe('Socket error messages', () => {
 						errorType: 'queryFailed',
 						errors: [{'type': 'noUriFound'}],
 					},
-					chainData: {
-						type: 'networkRequest',
-						comparator: {val: 'test'},
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'assert',
+							condition: {
+								subject: {
+									type: 'network',
+									compare: '=',
+									val: 'test',
+									requestInfo: [],
+									responseInfo: [],
+								},
+								type: 'made',
+								searchStrategy: 'all',
+							},
+							timeout: 2000,
+						},
 					},
 				},
 				'queryFailed: "Chain description."'
@@ -223,25 +290,40 @@ describe('Socket error messages', () => {
 							name: 'not in chain data, will be ignored',
 						}],
 					},
-					chainData: {
-						type: 'networkRequest',
+					jsonMessage: {
+						type: 'eval',
 						request: {
-							props: [{
-								name: 'testHeader',
-								val: 'testExpectedVal',
-							}, {
-								name: NETWORK_PROP.METHOD,
-								val: NETWORK_METHOD.GET,
-							}],
-						},
-						response: {
-							props: [{
-								name: NETWORK_PROP.BODY,
-								val: 'testBody',
-							}, {
-								name: NETWORK_PROP.STATUS,
-								val: 200,
-							}],
+							type: 'assert',
+							condition: {
+								subject: {
+									type: 'network',
+									compare: '=',
+									val: 'test',
+									requestInfo: [
+										{
+											name: 'testHeader',
+											val: 'testExpectedVal',
+										},
+										{
+											name: '@method',
+											val: 'GET',
+										},
+									],
+									responseInfo: [
+										{
+											name: '@body',
+											val: 'testBody',
+										},
+										{
+											name: '@status',
+											val: 200,
+										},
+									],
+								},
+								type: 'made',
+								searchStrategy: 'all',
+							},
+							timeout: 2000,
 						},
 					},
 				},
@@ -270,6 +352,54 @@ describe('Socket error messages', () => {
 			[basePayload('queryFailed', 'updateAlert'), 'Suitest instrumentation library is outdated. Please download and install the newest version.'],
 			[basePayload('queryFailed', 'notFunction'), 'Specified code is not a function. Chain description.'],
 			[basePayload('queryFailed', 'psImplicitVideo'), 'The "video" subject on the PlayStation platform is inconsistent, we recommend using the "native video" or "element" subject instead. Read more in docs - ps4-support.psImplicitVideo.'],
+			[
+				{
+					...basePayload('queryFailed', 'missingSubject'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'click',
+							target: {
+								type: 'element',
+								val: {
+									css: 'test',
+								},
+							},
+							clicks: [
+								{
+									type: 'single',
+									button: 'left',
+								},
+							],
+							count: 1,
+							delay: 1,
+						},
+					},
+				},
+				'Element Element name was not found.',
+			],
+			[
+				{
+					...basePayload('queryFailed', 'missingSubject'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'assert',
+							condition: {
+								subject: {
+									type: 'element',
+									val: {
+										css: 'test',
+									},
+								},
+								type: 'exists',
+							},
+							timeout: 2000,
+						},
+					},
+				},
+				'Element Element name was not found.',
+			],
 			[basePayload('networkError'), 'Chain description.'],
 			[basePayload('noHasLines'), 'No assertion properties defined. Chain description.'],
 			[basePayload('appCrashed'), 'App seems to have crashed. Chain description.'],
@@ -288,10 +418,20 @@ describe('Socket error messages', () => {
 			],
 			[basePayload('appRunning'), 'App is still running.'],
 			[
-				set(lensPath(['chainData']), {
-					type: 'press',
-					repeat: 4,
-				}, basePayload('appRunning')),
+				{
+					...basePayload('appRunning'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'button',
+							ids: [
+								'ENTER',
+							],
+							count: 4,
+							delay: 1,
+						},
+					},
+				},
 				'Maximum amount of key presses 4 reached. Condition was not satisfied. Chain description.',
 			],
 			[basePayload('appNotRunning'), 'Application is not running.'],
@@ -302,20 +442,43 @@ describe('Socket error messages', () => {
 			[basePayload('bootstrapPageNotDetected'), 'App seems to have exited correctly but something went wrong when loading the Suitest channel autostart application.'],
 			[basePayload('wrongAppDetected'), 'App seems to have exited correctly, however another app has been opened.'],
 			[
-				set(lensPath(['chainData', 'url']), 'some-url', basePayload('notExpectedResponse')),
+				{
+					...basePayload('notExpectedResponse'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'openUrl',
+							url: 'some-url',
+						},
+					},
+				},
 				'Unexpected response received while polling some-url. Chain description.',
 			],
 			[
-				set(lensPath(['chainData', 'url']), 'some-url', basePayload('noConnection')),
+				{
+					...basePayload('noConnection'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'openUrl',
+							url: 'some-url',
+						},
+					},
+				},
 				'Could not connect to server while polling some-url. Chain description.',
 			],
 			[
-				set(lensPath(['chainData', 'url']), 'some-url', basePayload('invalidResult')),
+				{
+					...basePayload('invalidResult'),
+					jsonMessage: {
+						type: 'eval',
+						request: {
+							type: 'openUrl',
+							url: 'some-url',
+						},
+					},
+				},
 				'Unexpected response received while polling some-url. Chain description.',
-			],
-			[
-				set(lensPath(['chainData', 'url']), 'some-url', basePayload('invalidResult', 'resultTooLong')),
-				'Response exceeded the size limit of 4KB while polling some-url. Chain description.',
 			],
 			[basePayload('lateManualLaunch'), 'In this configuration the "open app" commands inside the test are not supported. You may however start the test with "open app" command.'],
 			[basePayload('launchExpired'), 'Identical scheduling aborted.'],
@@ -385,11 +548,52 @@ describe('Socket error messages', () => {
 			[basePayload('appleError65'), 'Failed to launch app: Apple ID account error - see https://suite.st/docs/devices/apple-tv/#apple-id-account-error.'],
 			[basePayload('appleError70'), 'Failed to launch app: Xcode error - see https://suite.st/docs/devices/apple-tv/#xcode-error.'],
 			[basePayload('appleAppSignError'), 'Failed to launch app: App code sign error - see https://suite.st/docs/devices/apple-tv/#app-code-sign-error.'],
+			[basePayload('invalidPackage', 'appleTvSimPackageOnDevice'), 'An Apple TV app simulator package cannot be launched on real device.'],
+			[basePayload('invalidPackage', 'appleTvDevicePackageOnSim'), 'An Apple TV app package cannot be launched on simulator device.'],
 			[basePayload('missingPSSDK'), 'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#playstation-sdk-not-installed.'],
 			[basePayload('targetManagerBusy'), 'Please try again in a few minutes.'],
 			[basePayload('missingDotNet'), 'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#net-framework-not-installed.'],
+			[basePayload('bootstrapAppNotDetected'), 'The Suitest bootstrap application was not detected.'],
+			[basePayload('activationExpired'), 'Could not open the app because the DevKit/TestKit expired.'],
+			[basePayload('missingCpp'), 'Make sure you have Microsoft Visual C++ Redistributable installed. Please see our docs - https://suite.st/docs/devices/playstation.'],
+			[
+				{
+					...basePayload('testSnippetError'),
+					jsonMessage: {
+						request: {
+							val: 'testId',
+						},
+					},
+				},
+				'Test run by ID "testId" failed.',
+			],
+			[
+				{
+					...basePayload('invalidReference'),
+					jsonMessage: {
+						request: {
+							val: 'testId',
+						},
+					},
+				},
+				'Test with ID "testId" does not exist.',
+			],
+			[basePayload('outdatedLibraryWarning'), 'We have detected that your instrumentation library is outdated, the package can still be opened. Consider updating.'],
+			[basePayload('adbError', undefined, 'testReason'), 'testReason'],
+			[basePayload('adbError', 'certificateError'), 'Unable to parse the application signing certificate. Make sure your app package is signed and the certificate is valid.'],
+			[basePayload('adbError'), 'ADB communication with the device has failed. Make sure your device is set up correctly and it can be connected to using ADB.'],
+			[basePayload('outOfMemory'), 'Failed to open the app. Device is out of memory, please restart the device.'],
+			[basePayload('configuratorError'), 'Make sure that Apple Configurator 2 and Automation Tools are installed. Please see our docs.'],
+			[basePayload('appStoreBuild'), 'Can’t install App Store distribution build.'],
+			[basePayload('ioError'), 'Problem with storing data. Please check that there is enough disk space and that permissions are not limited. Contact support (mailto:support@suite.st) if problem persists.'],
+			[basePayload('netError'), 'Downloading of the driver failed, please check your internet connection and try again later. Contact support (mailto:support@suite.st) if problem persists.'],
+			[basePayload('sdComponentFailed'), 'Downloading of the driver failed, please try again later. Contact support (mailto:support@suite.st) if problem persists.'],
+			[basePayload('MoveTargetOutOfBounds'), 'Move target is outside of the visible area of the screen.'],
+			[basePayload('ElementClickIntercepted'), 'Click on the element was intercepted by another element.'],
 		].forEach(([payload, expectMessage]) => {
-			assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
+			it(expectMessage, () => {
+				assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
+			});
 		});
 	});
 
@@ -431,96 +635,5 @@ describe('Socket error messages', () => {
 		);
 
 		assert.strictEqual(msg4, 'prefix message' + EOL + '\tat line1');
-	});
-
-	it('test notStartedReasons keys', () => {
-		const reasonsCodes = [
-			'blasterError', 'bootstrappedPlatformError', 'testQueued', 'noAvailableAutomatedMinutes',
-			'noActivePlan', 'candyBoxOffline', 'suitestDriveOffline', 'runningBootSequence',
-			'deviceInUse', 'deviceDisabled', 'deviceDeleted', 'internalError',
-			'notDefinedPlatform', 'lgWebosPlatformError', 'xboxPlatformError', 'androidPlatformError',
-			'missingPSSDK', 'targetManagerBusy', 'missingDotNet',
-		].sort();
-
-		assert.deepStrictEqual(Object.keys(notStartedReasons).sort(), reasonsCodes);
-	});
-
-	it('test getNotStartedReasonMessage', () => {
-		assert.strictEqual(
-			getNotStartedReasonMessage('blasterError'),
-			'Cannot continue: IR blaster missing or incorrectly attached.\nInfrared blaster assigned to the device is missing or malfunctioning. Check the wiring, replace the blaster or assign another working CandyBox port to this device.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('bootstrappedPlatformError'),
-			'Cannot continue: Suitest bootstrap app is not running.\nSuitest tried to start the bootstrap application on this device but failed several times and will try no more. Please connect to the device and start the bootstrap app manually, then disconnect and the scheduled test will continue. If you have configured the Suitest channel, tune the TV to this channel and verify that Suitest badge is displayed on TV in the top right corner. If you have not configured the Suitest channel, please contact support.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('testQueued'),
-			'Execution will start as soon as other tests queued on this device will finish execution.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('noAvailableAutomatedMinutes'),
-			'Cannot continue: you\'ve used up all of your testing minutes.\nYou testing a lot! How about getting a bigger subscription https://the.suite.st/preferences/billing? Or, if you would like to purchase more testing minutes for the current billing cycle, please contact sales@suite.st. Your testing minutes will renew.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('noActivePlan'),
-			'Cannot continue: Your subscription has expired.\nYour subscription has expired, to continue using Suitest please renew your subscription (https://the.suite.st/preferences/billing).'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('candyBoxOffline'),
-			'Cannot continue: CandyBox controlling this device is offline.\nCheck that the cable plugged into the CandyBox delivers Internet connection or reboot the CandyBox and allow about 5 minutes for it to initialize.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('suitestDriveOffline'),
-			'Cannot continue: SuitestDrive controlling this device is offline.\nSuitestDrive controlling this device is not currently running or is offline. Please verify that the host computer has Internet connection and that SuitestDrive is running.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('runningBootSequence'),
-			'Trying to open Suitest bootstrap application.\nTest will start after the Suitest bootstrap application will open. Suitest will attempt to open the app in a number of ways. After each attempt it will wait for 60 seconds for the app to respond. If it will not, Suitest will try the next available method. Current methods are: 1) Sending EXIT key to the device, 2) Executing user defined boot sequence, 3) turning the TV on and off 4) Turning the TV on again. If starting the test takes a long time, you should configure a better boot sequence.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('deviceInUse'),
-			'A user is currently connected to this device. Execution will continue after the user disconnects.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('deviceDisabled'),
-			'This device is disabled. For the execution to continue please enable the device.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('deviceDeleted'),
-			'Cannot continue: Device is deleted.\nThe device on which the execution was scheduled has been deleted. Please cancel the test and schedule it on another available device.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('internalError'),
-			'Cannot continue: Internal error occurred.\nWe are very sorry, but some fishy error occurred when Suitest was trying to execute your test. Our developers have been notified and are already working hard to resolve the problem.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('notDefinedPlatform'),
-			'Cannot continue: Device does not support this platform.\nYou have scheduled the test execution with a configuration that depends on a platform, which this device does not currently support. You should either configure the platform on the device or cancel the test run.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('lgWebosPlatformError'),
-			'Cannot continue: LG WebOS driver failed.\nLG WebOS driver has misbehaved. Please verify that the device is online and it\'s current IP address is correctly specified in Suitest. Then doublecheck if the Development mode is enabled on the device. If nothing helps try rebooting the device and/or the CandyBox.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('xboxPlatformError'),
-			'Cannot continue: Xbox driver failed.\nXbox driver has misbehaved. Please verify that the device is online and it\'s current IP address and developer credentials are correctly specified in Suitest. If nothing helps try rebooting the device and restarting SuitestDrive.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('androidPlatformError'),
-			'Cannot continue: Android driver failed.\nAndroid driver has misbehaved. Please verify that the device is online and it\'s current IP address is correctly specified in Suitest. If nothing helps try rebooting the device and restarting SuitestDrive.'
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('missingPSSDK'),
-			'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#playstation-sdk-not-installed.',
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('targetManagerBusy'),
-			'Please try again in a few minutes.',
-		);
-		assert.strictEqual(
-			getNotStartedReasonMessage('missingDotNet'),
-			'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#net-framework-not-installed.'
-		);
 	});
 });

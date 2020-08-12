@@ -1,11 +1,13 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	position,
 	positionAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/positionChain');
+} = require('../../lib/chains/positionChain')(suitest);
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
 
 describe('Position chain', () => {
@@ -60,13 +62,10 @@ describe('Position chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(
-			position(1, 1).toString(),
-			'Position 1, 1'
-		);
+		testInputErrorSync(position(1, 1).toString);
 		assert.equal(
 			position(1, 1).click().toString(),
-			'Clicking at [1, 1]'
+			'Clicking at [1, 1], repeat 1 times every 1 ms'
 		);
 		assert.equal(
 			position(1, 2).click().repeat(10).interval(2000).toString(),
@@ -96,12 +95,29 @@ describe('Position chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({coordinates: {
-			x: 10,
-			y: 20,
-		}});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains(
+			{
+				coordinates: {
+					x: 10,
+					y: 20,
+				},
+				isClick: true,
+			},
+			'Launcher E Clicking at [10, 20], repeat 1 times every 1 ms'
+		);
+		beforeSendMsgContains(
+			{
+				coordinates: {
+					x: 10,
+					y: 20,
+				},
+				isAssert: true,
+				isClick: true,
+			},
+			'Launcher A Clicking at [10, 20], repeat 1 times every 1 ms'
+		);
 		log.restore();
 	});
 

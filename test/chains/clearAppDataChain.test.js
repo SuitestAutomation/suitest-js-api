@@ -1,4 +1,5 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {
 	clearAppData,
 	clearAppDataAssert,
@@ -6,10 +7,11 @@ const {
 	toString,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/clearAppDataChain');
+} = require('../../lib/chains/clearAppDataChain')(suitest);
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 describe('Clear app data chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -58,8 +60,7 @@ describe('Clear app data chain', () => {
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
 
-		beforeSendMsg();
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		assertBeforeSendMsg(beforeSendMsg, log, undefined, 'Launcher E Cleared app data');
 		log.restore();
 	});
 

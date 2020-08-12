@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {intervalComposer} = require('../../lib/composers');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
@@ -9,7 +10,7 @@ describe('Interval Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, intervalComposer(data, chain, makeChain));
+		Object.defineProperties(chain, intervalComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.interval, 'function');
 
@@ -25,7 +26,7 @@ describe('Interval Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, intervalComposer(data, chain, makeChain));
+		Object.defineProperties(chain, intervalComposer(suitest, data, chain, makeChain));
 
 		chain.interval(3000);
 
@@ -37,7 +38,7 @@ describe('Interval Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, intervalComposer(data, chain, makeChain));
+		Object.defineProperties(chain, intervalComposer(suitest, data, chain, makeChain));
 
 		testInputErrorSync(chain.interval, [-3]);
 		testInputErrorSync(chain.interval, [null]);

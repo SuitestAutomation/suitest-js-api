@@ -6,7 +6,7 @@ const {
 	getUnusedLeaves,
 	warnUnusedLeaves,
 	clearPool,
-} = require('../../lib/utils/unusedExpressionWatchers');
+} = require('../../index').unusedExpressionWatchers;
 
 describe('unusedExpressionWatchers', () => {
 	beforeEach(() => {

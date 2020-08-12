@@ -3,6 +3,10 @@ export interface Thenable <R> {
 	then <U> (onFulfilled?: (value: R) => U | Thenable<U>, onRejected?: (error: any) => void): Thenable<U>;
 }
 
+/**
+ * @description should return string representation of chain. May throw SuitestError if chain is malformed
+ * @throws {SuitestError} - May happen if chain is malformed
+ */
 export interface AbstractChain {
 	toString(): String;
 }
@@ -39,7 +43,7 @@ export interface Abandable<T> {
 }
 
 export interface Timeout<T> {
-	timeout(milliseconds: number): T;
+	timeout(milliseconds: number | string): T;
 }
 
 export interface Clickable<T> {
@@ -65,11 +69,11 @@ export interface SetTextModifier<T> {
 }
 
 export interface Repeatable<T> {
-	repeat(times: number): T;
+	repeat(times: number | string): T;
 }
 
 export interface Intervalable<T> {
-	interval(milliseconds: number): T;
+	interval(milliseconds: number | string): T;
 }
 
 export interface Equalable<T> {
@@ -201,16 +205,16 @@ type PropNameType = string;
 
 
 export interface ElementMatchModifiers<T> {
-	match(propertyName: PropNameType, propertyValue?: PropertyValue, comparator?: string, accuracy?: number): T;
+	match(propertyName: PropNameType, propertyValue?: PropertyValue, comparator?: string, accuracy?: number | string): T;
 	match(propertyDefinition: PropertyObjectDefinition | MatchesPropertiesItems | object ): T;
 
-	matches(propertyName: PropNameType, propertyValue?: PropertyValue, comparator?: string, accuracy?: number): T;
+	matches(propertyName: PropNameType, propertyValue?: PropertyValue, comparator?: string, accuracy?: number | string): T;
 	matches(propertyDefinition: PropertyObjectDefinition | MatchesPropertiesItems | object): T;
 
-	matchRepo(propertyName: PropNameType, comparator?: string, accuracy?: number): T;
+	matchRepo(propertyName: PropNameType, comparator?: string, accuracy?: number | string): T;
 	matchRepo(propertyDefinition: PropertyRepoObjectDefinition | MatchesRepoPropertiesItems): T;
 
-	matchesRepo(propertyName: PropNameType, comparator?: string, accuracy?: number): T;
+	matchesRepo(propertyName: PropNameType, comparator?: string, accuracy?: number | string): T;
 	matchesRepo(propertyDefinition: PropertyRepoObjectDefinition | MatchesRepoPropertiesItems): T;
 }
 

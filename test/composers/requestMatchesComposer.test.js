@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {requestMatchesComposer} = require('../../lib/composers');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {NETWORK_PROP, NETWORK_METHOD} = require('../../lib/constants/networkRequest');
@@ -14,7 +15,7 @@ describe('Network Request Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, requestMatchesComposer(data, chain, makeChain));
+		Object.defineProperties(chain, requestMatchesComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.requestMatch, 'function');
 		assert.strictEqual(typeof chain.requestMatches, 'function');
@@ -36,7 +37,7 @@ describe('Network Request Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, requestMatchesComposer(data, chain, makeChain));
+		Object.defineProperties(chain, requestMatchesComposer(suitest, data, chain, makeChain));
 
 		chain.requestMatch(NETWORK_PROP.METHOD, NETWORK_METHOD.GET);
 		assert.deepStrictEqual(makeChain.lastCall.args[0], {
@@ -86,7 +87,7 @@ describe('Network Request Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, requestMatchesComposer(data, chain, makeChain));
+		Object.defineProperties(chain, requestMatchesComposer(suitest, data, chain, makeChain));
 
 		testInputErrorSync(chain.requestMatch, ['Content-Type']);
 		testInputErrorSync(chain.requestMatch, [Symbol('unknown'), 'test']);
@@ -102,7 +103,7 @@ describe('Network Request Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, requestMatchesComposer(data, chain, makeChain));
+		Object.defineProperties(chain, requestMatchesComposer(suitest, data, chain, makeChain));
 
 		chain.requestMatch({
 			name: NETWORK_PROP.BODY,
@@ -117,6 +118,24 @@ describe('Network Request Match Composer', () => {
 						name: NETWORK_PROP.BODY,
 						val: 'test',
 						compare: PROP_COMPARATOR.EQUAL,
+					},
+				],
+			},
+		});
+
+		chain.requestMatch({
+			name: NETWORK_PROP.METHOD,
+			val: 'POST',
+			type: PROP_COMPARATOR.NOT_EQUAL,
+		});
+		assert.deepStrictEqual(makeChain.lastCall.args[0], {
+			request: {
+				type: SUBJ_COMPARATOR.REQUEST_MATCHES,
+				props: [
+					{
+						name: NETWORK_PROP.METHOD,
+						val: 'POST',
+						compare: PROP_COMPARATOR.NOT_EQUAL,
 					},
 				],
 			},
@@ -145,7 +164,7 @@ describe('Network Request Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, requestMatchesComposer(data, chain, makeChain));
+		Object.defineProperties(chain, requestMatchesComposer(suitest, data, chain, makeChain));
 
 		chain.requestMatch([
 			{
@@ -206,7 +225,7 @@ describe('Network Request Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, requestMatchesComposer(data, chain, makeChain));
+		Object.defineProperties(chain, requestMatchesComposer(suitest, data, chain, makeChain));
 
 		chain.requestMatch({
 			[NETWORK_PROP.BODY]: '{}',

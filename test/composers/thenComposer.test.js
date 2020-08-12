@@ -1,9 +1,11 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitestInstance = require('../../index');
 const {identity} = require('ramda');
 const testServer = require('../../lib/utils/testServer');
 const webSockets = require('../../lib/api/webSockets');
 const {makeThenComposer} = require('../../lib/composers');
+const suitest = {...suitestInstance, webSockets};
 const SuitestError = require('../../lib/utils/SuitestError');
 const {authContext} = require('../../lib/context');
 
@@ -35,7 +37,7 @@ describe('Then composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, makeThenComposer(noop, noop)(data, chain, makeChain));
+		Object.defineProperties(chain, makeThenComposer(noop, noop)(suitest, data, chain, makeChain));
 
 		const thenPropertyDescriptor = Object.getOwnPropertyDescriptor(chain, 'then');
 
@@ -56,7 +58,7 @@ describe('Then composer', () => {
 
 		callbackSpy.resolves(resolution);
 
-		Object.defineProperties(chain, makeThenComposer(executorSpy, callbackSpy)(data, chain, makeChain));
+		Object.defineProperties(chain, makeThenComposer(executorSpy, callbackSpy)(suitest, data, chain, makeChain));
 
 		await chain.then(success);
 		assert(success.calledWith(resolution));
@@ -73,7 +75,7 @@ describe('Then composer', () => {
 
 		callbackSpy.rejects(rejection);
 
-		Object.defineProperties(chain, makeThenComposer(executorSpy, callbackSpy)(data, chain, makeChain));
+		Object.defineProperties(chain, makeThenComposer(executorSpy, callbackSpy)(suitest, data, chain, makeChain));
 
 		await chain.then(undefined, fail);
 		assert(fail.calledWith(rejection));
@@ -86,7 +88,7 @@ describe('Then composer', () => {
 		const executorSpy = sinon.spy(identity);
 		const callbackSpy = sinon.spy(identity);
 
-		Object.defineProperties(chain, makeThenComposer(executorSpy, callbackSpy)(data, chain, makeChain));
+		Object.defineProperties(chain, makeThenComposer(executorSpy, callbackSpy)(suitest, data, chain, makeChain));
 
 		await chain;
 		await chain;
@@ -104,7 +106,7 @@ describe('Then composer', () => {
 		const executorSpy = sinon.spy(identity);
 		const callbackSpy = sinon.spy(identity);
 
-		Object.defineProperties(chain, makeThenComposer(executorSpy, callbackSpy)(data, chain, makeChain));
+		Object.defineProperties(chain, makeThenComposer(executorSpy, callbackSpy)(suitest, data, chain, makeChain));
 
 		const error = await chain;
 

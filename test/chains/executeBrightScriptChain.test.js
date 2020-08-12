@@ -1,12 +1,14 @@
 const assert = require('assert');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
+const suitest = require('../../index');
 const {
 	executeBrightScript,
 	executeBrightScriptAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/executeBrightScriptChain');
+} = require('../../lib/chains/executeBrightScriptChain')(suitest);
 const sinon = require('sinon');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 /**
  * This test is sort of high level, more like integration test
@@ -40,9 +42,10 @@ describe('Execute BrightScript chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg('1+1');
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains({command: '1+1'}, 'Launcher E Executing BrightScript:');
+		beforeSendMsgContains({command: '1+1', isAssert: true}, 'Launcher A Executing BrightScript:');
 		log.restore();
 	});
 

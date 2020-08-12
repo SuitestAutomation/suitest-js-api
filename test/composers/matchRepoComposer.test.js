@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {matchRepoComposer} = require('../../lib/composers');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
@@ -17,7 +18,7 @@ describe('Match Repo Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchRepoComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchRepoComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.matchRepo, 'function');
 		assert.strictEqual(typeof chain.matchesRepo, 'function');
@@ -39,7 +40,7 @@ describe('Match Repo Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchRepoComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchRepoComposer(suitest, data, chain, makeChain));
 
 		chain.matchRepo(ELEMENT_PROP.WIDTH);
 		assert.deepStrictEqual(makeChain.lastCall.args[0], {
@@ -92,12 +93,11 @@ describe('Match Repo Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchRepoComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchRepoComposer(suitest, data, chain, makeChain));
 
 		testInputErrorSync(chain.matchRepo, [Symbol('height')]);
 		testInputErrorSync(chain.matchRepo, [ELEMENT_PROP.HEIGHT, 500]);
 		testInputErrorSync(chain.matchRepo, [ELEMENT_PROP.LEFT, Symbol('>')]);
-		testInputErrorSync(chain.matchRepo, [ELEMENT_PROP.LEFT, PROP_COMPARATOR.APPROX, '20']);
 		testInputErrorSync(chain.matchRepo, [{
 			name: ELEMENT_PROP.LEFT,
 			val: 123,
@@ -109,7 +109,7 @@ describe('Match Repo Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchRepoComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchRepoComposer(suitest, data, chain, makeChain));
 
 		chain.matchRepo({
 			name: ELEMENT_PROP.WIDTH,
@@ -142,7 +142,7 @@ describe('Match Repo Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchRepoComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchRepoComposer(suitest, data, chain, makeChain));
 
 		chain.matchRepo([
 			{

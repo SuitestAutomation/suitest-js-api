@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {untilComposer} = require('../../lib/composers');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
@@ -9,7 +10,7 @@ describe('Until Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, untilComposer(data, chain, makeChain));
+		Object.defineProperties(chain, untilComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.until, 'function');
 
@@ -34,7 +35,7 @@ describe('Until Composer', () => {
 			},
 		};
 
-		Object.defineProperties(chain, untilComposer(data, chain, makeChain));
+		Object.defineProperties(chain, untilComposer(suitest, data, chain, makeChain));
 
 		chain.until(conditionChain);
 
@@ -46,7 +47,7 @@ describe('Until Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, untilComposer(data, chain, makeChain));
+		Object.defineProperties(chain, untilComposer(suitest, data, chain, makeChain));
 
 		testInputErrorSync(chain.until, [], {message: 'Until condition expects a chain as an input parameter'});
 		testInputErrorSync(chain.until, [{
@@ -57,5 +58,10 @@ describe('Until Composer', () => {
 			toJSON: () => ({request: {}}),
 		}], {message: 'Invalid input Until condition chain requires valid modifier and should be one of the following types:\n' +
 			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video()'});
+
+		// must not throw any error
+		chain.until({
+			toJSON: () => ({request: {condition: {subject: {type: 'video'}}}}),
+		});
 	});
 });

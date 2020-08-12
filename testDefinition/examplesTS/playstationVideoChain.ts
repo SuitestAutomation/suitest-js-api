@@ -23,7 +23,11 @@ psVideo().isStopped().timeout(10);
 psVideo().timeout(1).isStopped();
 
 async function videoTest() {
-    await psVideo().timeout(10);
+    const videoProps = await psVideo().timeout(10);
+    if (videoProps) {
+        // check that ts allow access to video properties
+        console.log(videoProps.videoLength, videoProps.videoPos);
+    }
     const videoEl = suitest.psVideo();
 
     await videoEl.matches(suitest.PROP.VIDEO_LENGTH, 300);

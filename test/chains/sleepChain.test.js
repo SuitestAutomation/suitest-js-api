@@ -1,4 +1,5 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {
 	sleep,
 	sleepAssert,
@@ -6,9 +7,9 @@ const {
 	toString,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/sleepChain');
+} = require('../../lib/chains/sleepChain')(suitest);
 const composers = require('../../lib/constants/composer');
-const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
+const {bySymbol, getComposerTypes, assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const sinon = require('sinon');
 
@@ -44,14 +45,18 @@ describe('Sleep chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(toString({milliseconds: 10}), 'Sleeping for 10ms');
+		// pass json message
+		assert.equal(toString({request: {timeout: 10}}), 'Sleeping for 10ms');
+		// pass raw command json definition
+		assert.equal(toString({timeout: 10}), 'Sleeping for 10ms');
 	});
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({milliseconds: 10});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains({milliseconds: 10}, 'Launcher E Sleeping for 10ms');
+		beforeSendMsgContains({milliseconds: 10, isAssert: true}, 'Launcher A Sleeping for 10ms');
 		log.restore();
 	});
 
@@ -88,7 +93,6 @@ describe('Sleep chain', () => {
 
 	it('should throw error in case of invalid input', () => {
 		testInputErrorSync(sleep, []);
-		testInputErrorSync(sleep, ['text']);
 		testInputErrorSync(sleep, [-1]);
 	});
 });

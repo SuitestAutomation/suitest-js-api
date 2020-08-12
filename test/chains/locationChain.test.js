@@ -1,13 +1,13 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {
 	location,
 	locationAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/locationChain');
-const comparatorTypes = require('../../lib/constants/comparator');
-const {SUBJ_COMPARATOR} = require('../../lib/mappings');
+} = require('../../lib/chains/locationChain')(suitest);
 const sinon = require('sinon');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 describe('Location chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -128,25 +128,60 @@ describe('Location chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(location().toString(), 'Getting current location');
-		assert.equal(location().equal('test').toString(), 'Checking if current location equals "test"');
-		assert.equal(location().not().equal('test').toString(), 'Checking if current location does not equal "test"');
-		assert.equal(location().contains('test').toString(), 'Checking if current location contains "test"');
-		assert.equal(location().not().contains('test').toString(), 'Checking if current location does not contain "test"');
-		assert.equal(location().startWith('test').toString(), 'Checking if current location starts with "test"');
-		assert.equal(
+		assert.strictEqual(location().toString(), 'Getting current location');
+		assert.strictEqual(location().equal('test').toString(), 'Checking if current location equals "test"');
+		assert.strictEqual(
+			location().not().equal('test').toString(),
+			'Checking if current location does not equal "test"'
+		);
+		assert.strictEqual(location().contains('test').toString(), 'Checking if current location contains "test"');
+		assert.strictEqual(
+			location().not().contains('test').toString(),
+			'Checking if current location does not contain "test"'
+		);
+		assert.strictEqual(location().startWith('test').toString(), 'Checking if current location starts with "test"');
+		assert.strictEqual(
 			location().not().startWith('test').toString(),
 			'Checking if current location does not start with "test"'
 		);
-		assert.equal(location().endWith('test').toString(), 'Checking if current location ends with "test"');
-		assert.equal(location().not().endWith('test').toString(), 'Checking if current location does not end with "test"');
+		assert.strictEqual(location().endWith('test').toString(), 'Checking if current location ends with "test"');
+		assert.strictEqual(
+			location().not().endWith('test').toString(),
+			'Checking if current location does not end with "test"'
+		);
 	});
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains(
+			{
+				type: 'query',
+				subject: {type: 'location'},
+			},
+			'Launcher E Getting current location'
+		);
+		beforeSendMsgContains(
+			{
+				comparator: {
+					type: '=',
+					val: 'val',
+				},
+			},
+			'Launcher E Checking if current location equals "val"'
+		);
+		beforeSendMsgContains(
+			{
+				isAssert: true,
+				comparator: {
+					type: '=',
+					val: 'val',
+				},
+			},
+			'Launcher A Checking if current location equals "val"'
+		);
+
 		log.restore();
 	});
 
@@ -168,14 +203,14 @@ describe('Location chain', () => {
 		assert.deepStrictEqual(toJSON({isAssert: true}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {subject: {type: 'location'}},
 				timeout: 2000,
 			},
 		}, 'chain wait');
 		assert.deepStrictEqual(toJSON({
 			comparator: {
-				type: comparatorTypes.EQUAL,
+				type: '=',
 				val: 'val',
 			},
 			timeout: 0,
@@ -185,7 +220,7 @@ describe('Location chain', () => {
 				type: 'assert',
 				condition: {
 					subject: {type: 'location'},
-					type: SUBJ_COMPARATOR[comparatorTypes.EQUAL],
+					type: '=',
 					val: 'val',
 				},
 			},

@@ -15,7 +15,12 @@ el.visible();
 el.moveTo();
 el.sendText('');
 el.setText('');
-el.timeout(1);
+el.timeout(1).then(props => {
+	if (props) {
+		// check that ts allow access to video properties
+		console.log(props.width, props.automationName, props.text);
+	}
+});
 el.exists();
 el.matches(PROP.IS_CHECKED, true);
 el.matches(PROP.VIDEO_STATE, VIDEO_STATE.UNDEFINED);
@@ -40,7 +45,7 @@ el.moveTo().toString();
 el.sendText('text').toString();
 el.setText('text').toString();
 el.sendText('text').repeat(10).interval(2000).toString();
-el.sendText('text').repeat(10).interval(2000).toAssert();
+el.sendText('text').repeat('<%variable%>').interval('<%variable%>').toAssert();
 el.setText('text').toString();
 el.setText('text').toAssert();
 el.timeout(10).not();
@@ -54,6 +59,7 @@ const elem = element('repo-id');
 elem.matches(PROP.WIDTH);
 elem.matches(PROP.HEIGHT);
 elem.matches(PROP.TOP, VALUE.REPO, COMP.APPROX, 20);
+elem.matches(PROP.TOP, VALUE.REPO, COMP.APPROX, '<%variable%>');
 elem.matches(PROP.BG_COLOR, '#F00');
 
 // Same with object syntax

@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {isPausedComposer, isStoppedComposer, isPlayingComposer} = require('../../lib/composers');
 
 describe('Video composers', () => {
@@ -8,7 +9,7 @@ describe('Video composers', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, isPausedComposer(data, chain, makeChain));
+		Object.defineProperties(chain, isPausedComposer(suitest, data, chain, makeChain));
 
 		const abandonPropertyDescriptor = Object.getOwnPropertyDescriptor(chain, 'isPaused');
 
@@ -23,7 +24,7 @@ describe('Video composers', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, isPlayingComposer(data, chain, makeChain));
+		Object.defineProperties(chain, isPlayingComposer(suitest, data, chain, makeChain));
 
 		const abandonPropertyDescriptor = Object.getOwnPropertyDescriptor(chain, 'isPlaying');
 
@@ -38,7 +39,7 @@ describe('Video composers', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, isStoppedComposer(data, chain, makeChain));
+		Object.defineProperties(chain, isStoppedComposer(suitest, data, chain, makeChain));
 
 		const abandonPropertyDescriptor = Object.getOwnPropertyDescriptor(chain, 'isStopped');
 
@@ -53,7 +54,7 @@ describe('Video composers', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, isStoppedComposer(data, chain, makeChain));
+		Object.defineProperties(chain, isStoppedComposer(suitest, data, chain, makeChain));
 
 		chain.isStopped();
 
@@ -72,7 +73,7 @@ describe('Video composers', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, isPlayingComposer(data, chain, makeChain));
+		Object.defineProperties(chain, isPlayingComposer(suitest, data, chain, makeChain));
 
 		chain.isPlaying();
 
@@ -91,7 +92,7 @@ describe('Video composers', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, isPausedComposer(data, chain, makeChain));
+		Object.defineProperties(chain, isPausedComposer(suitest, data, chain, makeChain));
 
 		chain.isPaused();
 

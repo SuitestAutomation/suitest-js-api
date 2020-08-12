@@ -1,10 +1,12 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {
 	window,
 	windowAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/windowChain');
+} = require('../../lib/chains/windowChain')(suitest);
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
 
 function testAllowedModifiers(chain) {
@@ -60,22 +62,30 @@ describe('Window chain', () => {
 	});
 
 	it('should have only allowed modifiers after sendText is applied', () => {
-		const chain = window().sendText('text');
+		function testWindowSendTextModifiers(chain) {
+			assert.strictEqual(typeof chain.clone, 'function');
+			assert.strictEqual(typeof chain.abandon, 'function');
+			assert.strictEqual(typeof chain.toString, 'function');
+			assert.strictEqual(typeof chain.toJSON, 'function');
+			assert.strictEqual(typeof chain.then, 'function');
+			assert.strictEqual(typeof chain.repeat, 'function');
+			assert.strictEqual(typeof chain.interval, 'function');
+			assert.strictEqual(typeof chain.sendText, 'undefined');
+			assert.strictEqual(typeof chain.refresh, 'undefined');
+			assert.strictEqual(typeof chain.goBack, 'undefined');
+			assert.strictEqual(typeof chain.goForward, 'undefined');
+			assert.strictEqual(typeof chain.setSize, 'undefined');
+			assert.strictEqual(typeof chain.dismissModal, 'undefined');
+			assert.strictEqual(typeof chain.acceptModal, 'undefined');
+		}
 
-		assert.strictEqual(typeof chain.clone, 'function');
-		assert.strictEqual(typeof chain.abandon, 'function');
-		assert.strictEqual(typeof chain.toString, 'function');
-		assert.strictEqual(typeof chain.toJSON, 'function');
-		assert.strictEqual(typeof chain.then, 'function');
-		assert.strictEqual(typeof chain.repeat, 'function');
-		assert.strictEqual(typeof chain.interval, 'function');
-		assert.strictEqual(typeof chain.sendText, 'undefined');
-		assert.strictEqual(typeof chain.refresh, 'undefined');
-		assert.strictEqual(typeof chain.goBack, 'undefined');
-		assert.strictEqual(typeof chain.goForward, 'undefined');
-		assert.strictEqual(typeof chain.setSize, 'undefined');
-		assert.strictEqual(typeof chain.dismissModal, 'undefined');
-		assert.strictEqual(typeof chain.acceptModal, 'undefined');
+		it('with empty string as a value', () => {
+			testWindowSendTextModifiers(window().sendText(''));
+		});
+
+		it('with not empty string as a value', () => {
+			testWindowSendTextModifiers(window().sendText('text'));
+		});
 	});
 
 	it('should have only allowed modifiers after other modifiers are applied', () => {
@@ -107,17 +117,18 @@ describe('Window chain', () => {
 		};
 
 		assert.strictEqual(window().toString(), 'Window chain');
+		assert.strictEqual(window().sendText('').toString(), 'Sending text "" to window, repeat 1 times every 1 ms');
 		assert.strictEqual(
 			window().sendText('text string').toString(),
-			'Sending text "text string" to window'
+			'Sending text "text string" to window, repeat 1 times every 1 ms'
 		);
 		assert.strictEqual(
 			window().sendText('text string').repeat(3).toString(),
-			'Sending text "text string" to window, repeat 3 times'
+			'Sending text "text string" to window, repeat 3 times every 1 ms'
 		);
 		assert.strictEqual(
 			window().sendText('text string').interval(3000).toString(),
-			'Sending text "text string" to window'
+			'Sending text "text string" to window, repeat 1 times every 3000 ms'
 		);
 		assert.strictEqual(
 			window().sendText('text string').interval(3000).repeat(2).toString(),
@@ -129,7 +140,7 @@ describe('Window chain', () => {
 		);
 		assert.strictEqual(
 			window().sendText('text string').until(untilData).toString(),
-			'Sending text "text string" to window'
+			'Sending text "text string" to window, repeat 1 times every 1 ms'
 		);
 		assert.strictEqual(
 			window().sendText('text string').repeat(3).interval(4000).toString(),
@@ -154,9 +165,20 @@ describe('Window chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({sendText: 'text'});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains(
+			{sendText: 'text'},
+			'Launcher E Sending text "text" to window, repeat 1 times every 1 ms'
+		);
+		beforeSendMsgContains(
+			{sendText: ''},
+			'Launcher E Sending text "" to window, repeat 1 times every 1 ms'
+		);
+		beforeSendMsgContains(
+			{sendText: 'assered text', isAssert: true},
+			'Launcher A Sending text "assered text" to window, repeat 1 times every 1 ms'
+		);
 		log.restore();
 	});
 
@@ -168,6 +190,19 @@ describe('Window chain', () => {
 				browserCommand: {type: void 0},
 			},
 		}, 'type testLine browserCommand');
+		assert.deepStrictEqual(toJSON({
+			isAssert: true,
+			sendText: '',
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'sendText',
+				target: {type: 'window'},
+				count: 1,
+				delay: 1,
+				val: '',
+			},
+		}, 'type testLine sendText with empty string');
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
 			sendText: 'text',

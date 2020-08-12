@@ -1,14 +1,16 @@
 const assert = require('assert');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
+const suitest = require('../../index');
 const {
 	jsExpression,
 	jsExpressionAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/javascriptExpressionChain');
+} = require('../../lib/chains/javascriptExpressionChain')(suitest);
 const {SUBJ_COMPARATOR} = require('../../lib/mappings');
 const comparatorTypes = require('../../lib/constants/comparator');
 const sinon = require('sinon');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 describe('JavaScript expression chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -125,6 +127,26 @@ describe('JavaScript expression chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
+
+		beforeSendMsgContains({expression: '1+1'}, 'Launcher E Evaluating JS:');
+		beforeSendMsgContains({
+			isNegated: true,
+			expression: '1+1',
+			comparator: {
+				type: comparatorTypes.EQUAL,
+				val: '2',
+			},
+		}, 'Launcher E Check if JS expression');
+		beforeSendMsgContains({
+			isAssert: true,
+			isNegated: true,
+			expression: '1+1',
+			comparator: {
+				type: comparatorTypes.EQUAL,
+				val: '2',
+			},
+		}, 'Launcher A Check if JS expression');
 
 		beforeSendMsg('1+1');
 		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
@@ -152,7 +174,7 @@ describe('JavaScript expression chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'javascript',
@@ -196,7 +218,7 @@ describe('JavaScript expression chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'javascript',

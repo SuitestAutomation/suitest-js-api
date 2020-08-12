@@ -1,13 +1,15 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	pressButton,
 	pressButtonAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/pressButtonChain');
+} = require('../../lib/chains/pressButtonChain')(suitest);
 const buttonTypes = require('../../lib/constants/vrc');
 const {VRC} = require('../../lib/mappings');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
 
 describe('Press button chain', () => {
@@ -37,15 +39,15 @@ describe('Press button chain', () => {
 	it('should convert to string with meaningful message', () => {
 		assert.strictEqual(
 			pressButton(buttonTypes.BACK).toString(),
-			'Pressing button BACK'
+			'Pressing button BACK, repeat 1 times every 1 ms'
 		);
 		assert.strictEqual(
 			pressButton([buttonTypes.BLUE, buttonTypes.DOWN]).toString(),
-			'Pressing buttons BLUE, DOWN'
+			'Pressing buttons BLUE, DOWN, repeat 1 times every 1 ms'
 		);
 		assert.strictEqual(
 			pressButton(buttonTypes.BLUE).repeat(10).toString(),
-			'Pressing button BLUE, repeat 10 times'
+			'Pressing button BLUE, repeat 10 times every 1 ms'
 		);
 		assert.strictEqual(
 			pressButton(buttonTypes.BLUE).repeat(10).interval(2000).toString(),
@@ -71,9 +73,13 @@ describe('Press button chain', () => {
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({ids: ['Up']});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains({ids: ['Up']}, 'Launcher E Pressing button Up, repeat 1 times every 1 ms');
+		beforeSendMsgContains(
+			{ids: ['Up'], isAssert: true},
+			'Launcher A Pressing button Up, repeat 1 times every 1 ms'
+		);
 		log.restore();
 	});
 

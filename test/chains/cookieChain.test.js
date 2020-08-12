@@ -1,4 +1,5 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	cookie,
@@ -7,11 +8,12 @@ const {
 	toString,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/cookieChain');
+} = require('../../lib/chains/cookieChain')(suitest);
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const sinon = require('sinon');
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 const allCookieComposers = [
 	composers.TO_STRING,
@@ -85,49 +87,133 @@ describe('Cookie chain', () => {
 	});
 
 	it('should convert to string with meaningful message', () => {
-		assert.equal(toString({cookieName: 'cookieName'}), 'Getting "cookieName" cookie');
-		assert.equal(toString({
-			cookieName: 'cookieName',
-			comparator: {type: SUBJ_COMPARATOR.EXIST},
+		// pass generated json message
+		assert.strictEqual(toString({
+			type: 'query',
+			subject: {
+				type: 'cookie',
+				cookieName: 'cookieName',
+			},
+		}), 'Getting "cookieName" cookie');
+		assert.strictEqual(toString({
+			type: 'testLine',
+			request: {
+				type: 'assert',
+				condition: {
+					subject: {
+						type: 'cookie',
+						val: 'cookieName',
+					},
+					type: 'exists',
+				},
+				timeout: 2000,
+			},
 		}), 'Checking if "cookieName" cookie exists');
-		assert.equal(toString({
-			cookieName: 'cookieName',
-			isNegated: true,
-			comparator: {type: SUBJ_COMPARATOR.EXIST},
+		assert.strictEqual(toString({
+			type: 'testLine',
+			request: {
+				type: 'assert',
+				condition: {
+					subject: {
+						type: 'cookie',
+						val: 'cookieName',
+					},
+					type: '!exists',
+				},
+				timeout: 2000,
+			},
 		}), 'Checking if "cookieName" cookie is missing');
-		assert.equal(toString({
-			cookieName: 'cookieName',
-			comparator: {type: SUBJ_COMPARATOR.MATCH_JS,
-				val: 'function(cookie){}'},
+		assert.strictEqual(toString({
+			type: 'testLine',
+			request: {
+				type: 'assert',
+				condition: {
+					subject: {
+						type: 'cookie',
+						val: 'cookieName',
+					},
+					type: 'matches',
+					val: 'function(cookie){}',
+				},
+				timeout: 2000,
+			},
 		}), 'Checking if "cookieName" cookie matches JS:\nfunction(cookie){}');
-		assert.equal(toString({
-			cookieName: 'cookieName',
-			isNegated: true,
-			comparator: {type: SUBJ_COMPARATOR.MATCH_JS,
-				val: 'function(cookie){}'},
+		assert.strictEqual(toString({
+			type: 'testLine',
+			request: {
+				type: 'assert',
+				condition: {
+					subject: {
+						type: 'cookie',
+						val: 'cookieName',
+					},
+					type: '!matches',
+					val: 'function(cookie){}',
+				},
+				timeout: 2000,
+			},
 		}), 'Checking if "cookieName" cookie does not match JS:\nfunction(cookie){}');
-		assert.equal(toString({
-			cookieName: 'cookieName',
-			comparator: {
-				type: SUBJ_COMPARATOR.EQUAL,
-				val: 'test',
+		assert.strictEqual(toString({
+			type: 'testLine',
+			request: {
+				type: 'assert',
+				condition: {
+					subject: {
+						type: 'cookie',
+						val: 'cookieName',
+					},
+					type: '=',
+					val: 'test',
+				},
+				timeout: 2000,
 			},
 		}), 'Checking if "cookieName" cookie equals test');
-		assert.equal(toString({
-			cookieName: 'cookieName',
-			isNegated: true,
-			comparator: {
-				type: SUBJ_COMPARATOR.EQUAL,
+		assert.strictEqual(toString({
+			type: 'testLine',
+			request: {
+				type: 'assert',
+				condition: {
+					subject: {
+						type: 'cookie',
+						val: 'cookieName',
+					},
+					type: '!=',
+					val: 'test',
+				},
+				timeout: 2000,
+			},
+		}), 'Checking if "cookieName" cookie does not equal test');
+		// pass raw line definition json
+		assert.strictEqual(toString({
+			type: 'assert',
+			condition: {
+				subject: {
+					type: 'cookie',
+					val: 'cookieName',
+				},
+				type: '!=',
 				val: 'test',
 			},
+			timeout: 2000,
 		}), 'Checking if "cookieName" cookie does not equal test');
 	});
 
 	it('should have beforeSendMsg', () => {
 		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
 
-		beforeSendMsg({cookieName: 'cookieName'});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
+		beforeSendMsgContains({cookieName: 'cookieName'}, 'Launcher E Getting "cookieName" cookie');
+		beforeSendMsgContains(
+			{
+				isAssert: true,
+				isNegated: true,
+				comparator: {
+					type: SUBJ_COMPARATOR.EXIST,
+					val: 'val',
+				},
+				cookieName: 'suiteCookie',
+				timeout: 1000,
+			}, 'Launcher A Checking if "suiteCookie" cookie is missing');
 		log.restore();
 	});
 
@@ -157,7 +243,7 @@ describe('Cookie chain', () => {
 		assert.deepStrictEqual(toJSON({isAssert: true}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {subject: {type: 'cookie'}},
 				timeout: 2000,
 			},
@@ -168,7 +254,7 @@ describe('Cookie chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {subject: {type: 'cookie'}},
 				timeout: 1000,
 			},
@@ -202,7 +288,7 @@ describe('Cookie chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',

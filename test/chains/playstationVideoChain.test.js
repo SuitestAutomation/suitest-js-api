@@ -1,8 +1,12 @@
 const assert = require('assert');
+const suitest = require('../../index');
+const sinon = require('sinon');
 const {
 	playstationVideo,
 	playstationVideoAssert,
-} = require('../../lib/chains/playstationVideoChain');
+	beforeSendMsg,
+} = require('../../lib/chains/playstationVideoChain')(suitest);
+const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const {ELEMENT_PROP} = require('../../lib/constants/element');
 const VIDEO_STATE = require('../../lib/constants/videoState');
 const HAD_NO_ERROR = require('../../lib/constants/hadNoError');
@@ -113,6 +117,28 @@ describe('Playstation video chain', () => {
 		);
 	});
 
+	it('should have beforeSendMsg', () => {
+		const log = sinon.stub(console, 'log');
+		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
+
+		beforeSendMsgContains({}, 'Launcher E Getting properties of "PlayStation WebMAF video"');
+		beforeSendMsgContains(
+			{
+				comparator: {type: 'hadNoError'},
+				searchStrategy: 'all',
+			},
+			'Launcher E PlayStation WebMAF video had no errors in entire video log');
+		beforeSendMsgContains(
+			{
+				comparator: {type: 'hadNoError'},
+				searchStrategy: 'all',
+				isAssert: true,
+			},
+			'Launcher A PlayStation WebMAF video had no errors in entire video log'
+		);
+		log.restore();
+	});
+
 	describe('should generate proper JSON', () => {
 		it('for initial state', () => {
 			assert.deepStrictEqual(
@@ -161,7 +187,7 @@ describe('Playstation video chain', () => {
 							type: 'has',
 						},
 						timeout: 2000,
-						type: 'wait',
+						type: 'assert',
 					},
 					type: 'eval',
 				},
@@ -192,7 +218,7 @@ describe('Playstation video chain', () => {
 							type: 'has',
 						},
 						timeout: 2000,
-						type: 'wait',
+						type: 'assert',
 					},
 					type: 'testLine',
 				},
@@ -211,7 +237,7 @@ describe('Playstation video chain', () => {
 						searchStrategy: 'currentUrl',
 					},
 					timeout: 2000,
-					type: 'wait',
+					type: 'assert',
 				},
 				type: 'eval',
 			};
@@ -234,7 +260,7 @@ describe('Playstation video chain', () => {
 							searchStrategy: 'all',
 						},
 						timeout: 2000,
-						type: 'wait',
+						type: 'assert',
 					},
 					type: 'eval',
 				}
@@ -282,7 +308,7 @@ describe('Playstation video chain', () => {
 							type: 'has',
 						},
 						timeout: 4000,
-						type: 'wait',
+						type: 'assert',
 					},
 					type: 'eval',
 				},
@@ -311,7 +337,7 @@ describe('Playstation video chain', () => {
 							type: 'has',
 						},
 						timeout: 4000,
-						type: 'wait',
+						type: 'assert',
 					},
 					type: 'testLine',
 				},

@@ -1,12 +1,12 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const path = require('path');
+const suitest = require('../../index');
 
-const logger = require('../../lib/utils/logger');
-const interactive = require('../../lib/commands/interactive');
 const repl = require('../../lib/testLauncher/repl');
 const texts = require('../../lib/texts');
-const {authContext} = require('../../lib/context');
+const {authContext, logger} = suitest;
+const interactive = require('../../lib/commands/interactive')
 
 const stubbed = {};
 
@@ -29,6 +29,7 @@ describe('interactive command', () => {
 		let startRepl;
 		let replCalls = 0;
 
+		// eslint-disable-next-line no-async-promise-executor
 		return new Promise(async resolve => {
 			startRepl = sinon.stub(repl, 'startRepl').callsFake(async() => {
 				await interactive();

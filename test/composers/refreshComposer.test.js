@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {refreshComposer} = require('../../lib/composers');
 
 describe('Refresh composer', () => {
@@ -8,7 +9,7 @@ describe('Refresh composer', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, refreshComposer(data, chain, makeChain));
+		Object.defineProperties(chain, refreshComposer(suitest, data, chain, makeChain));
 
 		const refreshPropertyDescriptor = Object.getOwnPropertyDescriptor(chain, 'refresh');
 
@@ -23,7 +24,7 @@ describe('Refresh composer', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, refreshComposer(data, chain, makeChain));
+		Object.defineProperties(chain, refreshComposer(suitest, data, chain, makeChain));
 
 		chain.refresh();
 

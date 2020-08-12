@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {existComposer} = require('../../lib/composers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 
@@ -9,7 +10,7 @@ describe('Exist Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, existComposer(data, chain, makeChain));
+		Object.defineProperties(chain, existComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.exist, 'function');
 		assert.strictEqual(typeof chain.exists, 'function');
@@ -31,7 +32,7 @@ describe('Exist Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, existComposer(data, chain, makeChain));
+		Object.defineProperties(chain, existComposer(suitest, data, chain, makeChain));
 
 		chain.exists();
 

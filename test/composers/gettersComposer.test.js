@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {gettersComposer} = require('../../lib/composers');
 
 describe('Getters Composer', () => {
@@ -8,7 +9,7 @@ describe('Getters Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, gettersComposer(data, chain, makeChain));
+		Object.defineProperties(chain, gettersComposer(suitest, data, chain, makeChain));
 
 		const withDescriptor = Object.getOwnPropertyDescriptor(chain, 'with');
 		const itDescriptor = Object.getOwnPropertyDescriptor(chain, 'it');
@@ -37,7 +38,7 @@ describe('Getters Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, gettersComposer(data, chain, makeChain));
+		Object.defineProperties(chain, gettersComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(chain.with, chain);
 		assert.strictEqual(chain.it, chain);

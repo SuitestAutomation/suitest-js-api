@@ -1,10 +1,8 @@
 const assert = require('assert');
 const sinon = require('sinon');
-const logger = require('../../lib/utils/logger');
-const {extend, config} = require('../../config');
+const {configuration, config, logger, pairedDeviceContext} = require('../../index');
 const timestamp = require('../../lib/utils/timestamp');
-const {pairedDeviceContext} = require('../../lib/context');
-
+const {extend} = configuration;
 let cachedConfig;
 let log;
 
@@ -54,7 +52,7 @@ describe('logger util', () => {
 	});
 
 	it('should log operation type', () => {
-		sinon.stub(timestamp, 'formatDate').returns('timestamp');
+		sinon.stub(timestamp, 'formatDate').returns(() => 'timestamp');
 
 		try {
 			logger.log('|A|', 'operation');
@@ -83,5 +81,117 @@ describe('logger util', () => {
 		logger.log('operation');
 
 		assert(log.firstCall.args[0].includes('MyDevice'), 'device short display name is included in left rail');
+	});
+
+	describe('getAppOutput method', () => {
+		it('should process data correctly', () => {
+			const output = logger.getAppOutput('log', [
+				1,
+				'text',
+				null,
+				false,
+				['array', [1, 3, 4]],
+				['object', {name: 1, age: 2}],
+				['function', 'funcName'],
+				['trace', [
+					['at foo...'],
+					['at bar...'],
+				]],
+				['count', 'count1', 42],
+				['count', 'count2', null],
+				['number', 'NaN'],
+				['number', 'Infinity'],
+				['number', '-Infinity'],
+				['undefined'],
+			]);
+
+			assert.deepStrictEqual(output, {
+				method: 'log',
+				args: [
+					1,
+					'text',
+					null,
+					false,
+					[1, 3, 4],
+					{name: 1, age: 2},
+					'funcName',
+					'at foo...\nat bar...',
+					'count1: 42',
+					'Count for \'count2\' does not exist',
+					NaN,
+					Infinity,
+					-Infinity,
+					undefined,
+				],
+			});
+
+			assert.deepStrictEqual(logger.getAppOutput('time', [['time', 'timer', null]]), {
+				method: 'log',
+				args: ['Timer \'timer\' already exists'],
+			});
+
+			assert.deepStrictEqual(logger.getAppOutput('timeLog', [['time', 'timer', null]]), {
+				method: 'log',
+				args: ['Timer \'timer\' does not exist'],
+			});
+		});
+
+		it('should return correct console method and color', () => {
+			assert.strictEqual(logger.getAppOutput('assert', []).method, 'log');
+			assert.deepStrictEqual(logger.getAppOutput('assert', [1]).args, ['Assertion failed:', 1]);
+
+			assert.strictEqual(logger.getAppOutput('dir').method, 'dir');
+			assert.strictEqual(logger.getAppOutput('table').method, 'table');
+			assert.deepStrictEqual(logger.getAppOutput('table', [['table', [1, 2]]]).args, [[1, 2]]);
+
+			assert.strictEqual(logger.getAppOutput('timeLog', [['time', 'timer', 42]]).method, 'log');
+			assert.deepStrictEqual(logger.getAppOutput('timeLog', [['time', 'timer', 42]]).args, ['timer: 42ms']);
+			assert.deepStrictEqual(
+				logger.getAppOutput('timeEnd', [['time', 'default', null]]).args,
+				['Timer \'default\' does not exist']
+			);
+
+			assert.deepStrictEqual(
+				logger.getAppOutput('trace', [['trace', ['at foo...', 'at bar...']]]).args,
+				['at foo...\nat bar...']
+			);
+		});
+
+		it('should process DOM element correctly', () => {
+			assert.strictEqual(
+				logger.getAppOutput('log', [['element', {
+					nodeType: 1,
+					nodeName: 'div',
+					attributes: {
+						class: 'menu',
+						id: 'main',
+					},
+					children: [{
+						nodeType: 3,
+						nodeValue: '1'.repeat(100),
+					}],
+				}]]).args[0],
+				`<div class="menu" id="main">${'1'.repeat(79)}…</div>`,
+				'el with text node child'
+			);
+
+			assert.strictEqual(
+				logger.getAppOutput('log', [['element', {nodeType: 1, nodeName: 'div'}]]).args[0],
+				'<div>…</div>',
+				'el without child'
+			);
+
+			assert.strictEqual(
+				logger.getAppOutput('log', [['element', {nodeType: 3, nodeValue: 'text'}]]).args[0],
+				'"text"',
+				'just text node'
+			);
+
+			assert.strictEqual(
+				logger.getAppOutput('log', [['element', {nodeType: 3, nodeValue: '1'.repeat(100)}]]).args[0],
+				`"${'1'.repeat(79)}…"`,
+				'text node trimmed'
+			);
+		});
 	});
 });

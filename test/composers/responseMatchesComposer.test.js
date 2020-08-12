@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {responseMatchesComposer} = require('../../lib/composers');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {NETWORK_PROP} = require('../../lib/constants/networkRequest');
@@ -14,7 +15,7 @@ describe('Network Response Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, responseMatchesComposer(data, chain, makeChain));
+		Object.defineProperties(chain, responseMatchesComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.responseMatch, 'function');
 		assert.strictEqual(typeof chain.responseMatches, 'function');
@@ -36,7 +37,7 @@ describe('Network Response Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, responseMatchesComposer(data, chain, makeChain));
+		Object.defineProperties(chain, responseMatchesComposer(suitest, data, chain, makeChain));
 
 		chain.responseMatch(NETWORK_PROP.STATUS, 200);
 		assert.deepStrictEqual(makeChain.lastCall.args[0], {
@@ -86,7 +87,7 @@ describe('Network Response Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, responseMatchesComposer(data, chain, makeChain));
+		Object.defineProperties(chain, responseMatchesComposer(suitest, data, chain, makeChain));
 
 		chain.responseMatch({
 			name: NETWORK_PROP.BODY,
@@ -129,15 +130,13 @@ describe('Network Response Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, responseMatchesComposer(data, chain, makeChain));
+		Object.defineProperties(chain, responseMatchesComposer(suitest, data, chain, makeChain));
 
 		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.BODY, 123]);
 		testInputErrorSync(chain.responseMatch, ['Content-Type']);
 		testInputErrorSync(chain.responseMatch, [Symbol('unknown'), 'test']);
 		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.STATUS, 200, Symbol('=')]);
 		testInputErrorSync(chain.responseMatch, ['Content-Type', 500]);
-		testInputErrorSync(chain.responseMatch, [NETWORK_PROP.STATUS, '200']);
-		testInputErrorSync(chain.responseMatch, [{[NETWORK_PROP.STATUS]: '200'}]);
 	});
 
 	it('should accept array of property definitions as a shortcut', () => {
@@ -145,7 +144,7 @@ describe('Network Response Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, responseMatchesComposer(data, chain, makeChain));
+		Object.defineProperties(chain, responseMatchesComposer(suitest, data, chain, makeChain));
 
 		chain.responseMatch([
 			{
@@ -206,7 +205,7 @@ describe('Network Response Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, responseMatchesComposer(data, chain, makeChain));
+		Object.defineProperties(chain, responseMatchesComposer(suitest, data, chain, makeChain));
 
 		chain.responseMatch({
 			[NETWORK_PROP.BODY]: '{}',
