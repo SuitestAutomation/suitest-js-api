@@ -7,7 +7,6 @@ const webSockets = require('../../lib/api/webSockets');
 const {makeThenComposer} = require('../../lib/composers');
 const suitest = {...suitestInstance, webSockets};
 const SuitestError = require('../../lib/utils/SuitestError');
-const {authContext} = require('../../lib/context');
 
 const noop = () => {
 	// noop
@@ -20,11 +19,11 @@ describe('Then composer', () => {
 	});
 
 	beforeEach(() => {
-		sinon.stub(authContext, 'authorizeWs').resolves();
+		sinon.stub(suitest.authContext, 'authorizeWs').resolves();
 	});
 
 	afterEach(() => {
-		authContext.authorizeWs.restore();
+		suitest.authContext.authorizeWs.restore();
 	});
 
 	after(async() => {
