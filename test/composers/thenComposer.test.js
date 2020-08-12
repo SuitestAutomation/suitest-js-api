@@ -18,6 +18,14 @@ describe('Then composer', () => {
 		await webSockets.connect();
 	});
 
+	beforeEach(() => {
+		sinon.stub(suitest.authContext, 'authorizeWs').resolves();
+	});
+
+	afterEach(() => {
+		suitest.authContext.authorizeWs.restore();
+	});
+
 	after(async() => {
 		await webSockets.disconnect();
 		await testServer.stop();
