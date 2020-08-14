@@ -1,4 +1,5 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	networkRequest,
@@ -7,7 +8,7 @@ const {
 	getComposers,
 	beforeSendMsg,
 	toString,
-} = require('../../lib/chains/networkRequestChain');
+} = require('../../lib/chains/networkRequestChain')(suitest);
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const {SUBJ_COMPARATOR, PROP_COMPARATOR} = require('../../lib/constants/comparator');
@@ -222,7 +223,7 @@ describe('Network request chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				timeout: 2000,
 				condition: {
 					subject: {
@@ -247,7 +248,7 @@ describe('Network request chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				timeout: 2000,
 				condition: {
 					subject: {
@@ -273,7 +274,7 @@ describe('Network request chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				timeout: 2000,
 				condition: {
 					subject: {
@@ -363,7 +364,7 @@ describe('Network request chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				timeout: 2000,
 				condition: {
 					subject: {
@@ -437,7 +438,7 @@ describe('Network request chain', () => {
 		assert.deepStrictEqual(toString({
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'network',

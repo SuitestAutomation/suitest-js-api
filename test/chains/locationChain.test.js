@@ -1,11 +1,11 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {
 	location,
 	locationAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/locationChain');
-const {SUBJ_COMPARATOR} = require('../../lib/mappings');
+} = require('../../lib/chains/locationChain')(suitest);
 const sinon = require('sinon');
 const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
@@ -203,7 +203,7 @@ describe('Location chain', () => {
 		assert.deepStrictEqual(toJSON({isAssert: true}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {subject: {type: 'location'}},
 				timeout: 2000,
 			},

@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {setSizeComposer} = require('../../lib/composers');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
@@ -9,7 +10,7 @@ describe('Set Size Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, setSizeComposer(data, chain, makeChain));
+		Object.defineProperties(chain, setSizeComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.setSize, 'function');
 
@@ -25,7 +26,7 @@ describe('Set Size Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, setSizeComposer(data, chain, makeChain));
+		Object.defineProperties(chain, setSizeComposer(suitest, data, chain, makeChain));
 
 		chain.setSize(10, 20);
 
@@ -41,7 +42,7 @@ describe('Set Size Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, setSizeComposer(data, chain, makeChain));
+		Object.defineProperties(chain, setSizeComposer(suitest, data, chain, makeChain));
 
 		testInputErrorSync(chain.setSize, ['string', 10]);
 		testInputErrorSync(chain.setSize, [10]);

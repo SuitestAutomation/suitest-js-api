@@ -12,7 +12,7 @@ describe('Had No Error Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, hadNoErrorComposer(data, chain, makeChain));
+		Object.defineProperties(chain, hadNoErrorComposer(suitest, data, chain, makeChain));
 
 		const hadNoErrorDescriptor = Object.getOwnPropertyDescriptor(chain, 'hadNoError');
 
@@ -26,7 +26,7 @@ describe('Had No Error Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, hadNoErrorComposer(data, chain, makeChain));
+		Object.defineProperties(chain, hadNoErrorComposer(suitest, data, chain, makeChain));
 
 		chain.hadNoError();
 
@@ -44,7 +44,7 @@ describe('Had No Error Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, hadNoErrorComposer(data, chain, makeChain));
+		Object.defineProperties(chain, hadNoErrorComposer(suitest, data, chain, makeChain));
 
 		chain.hadNoError();
 		assert.deepStrictEqual(
@@ -80,7 +80,7 @@ describe('Had No Error Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, hadNoErrorComposer(data, chain, makeChain));
+		Object.defineProperties(chain, hadNoErrorComposer(suitest, data, chain, makeChain));
 
 		assert.throws(
 			() => chain.hadNoError(null),

@@ -1,11 +1,12 @@
 const assert = require('assert');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
+const suitest = require('../../index');
 const {
 	executeCommand,
 	executeCommandAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/executeCommandChain');
+} = require('../../lib/chains/executeCommandChain')(suitest);
 const sinon = require('sinon');
 const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 

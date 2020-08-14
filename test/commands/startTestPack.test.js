@@ -1,16 +1,17 @@
 const assert = require('assert');
 const nock = require('nock');
 const sinon = require('sinon');
+const suitest = require('../../index');
 
-const logger = require('../../lib/utils/logger');
 const testServer = require('../../lib/utils/testServer');
-const {authContext} = require('../../lib/context');
+const {authContext, logger, config} = suitest;
+const webSockets = require('../../lib/api/webSockets');
+const startTestPack = (...args) =>
+	require('../../lib/commands/startTestPack').startTestPack({...suitest, webSockets}, ...args);
 const sessionConstants = require('../../lib/constants/session');
-const {startTestPack} = require('../../lib/commands/startTestPack');
 const endpoints = require('../../lib/api/endpoints');
 const SuitestError = require('../../lib/utils/SuitestError');
 const makeUrlFromArray = require('../../lib/utils/makeUrlFromArray');
-const {config} = require('../../config');
 const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
 const assertThrowsAsync = require('../../lib/utils/assertThrowsAsync');
 

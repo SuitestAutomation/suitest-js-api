@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {moveToComposer} = require('../../lib/composers');
 
 describe('Move To composer', () => {
@@ -8,7 +9,7 @@ describe('Move To composer', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, moveToComposer(data, chain, makeChain));
+		Object.defineProperties(chain, moveToComposer(suitest, data, chain, makeChain));
 
 		const abandonPropertyDescriptor = Object.getOwnPropertyDescriptor(chain, 'moveTo');
 
@@ -23,7 +24,7 @@ describe('Move To composer', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, moveToComposer(data, chain, makeChain));
+		Object.defineProperties(chain, moveToComposer(suitest, data, chain, makeChain));
 
 		chain.moveTo();
 

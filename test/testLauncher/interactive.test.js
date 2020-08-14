@@ -4,7 +4,7 @@ const sinon = require('sinon');
 const SuitestLauncher = require('../../lib/testLauncher/SuitestLauncher');
 const {handler} = require('../../lib/testLauncher/commands/interactive');
 const {promptPassword} = require('../../lib/utils/testLauncherHelper');
-const logger = require('../../lib/utils/logger');
+const logger = require('../../index').logger;
 
 describe('test launcher interactive command', function() {
 	before(async() => {
@@ -21,6 +21,7 @@ describe('test launcher interactive command', function() {
 		try {
 			await handler({
 				password: 'pass',
+				command: 'sdfsdf',
 			});
 			assert.strictEqual(interactiveStub.called, true);
 		} finally {

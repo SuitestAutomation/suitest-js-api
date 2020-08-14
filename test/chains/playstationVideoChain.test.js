@@ -1,10 +1,11 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const sinon = require('sinon');
 const {
 	playstationVideo,
 	playstationVideoAssert,
 	beforeSendMsg,
-} = require('../../lib/chains/playstationVideoChain');
+} = require('../../lib/chains/playstationVideoChain')(suitest);
 const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const {ELEMENT_PROP} = require('../../lib/constants/element');
 const VIDEO_STATE = require('../../lib/constants/videoState');
@@ -186,7 +187,7 @@ describe('Playstation video chain', () => {
 							type: 'has',
 						},
 						timeout: 2000,
-						type: 'wait',
+						type: 'assert',
 					},
 					type: 'eval',
 				},
@@ -217,7 +218,7 @@ describe('Playstation video chain', () => {
 							type: 'has',
 						},
 						timeout: 2000,
-						type: 'wait',
+						type: 'assert',
 					},
 					type: 'testLine',
 				},
@@ -236,7 +237,7 @@ describe('Playstation video chain', () => {
 						searchStrategy: 'currentUrl',
 					},
 					timeout: 2000,
-					type: 'wait',
+					type: 'assert',
 				},
 				type: 'eval',
 			};
@@ -259,7 +260,7 @@ describe('Playstation video chain', () => {
 							searchStrategy: 'all',
 						},
 						timeout: 2000,
-						type: 'wait',
+						type: 'assert',
 					},
 					type: 'eval',
 				}
@@ -307,7 +308,7 @@ describe('Playstation video chain', () => {
 							type: 'has',
 						},
 						timeout: 4000,
-						type: 'wait',
+						type: 'assert',
 					},
 					type: 'eval',
 				},
@@ -336,7 +337,7 @@ describe('Playstation video chain', () => {
 							type: 'has',
 						},
 						timeout: 4000,
-						type: 'wait',
+						type: 'assert',
 					},
 					type: 'testLine',
 				},

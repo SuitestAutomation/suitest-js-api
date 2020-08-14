@@ -1,4 +1,5 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const {
@@ -6,7 +7,7 @@ const {
 	elementAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/elementChain');
+} = require('../../lib/chains/elementChain')(suitest, suitest.video);
 const {VALUE, ELEMENT_PROP} = require('../../lib/constants/element');
 const VISIBILITY_STATE = require('../../lib/constants/visibilityState');
 const {PROP_COMPARATOR, SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
@@ -318,6 +319,8 @@ describe('Element chain', () => {
 			element('el-api-id').setText('text string').toString(),
 			'Setting text "text string" for "el-api-id"'
 		);
+		assert.throws(elementAssert({css: 'any'}).toString, 'Throws if line malformed');
+		assert.strictEqual(elementAssert({css: 'any'}).exist().toString(), 'Checking if "{"css":"any"}" exists');
 	});
 
 	it('should have beforeSendMsg', () => {
@@ -424,6 +427,18 @@ describe('Element chain', () => {
 				},
 			},
 		}, 'eval click');
+		assert.deepStrictEqual(toJSON({
+			selector: {
+				css: 'css',
+				index: 2,
+			},
+		}), {
+			type: 'query',
+			subject: {
+				type: 'elementProps',
+				selector: {css: 'css', ifMultipleFoundReturn: 2},
+			},
+		}, 'query with index');
 		assert.deepStrictEqual(toJSON({
 			isMoveTo: true,
 			selector: {apiId: 'apiId'},
@@ -536,7 +551,7 @@ describe('Element chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'element',
@@ -556,7 +571,7 @@ describe('Element chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'element',
@@ -577,7 +592,7 @@ describe('Element chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'element',
@@ -599,7 +614,7 @@ describe('Element chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'element',
@@ -650,7 +665,7 @@ describe('Element chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'element',

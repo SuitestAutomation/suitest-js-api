@@ -1,4 +1,5 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {
 	clearAppData,
 	clearAppDataAssert,
@@ -6,7 +7,7 @@ const {
 	toString,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/clearAppDataChain');
+} = require('../../lib/chains/clearAppDataChain')(suitest);
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');

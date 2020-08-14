@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {matchComposer} = require('../../lib/composers');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
@@ -17,7 +18,7 @@ describe('Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.match, 'function');
 		assert.strictEqual(typeof chain.matches, 'function');
@@ -39,7 +40,7 @@ describe('Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchComposer(suitest, data, chain, makeChain));
 
 		chain.match(ELEMENT_PROP.WIDTH);
 		assert.deepStrictEqual(makeChain.lastCall.args[0], {
@@ -135,7 +136,7 @@ describe('Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchComposer(suitest, data, chain, makeChain));
 
 		testInputErrorSync(chain.match, ['height']);
 		testInputErrorSync(chain.match, [Symbol('height')]);
@@ -161,7 +162,7 @@ describe('Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchComposer(suitest, data, chain, makeChain));
 
 		chain.match({
 			name: ELEMENT_PROP.WIDTH,
@@ -228,7 +229,7 @@ describe('Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchComposer(suitest, data, chain, makeChain));
 
 		chain.match([
 			ELEMENT_PROP.WIDTH,
@@ -311,7 +312,7 @@ describe('Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchComposer(suitest, data, chain, makeChain));
 
 		chain.match({
 			[ELEMENT_PROP.WIDTH]: 200,
@@ -345,7 +346,7 @@ describe('Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchComposer(suitest, data, chain, makeChain));
 
 		chain.match({
 			[ELEMENT_PROP.NAME]: ELEMENT_PROP.ALPHA,
@@ -373,7 +374,7 @@ describe('Match Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchComposer(suitest, data, chain, makeChain));
 
 		chain.match({
 			[ELEMENT_PROP.NAME]: 'userEmailField',

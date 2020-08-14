@@ -4,14 +4,15 @@ const sinon = require('sinon');
 const cp = require('child_process');
 
 const testServer = require('../../lib/utils/testServer');
-const {authContext} = require('../../lib/context');
+const {authContext, logger} = require('../../index');
 const TestLauncher = require('../../lib/testLauncher/SuitestLauncher');
 const makeUrlFromArray = require('../../lib/utils/makeUrlFromArray');
 const endpoints = require('../../lib/api/endpoints');
-const config = require('../../config').config;
+const config = require('../../config');
 const {snippets} = require('../../lib/testLauncher/launcherLogger');
-const logger = require('../../lib/utils/logger');
 const mockSpawn = require('../../lib/utils/testHelpers/mockSpawn');
+const webSockets = require('../../lib/api/webSockets');
+const suitest = require('../../index');
 
 describe('SuitestLauncher', () => {
 	before(async() => {
@@ -191,6 +192,7 @@ describe('SuitestLauncher', () => {
 			deviceId: 'deviceId',
 			appConfigId: 'config',
 		}, ['illegalCommand', '--illegalCommand']);
+		suitest.webSockets = webSockets;
 
 		await suitestLauncher.runInteractiveSession();
 		assert.ok(devicesDetailsNock.isDone(), 'device details request');

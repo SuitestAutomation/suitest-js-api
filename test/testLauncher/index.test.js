@@ -1,6 +1,6 @@
 const path = require('path');
 const assert = require('assert');
-const {authContext} = require('../../lib/context');
+const {authContext} = require('../../index');
 
 const testLauncherTest = processExecPath(path.resolve(__dirname, '../../lib/utils/testHelpers/testLauncherTest.js'));
 const spawn = require('child_process').spawn;

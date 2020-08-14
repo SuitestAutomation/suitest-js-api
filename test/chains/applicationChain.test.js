@@ -1,4 +1,5 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	application,
@@ -6,7 +7,7 @@ const {
 	getComposers,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/applicationChain');
+} = require('../../lib/chains/applicationChain')(suitest);
 const composers = require('../../lib/constants/composer');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
@@ -213,7 +214,7 @@ describe('Application chain', () => {
 		assert.deepStrictEqual(toJSON(defaultData), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'application',
@@ -248,7 +249,7 @@ describe('Application chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'application',

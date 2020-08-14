@@ -1,11 +1,12 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	brightScriptExpression,
 	brightScriptExpressionAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/brightScriptExpressionChain');
+} = require('../../lib/chains/brightScriptExpressionChain')(suitest);
 const sinon = require('sinon');
 const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
@@ -169,7 +170,7 @@ describe('BrightScript expression chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'brightscript',
@@ -213,7 +214,7 @@ describe('BrightScript expression chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'brightscript',

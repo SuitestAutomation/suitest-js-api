@@ -1,11 +1,12 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const sinon = require('sinon');
 const {
 	video,
 	videoAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/videoChain');
+} = require('../../lib/chains/videoChain')(suitest);
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {ELEMENT_PROP} = require('../../lib/constants/element');
 const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
@@ -169,7 +170,7 @@ describe('Video chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'video',
@@ -188,7 +189,7 @@ describe('Video chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'video',
@@ -208,7 +209,7 @@ describe('Video chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'video',
@@ -229,7 +230,7 @@ describe('Video chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'video',

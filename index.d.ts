@@ -31,6 +31,7 @@ import {ReplOptions} from './typeDefinition/InteractiveCommandChain';
 import {ImageLoadState} from './typeDefinition/constants/ImageLoadState';
 import {PlayStationVideoChain} from './typeDefinition/PlayStationVideoChain';
 import {HadNoError} from './typeDefinition/constants/HadNoError';
+import {TakeScreenshotChain} from './typeDefinition/TakeScreenshotChain';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -50,8 +51,19 @@ declare namespace suitest {
 		startTest(clientTestId: string, options?: StartTestOptions): Promise<void|SuitestError>;
 		startTest(): Promise<void|SuitestError>;
 		endTest(): Promise<void|SuitestError>;
-		configure(config: ConfigureOptions): Promise<void|SuitestError>;
 		interactive(options: ReplOptions): Promise<void>;
+
+		// config
+		getConfig(): ConfigureOptions;
+
+		/**
+		 * @deprecated use separate methods for changing configuration properties
+		 */
+		configure(config: Partial<ConfigureOptions>): void;
+		setDefaultTimeout(timeout: ConfigureOptions['defaultTimeout']): void;
+		setContinueOnFatalError(continueOnFatalError: ConfigureOptions['continueOnFatalError']): void;
+		setDisallowCrashReports(disallowCrashReports: ConfigureOptions['disallowCrashReports']): void;
+		setLogLevel(logLevel: ConfigureOptions['logLevel']): void;
 
 		// subjects
 		location(): LocationChain;
@@ -76,6 +88,38 @@ declare namespace suitest {
 		press(keys: string[]): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
+		/**
+		 * @description return PromiseLike object with Buffer as value
+		 */
+		takeScreenshot(dataFormat?: 'raw'): TakeScreenshotChain<Buffer>;
+
+		/**
+		 * @description return PromiseLike object with base64 string as value
+		 */
+		takeScreenshot(dataFormat: 'base64'): TakeScreenshotChain<string>;
+
+		/**
+		 * @description the complete path to the file name where the screenshot should be saved.
+		 * @example
+		 * suitest.saveScreenshot('/path/to/file.png');
+		 */
+		saveScreenshot(fileName: string): TakeScreenshotChain<void>;
+
+		getPairedDevice(): null | {
+			deviceId: string,
+			manufacturer: string,
+			model: string,
+			owner: string,
+			firmware: string,
+			isShared: boolean,
+			modelId: string,
+			platforms: string[],
+			customName?: string,
+			inactivityTimeout?: number,
+			status: string,
+			displayName?: string,
+			shortDisplayName?: string
+		}
 
 		// constants
 		PROP: elementTypes.ElementPropTypes;
@@ -217,10 +261,10 @@ declare namespace suitest {
 	}
 
 	interface ConfigureOptions {
-		logLevel?: 'silent'|'normal'|'verbose'|'debug'|'silly';
-		disallowCrashReports?: boolean;
-		continueOnFatalError?: boolean;
-		defaultTimeout?: number;
+		logLevel: 'silent'|'normal'|'verbose'|'debug'|'silly';
+		disallowCrashReports: boolean;
+		continueOnFatalError: boolean;
+		defaultTimeout: number;
 	}
 
 	interface ResponseError {
@@ -228,7 +272,7 @@ declare namespace suitest {
 	}
 
 	interface Context {
-		context: symbol;
+		context: any;
 		setContext(context: symbol): void;
 		clear(): void;
 	}
