@@ -47,7 +47,9 @@ declare namespace suitest {
 		setAppConfig(configId: string, options?: ConfigOverride): Promise<void|SuitestError>;
 		pairDevice(deviceId: string): Promise<DeviceData|SuitestError>;
 		releaseDevice(): Promise<void|SuitestError>;
+		// @deprecated use startTest without arguments
 		startTest(clientTestId: string, options?: StartTestOptions): Promise<void|SuitestError>;
+		startTest(): Promise<void|SuitestError>;
 		endTest(): Promise<void|SuitestError>;
 		interactive(options: ReplOptions): Promise<void>;
 

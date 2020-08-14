@@ -8,7 +8,6 @@ const webSockets = require('../../lib/api/webSockets');
 const {authContext, testContext, logger} = suitest;
 const startTest = (...args) => require('../../lib/commands/startTest')({...suitest, webSockets}, ...args);
 const SuitestError = require('../../lib/utils/SuitestError');
-const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('startTest', () => {
 	before(async() => {
@@ -29,12 +28,6 @@ describe('startTest', () => {
 		testContext.clear();
 		authContext.clear();
 		webSockets.disconnect();
-	});
-
-	it('should not allow startTest with invalid input', async() => {
-		await testInputErrorAsync(startTest, []);
-		await testInputErrorAsync(startTest, [1]);
-		await testInputErrorAsync(startTest, [null, {}]);
 	});
 
 	it('should not allow startTest command in guest, access token contexts', async() => {
