@@ -584,6 +584,7 @@ describe('Socket error messages', () => {
 			[basePayload('adbError'), 'ADB communication with the device has failed. Make sure your device is set up correctly and it can be connected to using ADB.'],
 			[basePayload('outOfMemory'), 'Failed to open the app. Device is out of memory, please restart the device.'],
 			[basePayload('configuratorError'), 'Make sure that Apple Configurator 2 and Automation Tools are installed. Please see our docs.'],
+			[basePayload('appleNetworkLogsError'), 'SuitestDrive can\'t launch NetworkLog service on Mac'],
 			[basePayload('appStoreBuild'), 'Can’t install App Store distribution build.'],
 			[basePayload('ioError'), 'Problem with storing data. Please check that there is enough disk space and that permissions are not limited. Contact support (mailto:support@suite.st) if problem persists.'],
 			[basePayload('netError'), 'Downloading of the driver failed, please check your internet connection and try again later. Contact support (mailto:support@suite.st) if problem persists.'],
