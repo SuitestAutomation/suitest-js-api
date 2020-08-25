@@ -98,7 +98,7 @@ describe('Socket error messages', () => {
 			[basePayload('failedStart'), 'Chain description.'],
 			[basePayload('missingApp'), 'Application is not installed on the device.'],
 			[basePayload('outdatedLibrary'), 'We have detected that your instrumentation library is outdated and the package cannot be opened. Update required.'],
-			[basePayload('initPlatformFailed'), 'Failed to start Suitest bootstrap application on this device.'],
+			[basePayload('initPlatformFailed'), 'Failed to bootstrap platform on this device.'],
 			[basePayload('packageNotFound'), 'There is nothing to test, because the selected configuration does not contain an app package. Upload a package on your app\'s configuration page before continuing.'],
 			[basePayload('internalError'), 'Internal error occurred. Chain description.'],
 			[basePayload('ILInternalError'), 'Internal error occurred. Chain description.'],
