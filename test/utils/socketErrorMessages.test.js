@@ -98,7 +98,7 @@ describe('Socket error messages', () => {
 			[basePayload('failedStart'), 'Chain description.'],
 			[basePayload('missingApp'), 'Application is not installed on the device.'],
 			[basePayload('outdatedLibrary'), 'We have detected that your instrumentation library is outdated and the package cannot be opened. Update required.'],
-			[basePayload('initPlatformFailed'), 'Failed to start Suitest bootstrap application on this device.'],
+			[basePayload('initPlatformFailed'), 'Failed to bootstrap platform on this device.'],
 			[basePayload('packageNotFound'), 'There is nothing to test, because the selected configuration does not contain an app package. Upload a package on your app\'s configuration page before continuing.'],
 			[basePayload('internalError'), 'Internal error occurred. Chain description.'],
 			[basePayload('ILInternalError'), 'Internal error occurred. Chain description.'],
@@ -242,7 +242,7 @@ describe('Socket error messages', () => {
 					jsonMessage: {
 						type: 'eval',
 						request: {
-							type: 'wait',
+							type: 'assert',
 							condition: {
 								subject: {
 									type: 'network',
@@ -293,7 +293,7 @@ describe('Socket error messages', () => {
 					jsonMessage: {
 						type: 'eval',
 						request: {
-							type: 'wait',
+							type: 'assert',
 							condition: {
 								subject: {
 									type: 'network',
@@ -384,7 +384,7 @@ describe('Socket error messages', () => {
 					jsonMessage: {
 						type: 'eval',
 						request: {
-							type: 'wait',
+							type: 'assert',
 							condition: {
 								subject: {
 									type: 'element',
@@ -403,7 +403,7 @@ describe('Socket error messages', () => {
 			[basePayload('networkError'), 'Chain description.'],
 			[basePayload('noHasLines'), 'No assertion properties defined. Chain description.'],
 			[basePayload('appCrashed'), 'App seems to have crashed. Chain description.'],
-			[basePayload('timeLimitExceeded'), 'Test execution limit exceeded (based on your subscription). Chain description.'],
+			[basePayload('timeLimitExceeded'), 'Test execution time limit exceeded. Contact us at sales@suite.st if you need to run longer tests. Chain description.'],
 			[basePayload('notResponding'), 'Device stopped responding.'],
 			[basePayload('suitestifyError'), 'Suitestify failed to start. Check your Suitestify settings.'],
 			[basePayload('suitestifyRequired'), 'This assertion only works with Suitestify. You can configure your app to use Suitestify in the app settings. Please note that Suitestify is not available for all platforms.'],
@@ -580,10 +580,17 @@ describe('Socket error messages', () => {
 			],
 			[basePayload('outdatedLibraryWarning'), 'We have detected that your instrumentation library is outdated, the package can still be opened. Consider updating.'],
 			[basePayload('adbError', undefined, 'testReason'), 'testReason'],
+			[basePayload('adbError', 'certificateError'), 'Unable to parse the application signing certificate. Make sure your app package is signed and the certificate is valid.'],
 			[basePayload('adbError'), 'ADB communication with the device has failed. Make sure your device is set up correctly and it can be connected to using ADB.'],
 			[basePayload('outOfMemory'), 'Failed to open the app. Device is out of memory, please restart the device.'],
 			[basePayload('configuratorError'), 'Make sure that Apple Configurator 2 and Automation Tools are installed. Please see our docs.'],
+			[basePayload('appleNetworkLogsError'), 'SuitestDrive can\'t launch NetworkLog service on Mac'],
 			[basePayload('appStoreBuild'), 'Can’t install App Store distribution build.'],
+			[basePayload('ioError'), 'Problem with storing data. Please check that there is enough disk space and that permissions are not limited. Contact support (mailto:support@suite.st) if problem persists.'],
+			[basePayload('netError'), 'Downloading of the driver failed, please check your internet connection and try again later. Contact support (mailto:support@suite.st) if problem persists.'],
+			[basePayload('sdComponentFailed'), 'Downloading of the driver failed, please try again later. Contact support (mailto:support@suite.st) if problem persists.'],
+			[basePayload('MoveTargetOutOfBounds'), 'Move target is outside of the visible area of the screen.'],
+			[basePayload('ElementClickIntercepted'), 'Click on the element was intercepted by another element.'],
 			[basePayload('unsupportedOSVersion'), 'Unsupported OS version, please see our docs (https://suite.st/docs/devices/playstation/).'],
 			[basePayload('targetManagerUnsupportedVersion'), 'Unsupported Target Manager Server, please see our docs (https://suite.st/docs/devices/playstation/).'],
 		].forEach(([payload, expectMessage]) => {

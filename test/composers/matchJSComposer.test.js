@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {matchJSComposer} = require('../../lib/composers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
@@ -10,7 +11,7 @@ describe('Match JS Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchJSComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchJSComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.matchJS, 'function');
 		assert.strictEqual(typeof chain.matchesJS, 'function');
@@ -32,7 +33,7 @@ describe('Match JS Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, matchJSComposer(data, chain, makeChain));
+		Object.defineProperties(chain, matchJSComposer(suitest, data, chain, makeChain));
 
 		chain.matchJS('test');
 

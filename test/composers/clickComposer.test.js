@@ -1,6 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {clickComposer} = require('../../lib/composers');
+const suitest = require('../../index');
 
 describe('Click composer', () => {
 	it('should define click method', () => {
@@ -8,7 +9,7 @@ describe('Click composer', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, clickComposer(data, chain, makeChain));
+		Object.defineProperties(chain, clickComposer(suitest, data, chain, makeChain));
 
 		const abandonPropertyDescriptor = Object.getOwnPropertyDescriptor(chain, 'click');
 
@@ -23,7 +24,7 @@ describe('Click composer', () => {
 		const data = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, clickComposer(data, chain, makeChain));
+		Object.defineProperties(chain, clickComposer(suitest, data, chain, makeChain));
 
 		chain.click();
 

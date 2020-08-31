@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {notComposer} = require('../../lib/composers');
 
 describe('Not Composer', () => {
@@ -8,7 +9,7 @@ describe('Not Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, notComposer(data, chain, makeChain));
+		Object.defineProperties(chain, notComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.not, 'function');
 		assert.strictEqual(typeof chain.doesNot, 'function');
@@ -36,7 +37,7 @@ describe('Not Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, notComposer(data, chain, makeChain));
+		Object.defineProperties(chain, notComposer(suitest, data, chain, makeChain));
 
 		chain.not();
 

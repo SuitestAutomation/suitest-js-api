@@ -1,6 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {cloneComposer} = require('../../lib/composers');
+const suitest = require('../../index');
 
 describe('Clone composer', () => {
 	it('should define clone method', () => {
@@ -8,7 +9,7 @@ describe('Clone composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, cloneComposer(data, chain, makeChain));
+		Object.defineProperties(chain, cloneComposer(suitest, data, chain, makeChain));
 
 		const clonePropertyDescriptor = Object.getOwnPropertyDescriptor(chain, 'clone');
 
@@ -23,7 +24,7 @@ describe('Clone composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, cloneComposer(data, chain, makeChain));
+		Object.defineProperties(chain, cloneComposer(suitest, data, chain, makeChain));
 
 		chain.clone();
 

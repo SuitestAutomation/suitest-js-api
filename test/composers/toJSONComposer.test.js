@@ -1,5 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const {makeToJSONComposer} = require('../../lib/composers');
 
 describe('toJSON Composer', () => {
@@ -8,7 +9,7 @@ describe('toJSON Composer', () => {
 		const chain = {};
 		const callback = sinon.spy();
 
-		Object.defineProperties(chain, makeToJSONComposer(callback)(data, chain));
+		Object.defineProperties(chain, makeToJSONComposer(callback)(suitest, data, chain));
 
 		assert.strictEqual(typeof chain.toJSON, 'function');
 
@@ -25,7 +26,7 @@ describe('toJSON Composer', () => {
 		const chain = {};
 		const callback = sinon.spy(() => json);
 
-		Object.defineProperties(chain, makeToJSONComposer(callback)(data, chain));
+		Object.defineProperties(chain, makeToJSONComposer(callback)(suitest, data, chain));
 
 		const res = chain.toJSON();
 

@@ -1,14 +1,13 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const suitest = require('../../index');
 const testServer = require('../../lib/utils/testServer');
 
 const sessionConstants = require('../../lib/constants/session');
-const {authContext, testContext} = require('../../lib/context');
-const startTest = require('../../lib/commands/startTest');
-const SuitestError = require('../../lib/utils/SuitestError');
 const webSockets = require('../../lib/api/webSockets');
-const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
-const logger = require('../../lib/utils/logger');
+const {authContext, testContext, logger} = suitest;
+const startTest = (...args) => require('../../lib/commands/startTest')({...suitest, webSockets}, ...args);
+const SuitestError = require('../../lib/utils/SuitestError');
 
 describe('startTest', () => {
 	before(async() => {
@@ -29,12 +28,6 @@ describe('startTest', () => {
 		testContext.clear();
 		authContext.clear();
 		webSockets.disconnect();
-	});
-
-	it('should not allow startTest with invalid input', async() => {
-		await testInputErrorAsync(startTest, []);
-		await testInputErrorAsync(startTest, [1]);
-		await testInputErrorAsync(startTest, [null, {}]);
 	});
 
 	it('should not allow startTest command in guest, access token contexts', async() => {

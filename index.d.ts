@@ -47,10 +47,23 @@ declare namespace suitest {
 		setAppConfig(configId: string, options?: ConfigOverride): Promise<void|SuitestError>;
 		pairDevice(deviceId: string): Promise<DeviceData|SuitestError>;
 		releaseDevice(): Promise<void|SuitestError>;
+		// @deprecated use startTest without arguments
 		startTest(clientTestId: string, options?: StartTestOptions): Promise<void|SuitestError>;
+		startTest(): Promise<void|SuitestError>;
 		endTest(): Promise<void|SuitestError>;
-		configure(config: ConfigureOptions): Promise<void|SuitestError>;
 		interactive(options: ReplOptions): Promise<void>;
+
+		// config
+		getConfig(): ConfigureOptions;
+
+		/**
+		 * @deprecated use separate methods for changing configuration properties
+		 */
+		configure(config: Partial<ConfigureOptions>): void;
+		setDefaultTimeout(timeout: ConfigureOptions['defaultTimeout']): void;
+		setContinueOnFatalError(continueOnFatalError: ConfigureOptions['continueOnFatalError']): void;
+		setDisallowCrashReports(disallowCrashReports: ConfigureOptions['disallowCrashReports']): void;
+		setLogLevel(logLevel: ConfigureOptions['logLevel']): void;
 
 		// subjects
 		location(): LocationChain;
@@ -91,6 +104,22 @@ declare namespace suitest {
 		 * suitest.saveScreenshot('/path/to/file.png');
 		 */
 		saveScreenshot(fileName: string): TakeScreenshotChain<void>;
+
+		getPairedDevice(): null | {
+			deviceId: string,
+			manufacturer: string,
+			model: string,
+			owner: string,
+			firmware: string,
+			isShared: boolean,
+			modelId: string,
+			platforms: string[],
+			customName?: string,
+			inactivityTimeout?: number,
+			status: string,
+			displayName?: string,
+			shortDisplayName?: string
+		}
 
 		// constants
 		PROP: elementTypes.ElementPropTypes;
@@ -232,10 +261,10 @@ declare namespace suitest {
 	}
 
 	interface ConfigureOptions {
-		logLevel?: 'silent'|'normal'|'verbose'|'debug'|'silly';
-		disallowCrashReports?: boolean;
-		continueOnFatalError?: boolean;
-		defaultTimeout?: number;
+		logLevel: 'silent'|'normal'|'verbose'|'debug'|'silly';
+		disallowCrashReports: boolean;
+		continueOnFatalError: boolean;
+		defaultTimeout: number;
 	}
 
 	interface ResponseError {

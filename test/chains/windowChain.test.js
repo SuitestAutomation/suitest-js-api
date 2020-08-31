@@ -1,10 +1,11 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {
 	window,
 	windowAssert,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/windowChain');
+} = require('../../lib/chains/windowChain')(suitest);
 const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const sinon = require('sinon');
 

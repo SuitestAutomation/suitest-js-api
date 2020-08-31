@@ -3,6 +3,10 @@ export interface Thenable <R> {
 	then <U> (onFulfilled?: (value: R) => U | Thenable<U>, onRejected?: (error: any) => void): Thenable<U>;
 }
 
+/**
+ * @description should return string representation of chain. May throw SuitestError if chain is malformed
+ * @throws {SuitestError} - May happen if chain is malformed
+ */
 export interface AbstractChain {
 	toString(): String;
 }

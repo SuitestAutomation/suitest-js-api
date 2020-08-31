@@ -1,4 +1,5 @@
 const assert = require('assert');
+const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 const {
 	cookie,
@@ -7,7 +8,7 @@ const {
 	toString,
 	toJSON,
 	beforeSendMsg,
-} = require('../../lib/chains/cookieChain');
+} = require('../../lib/chains/cookieChain')(suitest);
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
@@ -97,7 +98,7 @@ describe('Cookie chain', () => {
 		assert.strictEqual(toString({
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',
@@ -111,7 +112,7 @@ describe('Cookie chain', () => {
 		assert.strictEqual(toString({
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',
@@ -125,7 +126,7 @@ describe('Cookie chain', () => {
 		assert.strictEqual(toString({
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',
@@ -140,7 +141,7 @@ describe('Cookie chain', () => {
 		assert.strictEqual(toString({
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',
@@ -155,7 +156,7 @@ describe('Cookie chain', () => {
 		assert.strictEqual(toString({
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',
@@ -170,7 +171,7 @@ describe('Cookie chain', () => {
 		assert.strictEqual(toString({
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',
@@ -184,7 +185,7 @@ describe('Cookie chain', () => {
 		}), 'Checking if "cookieName" cookie does not equal test');
 		// pass raw line definition json
 		assert.strictEqual(toString({
-			type: 'wait',
+			type: 'assert',
 			condition: {
 				subject: {
 					type: 'cookie',
@@ -242,7 +243,7 @@ describe('Cookie chain', () => {
 		assert.deepStrictEqual(toJSON({isAssert: true}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {subject: {type: 'cookie'}},
 				timeout: 2000,
 			},
@@ -253,7 +254,7 @@ describe('Cookie chain', () => {
 		}), {
 			type: 'testLine',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {subject: {type: 'cookie'}},
 				timeout: 1000,
 			},
@@ -287,7 +288,7 @@ describe('Cookie chain', () => {
 		}), {
 			type: 'eval',
 			request: {
-				type: 'wait',
+				type: 'assert',
 				condition: {
 					subject: {
 						type: 'cookie',

@@ -3,6 +3,7 @@ const sinon = require('sinon');
 const {containComposer} = require('../../lib/composers');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
+const suitest = require('../../index');
 
 describe('Contain Composer', () => {
 	it('should provide .contain and .contains methods', () => {
@@ -10,7 +11,7 @@ describe('Contain Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, containComposer(data, chain, makeChain));
+		Object.defineProperties(chain, containComposer(suitest, data, chain, makeChain));
 
 		assert.strictEqual(typeof chain.contain, 'function');
 		assert.strictEqual(typeof chain.contains, 'function');
@@ -32,7 +33,7 @@ describe('Contain Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, containComposer(data, chain, makeChain));
+		Object.defineProperties(chain, containComposer(suitest, data, chain, makeChain));
 
 		chain.contains('test');
 
@@ -49,7 +50,7 @@ describe('Contain Composer', () => {
 		const chain = {};
 		const makeChain = sinon.spy();
 
-		Object.defineProperties(chain, containComposer(data, chain, makeChain));
+		Object.defineProperties(chain, containComposer(suitest, data, chain, makeChain));
 
 		testInputErrorSync(chain.contain, [1]);
 		testInputErrorSync(chain.contain, []);

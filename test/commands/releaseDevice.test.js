@@ -1,13 +1,13 @@
 const assert = require('assert');
 const testServer = require('../../lib/utils/testServer');
 const sinon = require('sinon');
+const suitest = require('../../index');
 
 const sessionConstants = require('../../lib/constants/session');
-const {authContext, pairedDeviceContext} = require('../../lib/context');
-const releaseDevice = require('../../lib/commands/releaseDevice');
-const SuitestError = require('../../lib/utils/SuitestError');
 const webSockets = require('../../lib/api/webSockets');
-const logger = require('../../lib/utils/logger');
+const {authContext, pairedDeviceContext, logger} = suitest;
+const releaseDevice = () => require('../../lib/commands/releaseDevice')({...suitest, webSockets});
+const SuitestError = require('../../lib/utils/SuitestError');
 
 describe('releaseDevice', () => {
 	before(async() => {

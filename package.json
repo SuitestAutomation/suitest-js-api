@@ -1,6 +1,6 @@
 {
   "name": "suitest-js-api",
-  "version": "1.17.1",
+  "version": "1.17.8",
   "main": "index.js",
   "repository": "git@github.com:SuitestAutomation/suitest-js-api.git",
   "author": "Suitest <hello@suite.st>",
@@ -37,11 +37,13 @@
     "lint": "eslint lib/ test/ --quiet"
   },
   "files": [
+    "bin",
     "config",
     "lib",
     "typeDefinition",
     "index.d.ts",
     "index.js",
+    "suitest.js",
     "CODE_OF_CONDUCT.md",
     "CONTRIBUTING.md",
     "LICENSE"
