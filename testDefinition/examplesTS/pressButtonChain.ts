@@ -13,6 +13,9 @@ async function testPressButton() {
 
 	await suitest.press(suitest.VRC.BUTTON_10);
 	await suitest.press(suitest.VRC.D_PAD_CENTER);
+	// ps buttons
+	await suitest.press(suitest.VRC.CROSS);
+	await suitest.press(suitest.VRC.L2);
 	// getters
 	const pressOk = suitest.press(suitest.VRC.OK);
 

@@ -591,6 +591,8 @@ describe('Socket error messages', () => {
 			[basePayload('sdComponentFailed'), 'Downloading of the driver failed, please try again later. Contact support (mailto:support@suite.st) if problem persists.'],
 			[basePayload('MoveTargetOutOfBounds'), 'Move target is outside of the visible area of the screen.'],
 			[basePayload('ElementClickIntercepted'), 'Click on the element was intercepted by another element.'],
+			[basePayload('unsupportedOSVersion'), 'Unsupported OS version, please see our docs (https://suite.st/docs/devices/playstation/#sdk-650-or-system-software-701-or-lower).'],
+			[basePayload('targetManagerUnsupportedVersion'), 'Unsupported Target Manager Server, please see our docs (https://suite.st/docs/devices/playstation/#sdk-650-or-system-software-701-or-lower).'],
 		].forEach(([payload, expectMessage]) => {
 			it(expectMessage, () => {
 				assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
