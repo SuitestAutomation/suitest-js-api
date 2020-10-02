@@ -55,24 +55,6 @@ describe('Open URL chain', () => {
 		assert.strictEqual(chain.times, chain);
 	});
 
-	it('should convert to string with meaningful message', () => {
-		// passing generated json message
-		assert.strictEqual(toString({
-			request: {url: '/test'},
-		}), 'Opening /test');
-		// passing raw json definition
-		assert.strictEqual(toString({url: '/test'}), 'Opening /test');
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
-
-		beforeSendMsgContains({absoluteURL: '/'}, 'Launcher E Opening /');
-		beforeSendMsgContains({absoluteURL: '/', isAssert: true}, 'Launcher A Opening /');
-		log.restore();
-	});
-
 	it('should generate correct socket message based on data', () => {
 		assert.deepStrictEqual(toJSON({absoluteURL: '/test'}), {
 			type: 'eval',

@@ -95,50 +95,6 @@ describe('Playstation video chain', () => {
 		assert.strictEqual(typeof chain.then, 'function');
 	});
 
-	it('should convert to string with meaningful message', () => {
-		assert.strictEqual(playstationVideo().toString(), 'Getting properties of "PlayStation WebMAF video"');
-		assert.strictEqual(
-			playstationVideo().matches(ELEMENT_PROP.VIDEO_URL, 'some/url').toString(),
-			'Checking if "PlayStation WebMAF video" matches:\n' +
-			'  videoUrl = some/url'
-		);
-		assert.strictEqual(
-			playstationVideo().matches(ELEMENT_PROP.VIDEO_URL, 'some/url').timeout(4000).toString(),
-			'Checking if "PlayStation WebMAF video" matches:\n' +
-			'  videoUrl = some/url'
-		);
-		assert.strictEqual(
-			playstationVideo().hadNoError(HAD_NO_ERROR.CURRENT_URL).toString(),
-			'PlayStation WebMAF video had no errors for current video URL',
-		);
-		assert.strictEqual(
-			playstationVideo().hadNoError(HAD_NO_ERROR.ALL).toString(),
-			'PlayStation WebMAF video had no errors in entire video log',
-		);
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
-
-		beforeSendMsgContains({}, 'Launcher E Getting properties of "PlayStation WebMAF video"');
-		beforeSendMsgContains(
-			{
-				comparator: {type: 'hadNoError'},
-				searchStrategy: 'all',
-			},
-			'Launcher E PlayStation WebMAF video had no errors in entire video log');
-		beforeSendMsgContains(
-			{
-				comparator: {type: 'hadNoError'},
-				searchStrategy: 'all',
-				isAssert: true,
-			},
-			'Launcher A PlayStation WebMAF video had no errors in entire video log'
-		);
-		log.restore();
-	});
-
 	describe('should generate proper JSON', () => {
 		it('for initial state', () => {
 			assert.deepStrictEqual(

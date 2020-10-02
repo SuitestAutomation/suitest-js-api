@@ -33,41 +33,6 @@ describe('Run test chain', () => {
 		assert.strictEqual(typeof chain.abandon, 'undefined');
 	});
 
-	it('should convert to string with meaningful message', () => {
-		assert.strictEqual(
-			runTest('testId').toString(),
-			'Running test by ID "testId", repeat 1 times'
-		);
-		assert.strictEqual(
-			runTest('testId').repeat(10).toString(),
-			'Running test by ID "testId", repeat 10 times'
-		);
-		assert.strictEqual(
-			runTest('testId')
-				.until({
-					toJSON: () => ({
-						request: {
-							condition: {
-								subject: {
-									type: 'location',
-								},
-							},
-						},
-					}),
-				})
-				.repeat(10).toString(),
-			'Running test by ID "testId", repeat 10 times'
-		);
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-
-		beforeSendMsg({type: 'testLine'});
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
-		log.restore();
-	});
-
 	it('should throw error in case of invalid input', () => {
 		testInputErrorSync(runTest, []);
 		testInputErrorSync(runTest, ['']);

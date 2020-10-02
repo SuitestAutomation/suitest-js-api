@@ -43,36 +43,6 @@ describe('Poll URL chain', () => {
 		assert.strictEqual(chain.times, chain);
 	});
 
-	it('should convert to string with meaningful message', () => {
-		// pass generated json message
-		assert.strictEqual(toString({
-			request: {
-				url: 'url',
-				response: true,
-			},
-		}), 'Will poll "url" every 500ms until response equals "true"'),
-		// pass raw command json definition
-		assert.strictEqual(toString({
-			url: 'url',
-			response: true,
-		}), 'Will poll "url" every 500ms until response equals "true"');
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
-
-		beforeSendMsgContains(
-			{url: 'testUrl', response: 'testResponse'},
-			'Launcher E Will poll "testUrl" every 500ms until response equals "testResponse"'
-		);
-		beforeSendMsgContains(
-			{url: 'testUrl', response: 'testResponse', isAssert: true},
-			'Launcher A Will poll "testUrl" every 500ms until response equals "testResponse"'
-		);
-		log.restore();
-	});
-
 	it('should generate correct socket message based on data', () => {
 		assert.deepStrictEqual(toJSON({
 			url: 'url',

@@ -61,66 +61,6 @@ describe('Position chain', () => {
 		assert.strictEqual(typeof chain.abandon, 'undefined');
 	});
 
-	it('should convert to string with meaningful message', () => {
-		testInputErrorSync(position(1, 1).toString);
-		assert.equal(
-			position(1, 1).click().toString(),
-			'Clicking at [1, 1], repeat 1 times every 1 ms'
-		);
-		assert.equal(
-			position(1, 2).click().repeat(10).interval(2000).toString(),
-			'Clicking at [1, 2], repeat 10 times every 2000 ms'
-		);
-		assert.equal(
-			position(1, 2).click()
-				.until({
-					toJSON: () => ({
-						request: {
-							condition: {
-								subject: {
-									type: 'location',
-								},
-							},
-						},
-					}),
-				})
-				.repeat(10).interval(2000).toString(),
-			'Clicking at [1, 2], repeat 10 times every 2000 ms'
-		);
-		assert.equal(
-			position(1, 2).moveTo().toString(),
-			'Moving cursor to position [1, 2]'
-		);
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
-
-		beforeSendMsgContains(
-			{
-				coordinates: {
-					x: 10,
-					y: 20,
-				},
-				isClick: true,
-			},
-			'Launcher E Clicking at [10, 20], repeat 1 times every 1 ms'
-		);
-		beforeSendMsgContains(
-			{
-				coordinates: {
-					x: 10,
-					y: 20,
-				},
-				isAssert: true,
-				isClick: true,
-			},
-			'Launcher A Clicking at [10, 20], repeat 1 times every 1 ms'
-		);
-		log.restore();
-	});
-
 	it('should throw error in case of invalid input', () => {
 		testInputErrorSync(position, [1]);
 		testInputErrorSync(position, [null, 1]);
