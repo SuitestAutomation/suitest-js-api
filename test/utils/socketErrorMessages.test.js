@@ -593,6 +593,8 @@ describe('Socket error messages', () => {
 			[basePayload('ElementClickIntercepted'), 'Click on the element was intercepted by another element.'],
 			[basePayload('unsupportedOSVersion'), 'Unsupported OS version, please see our docs (https://suite.st/docs/devices/playstation/#sdk-650-or-system-software-701-or-lower).'],
 			[basePayload('targetManagerUnsupportedVersion'), 'Unsupported Target Manager Server, please see our docs (https://suite.st/docs/devices/playstation/#sdk-650-or-system-software-701-or-lower).'],
+			[basePayload('connectionNotAuthorized'), 'Connection not authorized. Debug mode is not allowed on the device, please make sure it is enabled.'],
+			[basePayload('systemOutdated'), 'System software version mismatch. New version of system software is required.'],
 		].forEach(([payload, expectMessage]) => {
 			it(expectMessage, () => {
 				assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
