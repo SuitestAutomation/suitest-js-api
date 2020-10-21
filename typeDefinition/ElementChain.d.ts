@@ -7,6 +7,9 @@ import {
 	ElementMatchModifiers,
 	Timeout,
 	Clickable,
+	TapModifier,
+	ScrollModifier,
+	SwipeModifier,
 	SendTextModifier,
 	SetTextModifier,
 	MoveToModifier,
@@ -27,6 +30,9 @@ export interface ElementChain extends
 	SendTextModifier<ElementRepeatIntervalChain>, // sendText
 	SetTextModifier<ElementEmptyChain>, // setText
 	Clickable<ElementRepeatIntervalChain>, // click
+	TapModifier<ElementRepeatIntervalChain>, // tap
+	ScrollModifier<ElementRepeatIntervalChain>, // scroll
+	SwipeModifier<ElementRepeatIntervalChain>, // swipe
 	MoveToModifier<ElementEmptyChain>, // moveTo
 	VisibleModifier<ElementWithoutEvalChain>
 {}

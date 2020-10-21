@@ -157,3 +157,58 @@ el.matches([
 
 // With assert
 suitest.assert.element('api-id');
+
+async () => {
+	// tap element
+	const tapElement = element('a').tap('single');
+	element('a').tap('double');
+	element('a').tap('long');
+	element('a').tap(suitest.TAP_TYPES.DOUBLE);
+	element('a').tap(suitest.TAP_TYPES.LONG);
+	element('a').tap(suitest.TAP_TYPES.SINGLE);
+
+	await tapElement;
+	await tapElement.repeat(1);
+	await tapElement.repeat(5).interval(300);
+
+
+	// scroll from element
+	const scrollElement = element('b').scroll('top', 1);
+	element('b').scroll('top', 1);
+	element('b').scroll('top', 1);
+	element('b').scroll(suitest.DIRECTIONS.BOTTOM, 1);
+	element('b').scroll(suitest.DIRECTIONS.LEFT, 1);
+	element('b').scroll(suitest.DIRECTIONS.RIGHT, 1);
+	element('b').scroll(suitest.DIRECTIONS.TOP, 1);
+
+	await scrollElement;
+	await scrollElement.repeat(1);
+	await scrollElement.repeat(5).interval(300);
+
+// swipe position
+	const swipePos = element('a').swipe('top', 1, 1);
+	element('b').swipe('top', 1, 1);
+	element('b').swipe('top', 1, 1);
+	element('b').swipe(suitest.DIRECTIONS.BOTTOM, 1, 1);
+	element('b').swipe(suitest.DIRECTIONS.LEFT, 1, 1);
+	element('b').swipe(suitest.DIRECTIONS.RIGHT, 1, 1);
+	element('b').swipe(suitest.DIRECTIONS.TOP, 1, 1);
+
+	await swipePos;
+	await swipePos.repeat(1);
+	await swipePos.repeat(5).interval(300);
+
+	// flick position
+	const flickPos = element('a').flick('top', 1, 1);
+	element('b').flick('top', 1, 1);
+	element('b').flick('top', 1, 1);
+	element('b').flick(suitest.DIRECTIONS.BOTTOM, 1, 1);
+	element('b').flick(suitest.DIRECTIONS.LEFT, 1, 1);
+	element('b').flick(suitest.DIRECTIONS.RIGHT, 1, 1);
+	element('b').flick(suitest.DIRECTIONS.TOP, 1, 1);
+
+	await flickPos;
+	await flickPos.repeat(1);
+	await flickPos.repeat(5).interval(300);
+
+}

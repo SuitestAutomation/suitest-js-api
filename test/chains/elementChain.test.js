@@ -37,6 +37,10 @@ describe('Element chain', () => {
 		// assert.strictEqual(typeof chain.matchesBrightScript, 'function');
 		assert.strictEqual(typeof chain.timeout, 'function');
 		assert.strictEqual(typeof chain.click, 'function');
+		assert.strictEqual(typeof chain.tap, 'function');
+		assert.strictEqual(typeof chain.scroll, 'function');
+		assert.strictEqual(typeof chain.swipe, 'function');
+		assert.strictEqual(typeof chain.flick, 'function');
 		assert.strictEqual(typeof chain.repeat, 'undefined');
 		assert.strictEqual(typeof chain.interval, 'undefined');
 		assert.strictEqual(typeof chain.until, 'undefined');
@@ -65,6 +69,10 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
 		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
+		assert.strictEqual(typeof chain.tap, 'undefined');
+		assert.strictEqual(typeof chain.scroll, 'undefined');
+		assert.strictEqual(typeof chain.swipe, 'undefined');
+		assert.strictEqual(typeof chain.flick, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
 		assert.strictEqual(typeof chain.setText, 'undefined');
@@ -92,6 +100,109 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.until, 'function');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
+		assert.strictEqual(typeof chain.tap, 'undefined');
+		assert.strictEqual(typeof chain.scroll, 'undefined');
+		assert.strictEqual(typeof chain.swipe, 'undefined');
+		assert.strictEqual(typeof chain.flick, 'undefined');
+		assert.strictEqual(typeof chain.sendText, 'undefined');
+		assert.strictEqual(typeof chain.setText, 'undefined');
+		assert.strictEqual(typeof chain.not, 'undefined');
+		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
+		assert.strictEqual(typeof chain.isPlaying, 'undefined');
+		assert.strictEqual(typeof chain.isStopped, 'undefined');
+		assert.strictEqual(typeof chain.isPaused, 'undefined');
+	});
+
+	it('should have only allowed modifiers after tap is applied', () => {
+		const chain = element('element').tap('single');
+
+		assert.strictEqual(typeof chain.exist, 'undefined');
+		assert.strictEqual(typeof chain.exists, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
+		assert.strictEqual(typeof chain.match, 'undefined');
+		assert.strictEqual(typeof chain.matches, 'undefined');
+		assert.strictEqual(typeof chain.matchRepo, 'undefined');
+		assert.strictEqual(typeof chain.matchesRepo, 'undefined');
+		assert.strictEqual(typeof chain.matchJS, 'undefined');
+		assert.strictEqual(typeof chain.matchesJS, 'undefined');
+		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.repeat, 'function');
+		assert.strictEqual(typeof chain.interval, 'function');
+		assert.strictEqual(typeof chain.until, 'function');
+		assert.strictEqual(typeof chain.moveTo, 'undefined');
+		assert.strictEqual(typeof chain.click, 'undefined');
+		assert.strictEqual(typeof chain.tap, 'undefined');
+		assert.strictEqual(typeof chain.scroll, 'undefined');
+		assert.strictEqual(typeof chain.swipe, 'undefined');
+		assert.strictEqual(typeof chain.flick, 'undefined');
+		assert.strictEqual(typeof chain.sendText, 'undefined');
+		assert.strictEqual(typeof chain.setText, 'undefined');
+		assert.strictEqual(typeof chain.not, 'undefined');
+		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
+		assert.strictEqual(typeof chain.isPlaying, 'undefined');
+		assert.strictEqual(typeof chain.isStopped, 'undefined');
+		assert.strictEqual(typeof chain.isPaused, 'undefined');
+	});
+
+	it('should have only allowed modifiers after scroll is applied', () => {
+		const chain = element('element').scroll('top', 1);
+
+		assert.strictEqual(typeof chain.exist, 'undefined');
+		assert.strictEqual(typeof chain.exists, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
+		assert.strictEqual(typeof chain.match, 'undefined');
+		assert.strictEqual(typeof chain.matches, 'undefined');
+		assert.strictEqual(typeof chain.matchRepo, 'undefined');
+		assert.strictEqual(typeof chain.matchesRepo, 'undefined');
+		assert.strictEqual(typeof chain.matchJS, 'undefined');
+		assert.strictEqual(typeof chain.matchesJS, 'undefined');
+		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.repeat, 'function');
+		assert.strictEqual(typeof chain.interval, 'function');
+		assert.strictEqual(typeof chain.until, 'function');
+		assert.strictEqual(typeof chain.moveTo, 'undefined');
+		assert.strictEqual(typeof chain.click, 'undefined');
+		assert.strictEqual(typeof chain.tap, 'undefined');
+		assert.strictEqual(typeof chain.scroll, 'undefined');
+		assert.strictEqual(typeof chain.swipe, 'undefined');
+		assert.strictEqual(typeof chain.flick, 'undefined');
+		assert.strictEqual(typeof chain.sendText, 'undefined');
+		assert.strictEqual(typeof chain.setText, 'undefined');
+		assert.strictEqual(typeof chain.not, 'undefined');
+		assert.strictEqual(typeof chain.doesNot, 'undefined');
+		assert.strictEqual(typeof chain.isNot, 'undefined');
+		assert.strictEqual(typeof chain.isPlaying, 'undefined');
+		assert.strictEqual(typeof chain.isStopped, 'undefined');
+		assert.strictEqual(typeof chain.isPaused, 'undefined');
+	});
+
+	it('should have only allowed modifiers after swipe/flick is applied', () => {
+		const chain = element('element').swipe('top', 1, 1);
+
+		assert.strictEqual(typeof chain.exist, 'undefined');
+		assert.strictEqual(typeof chain.exists, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'undefined');
+		assert.strictEqual(typeof chain.match, 'undefined');
+		assert.strictEqual(typeof chain.matches, 'undefined');
+		assert.strictEqual(typeof chain.matchRepo, 'undefined');
+		assert.strictEqual(typeof chain.matchesRepo, 'undefined');
+		assert.strictEqual(typeof chain.matchJS, 'undefined');
+		assert.strictEqual(typeof chain.matchesJS, 'undefined');
+		assert.strictEqual(typeof chain.matchBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.matchesBrightScript, 'undefined');
+		assert.strictEqual(typeof chain.repeat, 'function');
+		assert.strictEqual(typeof chain.interval, 'function');
+		assert.strictEqual(typeof chain.until, 'function');
+		assert.strictEqual(typeof chain.moveTo, 'undefined');
+		assert.strictEqual(typeof chain.click, 'undefined');
+		assert.strictEqual(typeof chain.tap, 'undefined');
+		assert.strictEqual(typeof chain.scroll, 'undefined');
+		assert.strictEqual(typeof chain.swipe, 'undefined');
+		assert.strictEqual(typeof chain.flick, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
 		assert.strictEqual(typeof chain.setText, 'undefined');
 		assert.strictEqual(typeof chain.not, 'undefined');
@@ -121,6 +232,10 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.until, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
+		assert.strictEqual(typeof chain.tap, 'undefined');
+		assert.strictEqual(typeof chain.scroll, 'undefined');
+		assert.strictEqual(typeof chain.swipe, 'undefined');
+		assert.strictEqual(typeof chain.flick, 'undefined');
 		assert.strictEqual(typeof chain.sendText, 'undefined');
 		assert.strictEqual(typeof chain.setText, 'undefined');
 		assert.strictEqual(typeof chain.not, 'undefined');
@@ -147,8 +262,12 @@ describe('Element chain', () => {
 			assert.strictEqual(typeof chain.repeat, 'function');
 			assert.strictEqual(typeof chain.interval, 'function');
 			assert.strictEqual(typeof chain.until, 'function');
-		assert.strictEqual(typeof chain.moveTo, 'undefined');
+			assert.strictEqual(typeof chain.moveTo, 'undefined');
 			assert.strictEqual(typeof chain.click, 'undefined');
+			assert.strictEqual(typeof chain.tap, 'undefined');
+			assert.strictEqual(typeof chain.scroll, 'undefined');
+			assert.strictEqual(typeof chain.swipe, 'undefined');
+			assert.strictEqual(typeof chain.flick, 'undefined');
 			assert.strictEqual(typeof chain.sendText, 'undefined');
 			assert.strictEqual(typeof chain.setText, 'undefined');
 			assert.strictEqual(typeof chain.not, 'undefined');
@@ -182,6 +301,10 @@ describe('Element chain', () => {
 			assert.strictEqual(typeof chain.until, 'undefined');
 			assert.strictEqual(typeof chain.moveTo, 'undefined');
 			assert.strictEqual(typeof chain.click, 'undefined');
+			assert.strictEqual(typeof chain.tap, 'undefined');
+			assert.strictEqual(typeof chain.scroll, 'undefined');
+			assert.strictEqual(typeof chain.swipe, 'undefined');
+			assert.strictEqual(typeof chain.flick, 'undefined');
 			assert.strictEqual(typeof chain.sendText, 'undefined');
 			assert.strictEqual(typeof chain.setText, 'undefined');
 			assert.strictEqual(typeof chain.not, 'undefined');
@@ -378,6 +501,77 @@ describe('Element chain', () => {
 				},
 			},
 		}, 'testLine click');
+		assert.deepStrictEqual(toJSON({
+			isAssert: true,
+			tap: 'single',
+			selector: {apiId: 'apiId'},
+			repeat: 2,
+			interval: 2000,
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'tap',
+				taps: [{
+					type: 'single',
+				}],
+				count: 2,
+				delay: 2000,
+				target: {
+					type: 'element',
+					apiId: 'apiId',
+				},
+			},
+		}, 'testLine tap');
+		assert.deepStrictEqual(toJSON({
+			isAssert: true,
+			isScroll: true,
+			direction: 'top',
+			distance: 1,
+			selector: {apiId: 'apiId'},
+			repeat: 2,
+			interval: 2000,
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'scroll',
+				scroll: [{
+					distance: 1,
+					direction: 'top',
+				}],
+				count: 2,
+				delay: 2000,
+				target: {
+					type: 'element',
+					apiId: 'apiId',
+				},
+			},
+		}, 'testLine scroll');
+		assert.deepStrictEqual(toJSON({
+			isAssert: true,
+			isSwipe: true,
+			direction: 'top',
+			distance: 1,
+			duration: 1,
+			selector: {apiId: 'apiId'},
+			repeat: 2,
+			interval: 2000,
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'swipe',
+				swipe: [{
+					distance: 1,
+					direction: 'top',
+					duration: 1,
+				}],
+				count: 2,
+				delay: 2000,
+				target: {
+					type: 'element',
+					apiId: 'apiId',
+				},
+			},
+		}, 'testLine swipe/flick');
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
 			isClick: true,

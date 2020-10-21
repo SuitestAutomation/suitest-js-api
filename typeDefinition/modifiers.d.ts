@@ -54,6 +54,21 @@ export interface MoveToModifier<T> {
 	moveTo(): T;
 }
 
+export interface TapModifier<T> {
+	tap(type: 'single' | 'double' | 'long'): T;
+}
+
+type Direction = 'top' | 'bottom' | 'left' | 'right';
+
+export interface ScrollModifier<T> {
+	scroll(direction: Direction, distance: number | string): T;
+}
+
+export interface SwipeModifier<T> {
+	swipe(direction: Direction, distance: number | string, duration: number | string): T;
+	flick(direction: Direction, distance: number | string, duration: number | string): T;
+}
+
 export interface VideoStateModifiers<T> {
 	isPlaying(): T;
 	isPaused(): T;
