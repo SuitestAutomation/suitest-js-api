@@ -148,7 +148,7 @@ describe('Element chain', () => {
 	});
 
 	it('should have only allowed modifiers after scroll is applied', () => {
-		const chain = element('element').scroll('top', 1);
+		const chain = element('element').scroll('up', 1);
 
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
@@ -181,7 +181,7 @@ describe('Element chain', () => {
 	});
 
 	it('should have only allowed modifiers after swipe/flick is applied', () => {
-		const chain = element('element').swipe('top', 1, 1);
+		const chain = element('element').swipe('up', 1, 1);
 
 		assert.strictEqual(typeof chain.exist, 'undefined');
 		assert.strictEqual(typeof chain.exists, 'undefined');
@@ -525,7 +525,7 @@ describe('Element chain', () => {
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
 			isScroll: true,
-			direction: 'top',
+			direction: 'up',
 			distance: 1,
 			selector: {apiId: 'apiId'},
 			repeat: 2,
@@ -536,7 +536,7 @@ describe('Element chain', () => {
 				type: 'scroll',
 				scroll: [{
 					distance: 1,
-					direction: 'top',
+					direction: 'up',
 				}],
 				count: 2,
 				delay: 2000,
@@ -549,7 +549,7 @@ describe('Element chain', () => {
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
 			isSwipe: true,
-			direction: 'top',
+			direction: 'up',
 			distance: 1,
 			duration: 1,
 			selector: {apiId: 'apiId'},
@@ -561,7 +561,7 @@ describe('Element chain', () => {
 				type: 'swipe',
 				swipe: [{
 					distance: 1,
-					direction: 'top',
+					direction: 'up',
 					duration: 1,
 				}],
 				count: 2,

@@ -173,9 +173,9 @@ async () => {
 
 
 	// scroll from element
-	const scrollElement = element('b').scroll('top', 1);
-	element('b').scroll('top', 1);
-	element('b').scroll('top', 1);
+	const scrollElement = element('b').scroll('up', 1);
+	element('b').scroll('up', 1);
+	element('b').scroll('up', 1);
 	element('b').scroll(suitest.DIRECTIONS.BOTTOM, 1);
 	element('b').scroll(suitest.DIRECTIONS.LEFT, 1);
 	element('b').scroll(suitest.DIRECTIONS.RIGHT, 1);
@@ -186,9 +186,9 @@ async () => {
 	await scrollElement.repeat(5).interval(300);
 
 // swipe position
-	const swipePos = element('a').swipe('top', 1, 1);
-	element('b').swipe('top', 1, 1);
-	element('b').swipe('top', 1, 1);
+	const swipePos = element('a').swipe('up', 1, 1);
+	element('b').swipe('up', 1, 1);
+	element('b').swipe('up', 1, 1);
 	element('b').swipe(suitest.DIRECTIONS.BOTTOM, 1, 1);
 	element('b').swipe(suitest.DIRECTIONS.LEFT, 1, 1);
 	element('b').swipe(suitest.DIRECTIONS.RIGHT, 1, 1);
@@ -199,9 +199,9 @@ async () => {
 	await swipePos.repeat(5).interval(300);
 
 	// flick position
-	const flickPos = element('a').flick('top', 1, 1);
-	element('b').flick('top', 1, 1);
-	element('b').flick('top', 1, 1);
+	const flickPos = element('a').flick('up', 1, 1);
+	element('b').flick('up', 1, 1);
+	element('b').flick('up', 1, 1);
 	element('b').flick(suitest.DIRECTIONS.BOTTOM, 1, 1);
 	element('b').flick(suitest.DIRECTIONS.LEFT, 1, 1);
 	element('b').flick(suitest.DIRECTIONS.RIGHT, 1, 1);

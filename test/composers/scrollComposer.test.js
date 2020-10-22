@@ -26,8 +26,8 @@ describe('Scroll composer', () => {
 
 		Object.defineProperties(chain, scrollComposer(suitest, data, chain, makeChain));
 
-		chain.scroll('top', 1, 1);
+		chain.scroll('up', 1, 1);
 
-		assert.deepStrictEqual(makeChain.firstCall.args[0], {isScroll: true, distance: 1, direction: 'top'});
+		assert.deepStrictEqual(makeChain.firstCall.args[0], {isScroll: true, distance: 1, direction: 'up'});
 	});
 });

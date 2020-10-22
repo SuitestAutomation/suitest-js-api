@@ -79,7 +79,7 @@ describe('Position chain', () => {
 	});
 
 	it('should have only allowed modifiers after scroll is applied', () => {
-		const chain = position(1, 1).scroll('top', 1, 1);
+		const chain = position(1, 1).scroll('up', 1, 1);
 
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
@@ -90,7 +90,7 @@ describe('Position chain', () => {
 	});
 
 	it('should have only allowed modifiers after swipe is applied', () => {
-		const chain = position(1, 1).swipe('top', 1, 1, 1);
+		const chain = position(1, 1).swipe('up', 1, 1, 1);
 
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
@@ -235,7 +235,7 @@ describe('Position chain', () => {
 				y: 20,
 			},
 			isScroll: true,
-			direction: 'top',
+			direction: 'up',
 			distance: 2,
 			repeat: 2,
 			interval: 2000,
@@ -244,7 +244,7 @@ describe('Position chain', () => {
 			request: {
 				type: 'scroll',
 				scroll: [{
-					direction: 'top',
+					direction: 'up',
 					distance: 2,
 				}],
 				count: 2,
@@ -265,7 +265,7 @@ describe('Position chain', () => {
 				y: 20,
 			},
 			isSwipe: true,
-			direction: 'top',
+			direction: 'up',
 			distance: 2,
 			duration: 1,
 			repeat: 2,
@@ -275,7 +275,7 @@ describe('Position chain', () => {
 			request: {
 				type: 'swipe',
 				swipe: [{
-					direction: 'top',
+					direction: 'up',
 					distance: 2,
 					duration: 1,
 				}],

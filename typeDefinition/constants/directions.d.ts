@@ -1,6 +1,6 @@
 export type Directions = {
-	TOP:     'top',
-	BOTTOM:  'bottom',
+	UP:      'up',
+	DOWN:    'down',
 	LEFT:    'left',
 	RIGHT:   'right',
 };

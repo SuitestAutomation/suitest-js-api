@@ -27,10 +27,10 @@ describe('Swipe composer', () => {
 
 		Object.defineProperties(chain, swipeComposer(suitest, data, chain, makeChain));
 
-		chain.swipe('top', 1, 1, 1);
+		chain.swipe('up', 1, 1, 1);
 
 		assert.deepStrictEqual(makeChain.firstCall.args[0], {
-			isSwipe: true, distance: 1, direction: 'top', duration: 1,
+			isSwipe: true, distance: 1, direction: 'up', duration: 1,
 		});
 	});
 });

@@ -58,7 +58,7 @@ export interface TapModifier<T> {
 	tap(type: 'single' | 'double' | 'long'): T;
 }
 
-type Direction = 'top' | 'bottom' | 'left' | 'right';
+type Direction = 'up' | 'down' | 'left' | 'right';
 
 export interface ScrollModifier<T> {
 	scroll(direction: Direction, distance: number | string): T;
