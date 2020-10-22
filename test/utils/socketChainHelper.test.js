@@ -118,8 +118,8 @@ describe('socket chain helpers', () => {
 			new SuitestError(
 				'. .setText() is unsupported by this element.',
 				SuitestError.EVALUATION_ERROR,
-				{errorType: 'invalidInput', message: {code: 'elementNotSupported'}}
-			)
+				{errorType: 'invalidInput', message: {code: 'elementNotSupported'}},
+			),
 		);
 
 		assert.throws(
@@ -166,7 +166,7 @@ describe('socket chain helpers', () => {
 					timeout: 2000,
 				},
 			}),
-			err => err instanceof assert.AssertionError
+			err => err instanceof assert.AssertionError,
 		);
 
 		assert.throws(
@@ -183,7 +183,7 @@ describe('socket chain helpers', () => {
 			),
 			err => err instanceof assert.AssertionError &&
 				err.message.includes('× http://url/index-hbbtv.html (actual)') &&
-				err.message.includes('~ test (expected)')
+				err.message.includes('~ test (expected)'),
 		);
 
 		assert.throws(
@@ -265,7 +265,7 @@ describe('socket chain helpers', () => {
 				err.message.includes('× height: 720 (actual)') &&
 				err.message.includes('~ height: 100 (expected)') &&
 				err.message.includes('× width: 1282 (actual)') &&
-				err.message.includes('~ width: 200 (expected)')
+				err.message.includes('~ width: 200 (expected)'),
 		);
 
 		assert.throws(
@@ -332,7 +332,7 @@ describe('socket chain helpers', () => {
 				err.message.includes('~ visibility: invisible (expected)') &&
 				err.message.includes('× visibility: property missing (actual)'),
 			'Should display proper error message for missingProperty that can be received ' +
-			'when running device platform does not support specified property.'
+			'when running device platform does not support specified property.',
 		);
 
 		assert.throws(
@@ -392,7 +392,7 @@ describe('socket chain helpers', () => {
 							],
 						},
 					},
-				}
+				},
 			),
 			err => err instanceof assert.AssertionError &&
 				err.message.includes('× prop: 200 (actual)') &&
@@ -401,9 +401,9 @@ describe('socket chain helpers', () => {
 
 		assert.throws(
 			() => processServerResponse(logger, emptyString)(
-				{result: 'fatal'}, {stack: ''}, {}
+				{result: 'fatal'}, {stack: ''}, {},
 			), err => err.message.includes('Fatal'),
-			'Fatal error thrown correctly'
+			'Fatal error thrown correctly',
 		);
 
 		sinon.stub(logger, 'warn');
@@ -424,7 +424,7 @@ describe('socket chain helpers', () => {
 		it('should return testLine type', () => {
 			assert.strictEqual(
 				helpers.getRequestType({isAssert: true}),
-				'testLine'
+				'testLine',
 			);
 			assert.strictEqual(
 				helpers.getRequestType({
@@ -435,7 +435,7 @@ describe('socket chain helpers', () => {
 					setText: '',
 					sendText: 'text',
 				}),
-				'testLine'
+				'testLine',
 			);
 		});
 
@@ -504,7 +504,7 @@ describe('socket chain helpers', () => {
 					}),
 					err => err instanceof SuitestError &&
 						err.code === SuitestError.EVALUATION_ERROR &&
-						err.message.includes('Failed to take screenshot')
+						err.message.includes('Failed to take screenshot'),
 				);
 			});
 			it('with specified "error"', () => {
@@ -521,7 +521,7 @@ describe('socket chain helpers', () => {
 					}),
 					err => err instanceof SuitestError &&
 						err.code === SuitestError.EVALUATION_ERROR &&
-						err.message.includes('Some error related to making screenshot fail')
+						err.message.includes('Some error related to making screenshot fail'),
 				);
 			});
 			[
@@ -544,7 +544,7 @@ describe('socket chain helpers', () => {
 						}),
 						err => err instanceof SuitestError &&
 							err.code === SuitestError.EVALUATION_ERROR &&
-							err.message.includes(expectedMessage)
+							err.message.includes(expectedMessage),
 					);
 				});
 			});
@@ -570,10 +570,52 @@ describe('socket chain helpers', () => {
 			assert.strictEqual(res, undefined);
 			assert.deepStrictEqual(
 				writeFileStub.firstCall.args,
-				['/path/to/file.png', Buffer.from([1, 2, 3])]
+				['/path/to/file.png', Buffer.from([1, 2, 3])],
 			);
 		} finally {
 			writeFileStub.restore();
 		}
+	});
+
+	it('Handle aborted message', async() => {
+		const loggerErrorStub = sinon.fake();
+
+		assert.throws(
+			() => processServerResponse({error: loggerErrorStub})(
+				{
+					result: 'aborted',
+					message: {info: {}},
+					lineId: '2',
+					timeStarted: 1603368650150,
+					timeFinished: 1603368655763,
+					timeHrDiff: [5, 611864587],
+					timeScreenshotHr: [0, 0],
+					contentType: 'testLine',
+				},
+				{
+					type: 'sleep',
+					milliseconds: 100000,
+					stack: 'Error\n' +
+						'    at /suitest-js-api/lib/utils/makeChain.js:10:23\n' +
+						'    at /suitest-js-api/lib/utils/sentry/Raven.js:61:19\n' +
+						'    at Object.value [as toAssert] (/suitest-js-api/lib/utils/makeComposer.js:24:23)\n' +
+						'    at Object.sleepAssert [as sleep] (/suitest-js-api/lib/chains/sleepChain.js:81:57)\n' +
+						'    at Context.<anonymous> (/suitest-js-api-mocha-demo/test/dummy.test.js:12:16)\n' +
+						'    at processTicksAndRejections (internal/process/task_queues.js:93:5)',
+					isAssert: true,
+				},
+				{
+					type: 'testLine',
+					request: {
+						type: 'sleep',
+						timeout: 100000,
+					},
+				},
+			),
+			err => err instanceof SuitestError &&
+				err.code === SuitestError.UNKNOWN_ERROR &&
+				err.message === 'Test execution was aborted.',
+		);
+		assert(loggerErrorStub.calledWith('Test execution was aborted.'));
 	});
 });
