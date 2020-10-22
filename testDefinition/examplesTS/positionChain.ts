@@ -34,10 +34,10 @@ async function testPosition() {
 	const scrollPos = position(1, 1,).scroll('up', 1);
 	position(1, 1,).scroll('up', 1);
 	position(1, 1,).scroll('up', 1);
-	position(1, 1,).scroll(suitest.DIRECTIONS.BOTTOM, 1);
+	position(1, 1,).scroll(suitest.DIRECTIONS.DOWN, 1);
 	position(1, 1,).scroll(suitest.DIRECTIONS.LEFT, 1);
 	position(1, 1,).scroll(suitest.DIRECTIONS.RIGHT, 1);
-	position(1, 1,).scroll(suitest.DIRECTIONS.TOP, 1);
+	position(1, 1,).scroll(suitest.DIRECTIONS.UP, 1);
 
 	await scrollPos;
 	await scrollPos.repeat(1);
@@ -47,10 +47,10 @@ async function testPosition() {
 	const swipePos = position(1, 1,).swipe('up', 1, 1);
 	position(1, 1,).swipe('up', 1, 1);
 	position(1, 1,).swipe('up', 1, 1);
-	position(1, 1,).swipe(suitest.DIRECTIONS.BOTTOM, 1, 1);
+	position(1, 1,).swipe(suitest.DIRECTIONS.DOWN, 1, 1);
 	position(1, 1,).swipe(suitest.DIRECTIONS.LEFT, 1, 1);
 	position(1, 1,).swipe(suitest.DIRECTIONS.RIGHT, 1, 1);
-	position(1, 1,).swipe(suitest.DIRECTIONS.TOP, 1, 1);
+	position(1, 1,).swipe(suitest.DIRECTIONS.UP, 1, 1);
 
 	await swipePos;
 	await swipePos.repeat(1);
@@ -60,10 +60,10 @@ async function testPosition() {
 	const flickPos = position(1, 1,).flick('up', 1, 1);
 	position(1, 1,).flick('up', 1, 1);
 	position(1, 1,).flick('up', 1, 1);
-	position(1, 1,).flick(suitest.DIRECTIONS.BOTTOM, 1, 1);
+	position(1, 1,).flick(suitest.DIRECTIONS.DOWN, 1, 1);
 	position(1, 1,).flick(suitest.DIRECTIONS.LEFT, 1, 1);
 	position(1, 1,).flick(suitest.DIRECTIONS.RIGHT, 1, 1);
-	position(1, 1,).flick(suitest.DIRECTIONS.TOP, 1, 1);
+	position(1, 1,).flick(suitest.DIRECTIONS.UP, 1, 1);
 
 	await flickPos;
 	await flickPos.repeat(1);
