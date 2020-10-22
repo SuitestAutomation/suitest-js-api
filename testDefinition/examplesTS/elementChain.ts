@@ -179,7 +179,7 @@ async () => {
 	element('b').scroll(suitest.DIRECTIONS.DOWN, 1);
 	element('b').scroll(suitest.DIRECTIONS.LEFT, 1);
 	element('b').scroll(suitest.DIRECTIONS.RIGHT, 1);
-	element('b').scroll(suitest.DIRECTIONS.TOP, 1);
+	element('b').scroll(suitest.DIRECTIONS.UP, 1);
 
 	await scrollElement;
 	await scrollElement.repeat(1);
