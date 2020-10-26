@@ -150,64 +150,6 @@ describe('Application chain', () => {
 		assert.strictEqual(chain.times, chain);
 	});
 
-	it('should convert to string with meaningful message', () => {
-		const sendTextApp = application().sendText('some text');
-		const untilData = {
-			toJSON: () => ({
-				request: {
-					condition: {
-						subject: {
-							type: 'location',
-						},
-					},
-				},
-			}),
-		};
-
-		assert.throws(() => application().toString(), 'SuitestError: Invalid input - application command is malformed');
-		assert.strictEqual(application().hasExited().toString(), 'Application has exited');
-		assert.strictEqual(application().sendText('').toString(), 'Sending text "" to application, repeat 1 times every 1 ms');
-		assert.strictEqual(
-			sendTextApp.toString(),
-			'Sending text "some text" to application, repeat 1 times every 1 ms'
-		);
-		assert.strictEqual(
-			sendTextApp.repeat(2).toString(),
-			'Sending text "some text" to application, repeat 2 times every 1 ms'
-		);
-		assert.strictEqual(
-			sendTextApp.interval(2222).toString(),
-			'Sending text "some text" to application, repeat 1 times every 2222 ms'
-		);
-		assert.strictEqual(
-			sendTextApp.repeat(3).interval(2222).toString(),
-			'Sending text "some text" to application, repeat 3 times every 2222 ms'
-		);
-		assert.strictEqual(
-			sendTextApp.repeat(1).interval(1).toString(),
-			'Sending text "some text" to application, repeat 1 times every 1 ms'
-		);
-		assert.strictEqual(sendTextApp.until(untilData).toString(), 'Sending text "some text" to application');
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
-
-		beforeSendMsgContains(
-			{comparator: {type: SUBJ_COMPARATOR.HAS_EXITED}},
-			'Launcher E Application has exited'
-		);
-		beforeSendMsgContains(
-			{
-				isAssert: true,
-				sendText: 'text',
-			},
-			'Launcher A Sending text "text" to application'
-		);
-		log.restore();
-	});
-
 	it('should generate correct socket message based on data', () => {
 		const defaultData = {comparator: {type: SUBJ_COMPARATOR.HAS_EXITED}};
 

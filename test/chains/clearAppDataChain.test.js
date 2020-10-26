@@ -53,17 +53,6 @@ describe('Clear app data chain', () => {
 		});
 	});
 
-	it('should convert to string with meaningful message', () => {
-		assert.equal(toString(), 'Cleared app data');
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-
-		assertBeforeSendMsg(beforeSendMsg, log, undefined, 'Launcher E Cleared app data');
-		log.restore();
-	});
-
 	it('should define assert function', () => {
 		const chain = clearAppDataAssert();
 

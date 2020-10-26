@@ -109,50 +109,6 @@ describe('JavaScript expression chain', () => {
 		assert.strictEqual(typeof chain.abandon, 'undefined');
 	});
 
-	it('should convert to string with meaningful message', () => {
-		assert.equal(jsExpression('1+1').toString(), 'Evaluating JS:\n1+1');
-		assert.equal(
-			jsExpression('1+1').equal('test').toString(),
-			'Check if JS expression\n' +
-			'1+1\n' +
-			'equals string "test"'
-		);
-		assert.equal(
-			jsExpression('1+1').doesNot().startWith('test').toString(),
-			'Check if JS expression\n' +
-			'1+1\n' +
-			'does not start with string "test"'
-		);
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
-
-		beforeSendMsgContains({expression: '1+1'}, 'Launcher E Evaluating JS:');
-		beforeSendMsgContains({
-			isNegated: true,
-			expression: '1+1',
-			comparator: {
-				type: comparatorTypes.EQUAL,
-				val: '2',
-			},
-		}, 'Launcher E Check if JS expression');
-		beforeSendMsgContains({
-			isAssert: true,
-			isNegated: true,
-			expression: '1+1',
-			comparator: {
-				type: comparatorTypes.EQUAL,
-				val: '2',
-			},
-		}, 'Launcher A Check if JS expression');
-
-		beforeSendMsg('1+1');
-		assert.ok(log.firstCall.args[0], 'beforeSendMsg exists');
-		log.restore();
-	});
-
 	it('should generate correct socket message based on data', () => {
 		assert.deepStrictEqual(toJSON({
 			expression: '1+1',
