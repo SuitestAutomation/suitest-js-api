@@ -44,22 +44,6 @@ describe('Sleep chain', () => {
 		assert.strictEqual(chain.times, chain);
 	});
 
-	it('should convert to string with meaningful message', () => {
-		// pass json message
-		assert.equal(toString({request: {timeout: 10}}), 'Sleeping for 10ms');
-		// pass raw command json definition
-		assert.equal(toString({timeout: 10}), 'Sleeping for 10ms');
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
-
-		beforeSendMsgContains({milliseconds: 10}, 'Launcher E Sleeping for 10ms');
-		beforeSendMsgContains({milliseconds: 10, isAssert: true}, 'Launcher A Sleeping for 10ms');
-		log.restore();
-	});
-
 	it('should generate correct socket message based on data', () => {
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,

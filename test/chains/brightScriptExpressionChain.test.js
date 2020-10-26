@@ -107,48 +107,6 @@ describe('BrightScript expression chain', () => {
 		assert.strictEqual(typeof chain.abandon, 'undefined');
 	});
 
-	it('should convert to string with meaningful message', () => {
-		assert.equal(brightScriptExpression('1+1').toString(), 'Evaluating BrightScript:\n1+1');
-		assert.equal(
-			brightScriptExpression('1+1').equal('test').toString(),
-			'Check if BrightScript expression\n' +
-			'1+1\n' +
-			'equals string "test"'
-		);
-		assert.equal(
-			brightScriptExpression('1+1').doesNot().startWith('test').toString(),
-			'Check if BrightScript expression\n' +
-			'1+1\n' +
-			'does not start with string "test"'
-		);
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-
-		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
-
-		beforeSendMsgContains({expression: '1+1'}, 'Launcher E Evaluating BrightScript:');
-		beforeSendMsgContains({
-			isAssert: true,
-			isNegated: true,
-			expression: '1+1',
-			comparator: {
-				type: '=',
-				val: '2',
-			},
-		}, 'Launcher A Check if BrightScript expression');
-		beforeSendMsgContains({
-			isNegated: true,
-			expression: '1+1',
-			comparator: {
-				type: '=',
-				val: '2',
-			},
-		}, 'Launcher E Check if BrightScript expression');
-		log.restore();
-	});
-
 	it('should generate correct socket message based on data', () => {
 		assert.deepStrictEqual(toJSON({
 			expression: '1+1',

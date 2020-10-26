@@ -36,19 +36,6 @@ describe('Execute BrightScript chain', () => {
 		assert.strictEqual(typeof chain.abandon, 'undefined');
 	});
 
-	it('should convert to string with meaningful message', () => {
-		assert.equal(executeBrightScript('1+1').toString(), 'Executing BrightScript:\n1+1');
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
-
-		beforeSendMsgContains({command: '1+1'}, 'Launcher E Executing BrightScript:');
-		beforeSendMsgContains({command: '1+1', isAssert: true}, 'Launcher A Executing BrightScript:');
-		log.restore();
-	});
-
 	it('should throw error in case of invalid input', () => {
 		testInputErrorSync(executeBrightScript, []);
 		testInputErrorSync(executeBrightScript, [1]);

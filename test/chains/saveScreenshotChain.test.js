@@ -33,17 +33,6 @@ describe('Save screenshot chain', () => {
 		assert.deepStrictEqual(toJSON(), {type: 'takeScreenshot'});
 	});
 
-	it('should convert to string with meaningful message', () => {
-		assert.equal(toString(), 'Saving screenshot');
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-
-		assertBeforeSendMsg(beforeSendMsg, log, undefined, 'Launcher E Saving screenshot');
-		log.restore();
-	});
-
 	describe('testing saveScreenshot with different arguments', () => {
 		it('should accept not empty string', () => {
 			assert.doesNotThrow(() => saveScreenshot('/path/to/file.png'));

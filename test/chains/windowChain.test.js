@@ -4,10 +4,7 @@ const {
 	window,
 	windowAssert,
 	toJSON,
-	beforeSendMsg,
 } = require('../../lib/chains/windowChain')(suitest);
-const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
-const sinon = require('sinon');
 
 function testAllowedModifiers(chain) {
 	// general
@@ -101,85 +98,6 @@ describe('Window chain', () => {
 		const chain = window().abandon();
 
 		assert.strictEqual(typeof chain.abandon, 'undefined');
-	});
-
-	it('should convert to string with meaningful message', () => {
-		const untilData = {
-			toJSON: () => ({
-				request: {
-					condition: {
-						subject: {
-							type: 'location',
-						},
-					},
-				},
-			}),
-		};
-
-		assert.strictEqual(window().toString(), 'Window chain');
-		assert.strictEqual(window().sendText('').toString(), 'Sending text "" to window, repeat 1 times every 1 ms');
-		assert.strictEqual(
-			window().sendText('text string').toString(),
-			'Sending text "text string" to window, repeat 1 times every 1 ms'
-		);
-		assert.strictEqual(
-			window().sendText('text string').repeat(3).toString(),
-			'Sending text "text string" to window, repeat 3 times every 1 ms'
-		);
-		assert.strictEqual(
-			window().sendText('text string').interval(3000).toString(),
-			'Sending text "text string" to window, repeat 1 times every 3000 ms'
-		);
-		assert.strictEqual(
-			window().sendText('text string').interval(3000).repeat(2).toString(),
-			'Sending text "text string" to window, repeat 2 times every 3000 ms'
-		);
-		assert.strictEqual(
-			window().sendText('text string').interval(3000).repeat(2).until(untilData).toString(),
-			'Sending text "text string" to window, repeat 2 times every 3000 ms'
-		);
-		assert.strictEqual(
-			window().sendText('text string').until(untilData).toString(),
-			'Sending text "text string" to window, repeat 1 times every 1 ms'
-		);
-		assert.strictEqual(
-			window().sendText('text string').repeat(3).interval(4000).toString(),
-			'Sending text "text string" to window, repeat 3 times every 4000 ms'
-		);
-		assert.strictEqual(
-			window().sendText('text string').repeat(1).interval(1).toString(),
-			'Sending text "text string" to window, repeat 1 times every 1 ms'
-		);
-		assert.strictEqual(
-			window().sendText('text string').repeat(3).interval(4000).until(untilData).toString(),
-			'Sending text "text string" to window, repeat 3 times every 4000 ms'
-		);
-		assert.strictEqual(window().refresh('').toString(), 'Refreshing browser page');
-		assert.strictEqual(window().goBack('').toString(), 'Navigating back in browser history');
-		assert.strictEqual(window().goForward('').toString(), 'Navigating forward in browser history');
-		assert.strictEqual(window().dismissModal('').toString(), 'Dismissing modal dialog');
-		assert.strictEqual(window().acceptModal().toString(), 'Accepting modal dialog');
-		assert.strictEqual(window().acceptModal('text').toString(), 'Accepting modal dialog with \'text\' message');
-		assert.strictEqual(window().setSize(10, 20).toString(), 'Setting browser window size to 10, 20');
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
-
-		beforeSendMsgContains(
-			{sendText: 'text'},
-			'Launcher E Sending text "text" to window, repeat 1 times every 1 ms'
-		);
-		beforeSendMsgContains(
-			{sendText: ''},
-			'Launcher E Sending text "" to window, repeat 1 times every 1 ms'
-		);
-		beforeSendMsgContains(
-			{sendText: 'assered text', isAssert: true},
-			'Launcher A Sending text "assered text" to window, repeat 1 times every 1 ms'
-		);
-		log.restore();
 	});
 
 	it('should generate correct socket message based on data', () => {

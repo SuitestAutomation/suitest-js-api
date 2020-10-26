@@ -127,64 +127,6 @@ describe('Location chain', () => {
 		assert.strictEqual(typeof chain.toString, 'function');
 	});
 
-	it('should convert to string with meaningful message', () => {
-		assert.strictEqual(location().toString(), 'Getting current location');
-		assert.strictEqual(location().equal('test').toString(), 'Checking if current location equals "test"');
-		assert.strictEqual(
-			location().not().equal('test').toString(),
-			'Checking if current location does not equal "test"'
-		);
-		assert.strictEqual(location().contains('test').toString(), 'Checking if current location contains "test"');
-		assert.strictEqual(
-			location().not().contains('test').toString(),
-			'Checking if current location does not contain "test"'
-		);
-		assert.strictEqual(location().startWith('test').toString(), 'Checking if current location starts with "test"');
-		assert.strictEqual(
-			location().not().startWith('test').toString(),
-			'Checking if current location does not start with "test"'
-		);
-		assert.strictEqual(location().endWith('test').toString(), 'Checking if current location ends with "test"');
-		assert.strictEqual(
-			location().not().endWith('test').toString(),
-			'Checking if current location does not end with "test"'
-		);
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
-
-		beforeSendMsgContains(
-			{
-				type: 'query',
-				subject: {type: 'location'},
-			},
-			'Launcher E Getting current location'
-		);
-		beforeSendMsgContains(
-			{
-				comparator: {
-					type: '=',
-					val: 'val',
-				},
-			},
-			'Launcher E Checking if current location equals "val"'
-		);
-		beforeSendMsgContains(
-			{
-				isAssert: true,
-				comparator: {
-					type: '=',
-					val: 'val',
-				},
-			},
-			'Launcher A Checking if current location equals "val"'
-		);
-
-		log.restore();
-	});
-
 	it('should generate correct socket message based on data', () => {
 		assert.deepStrictEqual(toJSON({}), {
 			type: 'query',
