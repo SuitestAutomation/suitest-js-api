@@ -27,6 +27,8 @@ import {ContentMode} from './typeDefinition/constants/ContentMode';
 import {ElementState} from './typeDefinition/constants/ElementState';
 import {TextAlignment} from './typeDefinition/constants/TextAlignment';
 import {BorderStyle} from './typeDefinition/constants/BorderStyle';
+import {Directions} from './typeDefinition/constants/directions';
+import {TapTypes} from './typeDefinition/constants/tapTypes';
 import {ReplOptions} from './typeDefinition/InteractiveCommandChain';
 import {ImageLoadState} from './typeDefinition/constants/ImageLoadState';
 import {PlayStationVideoChain} from './typeDefinition/PlayStationVideoChain';
@@ -137,6 +139,8 @@ declare namespace suitest {
 		NETWORK_PROP: NetworkProp;
 		NETWORK_METHOD: NetworkMethod;
 		HAD_NO_ERROR: HadNoError;
+		TAP_TYPES: TapTypes;
+		DIRECTIONS: Directions;
 
 		authContext: AuthContext;
 		appContext: Context;

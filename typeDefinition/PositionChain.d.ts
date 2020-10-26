@@ -1,6 +1,9 @@
 import {
 	AbstractChain,
 	Clickable,
+	TapModifier,
+	ScrollModifier,
+	SwipeModifier,
 	MoveToModifier,
 	Repeatable,
 	Intervalable,
@@ -11,6 +14,9 @@ import {
 export interface PositionChain extends
 	PositionBaseQueryChain<PositionChain>,
 	Clickable<PositionRepeatIntervalChain>, // click
+	TapModifier<PositionRepeatIntervalChain>, // tap
+	ScrollModifier<PositionRepeatIntervalChain>, // scroll
+	SwipeModifier<PositionRepeatIntervalChain>, // swipe/flick
 	MoveToModifier<PositionEmptyChain> // moveTo
 {}
 

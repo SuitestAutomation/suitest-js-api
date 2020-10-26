@@ -20,6 +20,10 @@ describe('Position chain', () => {
 		assert.strictEqual(typeof chain.toJSON, 'function');
 		assert.strictEqual(typeof chain.then, 'function');
 		assert.strictEqual(typeof chain.click, 'function');
+		assert.strictEqual(typeof chain.scroll, 'function');
+		assert.strictEqual(typeof chain.swipe, 'function');
+		assert.strictEqual(typeof chain.flick, 'function');
+		assert.strictEqual(typeof chain.tap, 'function');
 		assert.strictEqual(typeof chain.repeat, 'undefined');
 		assert.strictEqual(typeof chain.interval, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'function');
@@ -44,6 +48,10 @@ describe('Position chain', () => {
 		assert.strictEqual(typeof chain.interval, 'function');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
+		assert.strictEqual(typeof chain.tap, 'undefined');
+		assert.strictEqual(typeof chain.swipe, 'undefined');
+		assert.strictEqual(typeof chain.flick, 'undefined');
+		assert.strictEqual(typeof chain.scroll, 'undefined');
 	});
 
 	it('should have only allowed modifiers after moveTo is applied', () => {
@@ -53,6 +61,43 @@ describe('Position chain', () => {
 		assert.strictEqual(typeof chain.interval, 'undefined');
 		assert.strictEqual(typeof chain.moveTo, 'undefined');
 		assert.strictEqual(typeof chain.click, 'undefined');
+		assert.strictEqual(typeof chain.tap, 'undefined');
+		assert.strictEqual(typeof chain.swipe, 'undefined');
+		assert.strictEqual(typeof chain.flick, 'undefined');
+		assert.strictEqual(typeof chain.scroll, 'undefined');
+	});
+
+	it('should have only allowed modifiers after tap is applied', () => {
+		const chain = position(1, 1).tap('single');
+
+		assert.strictEqual(typeof chain.moveTo, 'undefined');
+		assert.strictEqual(typeof chain.click, 'undefined');
+		assert.strictEqual(typeof chain.tap, 'undefined');
+		assert.strictEqual(typeof chain.swipe, 'undefined');
+		assert.strictEqual(typeof chain.flick, 'undefined');
+		assert.strictEqual(typeof chain.scroll, 'undefined');
+	});
+
+	it('should have only allowed modifiers after scroll is applied', () => {
+		const chain = position(1, 1).scroll('up', 1, 1);
+
+		assert.strictEqual(typeof chain.moveTo, 'undefined');
+		assert.strictEqual(typeof chain.click, 'undefined');
+		assert.strictEqual(typeof chain.tap, 'undefined');
+		assert.strictEqual(typeof chain.swipe, 'undefined');
+		assert.strictEqual(typeof chain.flick, 'undefined');
+		assert.strictEqual(typeof chain.scroll, 'undefined');
+	});
+
+	it('should have only allowed modifiers after swipe is applied', () => {
+		const chain = position(1, 1).swipe('up', 1, 1, 1);
+
+		assert.strictEqual(typeof chain.moveTo, 'undefined');
+		assert.strictEqual(typeof chain.click, 'undefined');
+		assert.strictEqual(typeof chain.tap, 'undefined');
+		assert.strictEqual(typeof chain.swipe, 'undefined');
+		assert.strictEqual(typeof chain.flick, 'undefined');
+		assert.strictEqual(typeof chain.scroll, 'undefined');
 	});
 
 	it('should have only allowed modifiers after abandon is applied', () => {
@@ -156,6 +201,95 @@ describe('Position chain', () => {
 				},
 			},
 		}, 'type testLine default');
+		assert.deepStrictEqual(toJSON({
+			isAssert: true,
+			coordinates: {
+				x: 10,
+				y: 20,
+			},
+			tap: 'single',
+			repeat: 2,
+			interval: 2000,
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'tap',
+				taps: [{
+					type: 'single',
+				}],
+				count: 2,
+				delay: 2000,
+				target: {
+					type: 'screen',
+					coordinates: {
+						x: 10,
+						y: 20,
+					},
+				},
+			},
+		}, 'type testLine tap');
+		assert.deepStrictEqual(toJSON({
+			isAssert: true,
+			coordinates: {
+				x: 10,
+				y: 20,
+			},
+			isScroll: true,
+			direction: 'up',
+			distance: 2,
+			repeat: 2,
+			interval: 2000,
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'scroll',
+				scroll: [{
+					direction: 'up',
+					distance: 2,
+				}],
+				count: 2,
+				delay: 2000,
+				target: {
+					type: 'screen',
+					coordinates: {
+						x: 10,
+						y: 20,
+					},
+				},
+			},
+		}, 'type testLine scroll');
+		assert.deepStrictEqual(toJSON({
+			isAssert: true,
+			coordinates: {
+				x: 10,
+				y: 20,
+			},
+			isSwipe: true,
+			direction: 'up',
+			distance: 2,
+			duration: 1,
+			repeat: 2,
+			interval: 2000,
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'swipe',
+				swipe: [{
+					direction: 'up',
+					distance: 2,
+					duration: 1,
+				}],
+				count: 2,
+				delay: 2000,
+				target: {
+					type: 'screen',
+					coordinates: {
+						x: 10,
+						y: 20,
+					},
+				},
+			},
+		}, 'type testLine swipe/flick');
 		assert.deepStrictEqual(toJSON({
 			coordinates: {
 				x: 100,
