@@ -434,4 +434,46 @@ describe('socket chain helpers', () => {
 			writeFileStub.restore();
 		}
 	});
+
+	it('Handle aborted message', async() => {
+		const loggerErrorStub = sinon.fake();
+
+		assert.throws(
+			() => processServerResponse({error: loggerErrorStub})(
+				{
+					result: 'aborted',
+					message: {info: {}},
+					lineId: '2',
+					timeStarted: 1603368650150,
+					timeFinished: 1603368655763,
+					timeHrDiff: [5, 611864587],
+					timeScreenshotHr: [0, 0],
+					contentType: 'testLine',
+				},
+				{
+					type: 'sleep',
+					milliseconds: 100000,
+					stack: 'Error\n' +
+						'    at /suitest-js-api/lib/utils/makeChain.js:10:23\n' +
+						'    at /suitest-js-api/lib/utils/sentry/Raven.js:61:19\n' +
+						'    at Object.value [as toAssert] (/suitest-js-api/lib/utils/makeComposer.js:24:23)\n' +
+						'    at Object.sleepAssert [as sleep] (/suitest-js-api/lib/chains/sleepChain.js:81:57)\n' +
+						'    at Context.<anonymous> (/suitest-js-api-mocha-demo/test/dummy.test.js:12:16)\n' +
+						'    at processTicksAndRejections (internal/process/task_queues.js:93:5)',
+					isAssert: true,
+				},
+				{
+					type: 'testLine',
+					request: {
+						type: 'sleep',
+						timeout: 100000,
+					},
+				},
+			),
+			err => err instanceof SuitestError &&
+				err.code === SuitestError.UNKNOWN_ERROR &&
+				err.message === 'Test execution was aborted.',
+		);
+		assert(loggerErrorStub.calledWith('Test execution was aborted.'));
+	});
 });
