@@ -11,6 +11,7 @@ const setAppConfig = (...args) =>
 const sessionConstants = require('../../lib/constants/session');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {testInputErrorAsync} = require('../../lib/utils/testHelpers/testInputError');
+const mockWebSocket = require('../../lib/utils/testHelpers/mockWebSocket');
 
 describe('setAppConfig', () => {
 	before(async() => {
@@ -33,6 +34,9 @@ describe('setAppConfig', () => {
 		appContext.clear();
 		authContext.clear();
 	});
+	afterEach(() => {
+		mockWebSocket.restoreResponse();
+	});
 
 	it('should throw correct error on invalid input', async() => {
 		await testInputErrorAsync(setAppConfig);
@@ -51,10 +55,16 @@ describe('setAppConfig', () => {
 	});
 
 	it('should set correct app config', async() => {
+		mockWebSocket.mockResponse({
+			appId: 'appId',
+			versionId: 'versionId',
+		});
 		authContext.setContext(sessionConstants.AUTOMATED, 'deviceId');
 		await setAppConfig('configId', {url: 'url'});
 
 		assert.deepEqual(appContext.context, {
+			appId: 'appId',
+			versionId: 'versionId',
 			configId: 'configId',
 			configOverride: {url: 'url'},
 		});
