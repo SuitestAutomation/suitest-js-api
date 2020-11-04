@@ -2,6 +2,8 @@
 
 const assert = require('assert');
 const {EOL} = require('os');
+const chainUtils = require('../../lib/utils/chainUtils');
+const sinon = require('sinon');
 const {
 	getErrorMessage,
 	getInfoErrorMessage,
@@ -11,9 +13,18 @@ const {
 } = require('../../lib/utils/socketErrorMessages');
 
 describe('Socket error messages', () => {
+
 	it('test response message getters', () => {
 		assert.equal(responseMessageInfo({message: {info: 'test'}}), 'test');
 		assert.equal(responseMessageCode({message: {code: 'test'}}), 'test');
+	});
+
+	it('getErrorMessage should use verbose level', () => {
+		const stub = sinon.stub(chainUtils, 'translateLineResult');
+
+		getErrorMessage({response: {}, jsonMessage: {}, verbosity: 'normal'});
+		chainUtils.translateLineResult.restore();
+		assert.strictEqual(stub.firstCall.args[1], 'verbose');
 	});
 
 	it('Error message getter should fails', () => {

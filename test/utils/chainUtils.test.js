@@ -33,7 +33,8 @@ describe('chainUtils', () => {
 	});
 
 	it('translateLine should produce correct output', () => {
-		assert.strictEqual(utils.translateLine({type: 'takeScreenshot'}), '|E|text');
-		assert.strictEqual(utils.translateLine({type: 'testLine', request: {type: 'assert'}}), '|A|text');
+		assert.strictEqual(utils.translateLine({type: 'takeScreenshot'}, 'verbose'), '|E|text');
+		assert.strictEqual(utils.translateLine({type: 'testLine', request: {type: 'assert'}}, 'silly'), '|A|text');
+		assert.strictEqual(utils.translateLine({type: 'takeScreenshot'}, 'silly'), '|E|text');
 	});
 });
