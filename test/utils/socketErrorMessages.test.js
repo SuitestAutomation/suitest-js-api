@@ -24,7 +24,7 @@ describe('Socket error messages', () => {
 
 		getErrorMessage({response: {}, jsonMessage: {}, verbosity: 'normal'});
 		chainUtils.translateLineResult.restore();
-		assert.strictEqual(stub.firstCall.args[1], 'verbose');
+		assert.strictEqual(stub.firstCall.args[1], 'silly');
 	});
 
 	it('Error message getter should fails', () => {
