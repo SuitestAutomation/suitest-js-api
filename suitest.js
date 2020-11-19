@@ -65,9 +65,13 @@ const {setUpRaven} = require('./lib/utils/sentry/Raven');
 const {warnLauncherAndLibHasDiffVersions} = require('./lib/utils/packageMetadataHelper');
 const {createLogger} = require('./lib/utils/logger');
 
+const EventEmitter = require('events');
+
 // Publicly available API goes here
-class SUITEST_API {
+class SUITEST_API extends EventEmitter {
 	constructor({exitOnError} = {}) {
+		super();
+
 		// instance dependencies
 		this.authContext = new AuthContext();
 		this.appContext = new Context();
