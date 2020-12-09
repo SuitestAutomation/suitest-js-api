@@ -30,10 +30,9 @@ Check out your fork, switch to the newly created branch and start fixing the iss
 Here are the steps to get you started:
 
 * Make sure you have [NodeJS][] of v10 or higher installed.
-* Make sure you have [Yarn][] installed globally. You can use NPM instead, if you'd like.
-* Open your CLI in project's dir and run `yarn` (or `npm i`).
-* Run `yarn test-watch` (or `npm run test-watch`) to enable TDD.
-* Make sure to run `yarn lint` (or `npm run lint`) before making commit.
+* Open your CLI in project's dir and run `npm i`.
+* Run `npm run test-watch` to enable TDD.
+* Make sure to run `npm run lint` before making commit.
 
 > **Heads up!** In order to make unit tests pass, you should remove (or temporary rename)
 > all `.suitestrc` files starting from project's dir and up the folder structure, as
@@ -59,5 +58,4 @@ The following conditions must be met before any pull request can be merged to Su
 [new issue]: https://github.com/SuitestAutomation/suitest-js-api/new
 [fork Suitest JS API]: https://help.github.com/articles/fork-a-repo
 [NodeJS]: https://nodejs.org/
-[Yarn]: https://yarnpkg.com/
 [create a pull request]: https://help.github.com/articles/creating-a-pull-request

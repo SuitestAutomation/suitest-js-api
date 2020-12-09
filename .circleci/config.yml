@@ -21,22 +21,10 @@ jobs:
     steps:
       - checkout
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
       - run:
           name: Install dependencies
           command: |
-            yarn install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+            npm ci
 
       # install code climate
       - run:
@@ -49,7 +37,7 @@ jobs:
       - run:
           name: Run Unit Tests
           command: |
-            yarn lint
+            npm run lint
             ./cc-test-reporter before-build
             npm run coverage
             ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
@@ -57,4 +45,4 @@ jobs:
       - run:
           name: Check TypeScript definitions
           command: |
-            yarn test-definitions
+            npm run test-definitions
