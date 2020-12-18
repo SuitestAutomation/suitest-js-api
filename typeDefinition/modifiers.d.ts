@@ -181,6 +181,14 @@ export declare namespace WindowModifiers {
 	}
 }
 
+export declare namespace DeviceModifiers {
+	export interface SetOrientation<T> {
+		setOrientation(Orientation: Orientation): T;
+	}
+}
+
+export type Orientation = 'portrait' | 'portrait-reversed' | 'landscape' | 'landscape-reversed';
+
 export interface HadNoErrorModifier<T> {
 	hadNoError(searchStrategy?: 'all' | 'currentUrl'): T;
 }
