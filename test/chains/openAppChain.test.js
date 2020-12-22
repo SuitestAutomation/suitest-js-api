@@ -55,29 +55,6 @@ describe('Open app chain', () => {
 		assert.strictEqual(chain.times, chain);
 	});
 
-	it('should convert to string with meaningful message', () => {
-		assert.strictEqual(toString({
-			request: {},
-		}), 'Opening app at homepage');
-		assert.strictEqual(toString({
-			request: {
-				relativeUrl: '/test',
-			},
-		}), 'Opening app at /test');
-		// should convert to string with meaningful message with raw json definition
-		assert.strictEqual(toString({}), 'Opening app at homepage');
-		assert.strictEqual(toString({relativeUrl: '/test'}), 'Opening app at /test');
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
-
-		beforeSendMsgContains({}, 'Launcher E Opening app at homepage');
-		beforeSendMsgContains({isAssert: true}, 'Launcher A Opening app at homepage');
-		log.restore();
-	});
-
 	it('should generate correct socket message based on data', () => {
 		assert.deepStrictEqual(toJSON({}), {
 			type: 'eval',

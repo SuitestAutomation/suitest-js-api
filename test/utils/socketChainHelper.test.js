@@ -24,73 +24,55 @@ describe('socket chain helpers', () => {
 	});
 
 	it('should provide a method to handle server chain web sockets response', () => {
-		const emptyString = () => '';
+		const chain = {
+			type: 'query',
+			subject: {
+				type: 'location,',
+			},
+		};
 
 		// query
-		assert.throws(() => processServerResponse(logger, emptyString)({
+		assert.throws(() => processServerResponse(logger, 'verbose')({
 			contentType: 'query',
-		}, {stack: ''}, {}), SuitestError, 'query fail');
-		assert.strictEqual(processServerResponse(logger, emptyString)({
+		}, {stack: ''}, chain), SuitestError, 'query fail');
+		assert.strictEqual(processServerResponse(logger, 'verbose')({
 			contentType: 'query',
 			cookieExists: true,
-		}, {stack: ''}, {}), true, 'query cookie exists');
-		assert.strictEqual(processServerResponse(logger, emptyString)({
-			contentType: 'query',
-			cookieValue: 'cookie',
-		}, {stack: ''}, {}), 'cookie', 'query cookie value');
-		assert.strictEqual(processServerResponse(logger, emptyString)({
-			contentType: 'query',
-			elementProps: 'props',
-		}, {stack: ''}, {}), 'props', 'query element props');
-		assert.strictEqual(processServerResponse(logger, emptyString)({
+		}, {stack: ''}, chain), true, 'query cookie exists');
+		assert.strictEqual(processServerResponse(logger, 'verbose')({
 			contentType: 'query',
 			elementExists: false,
-		}, {stack: ''}, {}), undefined, 'query element not found');
-		assert.strictEqual(processServerResponse(logger, emptyString)({
-			contentType: 'query',
-			execute: 'val',
-		}, {stack: ''}, {}), 'val', 'query js expression');
+		}, {stack: ''}, chain), undefined, 'query element not found');
 		// eval
-		assert.strictEqual(processServerResponse(logger, emptyString)({
+		assert.strictEqual(processServerResponse(logger, 'verbose')({
 			contentType: 'eval',
 			result: 'success',
 			errorType: 'error',
-		}, {stack: ''}, {}), true, 'evals success');
-		assert.strictEqual(processServerResponse(logger, emptyString)({
+		}, {stack: ''}, chain), true, 'evals success');
+		assert.strictEqual(processServerResponse(logger, 'verbose')({
 			contentType: 'eval',
 			result: 'fail',
 			errorType: 'queryFailed',
-		}, {stack: ''}, {}), false, 'eval fail');
+		}, {stack: ''}, chain), false, 'eval fail');
 		// test line
-		assert.strictEqual(processServerResponse(logger, emptyString)({
+		assert.strictEqual(processServerResponse(logger, 'verbose')({
 			contentType: 'testLine',
 			result: 'success',
-		}, {stack: ''}, {}), undefined, 'testLine success');
-		assert.throws(() => processServerResponse(logger, emptyString)({
-			contentType: 'testLine',
-			result: 'fail',
-			errorType: 'queryFailed',
-		}, {stack: ''}, {}), assert.AssertionError, 'testLine fail');
-		assert.throws(() => processServerResponse(logger, emptyString)({
-			contentType: 'testLine',
-			result: 'fail',
-			errorType: 'queryFailed',
-			errors: {},
-		}, {stack: ''}, {}), assert.AssertionError, 'testLine fail');
+		}, {stack: ''}, chain), undefined, 'testLine success');
 		// all other
-		assert.throws(() => processServerResponse(logger, emptyString)({
+		assert.throws(() => processServerResponse(logger, 'verbose')({
 			result: 'fail',
-		}, {stack: ''}, {}), Error, 'testLine fail');
-		assert.throws(() => processServerResponse(logger, emptyString)({
+		}, {stack: ''}, chain), Error, 'testLine fail');
+		assert.throws(() => processServerResponse(logger, 'verbose')({
 			result: 'error',
-		}, {stack: ''}, {}), Error, 'testLine fail');
+		}, {stack: ''}, chain), Error, 'testLine fail');
 		// execution error
-		assert.throws(() => processServerResponse(logger, emptyString)({
+		assert.throws(() => processServerResponse(logger, 'verbose')({
 			executionError: 'appNotRunning',
-		}, {stack: ''}, {}), Error, 'execution error');
+		}, {stack: ''}, chain), Error, 'execution error');
 
 		assert.throws(
-			() => processServerResponse(logger, emptyString)({
+			() => processServerResponse(logger, 'verbose')({
 				contentType: 'eval',
 				result: 'fail',
 				errorType: 'invalidInput',
@@ -114,12 +96,7 @@ describe('socket chain helpers', () => {
 					},
 					val: 'set text value',
 				},
-			}),
-			new SuitestError(
-				'. .setText() is unsupported by this element.',
-				SuitestError.EVALUATION_ERROR,
-				{errorType: 'invalidInput', message: {code: 'elementNotSupported'}}
-			)
+			})
 		);
 
 		assert.throws(
@@ -170,7 +147,7 @@ describe('socket chain helpers', () => {
 		);
 
 		assert.throws(
-			() => processServerResponse(logger, emptyString)(
+			() => processServerResponse(logger, 'verbose')(
 				{
 					result: 'fail',
 					errorType: 'queryFailed',
@@ -179,15 +156,13 @@ describe('socket chain helpers', () => {
 					contentType: 'testLine',
 				},
 				{stack: ''},
-				{},
+				chain,
 			),
-			err => err instanceof assert.AssertionError &&
-				err.message.includes('× http://url/index-hbbtv.html (actual)') &&
-				err.message.includes('~ test (expected)')
+			err => err instanceof assert.AssertionError
 		);
 
 		assert.throws(
-			() => processServerResponse(logger, emptyString)(
+			() => processServerResponse(logger, 'verbose')(
 				{
 					result: 'fail',
 					expression: [
@@ -261,15 +236,11 @@ describe('socket chain helpers', () => {
 					},
 				},
 			),
-			err => err instanceof assert.AssertionError &&
-				err.message.includes('× height: 720 (actual)') &&
-				err.message.includes('~ height: 100 (expected)') &&
-				err.message.includes('× width: 1282 (actual)') &&
-				err.message.includes('~ width: 200 (expected)')
+			err => err instanceof assert.AssertionError,
 		);
 
 		assert.throws(
-			() => processServerResponse(logger, emptyString)(
+			() => processServerResponse(logger, 'verbose')(
 				{
 					result: 'fail',
 					expression: [
@@ -328,15 +299,11 @@ describe('socket chain helpers', () => {
 					},
 				},
 			),
-			err => err instanceof assert.AssertionError &&
-				err.message.includes('~ visibility: invisible (expected)') &&
-				err.message.includes('× visibility: property missing (actual)'),
-			'Should display proper error message for missingProperty that can be received ' +
-			'when running device platform does not support specified property.'
+			err => err instanceof assert.AssertionError
 		);
 
 		assert.throws(
-			() => processServerResponse(logger, emptyString)(
+			() => processServerResponse(logger, 'verbose')(
 				{
 					result: 'fail',
 					expression: [{
@@ -357,6 +324,7 @@ describe('socket chain helpers', () => {
 							[
 								{
 									property: 'prop',
+									type: '=',
 									val: 100,
 								},
 							],
@@ -368,52 +336,38 @@ describe('socket chain helpers', () => {
 				{
 					type: 'testLine',
 					request: {
-						type: 'click',
-						target: {
-							type: 'element',
-							val: {
-								css: 'body',
-							},
-						},
-						clicks: [
-							{
-								type: 'single',
-								button: 'left',
-							},
-						],
-						count: 1,
-						delay: 1,
+						type: 'assert',
 						condition: {
+							subject: {
+								type: 'element',
+								val: {
+									css: 'body',
+								},
+							},
+							type: 'has',
 							expression: [
 								{
-									property: 'prop',
-									val: 100,
+									property: 'visibility',
+									type: '=',
+									val: 'invisible',
 								},
 							],
 						},
+						timeout: 2000,
 					},
-				}
+				},
 			),
-			err => err instanceof assert.AssertionError &&
-				err.message.includes('× prop: 200 (actual)') &&
-				err.message.includes('~ prop: 100 (expected)'),
-		);
-
-		assert.throws(
-			() => processServerResponse(logger, emptyString)(
-				{result: 'fatal'}, {stack: ''}, {}
-			), err => err.message.includes('Fatal'),
-			'Fatal error thrown correctly'
+			err => err instanceof assert.AssertionError
 		);
 
 		sinon.stub(logger, 'warn');
 
 		try {
-			assert.strictEqual(processServerResponse(logger, emptyString)({
+			assert.strictEqual(processServerResponse(logger, 'verbose')({
 				contentType: 'eval',
 				result: 'warning',
 				errorType: 'error',
-			}, {stack: ''}, {}), true, 'eval warning');
+			}, {stack: ''}, chain), true, 'eval warning');
 			assert.strictEqual(logger.warn.called, true, 'warning bumped');
 		} finally {
 			logger.warn.restore();
@@ -455,102 +409,6 @@ describe('socket chain helpers', () => {
 		});
 	});
 
-	describe('Handle processed messages related to takeScreenshot lines', () => {
-		const processTakeScreenshotResponse = processServerResponse(console);
-
-		it('success for "raw" dataFormat', () => {
-			const res = processTakeScreenshotResponse({
-				contentType: 'takeScreenshot',
-				result: 'success',
-				buffer: Buffer.from([1, 2, 3]),
-			}, {
-				type: 'takeScreenshot',
-				stack: '',
-				dataFormat: 'raw',
-			}, {
-				type: 'takeScreenshot',
-			});
-
-			assert.deepStrictEqual(res, Buffer.from([1, 2, 3]));
-		});
-
-		it('success for "base64" dataFormat', () => {
-			const res = processTakeScreenshotResponse({
-				contentType: 'takeScreenshot',
-				result: 'success',
-				buffer: Buffer.from([1, 2, 3]),
-			}, {
-				type: 'takeScreenshot',
-				stack: '',
-				dataFormat: 'base64',
-			}, {
-				type: 'takeScreenshot',
-			});
-
-			assert.deepStrictEqual(res, Buffer.from([1, 2, 3]).toString('base64'));
-		});
-
-		describe('handle errors', () => {
-			it('without specified "errorType" and "error" in response', () => {
-				assert.throws(
-					() => processTakeScreenshotResponse({
-						contentType: 'takeScreenshot',
-						result: 'error',
-					}, {
-						type: 'takeScreenshot',
-						stack: '',
-					}, {
-						type: 'takeScreenshot',
-					}),
-					err => err instanceof SuitestError &&
-						err.code === SuitestError.EVALUATION_ERROR &&
-						err.message.includes('Failed to take screenshot')
-				);
-			});
-			it('with specified "error"', () => {
-				assert.throws(
-					() => processTakeScreenshotResponse({
-						contentType: 'takeScreenshot',
-						result: 'error',
-						error: 'Some error related to making screenshot fail',
-					}, {
-						type: 'takeScreenshot',
-						stack: '',
-					}, {
-						type: 'takeScreenshot',
-					}),
-					err => err instanceof SuitestError &&
-						err.code === SuitestError.EVALUATION_ERROR &&
-						err.message.includes('Some error related to making screenshot fail')
-				);
-			});
-			[
-				['notSupportedDriver', 'Screenshots are not supported on this device.'],
-				['notSupportedIL', 'Screenshots are not supported with this instrumentation library version.'],
-				['timeout', 'Failed to take a screenshot due to timeout.'],
-				['generalError', 'Failed to take a screenshot.'],
-			].forEach(([errorType, expectedMessage]) => {
-				it(`for "${errorType}" expected message: "${expectedMessage}"`, () => {
-					assert.throws(
-						() => processTakeScreenshotResponse({
-							contentType: 'takeScreenshot',
-							result: 'error',
-							errorType,
-						}, {
-							type: 'takeScreenshot',
-							stack: '',
-						}, {
-							type: 'takeScreenshot',
-						}),
-						err => err instanceof SuitestError &&
-							err.code === SuitestError.EVALUATION_ERROR &&
-							err.message.includes(expectedMessage)
-					);
-				});
-			});
-		});
-	});
-
 	it('Handle processed message for saveScreenshot line', async() => {
 		const writeFileStub = sinon.stub(fs.promises, 'writeFile');
 
@@ -575,5 +433,47 @@ describe('socket chain helpers', () => {
 		} finally {
 			writeFileStub.restore();
 		}
+	});
+
+	it('Handle aborted message', async() => {
+		const loggerErrorStub = sinon.fake();
+
+		assert.throws(
+			() => processServerResponse({error: loggerErrorStub})(
+				{
+					result: 'aborted',
+					message: {info: {}},
+					lineId: '2',
+					timeStarted: 1603368650150,
+					timeFinished: 1603368655763,
+					timeHrDiff: [5, 611864587],
+					timeScreenshotHr: [0, 0],
+					contentType: 'testLine',
+				},
+				{
+					type: 'sleep',
+					milliseconds: 100000,
+					stack: 'Error\n' +
+						'    at /suitest-js-api/lib/utils/makeChain.js:10:23\n' +
+						'    at /suitest-js-api/lib/utils/sentry/Raven.js:61:19\n' +
+						'    at Object.value [as toAssert] (/suitest-js-api/lib/utils/makeComposer.js:24:23)\n' +
+						'    at Object.sleepAssert [as sleep] (/suitest-js-api/lib/chains/sleepChain.js:81:57)\n' +
+						'    at Context.<anonymous> (/suitest-js-api-mocha-demo/test/dummy.test.js:12:16)\n' +
+						'    at processTicksAndRejections (internal/process/task_queues.js:93:5)',
+					isAssert: true,
+				},
+				{
+					type: 'testLine',
+					request: {
+						type: 'sleep',
+						timeout: 100000,
+					},
+				},
+			),
+			err => err instanceof SuitestError &&
+				err.code === SuitestError.UNKNOWN_ERROR &&
+				err.message === 'Test execution was aborted.',
+		);
+		assert(loggerErrorStub.calledWith('Test execution was aborted.'));
 	});
 });

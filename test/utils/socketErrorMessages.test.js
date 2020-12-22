@@ -1,603 +1,35 @@
 /* eslint-disable max-len */
 
 const assert = require('assert');
-const {set, lensPath} = require('ramda');
 const {EOL} = require('os');
-const {stripAnsiChars} = require('../../lib/utils/stringUtils');
+const chainUtils = require('../../lib/utils/chainUtils');
+const sinon = require('sinon');
 const {
-	errorMap,
 	getErrorMessage,
 	getInfoErrorMessage,
 	responseMessageCode,
 	responseMessageInfo,
+	getSnippetLogs,
 } = require('../../lib/utils/socketErrorMessages');
 
 describe('Socket error messages', () => {
+
 	it('test response message getters', () => {
 		assert.equal(responseMessageInfo({message: {info: 'test'}}), 'test');
 		assert.equal(responseMessageCode({message: {code: 'test'}}), 'test');
 	});
 
-	it('All properties in errorMap should be functions', () => {
-		for (const handler of Object.values(errorMap)) {
-			assert.ok(typeof handler === 'function');
-		}
-	});
+	it('getErrorMessage should use verbose level', () => {
+		const stub = sinon.stub(chainUtils, 'translateLineResult');
 
-	it('All errorMap handlers should returns string', () => {
-		const toString = () => '';
-		const response = {};
-		const jsonMessage = {};
-
-		for (const key of Object.keys(errorMap)) {
-			const handler = errorMap[key];
-			const message = handler({
-				toString,
-				response: key === 'adbError' ? {
-					message: {
-						info: {
-							reason: 'reason',
-						},
-					},
-				} : response,
-				jsonMessage,
-			});
-
-			assert.ok(typeof message === 'string');
-		}
+		getErrorMessage({response: {}, jsonMessage: {}, verbosity: 'normal'});
+		chainUtils.translateLineResult.restore();
+		assert.strictEqual(stub.firstCall.args[1], 'normal');
 	});
 
 	it('Error message getter should fails', () => {
 		assert.throws(getErrorMessage);
 		assert.throws(() => getErrorMessage({}));
-	});
-
-	it('Error message getter should return default messages', () => {
-		const response = {errorType: 'unknownError'};
-		const toString = () => 'Chain description';
-		const jsonMessage = {};
-
-		assert.equal(getErrorMessage({
-			response,
-			toString,
-			jsonMessage,
-		}), 'unknownError: "Chain description."');
-
-		assert.equal(getErrorMessage({
-			response: {
-				...response,
-				errors: 'Some errors',
-			},
-			toString,
-			jsonMessage,
-		}), `unknownError: "Chain description."${EOL}errors: "Some errors"`);
-	});
-
-	describe('Error message should return specific messages', () => {
-		const toString = (jsonMessage, nameOnly) => nameOnly ? 'Element name' : 'Chain description';
-		const jsonMessage = {};
-		const basePayload = (errorType, code, reason) => {
-			let payload = {
-				response: {errorType},
-				toString,
-				jsonMessage,
-			};
-
-			if (code !== void 0) {
-				payload = set(lensPath(['response', 'message', 'code']), code, payload);
-			}
-
-			if (reason !== void 0) {
-				payload = set(lensPath(['response', 'message', 'info', 'reason']), reason, payload);
-			}
-
-			return payload;
-		};
-
-		[
-			[basePayload('failedStart'), 'Chain description.'],
-			[basePayload('missingApp'), 'Application is not installed on the device.'],
-			[basePayload('outdatedLibrary'), 'We have detected that your instrumentation library is outdated and the package cannot be opened. Update required.'],
-			[basePayload('initPlatformFailed'), 'Failed to bootstrap platform on this device.'],
-			[basePayload('packageNotFound'), 'There is nothing to test, because the selected configuration does not contain an app package. Upload a package on your app\'s configuration page before continuing.'],
-			[basePayload('internalError'), 'Internal error occurred. Chain description.'],
-			[basePayload('ILInternalError'), 'Internal error occurred. Chain description.'],
-			[basePayload('queryTimeout'), 'Application did not respond for 60 seconds. Executing "Chain description.".'],
-			[
-				set(lensPath(['response', 'message', 'info', 'timeout']), 3000, basePayload('queryTimeout', 'missingILResponse')),
-				'The wait time exceeded 3 seconds. Executing "Chain description.".',
-			],
-			[
-				set(lensPath(['response', 'message', 'info', 'timeout']), 1000, basePayload('queryTimeout', 'missingILResponse')),
-				'The wait time exceeded 1 second. Executing "Chain description.".',
-			],
-			[
-				set(lensPath(['response', 'message', 'info', 'timeout']), 500, basePayload('queryTimeout', 'missingILResponse')),
-				'The wait time exceeded 0.5 seconds. Executing "Chain description.".',
-			],
-			[basePayload('serverError'), 'Server error occurred. Chain description.'],
-			[basePayload('invalidCredentials'), 'Credentials for this device were changed.'],
-			[basePayload('syntaxError'), 'Test command received invalid input. Chain description.'],
-			[basePayload('syntaxError', 'WrongDelay'), 'Test command received invalid input. Delay value is invalid. Chain description.'],
-			[basePayload('syntaxError', 'wrongBody'), 'Body field value is exceeding 4KB limit. Chain description.'],
-			[basePayload('syntaxError', 'wrongUrl'), 'This does not look like a valid URL. Chain description.'],
-			[basePayload('invalidInput'), 'Test command received invalid input. Chain description.'],
-			[basePayload('invalidInput', 'lineTypeNotSupported'), 'This test command is not supported by the current app configuration. Chain description.'],
-			[
-				{
-					...basePayload('invalidInput', 'elementNotSupported'),
-					jsonMessage: {
-						type: 'eval',
-						request: {
-							type: 'click',
-							target: {
-								type: 'element',
-								val: {
-									css: 'test',
-								},
-							},
-							clicks: [
-								{
-									type: 'single',
-									button: 'left',
-								},
-							],
-							count: 1,
-							delay: 1,
-						},
-					},
-				},
-				'Chain description. .click() is unsupported by this element.',
-			],
-			[
-				{
-					...basePayload('invalidInput', 'elementNotSupported'),
-					jsonMessage: {
-						type: 'eval',
-						request: {
-							type: 'setText',
-							target: {
-								type: 'element',
-								val: {
-									css: 'test',
-								},
-							},
-							val: 'set text value',
-						},
-					},
-				},
-				'Chain description. .setText() is unsupported by this element.',
-			],
-			[basePayload('ActionNotAvailable'), 'This test command is not supported by the current app configuration. Chain description.'],
-			[
-				{
-					...basePayload('conditionNotSatisfied'),
-					jsonMessage: {
-						type: 'eval',
-						request: {
-							type: 'button',
-							ids: [
-								'ENTER',
-							],
-							count: 4,
-							delay: 1,
-						},
-					},
-				},
-				'Maximum amount of key presses 4 reached. Condition was not satisfied. Chain description.',
-			],
-			[basePayload('deviceError'), 'Internal error occurred. Chain description.'],
-			[basePayload('deviceError', 'unsupportedSelector', ''), 'Internal error occurred. Chain description.'],
-			[basePayload('deviceError', 'unsupportedSelector', 'xpathNotSupported'), 'Element cannot be found, because this device does not support XPath lookups.'],
-			[basePayload('deviceError', 'deviceFailure', 'cssSelectorInvalid'), 'CSS selector is invalid.'],
-			[basePayload('deviceError', 'videoAdapterInvalidOutput', 'some explanation from IL'), 'Video adapter error: some explanation from IL.'],
-			[basePayload('deviceError', 'videoAdapterNotFunction', 'some explanation from IL'), 'Video adapter error: some explanation from IL.'],
-			[basePayload('deviceError', 'videoAdapterThrownError', 'some explanation from IL'), 'Video adapter error: some explanation from IL.'],
-			[basePayload('wrongApp'), 'Wrong app ID detected'],
-			[basePayload('driverException'), 'Unexpected exception occurred on connected device. Please, contact support@suite.st if you see this often.'],
-			[basePayload('illegalButton'), 'Specified buttons are not supported on this device. Chain description.'],
-			[basePayload('unsupportedButton'), 'Specified buttons are not supported on this device. Chain description.'],
-			[basePayload('aborted'), 'Test execution was aborted. Chain description.'],
-			[basePayload('aborted', undefined, 'manualActionRequired'), 'Manual actions are not supported.'],
-			[
-				{
-					...basePayload('queryFailed'),
-					jsonMessage: {
-						type: 'eval',
-						request: {
-							type: 'button',
-							ids: [
-								'ENTER',
-							],
-							count: 4,
-							delay: 1,
-						},
-					},
-				},
-				'Maximum amount of key presses 4 reached. Condition was not satisfied. Chain description.',
-			],
-			[basePayload('queryFailed'), 'queryFailed: "Chain description."'],
-			[basePayload('queryFailed', 'invalidApp'), 'Wrong app ID detected'],
-			[
-				{
-					...basePayload('queryFailed', 'invalidUrl'),
-					response: {
-						...basePayload('queryFailed', 'invalidUrl').response,
-						actualValue: 'actualUrl',
-						expectedValue: 'expectedUrl',
-					},
-				},
-				'App loaded actualUrl instead of the expected expectedUrl. Consider updating the app URL in settings.'
-				+ `${EOL}\tFailing checks:`
-				+ `${EOL}\t~ expectedUrl (expected)`
-				+ `${EOL}\t× actualUrl (actual)${EOL}\t`,
-			],
-			[
-				{
-					...basePayload('queryFailed'),
-					response: {
-						errorType: 'queryFailed',
-						errors: [{'type': 'noUriFound'}],
-					},
-					jsonMessage: {
-						type: 'eval',
-						request: {
-							type: 'assert',
-							condition: {
-								subject: {
-									type: 'network',
-									compare: '=',
-									val: 'test',
-									requestInfo: [],
-									responseInfo: [],
-								},
-								type: 'made',
-								searchStrategy: 'all',
-							},
-							timeout: 2000,
-						},
-					},
-				},
-				'queryFailed: "Chain description."'
-				+ `${EOL}\tFailing checks:`
-				+ `${EOL}\t~ url: test (expected)`
-				+ `${EOL}\t× url: request was not made (actual)`,
-			],
-			[
-				{
-					...basePayload('queryFailed'),
-					response: {
-						errorType: 'queryFailed',
-						errors: [{
-							type: 'header',
-							name: 'testHeader',
-							actualValue: 'testActualVal',
-							message: 'request',
-						}, {
-							type: 'method',
-							actualValue: 'POST',
-							message: 'request',
-						}, {
-							type: 'body',
-							reason: 'notFound',
-							message: 'response',
-						}, {
-							type: 'status',
-							message: 'response',
-						}, {
-							type: 'header',
-							message: 'response',
-							name: 'not in chain data, will be ignored',
-						}],
-					},
-					jsonMessage: {
-						type: 'eval',
-						request: {
-							type: 'assert',
-							condition: {
-								subject: {
-									type: 'network',
-									compare: '=',
-									val: 'test',
-									requestInfo: [
-										{
-											name: 'testHeader',
-											val: 'testExpectedVal',
-										},
-										{
-											name: '@method',
-											val: 'GET',
-										},
-									],
-									responseInfo: [
-										{
-											name: '@body',
-											val: 'testBody',
-										},
-										{
-											name: '@status',
-											val: 200,
-										},
-									],
-								},
-								type: 'made',
-								searchStrategy: 'all',
-							},
-							timeout: 2000,
-						},
-					},
-				},
-				'queryFailed: "Chain description."'
-				+ `${EOL}\tFailing checks:`
-				+ `${EOL}\t~ request header "testHeader": testExpectedVal (expected)`
-				+ `${EOL}\t× request header "testHeader": testActualVal (actual)`
-				+ `${EOL}\t~ request method: GET (expected)`
-				+ `${EOL}\t× request method: POST (actual)`
-				+ `${EOL}\t~ response body: testBody (expected)`
-				+ `${EOL}\t× response body: not found (actual)`
-				+ `${EOL}\t~ response status: 200 (expected)`
-				+ `${EOL}\t× response status: unknown (actual)`,
-			],
-			[basePayload('queryFailed', 'applicationError'), 'Application thrown unexpected error while executing command "Chain description.".'],
-			[basePayload('queryFailed', 'exprException'), 'JavaScript error: .'],
-			[
-				set(
-					lensPath(['response', 'message', 'info', 'exception']),
-					'SomeException',
-					basePayload('queryFailed', 'exprException')
-				),
-				'JavaScript error: SomeException.',
-			],
-			[basePayload('queryFailed', 'orderErr'), 'Suitest instrumentation library should be placed as the first script in your HTML file. Loading the instrumentation library dynamically or after other scripts have loaded may cause many unusual errors.'],
-			[basePayload('queryFailed', 'updateAlert'), 'Suitest instrumentation library is outdated. Please download and install the newest version.'],
-			[basePayload('queryFailed', 'notFunction'), 'Specified code is not a function. Chain description.'],
-			[basePayload('queryFailed', 'psImplicitVideo'), 'The "video" subject on the PlayStation platform is inconsistent, we recommend using the "native video" or "element" subject instead. Read more in docs - ps4-support.psImplicitVideo.'],
-			[
-				{
-					...basePayload('queryFailed', 'missingSubject'),
-					jsonMessage: {
-						type: 'eval',
-						request: {
-							type: 'click',
-							target: {
-								type: 'element',
-								val: {
-									css: 'test',
-								},
-							},
-							clicks: [
-								{
-									type: 'single',
-									button: 'left',
-								},
-							],
-							count: 1,
-							delay: 1,
-						},
-					},
-				},
-				'Element Element name was not found.',
-			],
-			[
-				{
-					...basePayload('queryFailed', 'missingSubject'),
-					jsonMessage: {
-						type: 'eval',
-						request: {
-							type: 'assert',
-							condition: {
-								subject: {
-									type: 'element',
-									val: {
-										css: 'test',
-									},
-								},
-								type: 'exists',
-							},
-							timeout: 2000,
-						},
-					},
-				},
-				'Element Element name was not found.',
-			],
-			[basePayload('networkError'), 'Chain description.'],
-			[basePayload('noHasLines'), 'No assertion properties defined. Chain description.'],
-			[basePayload('appCrashed'), 'App seems to have crashed. Chain description.'],
-			[basePayload('timeLimitExceeded'), 'Test execution time limit exceeded. Contact us at sales@suite.st if you need to run longer tests. Chain description.'],
-			[basePayload('notResponding'), 'Device stopped responding.'],
-			[basePayload('suitestifyError'), 'Suitestify failed to start. Check your Suitestify settings.'],
-			[basePayload('suitestifyRequired'), 'This assertion only works with Suitestify. You can configure your app to use Suitestify in the app settings. Please note that Suitestify is not available for all platforms.'],
-			[basePayload('invalidVariable'), 'Variable is not defined in the app configuration.'],
-			[
-				set(lensPath(['response', 'args', 'variables']), ['test'], basePayload('invalidVariable')),
-				'Variable test is not defined in the app configuration.',
-			],
-			[
-				set(lensPath(['response', 'args', 'variables']), ['test', 'debug'], basePayload('invalidVariable')),
-				'Variables test, debug are not defined in the app configuration.',
-			],
-			[basePayload('appRunning'), 'App is still running.'],
-			[
-				{
-					...basePayload('appRunning'),
-					jsonMessage: {
-						type: 'eval',
-						request: {
-							type: 'button',
-							ids: [
-								'ENTER',
-							],
-							count: 4,
-							delay: 1,
-						},
-					},
-				},
-				'Maximum amount of key presses 4 reached. Condition was not satisfied. Chain description.',
-			],
-			[basePayload('appNotRunning'), 'Application is not running.'],
-			[
-				set(lensPath(['response', 'executionError']), 'appNotRunning', basePayload()),
-				'Application is not running.',
-			],
-			[basePayload('bootstrapPageNotDetected'), 'App seems to have exited correctly but something went wrong when loading the Suitest channel autostart application.'],
-			[basePayload('wrongAppDetected'), 'App seems to have exited correctly, however another app has been opened.'],
-			[
-				{
-					...basePayload('notExpectedResponse'),
-					jsonMessage: {
-						type: 'eval',
-						request: {
-							type: 'openUrl',
-							url: 'some-url',
-						},
-					},
-				},
-				'Unexpected response received while polling some-url. Chain description.',
-			],
-			[
-				{
-					...basePayload('noConnection'),
-					jsonMessage: {
-						type: 'eval',
-						request: {
-							type: 'openUrl',
-							url: 'some-url',
-						},
-					},
-				},
-				'Could not connect to server while polling some-url. Chain description.',
-			],
-			[
-				{
-					...basePayload('invalidResult'),
-					jsonMessage: {
-						type: 'eval',
-						request: {
-							type: 'openUrl',
-							url: 'some-url',
-						},
-					},
-				},
-				'Unexpected response received while polling some-url. Chain description.',
-			],
-			[basePayload('lateManualLaunch'), 'In this configuration the "open app" commands inside the test are not supported. You may however start the test with "open app" command.'],
-			[basePayload('launchExpired'), 'Identical scheduling aborted.'],
-			[basePayload('deviceIsBusy'), 'Identical scheduling aborted.'],
-			[basePayload('notActiveDeveloperMode'), 'Failed to launch application. Is "developer mode" turned on?'],
-			[basePayload('invalidUrl'), 'Application could not be launched. Please verify you have provided URL for this configuration.'],
-			[basePayload('invalidRepositoryReference'), 'Chain description.'],
-			[
-				set(lensPath(['response', 'message', 'apiId']), 'apiId', basePayload('invalidRepositoryReference', 'notExistingElement')),
-				'Element apiId was not found in repository.',
-			],
-			[
-				set(lensPath(['response', 'message']), {
-					property: 'someProp',
-					apiId: 'apiId',
-					code: 'unknownProperty',
-				}, basePayload('invalidRepositoryReference')),
-				'Element apiId does not support property "someProp".',
-			],
-			[
-				set(lensPath(['response', 'message', 'apiId']), 'apiId', basePayload('invalidRepositoryReference', 'notExistingPlatform')),
-				'Element apiId has no defined identifying properties for this platform.',
-			],
-			[basePayload('openAppOverrideFailed'), 'An error occurred while executing the "Open app override test".'],
-			[basePayload('invalidOpenAppOverrideReference'), 'Could not start execution, please check open app override setting. https://suite.st/docs/application/more-configuration-options/#open-app-override-test'],
-			[basePayload('Success'), 'Command executed successfully.'],
-			[basePayload('NoSuchElement'), 'Element Element name was not found.'],
-			[basePayload('NoSuchFrame'), 'Cannot switch to frame Element name.'],
-			[basePayload('UnknownCommand'), 'The requested resource could not be found, or a request was received using an HTTP method that is not supported by the mapped resource. Chain description.'],
-			[basePayload('StaleElementReference'), 'Element Element name is no longer inside DOM.'],
-			[basePayload('ElementNotVisible'), 'Element Element name is not currently visible.'],
-			[basePayload('InvalidElementState'), 'Cannot perform operation with element Element name because this element is in an invalid state (e.g. attempting to click a disabled element).'],
-			[basePayload('UnknownError'), 'UnknownError: "Chain description."'],
-			[basePayload('ElementIsNotSelectable'), 'Element Element name is not selectable.'],
-			[basePayload('XPathLookupError'), 'XPath error occurred when searching for Element name.'],
-			[basePayload('Timeout'), 'This command takes too long to execute. Chain description.'],
-			[basePayload('NoSuchWindow'), 'A request to switch to a different window could not be satisfied because the window could not be found. Chain description.'],
-			[basePayload('InvalidCookieDomain'), 'Cannot set a cookie on a domain different from the current page. Chain description.'],
-			[basePayload('UnableToSetCookie'), 'Cannot set the specified cookie value. Chain description.'],
-			[basePayload('UnexpectedAlertOpen'), 'A modal dialog was open, blocking this operation. Chain description.'],
-			[basePayload('NoAlertOpenError'), 'There was no modal dialog on the page. Chain description.'],
-			[basePayload('ScriptTimeout'), 'A script takes too long to execute. Chain description.'],
-			[basePayload('InvalidElementCoordinates'), 'Invalid coordinates specified for Element name.'],
-			[basePayload('IMENotAvailable'), 'IME was not available.'],
-			[basePayload('IMEEngineActivationFailed'), 'An IME engine could not be started.'],
-			[basePayload('InvalidSelector'), 'This selector is malformed. Chain description.'],
-			[basePayload('ElementNotInteractable'), 'Element is not currently interactable and may not be manipulated.'],
-			[basePayload('unknownWebDriverKey'), 'This key is not supported on the target device.'],
-			[basePayload('unfocusableElement'), 'Element Element name is not designed to receive any text input.'],
-			[basePayload('unclickableElement'), 'Cannot click on Element name because the element is obstructed by another element.'],
-			[basePayload('deviceConnectionError'), 'Failed to initialize device control.'],
-			[
-				set(lensPath(['response']), {
-					executeThrowException: true,
-					executeExceptionMessage: 'error',
-				}, basePayload()),
-				'JavaScript expression error: "error".',
-			],
-			[
-				set(lensPath(['response']), {
-					matchJSThrowException: true,
-					matchJSExceptionMessage: 'error',
-				}, basePayload()),
-				'JavaScript expression error: "error".',
-			],
-			[basePayload('signInRequired'), 'Account needs to be signed in on target device.'],
-			[basePayload('appleError65'), 'Failed to launch app: Apple ID account error - see https://suite.st/docs/devices/apple-tv/#apple-id-account-error.'],
-			[basePayload('appleError70'), 'Failed to launch app: Xcode error - see https://suite.st/docs/devices/apple-tv/#xcode-error.'],
-			[basePayload('appleAppSignError'), 'Failed to launch app: App code sign error - see https://suite.st/docs/devices/apple-tv/#app-code-sign-error.'],
-			[basePayload('invalidPackage', 'appleTvSimPackageOnDevice'), 'An Apple TV app simulator package cannot be launched on real device.'],
-			[basePayload('invalidPackage', 'appleTvDevicePackageOnSim'), 'An Apple TV app package cannot be launched on simulator device.'],
-			[basePayload('missingPSSDK'), 'Please make sure that you have the PlayStation SDK installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#playstation-sdk-not-installed.'],
-			[basePayload('targetManagerBusy'), 'Please try again in a few minutes.'],
-			[basePayload('missingDotNet'), 'Please make sure you have the .NET Framework installed. Please see our docs - https://suite.st/docs/troubleshooting/playstation/#net-framework-not-installed.'],
-			[basePayload('bootstrapAppNotDetected'), 'The Suitest bootstrap application was not detected.'],
-			[basePayload('activationExpired'), 'Could not open the app because the DevKit/TestKit expired.'],
-			[basePayload('missingCpp'), 'Make sure you have Microsoft Visual C++ Redistributable installed. Please see our docs - https://suite.st/docs/devices/playstation.'],
-			[
-				{
-					...basePayload('testSnippetError'),
-					jsonMessage: {
-						request: {
-							val: 'testId',
-						},
-					},
-				},
-				'Test run by ID "testId" failed.',
-			],
-			[
-				{
-					...basePayload('invalidReference'),
-					jsonMessage: {
-						request: {
-							val: 'testId',
-						},
-					},
-				},
-				'Test with ID "testId" does not exist.',
-			],
-			[basePayload('outdatedLibraryWarning'), 'We have detected that your instrumentation library is outdated, the package can still be opened. Consider updating.'],
-			[basePayload('adbError', undefined, 'testReason'), 'testReason'],
-			[basePayload('adbError', 'certificateError'), 'Unable to parse the application signing certificate. Make sure your app package is signed and the certificate is valid.'],
-			[basePayload('adbError'), 'ADB communication with the device has failed. Make sure your device is set up correctly and it can be connected to using ADB.'],
-			[basePayload('outOfMemory'), 'Failed to open the app. Device is out of memory, please restart the device.'],
-			[basePayload('configuratorError'), 'Make sure that Apple Configurator 2 and Automation Tools are installed. Please see our docs.'],
-			[basePayload('appleNetworkLogsError'), 'SuitestDrive can\'t launch NetworkLog service on Mac'],
-			[basePayload('appStoreBuild'), 'Can’t install App Store distribution build.'],
-			[basePayload('ioError'), 'Problem with storing data. Please check that there is enough disk space and that permissions are not limited. Contact support (mailto:support@suite.st) if problem persists.'],
-			[basePayload('netError'), 'Downloading of the driver failed, please check your internet connection and try again later. Contact support (mailto:support@suite.st) if problem persists.'],
-			[basePayload('sdComponentFailed'), 'Downloading of the driver failed, please try again later. Contact support (mailto:support@suite.st) if problem persists.'],
-			[basePayload('MoveTargetOutOfBounds'), 'Move target is outside of the visible area of the screen.'],
-			[basePayload('ElementClickIntercepted'), 'Click on the element was intercepted by another element.'],
-			[basePayload('unsupportedOSVersion'), 'Unsupported OS version, please see our docs (https://suite.st/docs/devices/playstation/#sdk-650-or-system-software-701-or-lower).'],
-			[basePayload('targetManagerUnsupportedVersion'), 'Unsupported Target Manager Server, please see our docs (https://suite.st/docs/devices/playstation/#sdk-650-or-system-software-701-or-lower).'],
-		].forEach(([payload, expectMessage]) => {
-			it(expectMessage, () => {
-				assert.strictEqual(stripAnsiChars(getErrorMessage(payload)), expectMessage, JSON.stringify(payload, null, 4));
-			});
-		});
 	});
 
 	it('should test getInfoErrorMessage', () => {
@@ -618,14 +50,14 @@ describe('Socket error messages', () => {
 
 		assert.strictEqual(
 			msg2,
-			'prefix message Test session will now close and all remaining Suitest commands will fail. To allow execution of remaining Suitest commands call suitest.startTest() or fix this error.\n\tat line1'
+			'prefix message Test session will now close and all remaining Suitest commands will fail. To allow execution of remaining Suitest commands call suitest.startTest() or fix this error.\n\tat line1',
 		);
 
 		const msg3 = getInfoErrorMessage(
 			'message',
 			'prefix ',
 			{},
-			'stack\n\tat line1\n\tat line2'
+			'stack\n\tat line1\n\tat line2',
 		).replace(/\r/gm, '');
 
 		assert.strictEqual(msg3, 'prefix message\n\tat line1');
@@ -634,9 +66,46 @@ describe('Socket error messages', () => {
 			'message' + EOL,
 			'prefix ',
 			{},
-			'stack\n\tat line1\n\tat line2'
+			'stack\n\tat line1\n\tat line2',
 		);
 
 		assert.strictEqual(msg4, 'prefix message' + EOL + '\tat line1');
+	});
+
+	it('getSnippetLogs Should produce correct output with simple line', () => {
+		const translateFn = (...args) => JSON.stringify(...args);
+		const payload = {'verbosity': 'debug', 'definitions': {'69c27f99-7b59-407f-b0e9-38244fd3a006': [{'lineId': '7e4785b4-8817-4550-8a84-cf93dd1bd0f6', 'type': 'sleep', 'excluded': false, 'timeout': 2000}, {'lineId': '8ddea4de-998b-44b8-804b-6700239e8140', 'type': 'sleep', 'excluded': false, 'timeout': 2000}, {'lineId': 'f34f1755-7dc0-4bbc-8582-33ae53dcb93a', 'type': 'sleep', 'excluded': false, 'timeout': 2000}]}, 'results': [{'result': 'success', 'lineId': '2-1', 'timeStarted': 1603807564404, 'timeFinished': 1603807566405, 'timeHrDiff': [2, 710622], 'timeScreenshotHr': [0, 0]}, {'result': 'success', 'lineId': '2-2', 'timeStarted': 1603807566405, 'timeFinished': 1603807568406, 'timeHrDiff': [2, 525453], 'timeScreenshotHr': [0, 0]}, {'result': 'success', 'lineId': '2-3', 'timeStarted': 1603807568407, 'timeFinished': 1603807570407, 'timeHrDiff': [2, 344593], 'timeScreenshotHr': [0, 0]}], 'testId': '69c27f99-7b59-407f-b0e9-38244fd3a006', 'level': 1};
+		const expectedOutput = ' {"lineId":"7e4785b4-8817-4550-8a84-cf93dd1bd0f6","type":"sleep","excluded":false,"timeout":2000}\n' +
+			' {"lineId":"8ddea4de-998b-44b8-804b-6700239e8140","type":"sleep","excluded":false,"timeout":2000}\n' +
+			' {"lineId":"f34f1755-7dc0-4bbc-8582-33ae53dcb93a","type":"sleep","excluded":false,"timeout":2000}';
+
+		assert.deepStrictEqual(getSnippetLogs(payload, translateFn), expectedOutput);
+	});
+
+	it('getSnippetLogs Should produce correct output with snippet', () => {
+		const translateFn = (...args) => JSON.stringify(...args);
+		const payload = {'verbosity': 'debug', 'definitions': {'424489ab-240a-4524-ae42-be1cd41a4912': [{'type': 'openApp', 'lineId': '0c54e7ec-78e5-411f-925c-d0dac9636e28'}, {'lineId': '504d5ab6-2d4d-44f8-ad65-07191ef1316a', 'type': 'runSnippet', 'excluded': false, 'val': '20330172-c45d-4917-9af6-c49b971c0d32', 'tasks': [{'type': 'openApp', 'lineId': '20b73343-e6ab-4120-80ad-60e8376b9c71'}, {'lineId': '1522d5dd-42ea-4466-bd52-3190026a0624', 'type': 'sleep', 'excluded': false, 'timeout': 2000}], 'definitionVersion': 2, 'count': 1}], '20330172-c45d-4917-9af6-c49b971c0d32': [{'lineId': '1522d5dd-42ea-4466-bd52-3190026a0624', 'type': 'sleep', 'excluded': false, 'timeout': 2000}, {'lineId': '0fbd016f-a7c4-45a9-9a39-0d7f0f3efbfe', 'type': 'wait', 'excluded': false, 'condition': {'subject': {'type': 'element', 'elementId': '1d05e97a-424c-40fa-acbe-1b803db7562e', 'name': 'Folder (All files) focused'}, 'type': 'has', 'expression': [{'property': 'backgroundColor', 'type': '=', 'inherited': true, 'val': 'rgba(0, 0, 0, 0)', 'uid': 'c257ee7a-f920-471a-996f-07360c65ca8f'}, {'property': 'borderColor', 'type': '=', 'inherited': true, 'val': 'rgba(20, 23, 176, 1)', 'uid': '87057927-a5c0-4949-885e-2f4a0ffeb185'}, {'property': 'borderStyle', 'type': '=', 'inherited': true, 'val': 'solid', 'uid': 'fb69b622-dfd7-437b-89ef-eadf8d915ebb'}, {'property': 'borderWidth', 'type': '=', 'inherited': true, 'val': '2px', 'uid': '51193d1f-f242-4633-b7eb-fef060352935'}, {'property': 'class', 'type': '=', 'inherited': true, 'val': 'widget container button item folder folder-main folder-all listitem active focus buttonFocussed', 'uid': 'ad9e2dcb-c40d-4dd9-a605-8784266c45e7'}, {'property': 'height', 'type': '=', 'inherited': true, 'val': 128, 'uid': '1111161d-13b0-41dd-b8e0-16dc62f136da'}, {'property': 'href', 'type': '=', 'inherited': true, 'val': '', 'uid': '5df8cd08-852c-40e1-9ba5-b8f78962e807'}, {'property': 'id', 'type': '=', 'inherited': true, 'val': 'allFolderButton', 'uid': 'b6165dea-c4ce-4cc1-aac2-ff351d82478c'}, {'property': 'image', 'type': '=', 'inherited': true, 'val': '', 'uid': 'ea5f8dfb-13ea-4618-b38e-3872697d0fe4'}, {'property': 'left', 'type': '=', 'inherited': true, 'val': 31, 'uid': 'fee4b83c-84df-4ca7-9491-58d26d087f1d'}, {'property': 'opacity', 'type': '=', 'inherited': true, 'val': 1, 'uid': '3f5bcb54-88c1-46bf-8caa-0cfddc552246'}, {'property': 'color', 'type': '=', 'inherited': true, 'val': 'rgba(255, 255, 255, 1)', 'uid': '77d09dca-12e6-47fe-b00f-5721ee4605a9'}, {'property': 'text', 'type': '=', 'inherited': true, 'val': 'All Files', 'uid': '147f05da-0d4a-4291-84e1-8ac5a2170884'}, {'property': 'top', 'type': '=', 'inherited': true, 'val': 165, 'uid': '230a1bc7-4cda-41c7-be99-323a6c3a55cd'}, {'property': 'width', 'type': '=', 'inherited': true, 'val': 166, 'uid': '957b8967-2c74-4c59-8a35-3a13abb4d371'}, {'property': 'zIndex', 'type': '=', 'inherited': true, 'val': 0, 'uid': '06b335fd-352b-469f-8ee3-096e9d4414fd'}]}, 'then': 'success', 'timeout': 10000}]}, 'results': [{'result': 'fail', 'results': [{'result': 'success', 'lineId': '2-2-1', 'timeStarted': 1603806943812, 'timeFinished': 1603806945812, 'timeHrDiff': [2, 522470], 'timeScreenshotHr': [0, 0]}, {'result': 'fail', 'errorType': 'queryFailed', 'message': {'code': 'missingSubject', 'info': {}}, 'lineId': '2-2-2', 'timeStarted': 1603806945813, 'timeFinished': 1603806955814, 'timeHrDiff': [10, 1639519], 'timeScreenshotHr': [0, 0]}], 'lineId': '2-2', 'timeStarted': 1603806943812, 'timeFinished': 1603806955815, 'timeHrDiff': [12, 2588583], 'timeScreenshotHr': [0, 0]}], 'testId': '424489ab-240a-4524-ae42-be1cd41a4912', 'level': 1};
+		const expectedOutput = ' {"lineId":"504d5ab6-2d4d-44f8-ad65-07191ef1316a","type":"runSnippet","excluded":false,"val":"20330172-c45d-4917-9af6-c49b971c0d32","tasks":[{"type":"openApp","lineId":"20b73343-e6ab-4120-80ad-60e8376b9c71"},{"lineId":"1522d5dd-42ea-4466-bd52-3190026a0624","type":"sleep","excluded":false,"timeout":2000}],"definitionVersion":2,"count":1}\n' +
+			'  {"lineId":"1522d5dd-42ea-4466-bd52-3190026a0624","type":"sleep","excluded":false,"timeout":2000}\n' +
+			'  {"lineId":"0fbd016f-a7c4-45a9-9a39-0d7f0f3efbfe","type":"wait","excluded":false,"condition":{"subject":{"type":"element","elementId":"1d05e97a-424c-40fa-acbe-1b803db7562e","name":"Folder (All files) focused"},"type":"has","expression":[{"property":"backgroundColor","type":"=","inherited":true,"val":"rgba(0, 0, 0, 0)","uid":"c257ee7a-f920-471a-996f-07360c65ca8f"},{"property":"borderColor","type":"=","inherited":true,"val":"rgba(20, 23, 176, 1)","uid":"87057927-a5c0-4949-885e-2f4a0ffeb185"},{"property":"borderStyle","type":"=","inherited":true,"val":"solid","uid":"fb69b622-dfd7-437b-89ef-eadf8d915ebb"},{"property":"borderWidth","type":"=","inherited":true,"val":"2px","uid":"51193d1f-f242-4633-b7eb-fef060352935"},{"property":"class","type":"=","inherited":true,"val":"widget container button item folder folder-main folder-all listitem active focus buttonFocussed","uid":"ad9e2dcb-c40d-4dd9-a605-8784266c45e7"},{"property":"height","type":"=","inherited":true,"val":128,"uid":"1111161d-13b0-41dd-b8e0-16dc62f136da"},{"property":"href","type":"=","inherited":true,"val":"","uid":"5df8cd08-852c-40e1-9ba5-b8f78962e807"},{"property":"id","type":"=","inherited":true,"val":"allFolderButton","uid":"b6165dea-c4ce-4cc1-aac2-ff351d82478c"},{"property":"image","type":"=","inherited":true,"val":"","uid":"ea5f8dfb-13ea-4618-b38e-3872697d0fe4"},{"property":"left","type":"=","inherited":true,"val":31,"uid":"fee4b83c-84df-4ca7-9491-58d26d087f1d"},{"property":"opacity","type":"=","inherited":true,"val":1,"uid":"3f5bcb54-88c1-46bf-8caa-0cfddc552246"},{"property":"color","type":"=","inherited":true,"val":"rgba(255, 255, 255, 1)","uid":"77d09dca-12e6-47fe-b00f-5721ee4605a9"},{"property":"text","type":"=","inherited":true,"val":"All Files","uid":"147f05da-0d4a-4291-84e1-8ac5a2170884"},{"property":"top","type":"=","inherited":true,"val":165,"uid":"230a1bc7-4cda-41c7-be99-323a6c3a55cd"},{"property":"width","type":"=","inherited":true,"val":166,"uid":"957b8967-2c74-4c59-8a35-3a13abb4d371"},{"property":"zIndex","type":"=","inherited":true,"val":0,"uid":"06b335fd-352b-469f-8ee3-096e9d4414fd"}]},"then":"success","timeout":10000}';
+
+		assert.deepStrictEqual(getSnippetLogs(payload, translateFn), expectedOutput);
+	});
+
+	it('getSnippetLogs Should produce correct output with loops', () => {
+		const translateFn = (...args) => JSON.stringify(...args);
+		const payload = {'verbosity': 'debug', 'definitions': {'424489ab-240a-4524-ae42-be1cd41a4912': [{'type': 'openApp', 'lineId': '0c54e7ec-78e5-411f-925c-d0dac9636e28'}, {'lineId': '504d5ab6-2d4d-44f8-ad65-07191ef1316a', 'type': 'runSnippet', 'excluded': false, 'val': '20330172-c45d-4917-9af6-c49b971c0d32', 'tasks': [{'type': 'openApp', 'lineId': '20b73343-e6ab-4120-80ad-60e8376b9c71'}, {'lineId': '1522d5dd-42ea-4466-bd52-3190026a0624', 'type': 'sleep', 'excluded': false, 'timeout': 2000}], 'definitionVersion': 2, 'count': 3}], '20330172-c45d-4917-9af6-c49b971c0d32': [{'lineId': '1522d5dd-42ea-4466-bd52-3190026a0624', 'type': 'sleep', 'excluded': false, 'timeout': 2000}, {'lineId': '0fbd016f-a7c4-45a9-9a39-0d7f0f3efbfe', 'type': 'wait', 'excluded': false, 'condition': {'subject': {'type': 'element', 'elementId': '1d05e97a-424c-40fa-acbe-1b803db7562e', 'name': 'Folder (All files) focused'}, 'type': 'has', 'expression': [{'property': 'backgroundColor', 'type': '=', 'inherited': true, 'val': 'rgba(0, 0, 0, 0)', 'uid': 'c257ee7a-f920-471a-996f-07360c65ca8f'}, {'property': 'borderColor', 'type': '=', 'inherited': true, 'val': 'rgba(20, 23, 176, 1)', 'uid': '87057927-a5c0-4949-885e-2f4a0ffeb185'}, {'property': 'borderStyle', 'type': '=', 'inherited': true, 'val': 'solid', 'uid': 'fb69b622-dfd7-437b-89ef-eadf8d915ebb'}, {'property': 'borderWidth', 'type': '=', 'inherited': true, 'val': '2px', 'uid': '51193d1f-f242-4633-b7eb-fef060352935'}, {'property': 'class', 'type': '=', 'inherited': true, 'val': 'widget container button item folder folder-main folder-all listitem active focus buttonFocussed', 'uid': 'ad9e2dcb-c40d-4dd9-a605-8784266c45e7'}, {'property': 'height', 'type': '=', 'inherited': true, 'val': 128, 'uid': '1111161d-13b0-41dd-b8e0-16dc62f136da'}, {'property': 'href', 'type': '=', 'inherited': true, 'val': '', 'uid': '5df8cd08-852c-40e1-9ba5-b8f78962e807'}, {'property': 'id', 'type': '=', 'inherited': true, 'val': 'allFolderButton', 'uid': 'b6165dea-c4ce-4cc1-aac2-ff351d82478c'}, {'property': 'image', 'type': '=', 'inherited': true, 'val': '', 'uid': 'ea5f8dfb-13ea-4618-b38e-3872697d0fe4'}, {'property': 'left', 'type': '=', 'inherited': true, 'val': 31, 'uid': 'fee4b83c-84df-4ca7-9491-58d26d087f1d'}, {'property': 'opacity', 'type': '=', 'inherited': true, 'val': 1, 'uid': '3f5bcb54-88c1-46bf-8caa-0cfddc552246'}, {'property': 'color', 'type': '=', 'inherited': true, 'val': 'rgba(255, 255, 255, 1)', 'uid': '77d09dca-12e6-47fe-b00f-5721ee4605a9'}, {'property': 'text', 'type': '=', 'inherited': true, 'val': 'All Files', 'uid': '147f05da-0d4a-4291-84e1-8ac5a2170884'}, {'property': 'top', 'type': '=', 'inherited': true, 'val': 165, 'uid': '230a1bc7-4cda-41c7-be99-323a6c3a55cd'}, {'property': 'width', 'type': '=', 'inherited': true, 'val': 166, 'uid': '957b8967-2c74-4c59-8a35-3a13abb4d371'}, {'property': 'zIndex', 'type': '=', 'inherited': true, 'val': 0, 'uid': '06b335fd-352b-469f-8ee3-096e9d4414fd'}]}, 'then': 'success', 'timeout': 10000}]}, 'results': [{'result': 'fail', 'loopResults': [{'result': 'fail', 'results': [{'result': 'success', 'lineId': '2-2-1', 'timeStarted': 1603806379665, 'timeFinished': 1603806381666, 'timeHrDiff': [2, 717761], 'timeScreenshotHr': [0, 0]}, {'result': 'fail', 'errorType': 'queryFailed', 'message': {'code': 'missingSubject', 'info': {}}, 'lineId': '2-2-2', 'timeStarted': 1603806381666, 'timeFinished': 1603806391667, 'timeHrDiff': [10, 1074480], 'timeScreenshotHr': [0, 0]}], 'timeStarted': 1603806379665, 'timeFinished': 1603806391668, 'timeHrDiff': [12, 2021472], 'timeScreenshotHr': [0, 0]}, {'result': 'fail', 'results': [{'result': 'success', 'lineId': '2-2-1', 'timeStarted': 1603806391669, 'timeFinished': 1603806393669, 'timeHrDiff': [2, 312851], 'timeScreenshotHr': [0, 0]}, {'result': 'fail', 'errorType': 'queryFailed', 'message': {'code': 'missingSubject', 'info': {}}, 'lineId': '2-2-2', 'timeStarted': 1603806393669, 'timeFinished': 1603806403670, 'timeHrDiff': [10, 1149854], 'timeScreenshotHr': [0, 0]}], 'timeStarted': 1603806391669, 'timeFinished': 1603806403671, 'timeHrDiff': [12, 1517900], 'timeScreenshotHr': [0, 0]}, {'result': 'fail', 'results': [{'result': 'success', 'lineId': '2-2-1', 'timeStarted': 1603806403671, 'timeFinished': 1603806405672, 'timeHrDiff': [2, 762261], 'timeScreenshotHr': [0, 0]}, {'result': 'fail', 'errorType': 'queryFailed', 'message': {'code': 'missingSubject', 'info': {}}, 'lineId': '2-2-2', 'timeStarted': 1603806405672, 'timeFinished': 1603806415674, 'timeHrDiff': [10, 1754955], 'timeScreenshotHr': [0, 0]}], 'timeStarted': 1603806403671, 'timeFinished': 1603806415674, 'timeHrDiff': [12, 2571791], 'timeScreenshotHr': [0, 0]}], 'lineId': '2-2', 'timeStarted': 1603806379665, 'timeFinished': 1603806415675, 'timeHrDiff': [36, 6987600], 'timeScreenshotHr': [0, 0]}], 'testId': '424489ab-240a-4524-ae42-be1cd41a4912', 'level': 1};
+		const expectedOutput = ' {"lineId":"504d5ab6-2d4d-44f8-ad65-07191ef1316a","type":"runSnippet","excluded":false,"val":"20330172-c45d-4917-9af6-c49b971c0d32","tasks":[{"type":"openApp","lineId":"20b73343-e6ab-4120-80ad-60e8376b9c71"},{"lineId":"1522d5dd-42ea-4466-bd52-3190026a0624","type":"sleep","excluded":false,"timeout":2000}],"definitionVersion":2,"count":3}\n' +
+			' - loop count: 1\n' +
+			'  {"lineId":"1522d5dd-42ea-4466-bd52-3190026a0624","type":"sleep","excluded":false,"timeout":2000}\n' +
+			'  {"lineId":"0fbd016f-a7c4-45a9-9a39-0d7f0f3efbfe","type":"wait","excluded":false,"condition":{"subject":{"type":"element","elementId":"1d05e97a-424c-40fa-acbe-1b803db7562e","name":"Folder (All files) focused"},"type":"has","expression":[{"property":"backgroundColor","type":"=","inherited":true,"val":"rgba(0, 0, 0, 0)","uid":"c257ee7a-f920-471a-996f-07360c65ca8f"},{"property":"borderColor","type":"=","inherited":true,"val":"rgba(20, 23, 176, 1)","uid":"87057927-a5c0-4949-885e-2f4a0ffeb185"},{"property":"borderStyle","type":"=","inherited":true,"val":"solid","uid":"fb69b622-dfd7-437b-89ef-eadf8d915ebb"},{"property":"borderWidth","type":"=","inherited":true,"val":"2px","uid":"51193d1f-f242-4633-b7eb-fef060352935"},{"property":"class","type":"=","inherited":true,"val":"widget container button item folder folder-main folder-all listitem active focus buttonFocussed","uid":"ad9e2dcb-c40d-4dd9-a605-8784266c45e7"},{"property":"height","type":"=","inherited":true,"val":128,"uid":"1111161d-13b0-41dd-b8e0-16dc62f136da"},{"property":"href","type":"=","inherited":true,"val":"","uid":"5df8cd08-852c-40e1-9ba5-b8f78962e807"},{"property":"id","type":"=","inherited":true,"val":"allFolderButton","uid":"b6165dea-c4ce-4cc1-aac2-ff351d82478c"},{"property":"image","type":"=","inherited":true,"val":"","uid":"ea5f8dfb-13ea-4618-b38e-3872697d0fe4"},{"property":"left","type":"=","inherited":true,"val":31,"uid":"fee4b83c-84df-4ca7-9491-58d26d087f1d"},{"property":"opacity","type":"=","inherited":true,"val":1,"uid":"3f5bcb54-88c1-46bf-8caa-0cfddc552246"},{"property":"color","type":"=","inherited":true,"val":"rgba(255, 255, 255, 1)","uid":"77d09dca-12e6-47fe-b00f-5721ee4605a9"},{"property":"text","type":"=","inherited":true,"val":"All Files","uid":"147f05da-0d4a-4291-84e1-8ac5a2170884"},{"property":"top","type":"=","inherited":true,"val":165,"uid":"230a1bc7-4cda-41c7-be99-323a6c3a55cd"},{"property":"width","type":"=","inherited":true,"val":166,"uid":"957b8967-2c74-4c59-8a35-3a13abb4d371"},{"property":"zIndex","type":"=","inherited":true,"val":0,"uid":"06b335fd-352b-469f-8ee3-096e9d4414fd"}]},"then":"success","timeout":10000}\n' +
+			' - loop count: 2\n' +
+			'  {"lineId":"1522d5dd-42ea-4466-bd52-3190026a0624","type":"sleep","excluded":false,"timeout":2000}\n' +
+			'  {"lineId":"0fbd016f-a7c4-45a9-9a39-0d7f0f3efbfe","type":"wait","excluded":false,"condition":{"subject":{"type":"element","elementId":"1d05e97a-424c-40fa-acbe-1b803db7562e","name":"Folder (All files) focused"},"type":"has","expression":[{"property":"backgroundColor","type":"=","inherited":true,"val":"rgba(0, 0, 0, 0)","uid":"c257ee7a-f920-471a-996f-07360c65ca8f"},{"property":"borderColor","type":"=","inherited":true,"val":"rgba(20, 23, 176, 1)","uid":"87057927-a5c0-4949-885e-2f4a0ffeb185"},{"property":"borderStyle","type":"=","inherited":true,"val":"solid","uid":"fb69b622-dfd7-437b-89ef-eadf8d915ebb"},{"property":"borderWidth","type":"=","inherited":true,"val":"2px","uid":"51193d1f-f242-4633-b7eb-fef060352935"},{"property":"class","type":"=","inherited":true,"val":"widget container button item folder folder-main folder-all listitem active focus buttonFocussed","uid":"ad9e2dcb-c40d-4dd9-a605-8784266c45e7"},{"property":"height","type":"=","inherited":true,"val":128,"uid":"1111161d-13b0-41dd-b8e0-16dc62f136da"},{"property":"href","type":"=","inherited":true,"val":"","uid":"5df8cd08-852c-40e1-9ba5-b8f78962e807"},{"property":"id","type":"=","inherited":true,"val":"allFolderButton","uid":"b6165dea-c4ce-4cc1-aac2-ff351d82478c"},{"property":"image","type":"=","inherited":true,"val":"","uid":"ea5f8dfb-13ea-4618-b38e-3872697d0fe4"},{"property":"left","type":"=","inherited":true,"val":31,"uid":"fee4b83c-84df-4ca7-9491-58d26d087f1d"},{"property":"opacity","type":"=","inherited":true,"val":1,"uid":"3f5bcb54-88c1-46bf-8caa-0cfddc552246"},{"property":"color","type":"=","inherited":true,"val":"rgba(255, 255, 255, 1)","uid":"77d09dca-12e6-47fe-b00f-5721ee4605a9"},{"property":"text","type":"=","inherited":true,"val":"All Files","uid":"147f05da-0d4a-4291-84e1-8ac5a2170884"},{"property":"top","type":"=","inherited":true,"val":165,"uid":"230a1bc7-4cda-41c7-be99-323a6c3a55cd"},{"property":"width","type":"=","inherited":true,"val":166,"uid":"957b8967-2c74-4c59-8a35-3a13abb4d371"},{"property":"zIndex","type":"=","inherited":true,"val":0,"uid":"06b335fd-352b-469f-8ee3-096e9d4414fd"}]},"then":"success","timeout":10000}\n' +
+			' - loop count: 3\n' +
+			'  {"lineId":"1522d5dd-42ea-4466-bd52-3190026a0624","type":"sleep","excluded":false,"timeout":2000}\n' +
+			'  {"lineId":"0fbd016f-a7c4-45a9-9a39-0d7f0f3efbfe","type":"wait","excluded":false,"condition":{"subject":{"type":"element","elementId":"1d05e97a-424c-40fa-acbe-1b803db7562e","name":"Folder (All files) focused"},"type":"has","expression":[{"property":"backgroundColor","type":"=","inherited":true,"val":"rgba(0, 0, 0, 0)","uid":"c257ee7a-f920-471a-996f-07360c65ca8f"},{"property":"borderColor","type":"=","inherited":true,"val":"rgba(20, 23, 176, 1)","uid":"87057927-a5c0-4949-885e-2f4a0ffeb185"},{"property":"borderStyle","type":"=","inherited":true,"val":"solid","uid":"fb69b622-dfd7-437b-89ef-eadf8d915ebb"},{"property":"borderWidth","type":"=","inherited":true,"val":"2px","uid":"51193d1f-f242-4633-b7eb-fef060352935"},{"property":"class","type":"=","inherited":true,"val":"widget container button item folder folder-main folder-all listitem active focus buttonFocussed","uid":"ad9e2dcb-c40d-4dd9-a605-8784266c45e7"},{"property":"height","type":"=","inherited":true,"val":128,"uid":"1111161d-13b0-41dd-b8e0-16dc62f136da"},{"property":"href","type":"=","inherited":true,"val":"","uid":"5df8cd08-852c-40e1-9ba5-b8f78962e807"},{"property":"id","type":"=","inherited":true,"val":"allFolderButton","uid":"b6165dea-c4ce-4cc1-aac2-ff351d82478c"},{"property":"image","type":"=","inherited":true,"val":"","uid":"ea5f8dfb-13ea-4618-b38e-3872697d0fe4"},{"property":"left","type":"=","inherited":true,"val":31,"uid":"fee4b83c-84df-4ca7-9491-58d26d087f1d"},{"property":"opacity","type":"=","inherited":true,"val":1,"uid":"3f5bcb54-88c1-46bf-8caa-0cfddc552246"},{"property":"color","type":"=","inherited":true,"val":"rgba(255, 255, 255, 1)","uid":"77d09dca-12e6-47fe-b00f-5721ee4605a9"},{"property":"text","type":"=","inherited":true,"val":"All Files","uid":"147f05da-0d4a-4291-84e1-8ac5a2170884"},{"property":"top","type":"=","inherited":true,"val":165,"uid":"230a1bc7-4cda-41c7-be99-323a6c3a55cd"},{"property":"width","type":"=","inherited":true,"val":166,"uid":"957b8967-2c74-4c59-8a35-3a13abb4d371"},{"property":"zIndex","type":"=","inherited":true,"val":0,"uid":"06b335fd-352b-469f-8ee3-096e9d4414fd"}]},"then":"success","timeout":10000}';
+
+		assert.deepStrictEqual(getSnippetLogs(payload, translateFn), expectedOutput);
 	});
 });

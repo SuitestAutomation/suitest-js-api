@@ -36,53 +36,6 @@ describe('Press button chain', () => {
 		assert.strictEqual(typeof chain.abandon, 'undefined');
 	});
 
-	it('should convert to string with meaningful message', () => {
-		assert.strictEqual(
-			pressButton(buttonTypes.BACK).toString(),
-			'Pressing button BACK, repeat 1 times every 1 ms'
-		);
-		assert.strictEqual(
-			pressButton([buttonTypes.BLUE, buttonTypes.DOWN]).toString(),
-			'Pressing buttons BLUE, DOWN, repeat 1 times every 1 ms'
-		);
-		assert.strictEqual(
-			pressButton(buttonTypes.BLUE).repeat(10).toString(),
-			'Pressing button BLUE, repeat 10 times every 1 ms'
-		);
-		assert.strictEqual(
-			pressButton(buttonTypes.BLUE).repeat(10).interval(2000).toString(),
-			'Pressing button BLUE, repeat 10 times every 2000 ms'
-		);
-		assert.strictEqual(
-			pressButton(buttonTypes.BLUE)
-				.until({
-					toJSON: () => ({
-						request: {
-							condition: {
-								subject: {
-									type: 'location',
-								},
-							},
-						},
-					}),
-				})
-				.repeat(10).interval(2000).toString(),
-			'Pressing button BLUE, repeat 10 times every 2000 ms'
-		);
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
-
-		beforeSendMsgContains({ids: ['Up']}, 'Launcher E Pressing button Up, repeat 1 times every 1 ms');
-		beforeSendMsgContains(
-			{ids: ['Up'], isAssert: true},
-			'Launcher A Pressing button Up, repeat 1 times every 1 ms'
-		);
-		log.restore();
-	});
-
 	it('should throw error in case of invalid input', () => {
 		testInputErrorSync(pressButton, []);
 		// empty string is invalid

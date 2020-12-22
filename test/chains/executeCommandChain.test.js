@@ -36,20 +36,6 @@ describe('Execute command chain', () => {
 		assert.strictEqual(typeof chain.abandon, 'undefined');
 	});
 
-	it('should convert to string with meaningful message', () => {
-		assert.equal(executeCommand('1+1').toString(), 'Executing command:\n1+1');
-	});
-
-	it('should have beforeSendMsg', () => {
-		const log = sinon.stub(console, 'log');
-		const beforeSendMsgContains = assertBeforeSendMsg(beforeSendMsg, log);
-
-		beforeSendMsgContains({command: '1+1'}, 'Launcher E Executing command:');
-		beforeSendMsgContains({command: '1+1', isAssert: true}, 'Launcher A Executing command:');
-
-		log.restore();
-	});
-
 	it('should throw error in case of invalid input', () => {
 		executeCommand(function() {
 			return 1 + 1;
