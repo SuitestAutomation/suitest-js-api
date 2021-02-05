@@ -42,7 +42,7 @@ declare var suitest: suitest.ISuitest;
 export = suitest;
 
 declare namespace suitest {
-	export interface ISuitestBase {
+	export interface ISuitestBase extends NodeJS.EventEmitter {
 		startTestPack(options: StartTestPackOptions): Promise<StartTestPackResult|SuitestError>;
 		openSession(options: OpenSessionOptions): Promise<OpenSessionResult|SuitestError>;
 		closeSession(): Promise<object|SuitestError>;
@@ -146,6 +146,13 @@ declare namespace suitest {
 		appContext: Context;
 		pairedDeviceContext: Context;
 		testContext: Context;
+
+		on(eventName: 'consoleLog', listener: (consoleLog: ConsoleLogEvent) => void): this;
+		on(eventName: 'networkLog', listener: (networkLog: NetworkLogEvent) => void): this;
+		once(eventName: 'consoleLog', listener: (consoleLog: ConsoleLogEvent) => void): this;
+		once(eventName: 'networkLog', listener: (networkLog: NetworkLogEvent) => void): this;
+		off(eventName: 'consoleLog', listener: (consoleLog: ConsoleLogEvent) => void): this;
+		off(eventName: 'networkLog', listener: (networkLog: NetworkLogEvent) => void): this;
 	}
 
 	export interface ISuitest extends ISuitestBase {
@@ -176,6 +183,37 @@ declare namespace suitest {
 		runTest(testId: string): RunTestChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
+	}
+
+	type NetworkLogEvent = {
+		type: 'networkLog',
+		requestId: string,
+		section: 'request',
+		request: {
+			headers: {[key: string]: string[]},
+			method: 'GET' | 'HEAD' |'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH',
+			time: number,
+			uri: string,
+		},
+	} | {
+		type: 'networkLog',
+		requestId: string,
+		section: 'response',
+		response: {
+			headers: {[key: string]: string[]},
+			statusCode: number,
+			startTime: number,
+			finishTime: number,
+			responseSize: number,
+			frozen: boolean,
+			requestBody: string,
+			responseBody: string,
+		},
+	}
+	type ConsoleLogEvent = {
+		type: 'consoleLog',
+		level: string,
+		data: any[],
 	}
 
 	interface DeviceData {
