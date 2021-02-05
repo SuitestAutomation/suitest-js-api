@@ -35,6 +35,7 @@ const pollUrlFactory = require('./lib/chains/pollUrlChain');
 const networkRequestFactory = require('./lib/chains/networkRequestChain');
 const videoFactory = require('./lib/chains/videoChain');
 const playstationVideoFactory = require('./lib/chains/playstationVideoChain');
+const deviceFactory = require('./lib/chains/deviceChain');
 
 // Constants
 const {ELEMENT_PROP, VALUE} = require('./lib/constants/element');
@@ -50,6 +51,8 @@ const VRC = require('./lib/constants/vrc');
 const KEY = require('./lib/constants/keys');
 const {NETWORK_PROP, NETWORK_METHOD} = require('./lib/constants/networkRequest');
 const HAD_NO_ERROR = require('./lib/constants/hadNoError');
+const TAP_TYPES = require('./lib/constants/tapTypes');
+const DIRECTIONS = require('./lib/constants/directions');
 
 // Network
 const webSocketsFactory = require('./lib/api/webSockets');
@@ -110,6 +113,7 @@ class SUITEST_API extends EventEmitter {
 		const {pressButton, pressButtonAssert} = pressButtonFactory(this);
 		const {position, positionAssert} = positionFactory(this);
 		const {window, windowAssert} = windowFactory(this);
+		const {device} = deviceFactory(this);
 		const {executeCommand, executeCommandAssert} = executeCommandFactory(this);
 		const {jsExpression, jsExpressionAssert} = jsExpressionFactory(this);
 		const {networkRequest, networkRequestAssert} = networkRequestFactory(this);
@@ -131,6 +135,7 @@ class SUITEST_API extends EventEmitter {
 		this.press = pressButton;
 		this.position = position;
 		this.window = window;
+		this.device = device;
 		this.executeCommand = executeCommand;
 		// this.executeBrightScript = executeBrightScriptFactory(this).executeBrightScript;
 		this.jsExpression = jsExpression;
@@ -158,6 +163,8 @@ class SUITEST_API extends EventEmitter {
 		this.NETWORK_PROP = NETWORK_PROP;
 		this.NETWORK_METHOD = NETWORK_METHOD;
 		this.HAD_NO_ERROR = HAD_NO_ERROR;
+		this.TAP_TYPES = TAP_TYPES;
+		this.DIRECTIONS = DIRECTIONS;
 
 		this.assert = {
 			application: applicationAssert,
