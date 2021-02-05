@@ -54,6 +54,21 @@ export interface MoveToModifier<T> {
 	moveTo(): T;
 }
 
+export interface TapModifier<T> {
+	tap(type: 'single' | 'double' | 'long'): T;
+}
+
+type Direction = 'up' | 'down' | 'left' | 'right';
+
+export interface ScrollModifier<T> {
+	scroll(direction: Direction, distance: number | string): T;
+}
+
+export interface SwipeModifier<T> {
+	swipe(direction: Direction, distance: number | string, duration: number | string): T;
+	flick(direction: Direction, distance: number | string, duration: number | string): T;
+}
+
 export interface VideoStateModifiers<T> {
 	isPlaying(): T;
 	isPaused(): T;
@@ -180,6 +195,14 @@ export declare namespace WindowModifiers {
 		acceptModal(test?: string): T;
 	}
 }
+
+export declare namespace DeviceModifiers {
+	export interface SetOrientation<T> {
+		setOrientation(Orientation: Orientation): T;
+	}
+}
+
+export type Orientation = 'portrait' | 'portrait-reversed' | 'landscape' | 'landscape-reversed';
 
 export interface HadNoErrorModifier<T> {
 	hadNoError(searchStrategy?: 'all' | 'currentUrl'): T;
