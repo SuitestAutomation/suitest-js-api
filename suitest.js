@@ -51,6 +51,8 @@ const VRC = require('./lib/constants/vrc');
 const KEY = require('./lib/constants/keys');
 const {NETWORK_PROP, NETWORK_METHOD} = require('./lib/constants/networkRequest');
 const HAD_NO_ERROR = require('./lib/constants/hadNoError');
+const TAP_TYPES = require('./lib/constants/tapTypes');
+const DIRECTIONS = require('./lib/constants/directions');
 
 // Network
 const webSocketsFactory = require('./lib/api/webSockets');
@@ -161,6 +163,8 @@ class SUITEST_API extends EventEmitter {
 		this.NETWORK_PROP = NETWORK_PROP;
 		this.NETWORK_METHOD = NETWORK_METHOD;
 		this.HAD_NO_ERROR = HAD_NO_ERROR;
+		this.TAP_TYPES = TAP_TYPES;
+		this.DIRECTIONS = DIRECTIONS;
 
 		this.assert = {
 			application: applicationAssert,
