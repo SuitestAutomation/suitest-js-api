@@ -35,6 +35,7 @@ const pollUrlFactory = require('./lib/chains/pollUrlChain');
 const networkRequestFactory = require('./lib/chains/networkRequestChain');
 const videoFactory = require('./lib/chains/videoChain');
 const playstationVideoFactory = require('./lib/chains/playstationVideoChain');
+const deviceFactory = require('./lib/chains/deviceChain');
 
 // Constants
 const {ELEMENT_PROP, VALUE} = require('./lib/constants/element');
@@ -112,6 +113,7 @@ class SUITEST_API extends EventEmitter {
 		const {pressButton, pressButtonAssert} = pressButtonFactory(this);
 		const {position, positionAssert} = positionFactory(this);
 		const {window, windowAssert} = windowFactory(this);
+		const {device} = deviceFactory(this);
 		const {executeCommand, executeCommandAssert} = executeCommandFactory(this);
 		const {jsExpression, jsExpressionAssert} = jsExpressionFactory(this);
 		const {networkRequest, networkRequestAssert} = networkRequestFactory(this);
@@ -133,6 +135,7 @@ class SUITEST_API extends EventEmitter {
 		this.press = pressButton;
 		this.position = position;
 		this.window = window;
+		this.device = device;
 		this.executeCommand = executeCommand;
 		// this.executeBrightScript = executeBrightScriptFactory(this).executeBrightScript;
 		this.jsExpression = jsExpression;

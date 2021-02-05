@@ -34,6 +34,7 @@ import {ImageLoadState} from './typeDefinition/constants/ImageLoadState';
 import {PlayStationVideoChain} from './typeDefinition/PlayStationVideoChain';
 import {HadNoError} from './typeDefinition/constants/HadNoError';
 import {TakeScreenshotChain} from './typeDefinition/TakeScreenshotChain';
+import {DeviceChain} from "./typeDefinition/DeviceChain";
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -90,6 +91,7 @@ declare namespace suitest {
 		press(keys: string[]): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
+		device(): DeviceChain;
 		/**
 		 * @description return PromiseLike object with Buffer as value
 		 */
