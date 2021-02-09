@@ -8,8 +8,6 @@ el.doesNot().matches(PROP.OPACITY, 1);
 el.not().matchesJS('');
 el.not().matchesBrightScript('');
 el.not().matchesRepo(PROP.OPACITY);
-el.not().visible();
-el.visible().doesNot();
 
 el.matchesJS('').timeout(1).doesNot();
 el.matchesBrightScript('').timeout(1).doesNot();
