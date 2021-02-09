@@ -75,7 +75,7 @@ describe('Video chain', () => {
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
 		assert.strictEqual(typeof chain.isNot, 'undefined');
-		assert.strictEqual(typeof chain.visible, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'function');
 
 		chain = video().visible();
 
@@ -142,6 +142,26 @@ describe('Video chain', () => {
 				timeout: 2000,
 			},
 		}, 'video visible testLine');
+		assert.deepStrictEqual(toJSON({
+			comparator: {
+				type: SUBJ_COMPARATOR.VISIBLE,
+			},
+			isNegated: true,
+			selector: {apiId: 'apiId'},
+			timeout: 2000,
+		}), {
+			type: 'eval',
+			request: {
+				type: 'assert',
+				condition: {
+					subject: {
+						type: 'video',
+					},
+					type: '!visible',
+				},
+				timeout: 2000,
+			},
+		}, 'element not visible testLine');
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
 			comparator: {
