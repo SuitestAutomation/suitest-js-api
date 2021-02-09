@@ -143,6 +143,27 @@ describe('Video chain', () => {
 			},
 		}, 'video visible testLine');
 		assert.deepStrictEqual(toJSON({
+			comparator: {
+				type: SUBJ_COMPARATOR.VISIBLE,
+			},
+			isNegated: true,
+			selector: {apiId: 'apiId'},
+			timeout: 2000,
+		}), {
+			type: 'eval',
+			request: {
+				type: 'assert',
+				condition: {
+					subject: {
+						type: 'element',
+						apiId: 'apiId',
+					},
+					type: '!visible',
+				},
+				timeout: 2000,
+			},
+		}, 'element not visible testLine');
+		assert.deepStrictEqual(toJSON({
 			isAssert: true,
 			comparator: {
 				type: SUBJ_COMPARATOR.MATCH_JS,
