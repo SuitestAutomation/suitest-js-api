@@ -75,7 +75,7 @@ describe('Video chain', () => {
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
 		assert.strictEqual(typeof chain.isNot, 'undefined');
-		assert.strictEqual(typeof chain.visible, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'function');
 
 		chain = video().visible();
 
@@ -155,8 +155,7 @@ describe('Video chain', () => {
 				type: 'assert',
 				condition: {
 					subject: {
-						type: 'element',
-						apiId: 'apiId',
+						type: 'video',
 					},
 					type: '!visible',
 				},
