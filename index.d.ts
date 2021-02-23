@@ -357,5 +357,11 @@ declare namespace suitest {
 		psVideo?: true,
 	}
 
-	type ScreenOrientationValues = 'portrait' | 'portraitReversed' | 'landscape' | 'landscapeReversed';
+	type ScreenOrientationValues =
+		| 'portrait'
+		| 'portraitReversed'
+		| 'landscape'
+		| 'landscapeReversed'
+		| 'landscapeRight'
+		| 'landscapeLeft';
 }
