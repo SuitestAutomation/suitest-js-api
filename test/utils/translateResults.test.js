@@ -69,15 +69,23 @@ describe('translateResults util', () => {
 		it('should return proper string', () => {
 			assert.strictEqual(
 				titleDescToText({
-					title: 'title',
-					description: 'description',
+					title: {
+						value: 'title',
+					},
+					description: {
+						value: 'description',
+					},
 				}),
 				'title\ndescription',
 			);
 			assert.strictEqual(
 				titleDescToText({
-					title: 'title',
-					description: '',
+					title: {
+						value: 'title',
+					},
+					description: {
+						value: '',
+					},
 				}),
 				'title',
 			);
