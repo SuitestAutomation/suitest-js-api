@@ -1,7 +1,6 @@
 const assert = require('assert');
 const {
 	transformMarkdown,
-	transformAllMarkdowns,
 	titleDescToText,
 	translateProgress,
 	translateNotStartedReason,
@@ -20,47 +19,6 @@ describe('translateResults util', () => {
 					'**bold**'
 				),
 				'(url), link (url), email (sales@test.com), link (url), preview (src), bold',
-			);
-		});
-	});
-
-	describe('transformAllMarkdowns method', () => {
-		it('should transform all markdown strings in any structure correctly', () => {
-			assert.deepStrictEqual(
-				transformAllMarkdowns({
-					title: '**title**',
-					description: 'some text with [link](url)',
-					details: [{
-						prop: 'opacity',
-						actual: 1,
-						expected: 0,
-						expectedDefault: false,
-						comparator: '<=',
-					}, {
-						prop: 'href',
-						actual: '[url1](url1)',
-						expected: '[url2](url2)',
-						expectedDefault: true,
-						comparator: '=',
-					}],
-				}),
-				{
-					title: 'title',
-					description: 'some text with link (url)',
-					details: [{
-						prop: 'opacity',
-						actual: 1,
-						expected: 0,
-						expectedDefault: false,
-						comparator: '<=',
-					}, {
-						prop: 'href',
-						actual: '(url1)',
-						expected: '(url2)',
-						expectedDefault: true,
-						comparator: '=',
-					}],
-				},
 			);
 		});
 	});
