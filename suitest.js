@@ -35,7 +35,7 @@ const pollUrlFactory = require('./lib/chains/pollUrlChain');
 const networkRequestFactory = require('./lib/chains/networkRequestChain');
 const videoFactory = require('./lib/chains/videoChain');
 const playstationVideoFactory = require('./lib/chains/playstationVideoChain');
-const deviceFactory = require('./lib/chains/deviceChain');
+const setScreenOrientationFactory = require('./lib/chains/setScreenOrientationChain');
 
 // Constants
 const {ELEMENT_PROP, VALUE} = require('./lib/constants/element');
@@ -53,6 +53,7 @@ const {NETWORK_PROP, NETWORK_METHOD} = require('./lib/constants/networkRequest')
 const HAD_NO_ERROR = require('./lib/constants/hadNoError');
 const TAP_TYPES = require('./lib/constants/tapTypes');
 const DIRECTIONS = require('./lib/constants/directions');
+const SCREEN_ORIENTATION = require('./lib/constants/screenOrientation');
 
 // Network
 const webSocketsFactory = require('./lib/api/webSockets');
@@ -113,7 +114,6 @@ class SUITEST_API extends EventEmitter {
 		const {pressButton, pressButtonAssert} = pressButtonFactory(this);
 		const {position, positionAssert} = positionFactory(this);
 		const {window, windowAssert} = windowFactory(this);
-		const {device} = deviceFactory(this);
 		const {executeCommand, executeCommandAssert} = executeCommandFactory(this);
 		const {jsExpression, jsExpressionAssert} = jsExpressionFactory(this);
 		const {networkRequest, networkRequestAssert} = networkRequestFactory(this);
@@ -124,6 +124,7 @@ class SUITEST_API extends EventEmitter {
 		const {runTestAssert} = runTestFactory(this);
 		const {takeScreenshot} = takeScreenshotFactory(this);
 		const {saveScreenshot} = saveScreenshotFactory(this);
+		const {setScreenOrientation, setScreenOrientationAssert} = setScreenOrientationFactory(this);
 
 		this.openApp = openApp;
 		this.openUrl = openUrl;
@@ -135,7 +136,6 @@ class SUITEST_API extends EventEmitter {
 		this.press = pressButton;
 		this.position = position;
 		this.window = window;
-		this.device = device;
 		this.executeCommand = executeCommand;
 		// this.executeBrightScript = executeBrightScriptFactory(this).executeBrightScript;
 		this.jsExpression = jsExpression;
@@ -147,6 +147,7 @@ class SUITEST_API extends EventEmitter {
 		this.pollUrl = pollUrl;
 		this.takeScreenshot = takeScreenshot;
 		this.saveScreenshot = saveScreenshot;
+		this.setScreenOrientation = setScreenOrientation;
 
 		this.PROP = ELEMENT_PROP;
 		this.COMP = PROP_COMPARATOR;
@@ -165,6 +166,7 @@ class SUITEST_API extends EventEmitter {
 		this.HAD_NO_ERROR = HAD_NO_ERROR;
 		this.TAP_TYPES = TAP_TYPES;
 		this.DIRECTIONS = DIRECTIONS;
+		this.SCREEN_ORIENTATION = SCREEN_ORIENTATION;
 
 		this.assert = {
 			application: applicationAssert,
@@ -187,6 +189,7 @@ class SUITEST_API extends EventEmitter {
 			networkRequest: networkRequestAssert,
 			video: videoAssert,
 			psVideo: playstationVideoAssert,
+			setScreenOrientation: setScreenOrientationAssert,
 		};
 
 		// Listen to process events to trigger websocket termination and dump warnings, if any
