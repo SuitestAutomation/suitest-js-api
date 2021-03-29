@@ -83,8 +83,8 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "@suitest/smst-to-text": "^4.0.2",
-    "@suitest/translate": "^4.2.0",
+    "@suitest/smst-to-text": "^4.2.2",
+    "@suitest/translate": "^4.2.4",
     "@types/node": "^14.0.10",
     "ajv": "^6.12.2",
     "ansi-regex": "^5.0.0",
