@@ -148,4 +148,19 @@ describe('chainUtils', () => {
 			},
 		]}, 'fetched snippet data');
 	});
+
+	it(`${utils.applyActions.name} should add taps to socketMessage`, () => {
+		assert.deepStrictEqual(
+			utils.applyActions({}, {tap: 'single'}),
+			{
+				taps: [{type: 'single'}],
+			},
+		);
+		assert.deepStrictEqual(
+			utils.applyActions({}, {tap: 'long', tapDuration: 4}),
+			{
+				taps: [{type: 'long', duration: 4}],
+			},
+		);
+	});
 });
