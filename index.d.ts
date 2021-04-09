@@ -92,6 +92,7 @@ declare namespace suitest {
 		press(keys: string[]): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
+
 		/**
 		 * @description return PromiseLike object with Buffer as value
 		 */
