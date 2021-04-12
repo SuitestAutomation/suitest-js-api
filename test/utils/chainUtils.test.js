@@ -157,9 +157,9 @@ describe('chainUtils', () => {
 			},
 		);
 		assert.deepStrictEqual(
-			utils.applyActions({}, {tap: 'long', tapDuration: 4}),
+			utils.applyActions({}, {tap: 'long', tapDuration: 4000}),
 			{
-				taps: [{type: 'long', duration: 4}],
+				taps: [{type: 'long', duration: 4000}],
 			},
 		);
 	});

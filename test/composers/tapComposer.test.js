@@ -1,9 +1,8 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {tapComposer} = require('../../lib/composers');
-const SuitestApi = require('../../suitest');
 const SuitestError = require('../../lib/utils/SuitestError');
-const suitest = new SuitestApi();
+const suitest = require('../../index');
 
 describe('Tap composer', () => {
 	it('should define tap method', () => {
@@ -40,12 +39,12 @@ describe('Tap composer', () => {
 
 		Object.defineProperties(chain, tapComposer(suitest, data, chain, makeChain));
 
-		chain.tap('long', 2);
+		chain.tap('long', 2000);
 		assert.deepStrictEqual(
 			makeChain.firstCall.args[0],
 			{
 				tap: 'long',
-				tapDuration: 2,
+				tapDuration: 2000,
 			},
 		);
 	});
@@ -63,11 +62,11 @@ describe('Tap composer', () => {
 		Object.defineProperties(chain, tapComposer(suitest, data, chain, makeChain));
 
 		assert.throws(
-			() => chain.tap('single', 2),
+			() => chain.tap('single', 2000),
 			isSuitestErrorInvalidInput('Invalid input provided for .tap function.' +
 				' Second argument (duration) can be specified for "long" tap type only'));
 		assert.throws(
-			() => chain.tap('long', '2'),
+			() => chain.tap('long', '2000'),
 			isSuitestErrorInvalidInput('Invalid input provided for .tap function.' +
 				' Second argument (duration) should be suitest configuration variable'),
 		);
