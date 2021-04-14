@@ -65,7 +65,7 @@ describe('suitest typescripts declarations tests', () => {
 	[
 		'elementChain', 'networkRequestChain', 'javascriptExpressionChain',
 		'locationChain', 'cookieChain', 'applicationChain',
-		'clearAppDataChain', 'executeCommandChain', 'openAppChain',
+		'clearAppDataChain', 'closeAppChain', 'suspendAppChain', 'executeCommandChain', 'openAppChain',
 		'openUrlChain', 'pollUrlChain', 'positionChain',
 		'pressButtonChain', 'sleepChain', 'windowChain',
 		'videoChain', 'playstationVideoChain', 'indexTest',
