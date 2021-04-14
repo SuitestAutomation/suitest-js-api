@@ -1,6 +1,8 @@
 import {LocationChain} from './typeDefinition/LocationChain';
 import {ApplicationChain} from './typeDefinition/ApplicationChain';
 import {ClearAppDataChain} from './typeDefinition/ClearAppData';
+import {CloseAppChain} from './typeDefinition/CloseApp';
+import {SuspendAppChain} from './typeDefinition/SuspendApp';
 import {CookieChain} from './typeDefinition/CookieChain';
 import {ElementChain} from './typeDefinition/ElementChain';
 import * as elementTypes from './typeDefinition/constants/Element';
@@ -73,6 +75,8 @@ declare namespace suitest {
 		location(): LocationChain;
 		application(): ApplicationChain;
 		clearAppData(): ClearAppDataChain;
+		closeApp(): CloseAppChain;
+		suspendApp(): SuspendAppChain;
 		cookie(cookieName: string): CookieChain;
 		element(elementSelector: ElementSelector | string): ElementChain;
 		video(): VideoChain;
@@ -167,6 +171,8 @@ declare namespace suitest {
 		location(): LocationChain;
 		application(): ApplicationChain;
 		clearAppData(): ClearAppDataChain;
+		closeApp(): CloseAppChain;
+		suspendApp(): SuspendAppChain;
 		cookie(cookieName: string): CookieChain;
 		element(elementSelector: ElementSelector | string): ElementChain;
 		video(): VideoChain;

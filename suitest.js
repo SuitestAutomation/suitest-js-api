@@ -20,6 +20,8 @@ const openUrlFactory = require('./lib/chains/openUrlChain');
 const locationFactory = require('./lib/chains/locationChain');
 const applicationFactory = require('./lib/chains/applicationChain');
 const clearAppDataFactory = require('./lib/chains/clearAppDataChain');
+const closeAppFactory = require('./lib/chains/closeAppChain');
+const suspendAppFactory = require('./lib/chains/suspendAppChain');
 const cookieFactory = require('./lib/chains/cookieChain');
 const sleepFactory = require('./lib/chains/sleepChain');
 const pressButtonFactory = require('./lib/chains/pressButtonChain');
@@ -108,6 +110,8 @@ class SUITEST_API extends EventEmitter {
 		const {openUrl, openUrlAssert} = openUrlFactory(this);
 		const {application, applicationAssert} = applicationFactory(this);
 		const {clearAppData, clearAppDataAssert} = clearAppDataFactory(this);
+		const {closeApp, closeAppAssert} = closeAppFactory(this);
+		const {suspendApp, suspendAppAssert} = suspendAppFactory(this);
 		const {location, locationAssert} = locationFactory(this);
 		const {cookie, cookieAssert} = cookieFactory(this);
 		const {sleep, sleepAssert} = sleepFactory(this);
@@ -130,6 +134,8 @@ class SUITEST_API extends EventEmitter {
 		this.openUrl = openUrl;
 		this.application = application;
 		this.clearAppData = clearAppData;
+		this.closeApp = closeApp;
+		this.suspendApp = suspendApp;
 		this.location = location;
 		this.cookie = cookie;
 		this.sleep = sleep;
@@ -171,6 +177,8 @@ class SUITEST_API extends EventEmitter {
 		this.assert = {
 			application: applicationAssert,
 			clearAppData: clearAppDataAssert,
+			closeApp: closeAppAssert,
+			suspendApp: suspendAppAssert,
 			openApp: openAppAssert,
 			openUrl: openUrlAssert,
 			location: locationAssert,
