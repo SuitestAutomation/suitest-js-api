@@ -5,4 +5,5 @@ export type ScreenOrientation = {
 	LANDSCAPE_REVERSED: 'landscapeReversed',
 	LANDSCAPE_RIGHT:    'landscapeRight',
 	LANDSCAPE_LEFT:     'landscapeLeft',
+	UPSIDE_DOWN:        'upsideDown',
 }
