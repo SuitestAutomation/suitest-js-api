@@ -11,7 +11,7 @@ describe('Suspend composer', () => {
 
 		Object.defineProperties(chain, suspendComposer(suitest, data, chain, makeChain));
 
-		const suspendPropertyDescriptor = Object.getOwnPropertyDescriptor(chain, 'close');
+		const suspendPropertyDescriptor = Object.getOwnPropertyDescriptor(chain, 'suspend');
 
 		assert.strictEqual(typeof chain.suspend, 'function', 'is a Function');
 		assert.strictEqual(suspendPropertyDescriptor.configurable, false, 'not configurable');

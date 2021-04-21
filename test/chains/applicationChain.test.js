@@ -22,11 +22,13 @@ describe('Application chain', () => {
 			composers.ABANDON,
 			composers.ASSERT,
 			composers.CLONE,
+			composers.CLOSE_APP,
 			composers.HAS_EXITED,
 			composers.TIMEOUT,
 			composers.GETTERS,
 			composers.TO_JSON,
 			composers.SEND_TEXT,
+			composers.SUSPEND_APP,
 		].sort(bySymbol), 'clear state');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
@@ -36,11 +38,13 @@ describe('Application chain', () => {
 			composers.THEN,
 			composers.ASSERT,
 			composers.CLONE,
+			composers.CLOSE_APP,
 			composers.HAS_EXITED,
 			composers.TIMEOUT,
 			composers.GETTERS,
 			composers.TO_JSON,
 			composers.SEND_TEXT,
+			composers.SUSPEND_APP,
 		].sort(bySymbol), 'abandoned chain');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
@@ -50,11 +54,13 @@ describe('Application chain', () => {
 			composers.THEN,
 			composers.ABANDON,
 			composers.CLONE,
+			composers.CLOSE_APP,
 			composers.HAS_EXITED,
 			composers.TIMEOUT,
 			composers.GETTERS,
 			composers.TO_JSON,
 			composers.SEND_TEXT,
+			composers.SUSPEND_APP,
 		].sort(bySymbol), 'assert chain');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
@@ -64,11 +70,13 @@ describe('Application chain', () => {
 			composers.THEN,
 			composers.ABANDON,
 			composers.CLONE,
+			composers.CLOSE_APP,
 			composers.ASSERT,
 			composers.TIMEOUT,
 			composers.GETTERS,
 			composers.TO_JSON,
 			composers.SEND_TEXT,
+			composers.SUSPEND_APP,
 		].sort(bySymbol), 'chain with comparator');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
@@ -78,11 +86,13 @@ describe('Application chain', () => {
 			composers.THEN,
 			composers.ABANDON,
 			composers.CLONE,
+			composers.CLOSE_APP,
 			composers.ASSERT,
 			composers.HAS_EXITED,
 			composers.GETTERS,
 			composers.TO_JSON,
 			composers.SEND_TEXT,
+			composers.SUSPEND_APP,
 		].sort(bySymbol), 'chain with timeout');
 
 		// testing sendText related modifiers
@@ -91,11 +101,13 @@ describe('Application chain', () => {
 			composers.THEN,
 			composers.ABANDON,
 			composers.CLONE,
+			composers.CLOSE_APP,
 			composers.ASSERT,
 			composers.HAS_EXITED,
 			composers.TIMEOUT,
 			composers.GETTERS,
 			composers.TO_JSON,
+			composers.SUSPEND_APP,
 		];
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
