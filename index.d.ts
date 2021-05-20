@@ -68,6 +68,10 @@ declare namespace suitest {
 		setContinueOnFatalError(continueOnFatalError: ConfigureOptions['continueOnFatalError']): void;
 		setDisallowCrashReports(disallowCrashReports: ConfigureOptions['disallowCrashReports']): void;
 		setLogLevel(logLevel: ConfigureOptions['logLevel']): void;
+		setLogLevel(testLines: ConfigureOptions['testLines']): void;
+		setLogLevel(testErrors: ConfigureOptions['testErrors']): void;
+		setLogLevel(networkLogs: ConfigureOptions['networkLogs']): void;
+		setLogLevel(consoleLogs: ConfigureOptions['consoleLogs']): void;
 
 		// subjects
 		location(): LocationChain;
@@ -310,6 +314,10 @@ declare namespace suitest {
 
 	interface ConfigureOptions {
 		logLevel: 'silent'|'normal'|'verbose'|'debug'|'silly';
+		testLines: 'silent'|'normal'|'verbose'|'debug'|'silly';
+		testErrors: 'silent'|'normal'|'verbose'|'debug'|'silly';
+		networkLogs?: 'silent'|'normal'|'verbose'|'debug'|'silly';
+		consoleLogs?: 'silent'|'normal'|'verbose'|'debug'|'silly';
 		disallowCrashReports: boolean;
 		continueOnFatalError: boolean;
 		defaultTimeout: number;
