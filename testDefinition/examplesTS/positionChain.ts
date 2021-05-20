@@ -22,8 +22,10 @@ async function testPosition() {
 	const tapPos = position(1, 1,).tap('single');
 	position(1, 1,).tap('double');
 	position(1, 1,).tap('long');
+	position(1, 1).tap('long', 2000);
 	position(1, 1,).tap(suitest.TAP_TYPES.DOUBLE);
 	position(1, 1,).tap(suitest.TAP_TYPES.LONG);
+	position(1, 1,).tap(suitest.TAP_TYPES.LONG, 2000);
 	position(1, 1,).tap(suitest.TAP_TYPES.SINGLE);
 
 	await tapPos;

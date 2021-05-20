@@ -56,6 +56,7 @@ export interface MoveToModifier<T> {
 
 export interface TapModifier<T> {
 	tap(type: 'single' | 'double' | 'long'): T;
+	tap(type: 'long', duration: number | string): T;
 }
 
 type Direction = 'up' | 'down' | 'left' | 'right';
