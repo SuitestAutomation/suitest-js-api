@@ -33,27 +33,19 @@ const configurableFields = [
 ];
 
 const main = Object.freeze({
-	apiUrl: 'https://staging.suite.st/api/public/v3',
+	apiUrl: 'https://the.suite.st/api/public/v3',
 	disallowCrashReports: false,
 	logLevel: logLevels.normal,
-	// testLines: logLevels.normal,
-	// testErrors: logLevels.normal,
-	// networkLogs: logLevels.normal,
-	// consoleLogs: logLevels.normal,
 	sentryDsn,
 	timestamp: timestamp.default,
 	defaultTimeout: DEFAULT_TIMEOUT,
-	wsUrl: 'wss://staging.suite.st/api/public/v3/socket',
+	wsUrl: 'wss://the.suite.st/api/public/v3/socket',
 });
 
 const test = Object.freeze({
 	apiUrl: 'https://localhost',
 	disallowCrashReports: true,
 	logLevel: logLevels.debug,
-	// testLines: logLevels.debug,
-	// testErrors: logLevels.debug,
-	// networkLogs: logLevels.debug,
-	// consoleLogs: logLevels.debug,
 	sentryDsn,
 	timestamp: timestamp.default,
 	defaultTimeout: DEFAULT_TIMEOUT,
