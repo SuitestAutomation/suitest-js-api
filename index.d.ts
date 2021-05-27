@@ -362,8 +362,5 @@ declare namespace suitest {
 		| 'portrait'
 		| 'portraitReversed'
 		| 'landscape'
-		| 'landscapeReversed'
-		| 'landscapeRight'
-		| 'landscapeLeft'
-		| 'portraitUpsideDown';
+		| 'landscapeReversed';
 }
