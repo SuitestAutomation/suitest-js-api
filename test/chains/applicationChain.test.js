@@ -145,13 +145,13 @@ describe('Application chain', () => {
 		].sort(bySymbol), 'sendText chain with until');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
-			isClosed: true,
+			closeApp: true,
 		})), [
 			...commonApplicationModifiers,
 		].sort(bySymbol), 'close command');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
-			isSuspended: true,
+			suspendApp: true,
 		})), [
 			...commonApplicationModifiers,
 		].sort(bySymbol), 'suspend command');
@@ -301,7 +301,7 @@ describe('Application chain', () => {
 		}, 'application sendText with repeat and interval');
 
 		assert.deepStrictEqual(toJSON({
-			isSuspended: true,
+			suspendApp: true,
 		}), {
 			type: 'eval',
 			request: {
@@ -310,7 +310,7 @@ describe('Application chain', () => {
 		}, 'application suspended');
 
 		assert.deepStrictEqual(toJSON({
-			isClosed: true,
+			closeApp: true,
 		}), {
 			type: 'eval',
 			request: {

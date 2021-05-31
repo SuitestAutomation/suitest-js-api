@@ -19,7 +19,7 @@ describe('Suspend composer', () => {
 		assert.strictEqual(suspendPropertyDescriptor.writable, false, 'not writable');
 	});
 
-	it('should set isSuspended flag when object converts to assert', () => {
+	it('should set suspendApp flag when object converts to assert', () => {
 		const chain = {};
 		const data = {};
 		const makeChain = sinon.spy();
@@ -28,6 +28,6 @@ describe('Suspend composer', () => {
 
 		chain.suspend();
 
-		assert.deepStrictEqual(makeChain.firstCall.args[0], {isSuspended: true});
+		assert.deepStrictEqual(makeChain.firstCall.args[0], {suspendApp: true});
 	});
 });

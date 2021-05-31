@@ -19,7 +19,7 @@ describe('Close composer', () => {
 		assert.strictEqual(closePropertyDescriptor.writable, false, 'not writable');
 	});
 
-	it('should set isClosed flag when object converts to assert', () => {
+	it('should set closeApp flag when object converts to assert', () => {
 		const chain = {};
 		const data = {};
 		const makeChain = sinon.spy();
@@ -28,6 +28,6 @@ describe('Close composer', () => {
 
 		chain.close();
 
-		assert.deepStrictEqual(makeChain.firstCall.args[0], {isClosed: true});
+		assert.deepStrictEqual(makeChain.firstCall.args[0], {closeApp: true});
 	});
 });
