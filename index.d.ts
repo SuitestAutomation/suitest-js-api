@@ -92,6 +92,7 @@ declare namespace suitest {
 		press(keys: string[]): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
+
 		/**
 		 * @description return PromiseLike object with Buffer as value
 		 */
@@ -357,5 +358,12 @@ declare namespace suitest {
 		psVideo?: true,
 	}
 
-	type ScreenOrientationValues = 'portrait' | 'portraitReversed' | 'landscape' | 'landscapeReversed';
+	type ScreenOrientationValues =
+		| 'portrait'
+		| 'portraitReversed'
+		| 'landscape'
+		| 'landscapeReversed'
+		| 'landscapeRight'
+		| 'landscapeLeft'
+		| 'portraitUpsideDown';
 }
