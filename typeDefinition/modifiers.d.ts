@@ -237,3 +237,11 @@ export interface ElementMatchModifiers<T> {
 export interface HasExitedModifiers<T> {
 	hasExited(): T;
 }
+
+export interface CloseModifier<T> {
+	close(): T;
+}
+
+export interface SuspendModifier<T> {
+	suspend(): T;
+}

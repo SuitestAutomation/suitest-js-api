@@ -1,6 +1,8 @@
 import {
 	AbstractChain,
 	HasExitedModifiers,
+	CloseModifier,
+	SuspendModifier,
 	BaseChain,
 	SendTextModifier,
 	UntilModifier,
@@ -23,7 +25,9 @@ interface ApplicationEmptyChain extends
 export interface ApplicationChain extends
 	SendTextModifier<ApplicationRepeatIntervalUntilChain>,
 	ApplicationBaseQueryChain<ApplicationChain>,
-	HasExitedModifiers<ApplicationEmptyChain>
+	HasExitedModifiers<ApplicationEmptyChain>,
+	CloseModifier<ApplicationEmptyChain>,
+	SuspendModifier<ApplicationEmptyChain>
 {}
 
 interface ApplicationRepeatIntervalUntilChain extends
