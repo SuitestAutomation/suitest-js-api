@@ -23,6 +23,7 @@ describe('Open app chain', () => {
 			composers.CLONE,
 			composers.GETTERS,
 			composers.TO_JSON,
+			composers.LAUNCH_MODE,
 		].sort(bySymbol), 'clear state');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
@@ -34,6 +35,7 @@ describe('Open app chain', () => {
 			composers.CLONE,
 			composers.GETTERS,
 			composers.TO_JSON,
+			composers.LAUNCH_MODE,
 		].sort(bySymbol), 'abandoned chain');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
@@ -45,6 +47,7 @@ describe('Open app chain', () => {
 			composers.CLONE,
 			composers.GETTERS,
 			composers.TO_JSON,
+			composers.LAUNCH_MODE,
 		].sort(bySymbol), 'assert chain');
 
 		const chain = openApp();
