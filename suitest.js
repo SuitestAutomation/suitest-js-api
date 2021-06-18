@@ -52,6 +52,7 @@ const KEY = require('./lib/constants/keys');
 const {NETWORK_PROP, NETWORK_METHOD} = require('./lib/constants/networkRequest');
 const HAD_NO_ERROR = require('./lib/constants/hadNoError');
 const TAP_TYPES = require('./lib/constants/tapTypes');
+const LAUNCH_MODE = require('./lib/constants/launchMode');
 const DIRECTIONS = require('./lib/constants/directions');
 const SCREEN_ORIENTATION = require('./lib/constants/screenOrientation');
 
@@ -165,6 +166,7 @@ class SUITEST_API extends EventEmitter {
 		this.NETWORK_METHOD = NETWORK_METHOD;
 		this.HAD_NO_ERROR = HAD_NO_ERROR;
 		this.TAP_TYPES = TAP_TYPES;
+		this.LAUNCH_MODE = LAUNCH_MODE;
 		this.DIRECTIONS = DIRECTIONS;
 		this.SCREEN_ORIENTATION = SCREEN_ORIENTATION;
 
