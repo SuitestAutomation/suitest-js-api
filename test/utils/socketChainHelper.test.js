@@ -435,6 +435,35 @@ describe('socket chain helpers', () => {
 		}
 	});
 
+	describe('handle errors for takeScreenshotLine', async () => {
+		const processTakeScreenshotResponse = processServerResponse({error: sinon.fake()});
+
+		[
+			['notSupportedPlatform', 'Screenshots are not supported on this device.'],
+			['notSupportedIL', 'Screenshots are not supported with this instrumentation library version.'],
+			['timeout', 'Failed to take a screenshot due to timeout.'],
+			['generalError', 'Failed to take a screenshot.'],
+		].forEach(([errorType, expectedMessage]) => {
+			it(`for "${errorType}" expected message: "${expectedMessage}"`, () => {
+				assert.throws(
+					() => processTakeScreenshotResponse({
+						contentType: 'takeScreenshot',
+						result: 'error',
+						errorType,
+					}, {
+						type: 'takeScreenshot',
+						stack: '',
+					}, {
+						type: 'takeScreenshot',
+					}),
+					err => err instanceof SuitestError &&
+						err.code === SuitestError.EVALUATION_ERROR &&
+						err.message.includes(expectedMessage)
+				);
+			});
+		});
+	});
+
 	it('Handle aborted message', async() => {
 		const loggerErrorStub = sinon.fake();
 
