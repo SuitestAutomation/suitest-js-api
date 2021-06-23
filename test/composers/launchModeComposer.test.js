@@ -2,6 +2,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 const {launchModeComposer} = require('../../lib/composers');
 const suitest = require('../../index');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Launch Mode composer', () => {
 	it('should define Launch Mode method', () => {
@@ -19,7 +20,7 @@ describe('Launch Mode composer', () => {
 		assert.strictEqual(launchModePropertyDescriptor.writable, false, 'not writable');
 	});
 
-	it('should set closeApp flag when object converts to assert', () => {
+	it('should generate correct chain', () => {
 		const chain = {};
 		const data = {};
 		const makeChain = sinon.spy();
@@ -28,8 +29,21 @@ describe('Launch Mode composer', () => {
 
 		chain.launchMode('restart');
 
-		console.log('makeChain.firstCall ', makeChain.firstCall)
-
 		assert.deepStrictEqual(makeChain.firstCall.args[0], {launchMode: 'restart'});
+	});
+
+	it('should throw exception with invalid input', () => {
+		const data = {};
+		const chain = {};
+		const makeChain = sinon.spy();
+
+		Object.defineProperties(chain, launchModeComposer(suitest, data, chain, makeChain));
+
+		testInputErrorSync(chain.launchMode, [-3]);
+		testInputErrorSync(chain.launchMode, [null]);
+		testInputErrorSync(chain.launchMode, ['string']);
+		testInputErrorSync(chain.launchMode, ['1']);
+		testInputErrorSync(chain.launchMode, [{}]);
+		testInputErrorSync(chain.launchMode, []);
 	});
 });
