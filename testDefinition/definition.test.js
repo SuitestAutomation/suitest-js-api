@@ -1,5 +1,5 @@
 const ts = require('typescript');
-const assert = require('assert');
+const assert = require('assert').strict;
 const {prop} = require('ramda');
 
 const typescriptCompilerOptions = {
@@ -69,6 +69,7 @@ describe('suitest typescripts declarations tests', () => {
 		'pressButtonChain', 'sleepChain', 'windowChain',
 		'videoChain', 'playstationVideoChain', 'indexTest',
 		'runTestChain', 'takeScreenshotChain', 'saveScreenshotChain',
+		'setScreenOrientation',
 		// 'executeBrightScriptChain', 'brightScriptExpressionChain',
 	].forEach(fileName => {
 		it(`should compile example ${fileName}`, (done) => {

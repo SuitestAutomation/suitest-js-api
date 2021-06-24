@@ -56,6 +56,7 @@ export interface MoveToModifier<T> {
 
 export interface TapModifier<T> {
 	tap(type: 'single' | 'double' | 'long'): T;
+	tap(type: 'long', duration: number | string): T;
 }
 
 type Direction = 'up' | 'down' | 'left' | 'right';
@@ -195,14 +196,6 @@ export declare namespace WindowModifiers {
 		acceptModal(test?: string): T;
 	}
 }
-
-export declare namespace DeviceModifiers {
-	export interface SetOrientation<T> {
-		setOrientation(Orientation: Orientation): T;
-	}
-}
-
-export type Orientation = 'portrait' | 'portrait-reversed' | 'landscape' | 'landscape-reversed';
 
 export interface HadNoErrorModifier<T> {
 	hadNoError(searchStrategy?: 'all' | 'currentUrl'): T;

@@ -5,10 +5,7 @@ const {
 	executeCommand,
 	executeCommandAssert,
 	toJSON,
-	beforeSendMsg,
 } = require('../../lib/chains/executeCommandChain')(suitest);
-const sinon = require('sinon');
-const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 /**
  * This test is sort of high level, more like integration test
@@ -30,7 +27,7 @@ describe('Execute command chain', () => {
 		assert.strictEqual(chain.times, chain);
 	});
 
-	it('should have only allowed modifiers after matchJS is applied', () => {
+	it('should have only allowed modifiers after abandon is applied', () => {
 		const chain = executeCommand('1+1').abandon();
 
 		assert.strictEqual(typeof chain.abandon, 'undefined');

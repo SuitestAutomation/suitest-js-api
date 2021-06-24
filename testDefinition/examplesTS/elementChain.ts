@@ -163,8 +163,10 @@ async () => {
 	const tapElement = element('a').tap('single');
 	element('a').tap('double');
 	element('a').tap('long');
+	element('a').tap('long', 2000);
 	element('a').tap(suitest.TAP_TYPES.DOUBLE);
 	element('a').tap(suitest.TAP_TYPES.LONG);
+	element('a').tap(suitest.TAP_TYPES.LONG, 2000);
 	element('a').tap(suitest.TAP_TYPES.SINGLE);
 
 	await tapElement;

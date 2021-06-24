@@ -47,6 +47,24 @@ describe('request', () => {
 		}
 	});
 
+	it('should handle 403 response', async() => {
+		const testNock = nock(/.*/).get('/test').reply(403, {});
+
+		try {
+			await request('/test', {method: 'GET'});
+			assert.ok(false);
+		} catch (error) {
+			assert.ok(testNock.isDone(), 'request');
+			assert.ok(error, 'error');
+			assert.strictEqual(error.code, SuitestError.SERVER_ERROR, 'error code');
+			assert.strictEqual(
+				error.message,
+				'Unauthorized access - your IP address is not whitelisted. Please contact your Suitest administrator for more information.',
+				'error message',
+			);
+		}
+	});
+
 	it('should send request with correct body', async() => {
 		const testNock = nock(/.*/).post('/test', '{"data":"data"}').reply(200, {});
 		let res;

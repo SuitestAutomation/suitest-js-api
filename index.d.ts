@@ -34,7 +34,8 @@ import {ImageLoadState} from './typeDefinition/constants/ImageLoadState';
 import {PlayStationVideoChain} from './typeDefinition/PlayStationVideoChain';
 import {HadNoError} from './typeDefinition/constants/HadNoError';
 import {TakeScreenshotChain} from './typeDefinition/TakeScreenshotChain';
-import {DeviceChain} from "./typeDefinition/DeviceChain";
+import {SetScreenOrientationChain} from './typeDefinition/SetScreenOrientationChain';
+import {ScreenOrientation} from './typeDefinition/constants/ScreenOrientation';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -91,11 +92,12 @@ declare namespace suitest {
 		press(keys: string[]): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
-		device(): DeviceChain;
+
 		/**
 		 * @description return PromiseLike object with Buffer as value
 		 */
 		takeScreenshot(dataFormat?: 'raw'): TakeScreenshotChain<Buffer>;
+		setScreenOrientation(orientation: ScreenOrientationValues): SetScreenOrientationChain;
 
 		/**
 		 * @description return PromiseLike object with base64 string as value
@@ -143,6 +145,7 @@ declare namespace suitest {
 		HAD_NO_ERROR: HadNoError;
 		TAP_TYPES: TapTypes;
 		DIRECTIONS: Directions;
+		SCREEN_ORIENTATION: ScreenOrientation;
 
 		authContext: AuthContext;
 		appContext: Context;
@@ -185,6 +188,7 @@ declare namespace suitest {
 		runTest(testId: string): RunTestChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
+		setScreenOrientation(orientation: ScreenOrientationValues): SetScreenOrientationChain;
 	}
 
 	type NetworkLogEvent = {
@@ -353,4 +357,10 @@ declare namespace suitest {
 		video?: true,
 		psVideo?: true,
 	}
+
+	type ScreenOrientationValues =
+		| 'portrait'
+		| 'portraitReversed'
+		| 'landscape'
+		| 'landscapeReversed';
 }
