@@ -38,6 +38,10 @@ export interface Clonable<T> {
 	clone(): T;
 }
 
+export interface LaunchMode<T> {
+	launchMode(mode: 'resume' | 'restart'): T;
+}
+
 export interface Abandable<T> {
 	abandon(): T;
 }
