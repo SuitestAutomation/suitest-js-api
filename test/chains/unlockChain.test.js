@@ -44,6 +44,7 @@ describe('Unlock chain', () => {
 	it('should generate correct socket message based on data', () => {
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
+			passcode: 1111,
 		}), {
 			type: 'testLine',
 			request: {
@@ -51,18 +52,23 @@ describe('Unlock chain', () => {
 				passcode: 1111,
 			},
 		}, 'type testLine');
-		assert.deepStrictEqual(toJSON({
-		}), {
+		assert.deepStrictEqual(toJSON({passcode: 1111}), {
 			type: 'eval',
 			request: {
 				type: 'unlock',
 				passcode: 1111,
 			},
 		}, 'type eval');
+		assert.deepStrictEqual(toJSON(), {
+			type: 'eval',
+			request: {
+				type: 'unlock',
+			},
+		}, 'type eval without passcode');
 	});
 
 	it('should define assert function', () => {
-		const chain = unlockAssert();
+		const chain = unlockAssert(1111);
 
 		assert.ok('toString' in chain);
 		assert.ok('then' in chain);

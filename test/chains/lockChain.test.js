@@ -67,9 +67,4 @@ describe('lock chain', () => {
 		assert.ok('clone' in chain);
 		assert.ok('abandon' in chain);
 	});
-
-	it('should throw error in case of invalid input', () => {
-		testInputErrorSync(lock, []);
-		testInputErrorSync(lock, [-1]);
-	});
 });
