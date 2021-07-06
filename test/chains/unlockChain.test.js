@@ -59,7 +59,7 @@ describe('Unlock chain', () => {
 				passcode: 1111,
 			},
 		}, 'type eval');
-		assert.deepStrictEqual(toJSON(), {
+		assert.deepStrictEqual(toJSON({}), {
 			type: 'eval',
 			request: {
 				type: 'unlock',
