@@ -22,6 +22,8 @@ const applicationFactory = require('./lib/chains/applicationChain');
 const clearAppDataFactory = require('./lib/chains/clearAppDataChain');
 const cookieFactory = require('./lib/chains/cookieChain');
 const sleepFactory = require('./lib/chains/sleepChain');
+const lockFactory = require('./lib/chains/lockChain');
+const unlockFactory = require('./lib/chains/unlockChain');
 const pressButtonFactory = require('./lib/chains/pressButtonChain');
 const positionFactory = require('./lib/chains/positionChain');
 const windowFactory = require('./lib/chains/windowChain');
@@ -111,6 +113,8 @@ class SUITEST_API extends EventEmitter {
 		const {location, locationAssert} = locationFactory(this);
 		const {cookie, cookieAssert} = cookieFactory(this);
 		const {sleep, sleepAssert} = sleepFactory(this);
+		const {lock, lockAssert} = lockFactory(this);
+		const {unlock, unlockAssert} = unlockFactory(this);
 		const {pressButton, pressButtonAssert} = pressButtonFactory(this);
 		const {position, positionAssert} = positionFactory(this);
 		const {window, windowAssert} = windowFactory(this);
@@ -133,6 +137,8 @@ class SUITEST_API extends EventEmitter {
 		this.location = location;
 		this.cookie = cookie;
 		this.sleep = sleep;
+		this.lock = lock;
+		this.unlock = unlock;
 		this.press = pressButton;
 		this.position = position;
 		this.window = window;
@@ -176,6 +182,8 @@ class SUITEST_API extends EventEmitter {
 			location: locationAssert,
 			cookie: cookieAssert,
 			sleep: sleepAssert,
+			lock: lockAssert,
+			unlock: unlockAssert,
 			press: pressButtonAssert,
 			position: positionAssert,
 			window: windowAssert,
