@@ -17,6 +17,8 @@ import {PressButtonChain} from './typeDefinition/PressButton';
 import {VrcConstants} from './typeDefinition/constants/Vrc';
 import {RunTestChain} from './typeDefinition/RunTestChain';
 import {SleepChain} from './typeDefinition/SleepChain';
+import {LockChain} from './typeDefinition/LockChain';
+import {UnlockChain} from './typeDefinition/UnlockChain';
 import {VideoChain} from './typeDefinition/VideoChain';
 import {WindowChain} from './typeDefinition/WindowChain';
 import {VideoState} from './typeDefinition/constants/VideoState';
@@ -91,6 +93,8 @@ declare namespace suitest {
 		press(key: string): PressButtonChain;
 		press(keys: string[]): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
+		lock(): LockChain;
+		unlock(passcode?: number): UnlockChain;
 		window(): WindowChain;
 
 		/**
@@ -187,6 +191,8 @@ declare namespace suitest {
 		press(keys: string[]): PressButtonChain;
 		runTest(testId: string): RunTestChain;
 		sleep(milliseconds: number): SleepChain;
+		lock(): LockChain;
+		unlock(passcode: number): UnlockChain;
 		window(): WindowChain;
 		setScreenOrientation(orientation: ScreenOrientationValues): SetScreenOrientationChain;
 	}
