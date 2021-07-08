@@ -36,10 +36,6 @@ sendTextToApp.repeat(3).interval(200);
 sendTextToApp.interval(400).repeat('<%variable%>');
 sendTextToApp.interval(400).repeat(2);
 
-// should have close and suspend methods
-application().close();
-application().suspend();
-
 sendTextToApp.clone();
 sendTextToApp.then();
 sendTextToApp.abandon();

@@ -14,6 +14,8 @@ const endTest = require('./lib/commands/endTest');
 
 // Chains
 const openAppFactory = require('./lib/chains/openAppChain');
+const closeAppFactory = require('./lib/chains/closeAppChain');
+const suspendAppFactory = require('./lib/chains/suspendAppChain');
 const takeScreenshotFactory = require('./lib/chains/takeScreenshotChain');
 const saveScreenshotFactory = require('./lib/chains/saveScreenshotChain');
 const openUrlFactory = require('./lib/chains/openUrlChain');
@@ -106,6 +108,8 @@ class SUITEST_API extends EventEmitter {
 		this.releaseDevice = (...args) => releaseDevice(this, ...args);
 
 		const {openApp, openAppAssert} = openAppFactory(this);
+		const {closeApp, closeAppAssert} = closeAppFactory(this);
+		const {suspendApp, suspendAppAssert} = suspendAppFactory(this);
 		const {openUrl, openUrlAssert} = openUrlFactory(this);
 		const {application, applicationAssert} = applicationFactory(this);
 		const {clearAppData, clearAppDataAssert} = clearAppDataFactory(this);
@@ -128,6 +132,8 @@ class SUITEST_API extends EventEmitter {
 		const {setScreenOrientation, setScreenOrientationAssert} = setScreenOrientationFactory(this);
 
 		this.openApp = openApp;
+		this.closeApp = closeApp;
+		this.suspendApp = suspendApp;
 		this.openUrl = openUrl;
 		this.application = application;
 		this.clearAppData = clearAppData;
@@ -174,6 +180,8 @@ class SUITEST_API extends EventEmitter {
 			application: applicationAssert,
 			clearAppData: clearAppDataAssert,
 			openApp: openAppAssert,
+			closeApp: closeAppAssert,
+			suspendApp: suspendAppAssert,
 			openUrl: openUrlAssert,
 			location: locationAssert,
 			cookie: cookieAssert,
