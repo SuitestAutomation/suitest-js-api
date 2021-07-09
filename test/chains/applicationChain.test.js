@@ -19,13 +19,11 @@ describe('Application chain', () => {
 			composers.ABANDON,
 			composers.ASSERT,
 			composers.CLONE,
-			composers.CLOSE_APP,
 			composers.HAS_EXITED,
 			composers.TIMEOUT,
 			composers.GETTERS,
 			composers.TO_JSON,
 			composers.SEND_TEXT,
-			composers.SUSPEND_APP,
 		].sort(bySymbol), 'clear state');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
@@ -35,13 +33,11 @@ describe('Application chain', () => {
 			composers.THEN,
 			composers.ASSERT,
 			composers.CLONE,
-			composers.CLOSE_APP,
 			composers.HAS_EXITED,
 			composers.TIMEOUT,
 			composers.GETTERS,
 			composers.TO_JSON,
 			composers.SEND_TEXT,
-			composers.SUSPEND_APP,
 		].sort(bySymbol), 'abandoned chain');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
@@ -51,13 +47,11 @@ describe('Application chain', () => {
 			composers.THEN,
 			composers.ABANDON,
 			composers.CLONE,
-			composers.CLOSE_APP,
 			composers.HAS_EXITED,
 			composers.TIMEOUT,
 			composers.GETTERS,
 			composers.TO_JSON,
 			composers.SEND_TEXT,
-			composers.SUSPEND_APP,
 		].sort(bySymbol), 'assert chain');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
@@ -80,13 +74,11 @@ describe('Application chain', () => {
 			composers.THEN,
 			composers.ABANDON,
 			composers.CLONE,
-			composers.CLOSE_APP,
 			composers.ASSERT,
 			composers.HAS_EXITED,
 			composers.GETTERS,
 			composers.TO_JSON,
 			composers.SEND_TEXT,
-			composers.SUSPEND_APP,
 		].sort(bySymbol), 'chain with timeout');
 
 		// testing sendText related modifiers
@@ -143,18 +135,6 @@ describe('Application chain', () => {
 			composers.REPEAT,
 			composers.INTERVAL,
 		].sort(bySymbol), 'sendText chain with until');
-
-		assert.deepStrictEqual(getComposerTypes(getComposers({
-			closeApp: true,
-		})), [
-			...commonApplicationModifiers,
-		].sort(bySymbol), 'close command');
-
-		assert.deepStrictEqual(getComposerTypes(getComposers({
-			suspendApp: true,
-		})), [
-			...commonApplicationModifiers,
-		].sort(bySymbol), 'suspend command');
 
 		const chain = application();
 
@@ -299,24 +279,6 @@ describe('Application chain', () => {
 				val: 'text',
 			},
 		}, 'application sendText with repeat and interval');
-
-		assert.deepStrictEqual(toJSON({
-			suspendApp: true,
-		}), {
-			type: 'eval',
-			request: {
-				type: 'suspendApp',
-			},
-		}, 'application suspended');
-
-		assert.deepStrictEqual(toJSON({
-			closeApp: true,
-		}), {
-			type: 'eval',
-			request: {
-				type: 'closeApp',
-			},
-		}, 'application closed');
 	});
 
 	it('should throw error in case of invalid input', () => {
