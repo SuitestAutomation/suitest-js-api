@@ -14,6 +14,8 @@ const endTest = require('./lib/commands/endTest');
 
 // Chains
 const openAppFactory = require('./lib/chains/openAppChain');
+const closeAppFactory = require('./lib/chains/closeAppChain');
+const suspendAppFactory = require('./lib/chains/suspendAppChain');
 const takeScreenshotFactory = require('./lib/chains/takeScreenshotChain');
 const saveScreenshotFactory = require('./lib/chains/saveScreenshotChain');
 const openUrlFactory = require('./lib/chains/openUrlChain');
@@ -52,6 +54,7 @@ const KEY = require('./lib/constants/keys');
 const {NETWORK_PROP, NETWORK_METHOD} = require('./lib/constants/networkRequest');
 const HAD_NO_ERROR = require('./lib/constants/hadNoError');
 const TAP_TYPES = require('./lib/constants/tapTypes');
+const LAUNCH_MODE = require('./lib/constants/launchMode');
 const DIRECTIONS = require('./lib/constants/directions');
 const SCREEN_ORIENTATION = require('./lib/constants/screenOrientation');
 
@@ -105,6 +108,8 @@ class SUITEST_API extends EventEmitter {
 		this.releaseDevice = (...args) => releaseDevice(this, ...args);
 
 		const {openApp, openAppAssert} = openAppFactory(this);
+		const {closeApp, closeAppAssert} = closeAppFactory(this);
+		const {suspendApp, suspendAppAssert} = suspendAppFactory(this);
 		const {openUrl, openUrlAssert} = openUrlFactory(this);
 		const {application, applicationAssert} = applicationFactory(this);
 		const {clearAppData, clearAppDataAssert} = clearAppDataFactory(this);
@@ -127,6 +132,8 @@ class SUITEST_API extends EventEmitter {
 		const {setScreenOrientation, setScreenOrientationAssert} = setScreenOrientationFactory(this);
 
 		this.openApp = openApp;
+		this.closeApp = closeApp;
+		this.suspendApp = suspendApp;
 		this.openUrl = openUrl;
 		this.application = application;
 		this.clearAppData = clearAppData;
@@ -165,6 +172,7 @@ class SUITEST_API extends EventEmitter {
 		this.NETWORK_METHOD = NETWORK_METHOD;
 		this.HAD_NO_ERROR = HAD_NO_ERROR;
 		this.TAP_TYPES = TAP_TYPES;
+		this.LAUNCH_MODE = LAUNCH_MODE;
 		this.DIRECTIONS = DIRECTIONS;
 		this.SCREEN_ORIENTATION = SCREEN_ORIENTATION;
 
@@ -172,6 +180,8 @@ class SUITEST_API extends EventEmitter {
 			application: applicationAssert,
 			clearAppData: clearAppDataAssert,
 			openApp: openAppAssert,
+			closeApp: closeAppAssert,
+			suspendApp: suspendAppAssert,
 			openUrl: openUrlAssert,
 			location: locationAssert,
 			cookie: cookieAssert,

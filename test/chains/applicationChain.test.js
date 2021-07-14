@@ -6,13 +6,10 @@ const {
 	applicationAssert,
 	getComposers,
 	toJSON,
-	beforeSendMsg,
 } = require('../../lib/chains/applicationChain')(suitest);
 const composers = require('../../lib/constants/composer');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
-const sinon = require('sinon');
-const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 
 describe('Application chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -58,7 +55,7 @@ describe('Application chain', () => {
 		].sort(bySymbol), 'assert chain');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
-			comparator: {},
+			comparator: {type: SUBJ_COMPARATOR.HAS_EXITED},
 		})), [
 			composers.TO_STRING,
 			composers.THEN,
@@ -68,7 +65,6 @@ describe('Application chain', () => {
 			composers.TIMEOUT,
 			composers.GETTERS,
 			composers.TO_JSON,
-			composers.SEND_TEXT,
 		].sort(bySymbol), 'chain with comparator');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
@@ -86,14 +82,12 @@ describe('Application chain', () => {
 		].sort(bySymbol), 'chain with timeout');
 
 		// testing sendText related modifiers
-		const commonSendTextModifiers = [
+		const commonApplicationModifiers = [
 			composers.TO_STRING,
 			composers.THEN,
 			composers.ABANDON,
 			composers.CLONE,
 			composers.ASSERT,
-			composers.HAS_EXITED,
-			composers.TIMEOUT,
 			composers.GETTERS,
 			composers.TO_JSON,
 		];
@@ -101,7 +95,7 @@ describe('Application chain', () => {
 		assert.deepStrictEqual(getComposerTypes(getComposers({
 			sendText: 'some text',
 		})), [
-			...commonSendTextModifiers,
+			...commonApplicationModifiers,
 			composers.UNTIL,
 			composers.INTERVAL,
 			composers.REPEAT,
@@ -109,7 +103,7 @@ describe('Application chain', () => {
 		assert.deepStrictEqual(getComposerTypes(getComposers({
 			sendText: '',
 		})), [
-			...commonSendTextModifiers,
+			...commonApplicationModifiers,
 			composers.UNTIL,
 			composers.INTERVAL,
 			composers.REPEAT,
@@ -119,7 +113,7 @@ describe('Application chain', () => {
 			sendText: 'some text',
 			interval: 2000,
 		})), [
-			...commonSendTextModifiers,
+			...commonApplicationModifiers,
 			composers.UNTIL,
 			composers.REPEAT,
 		].sort(bySymbol), 'sendText chain with interval');
@@ -128,7 +122,7 @@ describe('Application chain', () => {
 			sendText: 'some text',
 			repeat: 2000,
 		})), [
-			...commonSendTextModifiers,
+			...commonApplicationModifiers,
 			composers.UNTIL,
 			composers.INTERVAL,
 		].sort(bySymbol), 'sendText chain with repeat');
@@ -137,7 +131,7 @@ describe('Application chain', () => {
 			sendText: 'some text',
 			until: 'testCondition',
 		})), [
-			...commonSendTextModifiers,
+			...commonApplicationModifiers,
 			composers.REPEAT,
 			composers.INTERVAL,
 		].sort(bySymbol), 'sendText chain with until');
