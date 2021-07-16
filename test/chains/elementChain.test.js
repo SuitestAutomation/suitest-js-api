@@ -336,7 +336,7 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.not, 'undefined');
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
 		assert.strictEqual(typeof chain.isNot, 'undefined');
-		assert.strictEqual(typeof chain.visible, 'undefined');
+		assert.strictEqual(typeof chain.visible, 'function');
 	});
 
 	it('should generate correct socket message based on data', () => {
@@ -648,6 +648,27 @@ describe('Element chain', () => {
 				timeout: 2000,
 			},
 		}, 'element visible testLine');
+		assert.deepStrictEqual(toJSON({
+			comparator: {
+				type: SUBJ_COMPARATOR.VISIBLE,
+			},
+			isNegated: true,
+			selector: {apiId: 'apiId'},
+			timeout: 2000,
+		}), {
+			type: 'eval',
+			request: {
+				type: 'assert',
+				condition: {
+					subject: {
+						type: 'element',
+						apiId: 'apiId',
+					},
+					type: '!visible',
+				},
+				timeout: 2000,
+			},
+		}, 'element not visible testLine');
 		assert.deepStrictEqual(toJSON({
 			isAssert: true,
 			comparator: {
