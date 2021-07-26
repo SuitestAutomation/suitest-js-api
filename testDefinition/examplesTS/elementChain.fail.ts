@@ -1,4 +1,4 @@
-import {element, PROP} from '../../index';
+import {element, PROP, assert} from '../../index';
 
 const el = element({
     css: '.my-element',
@@ -36,3 +36,6 @@ element('repo-id').matchesRepo({
     name: PROP.BG_COLOR,
     val: '#F00', // invalid, value is always taken from repo. Use matches for this
 });
+
+// assertion version of element should not have getCssProperties
+assert.element('apiId').getCssProperties(['width']);

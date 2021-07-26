@@ -241,3 +241,7 @@ export interface ElementMatchModifiers<T> {
 export interface HasExitedModifiers<T> {
 	hasExited(): T;
 }
+
+export interface GetCssModifiers<T> {
+	getCssProperties(properties: string[]): T;
+}
