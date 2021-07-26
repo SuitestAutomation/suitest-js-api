@@ -15,10 +15,12 @@ import {
 	MoveToModifier,
 	Repeatable,
 	Intervalable,
+	BaseEmptyChain,
 	BaseChain,
 	UntilModifier,
 	VisibleModifier,
 	VideoStateModifiers,
+	GetCssModifiers,
 } from './modifiers';
 import {ElementProps} from "./constants/ElementProps";
 
@@ -34,7 +36,8 @@ export interface ElementChain extends
 	ScrollModifier<ElementRepeatIntervalChain>, // scroll
 	SwipeModifier<ElementRepeatIntervalChain>, // swipe
 	MoveToModifier<ElementEmptyChain>, // moveTo
-	VisibleModifier<ElementWithoutEvalChain>
+	VisibleModifier<ElementWithoutEvalChain>,// visible
+	GetCssModifiers<ElementGetPropertiesChain> // getCssProperties
 {}
 
 // -matchers +timeout +negation
@@ -105,6 +108,13 @@ interface ElementEvalModifiers<T> extends
 	// MatchBrightScriptModifiers<T>,
 	ExistsModifiers<T>,
 	ElementMatchModifiers<T>
+{}
+
+/*
+ * @description represents return value of calling getCssProperties function.
+ */
+interface ElementGetPropertiesChain extends
+	BaseEmptyChain<ElementGetPropertiesChain, Record<string, string>, ElementAbandonedChain>
 {}
 
 interface ElementEvalModifiersWithNegation<T> extends

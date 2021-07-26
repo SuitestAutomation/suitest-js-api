@@ -156,7 +156,7 @@ el.matches([
 ]);
 
 // With assert
-suitest.assert.element('api-id');
+suitest.element({ css: 'body' }).getCssProperties(['width']);
 
 async () => {
 	// tap element
