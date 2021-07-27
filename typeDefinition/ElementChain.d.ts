@@ -21,6 +21,7 @@ import {
 	VisibleModifier,
 	VideoStateModifiers,
 	GetCssModifiers,
+	GetAttributesModifier,
 } from './modifiers';
 import {ElementProps} from "./constants/ElementProps";
 
@@ -37,7 +38,8 @@ export interface ElementChain extends
 	SwipeModifier<ElementRepeatIntervalChain>, // swipe
 	MoveToModifier<ElementEmptyChain>, // moveTo
 	VisibleModifier<ElementWithoutEvalChain>,// visible
-	GetCssModifiers<ElementGetPropertiesChain> // getCssProperties
+	GetCssModifiers<ElementGetPropertiesChain>, // getCssProperties
+	GetAttributesModifier<ElementGetAttributesChain> // getAttributes
 {}
 
 // -matchers +timeout +negation
@@ -115,6 +117,10 @@ interface ElementEvalModifiers<T> extends
  */
 interface ElementGetPropertiesChain extends
 	BaseEmptyChain<ElementGetPropertiesChain, Record<string, string>, ElementAbandonedChain>
+{}
+
+interface ElementGetAttributesChain extends
+	BaseEmptyChain<ElementGetAttributesChain, Record<string, string>, ElementAbandonedChain>
 {}
 
 interface ElementEvalModifiersWithNegation<T> extends

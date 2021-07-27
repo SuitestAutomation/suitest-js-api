@@ -37,5 +37,7 @@ element('repo-id').matchesRepo({
     val: '#F00', // invalid, value is always taken from repo. Use matches for this
 });
 
-// assertion version of element should not have getCssProperties
+// assertion version of element should not have getCssProperties, getAttributes
 assert.element('apiId').getCssProperties(['width']);
+assert.element({ css: 'body' }).getAttributes();
+assert.element({ css: 'body' }).getAttributes(['type']);

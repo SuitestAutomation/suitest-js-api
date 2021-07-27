@@ -245,3 +245,7 @@ export interface HasExitedModifiers<T> {
 export interface GetCssModifiers<T> {
 	getCssProperties(properties: string[]): T;
 }
+
+export interface GetAttributesModifier<T> {
+	getAttributes(attributes?: string[]): T;
+}

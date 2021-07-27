@@ -173,7 +173,7 @@ declare namespace suitest {
 		application(): ApplicationChain;
 		clearAppData(): ClearAppDataChain;
 		cookie(cookieName: string): CookieChain;
-		element(elementSelector: ElementSelector | string): Omit<ElementChain, 'getCssProperties'>;
+		element(elementSelector: ElementSelector | string): Omit<ElementChain, 'getCssProperties' | 'getAttributes'>;
 		video(): VideoChain;
 		psVideo(): PlayStationVideoChain;
 		executeCommand(jsCode: string): ExecuteCommandChain;
