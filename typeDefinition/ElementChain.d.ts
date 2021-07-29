@@ -21,6 +21,7 @@ import {
 	VisibleModifier,
 	VideoStateModifiers,
 	GetCssModifiers,
+	HandleModifier,
 } from './modifiers';
 import {ElementProps} from "./constants/ElementProps";
 
@@ -37,7 +38,8 @@ export interface ElementChain extends
 	SwipeModifier<ElementRepeatIntervalChain>, // swipe
 	MoveToModifier<ElementEmptyChain>, // moveTo
 	VisibleModifier<ElementWithoutEvalChain>,// visible
-	GetCssModifiers<ElementGetPropertiesChain> // getCssProperties
+	GetCssModifiers<ElementGetPropertiesChain>, // getCssProperties
+	HandleModifier<ElementHandleChain> // handle
 {}
 
 // -matchers +timeout +negation
@@ -115,6 +117,13 @@ interface ElementEvalModifiers<T> extends
  */
 interface ElementGetPropertiesChain extends
 	BaseEmptyChain<ElementGetPropertiesChain, Record<string, string>, ElementAbandonedChain>
+{}
+
+/*
+ * @description represents return value of calling "handle" function.
+ */
+interface ElementHandleChain extends
+	BaseEmptyChain<ElementHandleChain, string[], ElementAbandonedChain>
 {}
 
 interface ElementEvalModifiersWithNegation<T> extends

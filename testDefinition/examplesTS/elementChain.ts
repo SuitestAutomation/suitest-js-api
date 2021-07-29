@@ -158,6 +158,11 @@ el.matches([
 // With assert
 suitest.element({ css: 'body' }).getCssProperties(['width']);
 
+suitest.element({ css: 'body' }).handle();
+suitest.element({ css: 'body' }).handle(true);
+suitest.element({ css: 'body' }).handle({});
+suitest.element({ css: 'body' }).handle({multiple: true});
+
 async () => {
 	// tap element
 	const tapElement = element('a').tap('single');
