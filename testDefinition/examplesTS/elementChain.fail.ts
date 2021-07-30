@@ -39,3 +39,5 @@ element('repo-id').matchesRepo({
 
 // assertion version of element should not have getCssProperties
 assert.element('apiId').getCssProperties(['width']);
+
+assert.element({ css: 'body' }).handle();
