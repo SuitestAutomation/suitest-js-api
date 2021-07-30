@@ -41,3 +41,5 @@ element('repo-id').matchesRepo({
 assert.element('apiId').getCssProperties(['width']);
 assert.element({ css: 'body' }).getAttributes();
 assert.element({ css: 'body' }).getAttributes(['type']);
+
+assert.element({ css: 'body' }).handle();
