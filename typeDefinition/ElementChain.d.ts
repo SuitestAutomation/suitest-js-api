@@ -22,6 +22,7 @@ import {
 	VideoStateModifiers,
 	GetCssModifiers,
 	HandleModifier,
+	GetAttributesModifier,
 } from './modifiers';
 import {ElementProps} from "./constants/ElementProps";
 
@@ -39,7 +40,8 @@ export interface ElementChain extends
 	MoveToModifier<ElementEmptyChain>, // moveTo
 	VisibleModifier<ElementWithoutEvalChain>,// visible
 	GetCssModifiers<ElementGetPropertiesChain>, // getCssProperties
-	HandleModifier<ElementHandleChain> // handle
+	HandleModifier<ElementHandleChain>, // handle
+	GetAttributesModifier<ElementGetAttributesChain> // getAttributes
 {}
 
 // -matchers +timeout +negation
@@ -124,6 +126,13 @@ interface ElementGetPropertiesChain extends
  */
 interface ElementHandleChain extends
 	BaseEmptyChain<ElementHandleChain, string[], ElementAbandonedChain>
+{}
+
+/*
+ * @description represents return value of calling "getAttributes" function.
+ */
+interface ElementGetAttributesChain extends
+	BaseEmptyChain<ElementGetAttributesChain, Record<string, string>, ElementAbandonedChain>
 {}
 
 interface ElementEvalModifiersWithNegation<T> extends

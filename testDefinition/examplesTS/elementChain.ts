@@ -155,8 +155,9 @@ el.matches([
 	},
 ]);
 
-// With assert
 suitest.element({ css: 'body' }).getCssProperties(['width']);
+suitest.element({ css: 'body' }).getAttributes();
+suitest.element({ css: 'body' }).getAttributes(['type']);
 
 suitest.element({ css: 'body' }).handle();
 suitest.element({ css: 'body' }).handle(true);
