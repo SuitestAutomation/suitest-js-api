@@ -360,6 +360,7 @@ declare namespace suitest {
 		size?: string,
 		color?: string,
 		index?: number,
+		active?: true,
 		video?: true,
 		psVideo?: true,
 	}
