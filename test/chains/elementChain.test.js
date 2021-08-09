@@ -793,6 +793,80 @@ describe('Element chain', () => {
 		}, 'element has props js testLine');
 	});
 
+	it('generate correct ws message for requesting element handle', () => {
+		assert.deepStrictEqual(toJSON({
+			handle: {multiple: false},
+			selector: {handle: true},
+		}), {
+			subject: {
+				type: 'elementHandle',
+				multiple: false,
+				selector: {
+					handle: true,
+				},
+			},
+			type: 'query',
+		}, 'get single element handle');
+		assert.deepStrictEqual(toJSON({
+			handle: {multiple: true},
+			selector: {css: 'div'},
+		}), {
+			subject: {
+				type: 'elementHandle',
+				multiple: true,
+				selector: {
+					css: 'div',
+				},
+			},
+			type: 'query',
+		}, 'get multiple element handle');
+	});
+
+	it('generate correct ws message for requesting element attributes', () => {
+		assert.deepStrictEqual(toJSON({
+			selector: {active: true},
+			attributes: [],
+		}), {
+			subject: {
+				type: 'elementAttributes',
+				attributes: [],
+				selector: {
+					active: true,
+				},
+			},
+			type: 'query',
+		}, 'get all element attributes');
+		assert.deepStrictEqual(toJSON({
+			selector: {active: true},
+			attributes: ['id', 'class'],
+		}), {
+			subject: {
+				type: 'elementAttributes',
+				attributes: ['id', 'class'],
+				selector: {
+					active: true,
+				},
+			},
+			type: 'query',
+		}, 'get several element attributes');
+	});
+
+	it('generate correct ws message for requesting element css properties', () => {
+		assert.deepStrictEqual(toJSON({
+			selector: {active: true},
+			cssProps: ['height', 'width'],
+		}), {
+			subject: {
+				type: 'elementCssProps',
+				elementCssProps: ['height', 'width'],
+				selector: {
+					active: true,
+				},
+			},
+			type: 'query',
+		}, 'get element css properties');
+	});
+
 	it('should throw error in case of invalid input', () => {
 		testInputErrorSync(element, ['']);
 		testInputErrorSync(element, [{'noRequiredSelector': true}]);
