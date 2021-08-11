@@ -1,17 +1,14 @@
 const assert = require('assert');
 const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
-const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const {
 	element,
 	elementAssert,
 	toJSON,
-	beforeSendMsg,
 } = require('../../lib/chains/elementChain')(suitest, suitest.video);
 const {VALUE, ELEMENT_PROP} = require('../../lib/constants/element');
 const VISIBILITY_STATE = require('../../lib/constants/visibilityState');
 const {PROP_COMPARATOR, SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
-const sinon = require('sinon');
 
 describe('Element chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -337,6 +334,48 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
 		assert.strictEqual(typeof chain.isNot, 'undefined');
 		assert.strictEqual(typeof chain.visible, 'function');
+	});
+
+	it('should generate correct selectors', () => {
+		assert.deepStrictEqual(
+			element([{css: '#app'}, {css: 'div'}, {css: 'span'}]).toJSON(),
+			{
+				subject: {
+					selector: [
+						{css: '#app'},
+						{css: 'div'},
+						{css: 'span'},
+					],
+					type: 'elementProps',
+				},
+				type: 'query',
+			},
+			'should generate array of selectors',
+		);
+
+		assert.deepStrictEqual(
+			element({css: 'body'}).toJSON(),
+			{
+				subject: {
+					selector: {css: 'body'},
+					type: 'elementProps',
+				},
+				type: 'query',
+			},
+			'should generate css selector',
+		);
+
+		assert.deepStrictEqual(
+			element('element-id').toJSON(),
+			{
+				subject: {
+					selector: {apiId: 'element-id'},
+					type: 'elementProps',
+				},
+				type: 'query',
+			},
+			'should generate apiId selector',
+		);
 	});
 
 	it('should generate correct socket message based on data', () => {
@@ -870,6 +909,8 @@ describe('Element chain', () => {
 	it('should throw error in case of invalid input', () => {
 		testInputErrorSync(element, ['']);
 		testInputErrorSync(element, [{'noRequiredSelector': true}]);
+		testInputErrorSync(element, [[{}]]);
+		testInputErrorSync(element, [[{'noRequiredSelector': true}]]);
 	});
 
 	it('should define assert function', () => {
