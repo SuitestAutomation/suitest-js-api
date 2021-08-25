@@ -73,7 +73,8 @@ interface VideoEvalModifiers<T> extends
 {}
 
 interface VideoEvalModifiersWithNegation<T> extends
-	ExistsModifiers<T>
+	ExistsModifiers<T>,
+	VisibleModifier<T>
 {}
 
 interface VideoBaseQueryChain<TSelf> extends

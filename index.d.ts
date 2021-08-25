@@ -36,6 +36,8 @@ import {HadNoError} from './typeDefinition/constants/HadNoError';
 import {TakeScreenshotChain} from './typeDefinition/TakeScreenshotChain';
 import {SetScreenOrientationChain} from './typeDefinition/SetScreenOrientationChain';
 import {ScreenOrientation} from './typeDefinition/constants/ScreenOrientation';
+import {CloseAppChain} from './typeDefinition/CloseAppChain';
+import {SuspendAppChain} from './typeDefinition/SuspendAppChain';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -88,6 +90,8 @@ declare namespace suitest {
 		// executeBrightScript(brsCode: string): ExecuteBrightScriptChain;
 		// brightScriptExpression(expression: string): BrightScriptExpressionChain;
 		openApp(relativeUrl?: string): OpenAppChain;
+		closeApp(): CloseAppChain;
+		suspendApp(): SuspendAppChain;
 		networkRequest(): NetworkRequestChain;
 		openUrl(absoluteUrl: string): OpenUrlChain;
 		pollUrl(url: string, response: string): PollUrlChain;
@@ -183,6 +187,8 @@ declare namespace suitest {
 		// executeBrightScript(brsCode: string): ExecuteBrightScriptChain;
 		// brightScriptExpression(expression: string): BrightScriptExpressionChain;
 		openApp(relativeUrl?: string): OpenAppChain;
+		closeApp(): CloseAppChain;
+		suspendApp(): SuspendAppChain;
 		networkRequest(): NetworkRequestChain;
 		openUrl(absoluteUrl: string): OpenUrlChain;
 		pollUrl(url: string, response: string): PollUrlChain;
@@ -370,8 +376,5 @@ declare namespace suitest {
 		| 'portrait'
 		| 'portraitReversed'
 		| 'landscape'
-		| 'landscapeReversed'
-		| 'landscapeRight'
-		| 'landscapeLeft'
-		| 'portraitUpsideDown';
+		| 'landscapeReversed';
 }

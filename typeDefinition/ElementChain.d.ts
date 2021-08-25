@@ -108,7 +108,8 @@ interface ElementEvalModifiers<T> extends
 {}
 
 interface ElementEvalModifiersWithNegation<T> extends
-	ExistsModifiers<T>
+	ExistsModifiers<T>,
+	VisibleModifier<T>
 {}
 
 interface ElementBaseQueryChain<TSelf> extends
