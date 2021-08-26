@@ -10,6 +10,7 @@ openAppChain.then();
 openAppChain.abandon();
 openAppChain.clone();
 openAppChain.toAssert();
+openAppChain.launchMode('resume');
 
 // should have only toString method
 const abandonedOpenApp = openApp().abandon();
