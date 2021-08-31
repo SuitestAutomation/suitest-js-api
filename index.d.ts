@@ -247,7 +247,7 @@ declare namespace suitest {
 		url?: string;
 		suitestify?: boolean;
 		domainList?: string[];
-		freezeRules?: Array<{
+		mapRules?: Array<{
 			methods: string[];
 			url: string;
 			type: string;
