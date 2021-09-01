@@ -17,16 +17,24 @@ const DEFAULT_TIMEOUT = 2000;
 
 const overridableFields = [
 	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
-	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
-	'logLevel', 'logDir', 'timestamp', 'configFile', 'disallowCrashReports', 'defaultTimeout', // launcher common
+	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher interactive
+	'logLevel', 'logLevelTestLines', 'logLevelTestErrors', 'logLevelNetworkLogs', 'logLevelConsoleLogs', // launcher common
+	'logLevelDebug', 'logLevelTestLauncher', 'logDir', 'timestamp', 'configFile', 'disallowCrashReports', // launcher common
+	'defaultTimeout', // launcher common
 ];
 
-const configurableFields = ['logLevel', 'disallowCrashReports', 'defaultTimeout'];
+const configurableFields = ['logLevel', 'logLevelTestLines', 'logLevelTestErrors', 'logLevelNetworkLogs',
+	'logLevelConsoleLogs', 'disallowCrashReports', 'defaultTimeout'];
 
 const main = Object.freeze({
 	apiUrl: 'https://the.suite.st/api/public/v3',
 	disallowCrashReports: false,
-	logLevel: logLevels.normal,
+	logLevelTestLines: logLevels.normal,
+	logLevelTestErrors: logLevels.normal,
+	logLevelNetworkLogs: logLevels.normal,
+	logLevelConsoleLogs: logLevels.normal,
+	logLevelTestLauncher: logLevels.normal,
+	logLevelDebug: false,
 	sentryDsn,
 	timestamp: timestamp.default,
 	defaultTimeout: DEFAULT_TIMEOUT,
@@ -36,7 +44,12 @@ const main = Object.freeze({
 const test = Object.freeze({
 	apiUrl: 'https://localhost',
 	disallowCrashReports: true,
-	logLevel: logLevels.debug,
+	logLevelTestLines: logLevels.debug,
+	logLevelTestErrors: logLevels.debug,
+	logLevelNetworkLogs: logLevels.debug,
+	logLevelConsoleLogs: logLevels.debug,
+	logLevelTestLauncher: logLevels.debug,
+	logLevelDebug: true,
 	sentryDsn,
 	timestamp: timestamp.default,
 	defaultTimeout: DEFAULT_TIMEOUT,
@@ -60,6 +73,16 @@ const configFactory = () => {
 	 * @param {Object} overrideObj
 	 */
 	function override(overrideObj = {}) {
+		const newOverrideObj = {...overrideObj};
+
+		if (newOverrideObj.logLevel) {
+			['logLevelTestLines', 'logLevelTestErrors', 'logLevelNetworkLogs', 'logLevelConsoleLogs',
+				'logLevelTestLauncher'].forEach(conf => {
+				newOverrideObj[conf] = newOverrideObj[conf] ? newOverrideObj[conf] : newOverrideObj.logLevel;
+			});
+			delete newOverrideObj.logLevel;
+		}
+
 		const _overrideObj = pickNonNil(overridableFields, overrideObj);
 
 		validate(validators.CONFIGURE, _overrideObj, invalidConfigObj());

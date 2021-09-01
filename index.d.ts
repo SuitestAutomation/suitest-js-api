@@ -70,6 +70,10 @@ declare namespace suitest {
 		setContinueOnFatalError(continueOnFatalError: ConfigureOptions['continueOnFatalError']): void;
 		setDisallowCrashReports(disallowCrashReports: ConfigureOptions['disallowCrashReports']): void;
 		setLogLevel(logLevel: ConfigureOptions['logLevel']): void;
+		setLogLevelTestLines(logLevel: ConfigureOptions['logLevel']): void;
+		setLogLevelTestErrors(logLevel: ConfigureOptions['logLevel']): void;
+		setLogLevelNetworkLogs(logLevel: ConfigureOptions['logLevel']): void;
+		setLogLevelConsoleLogs(logLevel: ConfigureOptions['logLevel']): void;
 
 		// subjects
 		location(): LocationChain;

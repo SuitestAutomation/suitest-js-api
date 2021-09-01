@@ -36,7 +36,6 @@ describe('logger util', () => {
 		assert(console.info.called);
 		assert(console.warn.called);
 		assert(console.error.called);
-		assert(console.log.called);
 	});
 
 	it('should display debug message', () => {

@@ -32,47 +32,47 @@ describe('socket chain helpers', () => {
 		};
 
 		// query
-		assert.throws(() => processServerResponse(logger, 'verbose')({
+		assert.throws(() => processServerResponse(logger, 'verbose', 'verbose')({
 			contentType: 'query',
 		}, {stack: ''}, chain), SuitestError, 'query fail');
-		assert.strictEqual(processServerResponse(logger, 'verbose')({
+		assert.strictEqual(processServerResponse(logger, 'verbose', 'verbose')({
 			contentType: 'query',
 			cookieExists: true,
 		}, {stack: ''}, chain), true, 'query cookie exists');
-		assert.strictEqual(processServerResponse(logger, 'verbose')({
+		assert.strictEqual(processServerResponse(logger, 'verbose', 'verbose')({
 			contentType: 'query',
 			elementExists: false,
 		}, {stack: ''}, chain), undefined, 'query element not found');
 		// eval
-		assert.strictEqual(processServerResponse(logger, 'verbose')({
+		assert.strictEqual(processServerResponse(logger, 'verbose', 'verbose')({
 			contentType: 'eval',
 			result: 'success',
 			errorType: 'error',
 		}, {stack: ''}, chain), true, 'evals success');
-		assert.strictEqual(processServerResponse(logger, 'verbose')({
+		assert.strictEqual(processServerResponse(logger, 'verbose', 'verbose')({
 			contentType: 'eval',
 			result: 'fail',
 			errorType: 'queryFailed',
 		}, {stack: ''}, chain), false, 'eval fail');
 		// test line
-		assert.strictEqual(processServerResponse(logger, 'verbose')({
+		assert.strictEqual(processServerResponse(logger, 'verbose', 'verbose')({
 			contentType: 'testLine',
 			result: 'success',
 		}, {stack: ''}, chain), undefined, 'testLine success');
 		// all other
-		assert.throws(() => processServerResponse(logger, 'verbose')({
+		assert.throws(() => processServerResponse(logger, 'verbose', 'verbose')({
 			result: 'fail',
 		}, {stack: ''}, chain), Error, 'testLine fail');
-		assert.throws(() => processServerResponse(logger, 'verbose')({
+		assert.throws(() => processServerResponse(logger, 'verbose', 'verbose')({
 			result: 'error',
 		}, {stack: ''}, chain), Error, 'testLine fail');
 		// execution error
-		assert.throws(() => processServerResponse(logger, 'verbose')({
+		assert.throws(() => processServerResponse(logger, 'verbose', 'verbose')({
 			executionError: 'appNotRunning',
 		}, {stack: ''}, chain), Error, 'execution error');
 
 		assert.throws(
-			() => processServerResponse(logger, 'verbose')({
+			() => processServerResponse(logger, 'verbose', 'verbose')({
 				contentType: 'eval',
 				result: 'fail',
 				errorType: 'invalidInput',
@@ -147,7 +147,7 @@ describe('socket chain helpers', () => {
 		);
 
 		assert.throws(
-			() => processServerResponse(logger, 'verbose')(
+			() => processServerResponse(logger, 'verbose', 'verbose')(
 				{
 					result: 'fail',
 					errorType: 'queryFailed',
@@ -162,7 +162,7 @@ describe('socket chain helpers', () => {
 		);
 
 		assert.throws(
-			() => processServerResponse(logger, 'verbose')(
+			() => processServerResponse(logger, 'verbose', 'verbose')(
 				{
 					result: 'fail',
 					expression: [
@@ -240,7 +240,7 @@ describe('socket chain helpers', () => {
 		);
 
 		assert.throws(
-			() => processServerResponse(logger, 'verbose')(
+			() => processServerResponse(logger, 'verbose', 'verbose')(
 				{
 					result: 'fail',
 					expression: [
@@ -303,7 +303,7 @@ describe('socket chain helpers', () => {
 		);
 
 		assert.throws(
-			() => processServerResponse(logger, 'verbose')(
+			() => processServerResponse(logger, 'verbose', 'verbose')(
 				{
 					result: 'fail',
 					expression: [{
@@ -360,17 +360,17 @@ describe('socket chain helpers', () => {
 			err => err instanceof assert.AssertionError
 		);
 
-		sinon.stub(logger, 'warn');
+		sinon.stub(logger, 'testLineWarn');
 
 		try {
-			assert.strictEqual(processServerResponse(logger, 'verbose')({
+			assert.strictEqual(processServerResponse(logger, 'verbose', 'verbose')({
 				contentType: 'eval',
 				result: 'warning',
 				errorType: 'error',
 			}, {stack: ''}, chain), true, 'eval warning');
-			assert.strictEqual(logger.warn.called, true, 'warning bumped');
+			assert.strictEqual(logger.testLineWarn.called, true, 'warning bumped');
 		} finally {
-			logger.warn.restore();
+			logger.testLineWarn.restore();
 		}
 	});
 
@@ -439,7 +439,7 @@ describe('socket chain helpers', () => {
 		const loggerErrorStub = sinon.fake();
 
 		assert.throws(
-			() => processServerResponse({error: loggerErrorStub})(
+			() => processServerResponse({testLineError: loggerErrorStub})(
 				{
 					result: 'aborted',
 					message: {info: {}},
