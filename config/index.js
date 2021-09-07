@@ -18,7 +18,8 @@ const DEFAULT_TIMEOUT = 2000;
 const overridableFields = [
 	'tokenKey', 'tokenPassword', 'token', 'testPackId', 'concurrency', 'presets', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
-	'logLevel', 'logDir', 'timestamp', 'configFile', 'disallowCrashReports', 'defaultTimeout', // launcher common
+	// launcher common
+	'logLevel', 'logDir', 'timestamp', 'configFile', 'disallowCrashReports', 'defaultTimeout', 'screenshotDir',
 ];
 
 const configurableFields = ['logLevel', 'disallowCrashReports', 'defaultTimeout'];
