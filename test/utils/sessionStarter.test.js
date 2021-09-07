@@ -54,59 +54,6 @@ describe('sessionStarter util', () => {
 		process.exit.restore();
 	});
 
-	it('should launch automated session and pair to device', async() => {
-		const removeResponseMatcher = testServer.mockRespondData(
-			obj => obj.content.type === wsContentTypes.pairDevice,
-			{
-				result: 'success',
-				appId: 'app-id',
-				versionId: 'version-id',
-				configId: 'config-id',
-			},
-		);
-		const res = await bootstrapSession(deviceId, {
-			sessionType: 'automated',
-			sessionToken: 'token',
-		});
-
-		assert.strictEqual(res, undefined);
-		assert.deepStrictEqual(appContext.context, {
-			appId: 'app-id',
-			versionId: 'version-id',
-			configId: 'config-id',
-		});
-		removeResponseMatcher();
-	});
-
-	it('should launch interactive session, pair to device, set app config', async() => {
-		const res = await bootstrapSession(deviceId, {
-			sessionType: 'interactive',
-			sessionToken: 'token',
-			appConfigId: 'configId',
-		});
-
-		assert.strictEqual(res, undefined);
-		assert.strictEqual(authContext.context, sessionConstants.INTERACTIVE);
-		assert.strictEqual(appContext.context.configId, 'configId');
-		assert.ok(Reflect.has(appContext.context, 'versionId'));
-		assert.ok(Reflect.has(appContext.context, 'appId'));
-		assert.strictEqual(pairedDeviceContext.context.deviceId, deviceId);
-	});
-
-	it('should launch interactive session in debug mode and send enableDebugMode ws request', async() => {
-		const res = await bootstrapSession(deviceId, {
-			sessionType: 'interactive',
-			sessionToken: 'token',
-			appConfigId: 'configId',
-			isDebugMode: true,
-		});
-
-		assert.strictEqual(res, undefined);
-		assert.strictEqual(authContext.context, sessionConstants.INTERACTIVE);
-		assert.strictEqual(appContext.context.configId, 'configId');
-		assert.strictEqual(pairedDeviceContext.context.deviceId, deviceId);
-	});
-
 	it('should throw with invalid config in automated mode', async() => {
 		await bootstrapSession(deviceId, {sessionType: 'automated'});
 		assert(process.exit.calledWith(1));
