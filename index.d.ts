@@ -110,10 +110,18 @@ declare namespace suitest {
 
 		/**
 		 * @description the complete path to the file name where the screenshot should be saved.
+		 *  Can be defined as string with placeholders, for example default path
+		 *  to screenshots folder looks like {screenshotDir}/{dateTime}-{currentFile}-l{currentLine}.png.
+		 *  Available placeholders:
+		 *  - screenshotDir - default value is "screenshots"
+		 *  - dateTime - time when saving screenshot happens in YYYY-MM-DD-HH-mm-ss-SSS format
+		 *  - currentFile - file where saving screenshot requested
+		 *  - currentLine - line of code where saving screenshot requested
 		 * @example
 		 * suitest.saveScreenshot('/path/to/file.png');
+		 * suitest.saveScreenshot('{screenshotDir}/{dateTime}-{currentFile}-l{currentLine}.png');
 		 */
-		saveScreenshot(fileName: string): TakeScreenshotChain<void>;
+		saveScreenshot(fileName?: string): TakeScreenshotChain<void>;
 
 		getPairedDevice(): null | {
 			deviceId: string,

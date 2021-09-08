@@ -1,16 +1,16 @@
 const assert = require('assert');
+const path = require('path');
+const sinon = require('sinon');
 const suitest = require('../../index');
 const {
 	saveScreenshot,
 	getComposers,
-	toString,
 	toJSON,
-	beforeSendMsg,
+	processFilePath,
+	getPlaceholdersValues,
 } = require('../../lib/chains/saveScreenshotChain')(suitest);
 const composers = require('../../lib/constants/composer');
 const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
-const sinon = require('sinon');
-const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const SuitestError = require('../../lib/utils/SuitestError');
 
 describe('Save screenshot chain', () => {
@@ -37,6 +37,7 @@ describe('Save screenshot chain', () => {
 		it('should accept not empty string', () => {
 			assert.doesNotThrow(() => saveScreenshot('/path/to/file.png'));
 			assert.doesNotThrow(() => saveScreenshot('C:\\path\\to\\file.png'));
+			assert.doesNotThrow(() => saveScreenshot());
 		});
 
 		it('should throw error when passing invalid arguments', () => {
@@ -51,6 +52,68 @@ describe('Save screenshot chain', () => {
 			assert.throws(() => saveScreenshot(() => void 0), isSuitestErrorInvalidInput);
 			assert.throws(() => saveScreenshot(111), isSuitestErrorInvalidInput);
 			assert.throws(() => saveScreenshot(Symbol('any')), isSuitestErrorInvalidInput);
+		});
+	});
+
+	describe('testing helper functions for processing file path', () => {
+		let clock;
+		const formattedDateTime = '2020-01-12-13-31-12-444';
+
+		before(() => {
+			clock = sinon.useFakeTimers(new Date('01 12 2020 13:31:12:444'));
+		});
+
+		it('processFilePath function', () => {
+			assert.deepStrictEqual(
+				processFilePath('test.png'),
+				'test.png',
+				'should return original path if it is does not contains placeholders',
+			);
+			assert.deepStrictEqual(
+				processFilePath('{dateTime}'),
+				formattedDateTime,
+				'should replace "{dateTime}" placeholder',
+			);
+			assert.deepStrictEqual(
+				processFilePath('{screenshotDir}'),
+				path.resolve(process.cwd(), 'screenshots'),
+				'should replace "{screenshotDir}" placeholder',
+			);
+			assert.deepStrictEqual(
+				processFilePath('{currentFile}'),
+				'saveScreenshotChain.test.js',
+				'should replace "{currentFile}" placeholder',
+			);
+			assert.deepStrictEqual(
+				processFilePath('{currentLine}'),
+				'88',
+				'should replace "{currentLine}" placeholder',
+			);
+			assert.deepStrictEqual(
+				processFilePath(path.join('{screenshotDir}', '{dateTime}_{currentFile}_l{currentLine}.png')),
+				path.join(
+					process.cwd(),
+					'screenshots',
+					formattedDateTime + '_saveScreenshotChain.test.js_l93.png',
+				),
+				'should replace several placeholders',
+			);
+		});
+
+		it('getPlaceholdersValues function', () => {
+			assert.deepStrictEqual(
+				getPlaceholdersValues(),
+				{
+					screenshotDir: path.join(process.cwd(), 'screenshots'),
+					dateTime: formattedDateTime,
+					currentFile: 'saveScreenshotChain.test.js',
+					currentLine: 105,
+				},
+			);
+		});
+
+		after(() => {
+			clock.restore();
 		});
 	});
 });
