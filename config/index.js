@@ -16,7 +16,7 @@ const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab66
 const DEFAULT_TIMEOUT = 2000;
 
 const overridableFields = [
-	'tokenKey', 'tokenPassword', 'token', 'testPackId', 'concurrency', 'presets', // launcher automated
+	'tokenKey', 'tokenPassword', 'tokenId', 'testPackId', 'concurrency', 'presets', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
 	// launcher common
 	'logLevel', 'logDir', 'timestamp', 'configFile', 'disallowCrashReports', 'defaultTimeout', 'screenshotDir',
