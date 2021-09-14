@@ -66,20 +66,7 @@ describe('pairDevice', () => {
 		const deviceId = uuid();
 
 		stubDeviceInfoFeed(deviceId);
-		authContext.setContext(sessionConstants.AUTOMATED, 'tokenId');
-		try {
-			const res = await pairDevice(deviceId);
-
-			assert.ok(res, 'response');
-			assert.equal(res.result, 'success', 'response result');
-			assert.ok(!!pairedDeviceContext, 'device context set');
-		} catch (error) {
-			assert.ok(!error, 'error');
-		}
-
-		authContext.setContext(sessionConstants.INTERACTIVE, 'tokenId');
-		stubDeviceInfoFeed(deviceId);
-
+		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
 		try {
 			const res = await pairDevice(deviceId);
 

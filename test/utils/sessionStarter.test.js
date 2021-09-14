@@ -1,18 +1,17 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {v1: uuid} = require('uuid');
-
+const nock = require('nock');
 const testServer = require('../../lib/utils/testServer');
 const webSockets = require('../../lib/api/webSockets');
-const wsContentTypes = require('../../lib/api/wsContentTypes');
 const SuitestApi = require('../../suitest');
-const suitest = new SuitestApi();
-const {pairedDeviceContext, authContext, appContext, testContext, logger} = suitest;
 const sessionStarter = require('../../lib/utils/sessionStarter');
-const bootstrapSession = (...args) => sessionStarter.bootstrapSession({...suitest, webSockets}, ...args);
-const sessionConstants = require('../../lib/constants/session');
-const nock = require('nock');
 const stubDeviceInfoFeed = require('../../lib/utils/testHelpers/mockDeviceInfo');
+const modes = require('../../lib/constants/modes');
+
+const suitest = new SuitestApi();
+const bootstrapSession = (...args) => sessionStarter.bootstrapSession({...suitest, webSockets}, ...args);
+const {pairedDeviceContext, authContext, appContext, logger} = suitest;
 
 const deviceId = uuid();
 
@@ -32,7 +31,6 @@ describe('sessionStarter util', () => {
 		pairedDeviceContext.clear();
 		authContext.clear();
 		appContext.clear();
-		testContext.clear();
 	});
 
 	after(async() => {
@@ -46,7 +44,6 @@ describe('sessionStarter util', () => {
 		pairedDeviceContext.clear();
 		authContext.clear();
 		appContext.clear();
-		testContext.clear();
 	});
 
 	afterEach(() => {
@@ -55,13 +52,13 @@ describe('sessionStarter util', () => {
 	});
 
 	it('should throw with invalid config in automated mode', async() => {
-		await bootstrapSession(deviceId, {sessionType: 'automated'});
+		await bootstrapSession(deviceId, {sessionType: modes.TOKEN});
 		assert(process.exit.calledWith(1));
 		assert(logger.error.called);
 	});
 
 	it('should throw with invalid config in interactive mode', async() => {
-		await bootstrapSession(deviceId, {sessionType: 'interactive'});
+		await bootstrapSession(deviceId, {sessionType: modes.TOKEN});
 		assert(process.exit.calledWith(1));
 		assert(logger.error.called);
 	});
