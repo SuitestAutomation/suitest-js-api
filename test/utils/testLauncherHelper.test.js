@@ -51,13 +51,13 @@ describe('testLauncherHelper util', () => {
 		const validate = sinon.stub(validation, 'validate');
 		const argsValidationError = sinon.stub(log, 'argsValidationError');
 
-		testLauncherHelper.validateInput('AUTOMATED', {});
-		assert.equal(validation.validate.firstCall.args[0], validation.validators.TEST_LAUNCHER_AUTOMATED);
+		testLauncherHelper.validateInput('TOKEN', {});
+		assert.equal(validation.validate.firstCall.args[0], validation.validators.TEST_LAUNCHER_TOKEN);
 		assert.deepEqual(validation.validate.firstCall.args[1], {});
-		assert.equal(validation.validate.firstCall.args[2], 'provided for \'suitest automated\' command. It');
+		assert.equal(validation.validate.firstCall.args[2], 'provided for \'suitest token\' command. It');
 		assert.ok(!process.exit.called, 'exit not called');
 		validate.restore();
-		testLauncherHelper.validateInput('AUTOMATED', {});
+		testLauncherHelper.validateInput('TOKEN', {});
 		assert.ok(argsValidationError.firstCall.args[0].message.includes('Invalid input'));
 		assert.ok(process.exit.calledWith(1), 'exit called with 1');
 		argsValidationError.restore();
@@ -69,21 +69,28 @@ describe('testLauncherHelper util', () => {
 
 		testLauncherHelper.increaseMaxListeners(emitter1, 5, 3);
 
-		assert.strictEqual(emitter1.getMaxListeners(), listenersCount1 + 6, 'when devicesCount > concurrency allowed, limit to concurrency');
+		assert.strictEqual(
+			emitter1.getMaxListeners(),
+			listenersCount1 + 6, 'when devicesCount > concurrency allowed, limit to concurrency',
+		);
 
 		const emitter2 = new EventEmitter();
 		const listenersCount2 = emitter2.getMaxListeners();
 
 		testLauncherHelper.increaseMaxListeners(emitter2, 5, 0);
 
-		assert.strictEqual(emitter2.getMaxListeners(), listenersCount2 + 10, 'when concurrency is 0, limit to devicesCount');
+		assert.strictEqual(
+			emitter2.getMaxListeners(),
+			listenersCount2 + 10, 'when concurrency is 0, limit to devicesCount');
 
 		const emitter3 = new EventEmitter();
 		const listenersCount3 = emitter3.getMaxListeners();
 
 		testLauncherHelper.increaseMaxListeners(emitter3, 5, 10);
 
-		assert.strictEqual(emitter3.getMaxListeners(), listenersCount3 + 10, 'when devicesCount < concurrency, limit to devicesCount');
+		assert.strictEqual(
+			emitter3.getMaxListeners(),
+			listenersCount3 + 10, 'when devicesCount < concurrency, limit to devicesCount');
 	});
 
 	it('isDebugMode should return true if debug argument supplied', () => {
@@ -105,24 +112,24 @@ describe('testLauncherHelper util', () => {
 	it('getDebugOption should return false if no debug option is provided', () => {
 		assert.strictEqual(
 			testLauncherHelper.getDebugOption({inspectBrk: undefined, inspect: undefined}),
-			false
+			false,
 		);
 	});
 
 	it('getDebugOption should return correct option if debug option is provided', () => {
 		assert.strictEqual(
 			testLauncherHelper.getDebugOption({inspectBrk: 9099, inspect: undefined}),
-			'--inspect-brk=9099'
+			'--inspect-brk=9099',
 		);
 
 		assert.strictEqual(
 			testLauncherHelper.getDebugOption({inspectBrk: undefined, inspect: 'true'}),
-			'--inspect'
+			'--inspect',
 		);
 
 		assert.strictEqual(
 			testLauncherHelper.getDebugOption({inspectBrk: undefined, inspect: true}),
-			'--inspect'
+			'--inspect',
 		);
 	});
 });

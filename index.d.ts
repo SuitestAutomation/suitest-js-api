@@ -47,21 +47,17 @@ export = suitest;
 
 declare namespace suitest {
 	export interface ISuitestBase extends NodeJS.EventEmitter {
-		startTestPack(options: StartTestPackOptions): Promise<StartTestPackResult|SuitestError>;
 		openSession(options: OpenSessionOptions): Promise<OpenSessionResult|SuitestError>;
 		closeSession(): Promise<object|SuitestError>;
 		setAppConfig(configId: string, options?: ConfigOverride): Promise<void|SuitestError>;
 		pairDevice(deviceId: string): Promise<DeviceData|SuitestError>;
 		releaseDevice(): Promise<void|SuitestError>;
-		// @deprecated use startTest without arguments
-		startTest(clientTestId: string, options?: StartTestOptions): Promise<void|SuitestError>;
-		startTest(): Promise<void|SuitestError>;
-		endTest(): Promise<void|SuitestError>;
 		interactive(options: ReplOptions): Promise<void>;
 
 		// config
 		getConfig(): ConfigureOptions;
 
+		// TODO: remove it and update UT
 		/**
 		 * @deprecated use separate methods for changing configuration properties
 		 */
@@ -162,7 +158,6 @@ declare namespace suitest {
 		authContext: AuthContext;
 		appContext: Context;
 		pairedDeviceContext: Context;
-		testContext: Context;
 
 		on(eventName: 'consoleLog', listener: (consoleLog: ConsoleLogEvent) => void): this;
 		on(eventName: 'networkLog', listener: (networkLog: NetworkLogEvent) => void): this;
@@ -270,56 +265,13 @@ declare namespace suitest {
 		[key: string]: any; // user should have ability to pass any property to config object
 	}
 
-	interface StartTestPackOptions {
-		testPackId: number;
-		accessTokenKey: string;
-		accessTokenPassword: string;
-		config?: ConfigOverride;
-		metadata?: {
-			version?: string;
-			hash?: string;
-			link?: string;
-		},
-		commitHash?: string;
-		appVersion?: string;
-		vcsBranch?: string;
-		allowServiceCalls?: boolean;
-		includeChangelist?: boolean;
-	}
-
-	interface StartTestPackResult {
-		deviceAccessToken: string;
-		tokenValidUntil: string;
-		testPackRunId: string;
-		testPack: {
-			name: string;
-			models: Array<{
-				modelId: string;
-				firmware: string;
-			}>,
-			devices: Array<{deviceId: string}>;
-		}
-	}
-
 	type OpenSessionOptions = {
-		username: string;
-		password: string;
-		orgId: string;
-	} | {
-		sessionToken: string;
-	} | {
-		accessTokenKey: string;
-		accessTokenPassword: string;
+		tokenId: string;
+		tokenPassword: string;
 	}
 
 	interface OpenSessionResult {
-		deviceAccessToken: string;
-		tokenValidUntil: string;
-	}
-
-	interface StartTestOptions {
-		name?: string;
-		description?: string;
+		accessToken: string;
 	}
 
 	interface ConfigureOptions {
@@ -334,8 +286,8 @@ declare namespace suitest {
 	}
 
 	interface Context {
-		context: any;
-		setContext(context: symbol): void;
+		context: unknown;
+		setContext(context: unknown): void;
 		clear(): void;
 	}
 
