@@ -82,7 +82,6 @@ describe('SuitestLauncher', () => {
 	it('should exit process if inspect arg provided in with several devices', async function() {
 		this.timeout(5000); // give more time to process
 
-		// TODO: define correct input
 		const suitestLauncher = new TestLauncher({
 			tokenId: '1',
 			tokenPassword: '1',
@@ -119,5 +118,34 @@ describe('SuitestLauncher', () => {
 		assert.ok(devicesDetailsNock.isDone(), 'device details request');
 		assert(process.exit.calledWith(1));
 		assert(logger.error.called);
+	});
+
+	it('should exit runTokenSession when config id, device id and preset were not provided', async() => {
+		const suitestLauncher = new TestLauncher({
+			tokenId: '1',
+			tokenPassword: '1',
+		}, ['npm', '--version']);
+
+		await suitestLauncher.runTokenSession();
+		assert(process.exit.calledWith(1));
+		assert(logger.error.called);
+		sinon.assert.calledWith(logger.error, 'Please specify Configuration id and device id, or presets');
+	});
+
+	it('should exit runTokenSession when any of specified preset in args not exists in configs', async() => {
+		const suitestLauncher = new TestLauncher({
+			tokenId: '1',
+			tokenPassword: '1',
+			preset: ['firstPreset', 'secondPreset', 'thirdPreset', 'fourthPreset'],
+			presets: {
+				firstPreset: {config: 'config-id1', device: 'device-id1'},
+				secondPreset: {config: 'config-id2', device: 'device-id2'},
+			},
+		}, ['npm', '--version']);
+
+		await suitestLauncher.runTokenSession();
+		assert(process.exit.calledWith(1));
+		assert(logger.error.called);
+		sinon.assert.calledWith(logger.error, 'Presets thirdPreset, fourthPreset were not found in your configuration');
 	});
 });
