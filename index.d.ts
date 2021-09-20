@@ -131,8 +131,6 @@ declare namespace suitest {
 			customName?: string,
 			inactivityTimeout?: number,
 			status: string,
-			displayName?: string,
-			shortDisplayName?: string
 		}
 
 		// constants
