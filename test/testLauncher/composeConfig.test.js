@@ -1,9 +1,10 @@
 const assert = require('assert');
 const fs = require('fs');
 const sinon = require('sinon');
+const mock = require('mock-fs');
 
 const SuitestError = require('../../lib/utils/SuitestError');
-const {readUserConfig} = require('../../lib/testLauncher/composeConfig');
+const {readUserConfig, readRcConfig} = require('../../lib/testLauncher/composeConfig');
 
 describe('testLauncher readUserConfig', () => {
 	it('readUserConfig method should process config file correctly', () => {
@@ -35,6 +36,58 @@ describe('testLauncher readUserConfig', () => {
 			);
 		} finally {
 			fs.readFileSync.restore();
+		}
+	});
+
+	it('readRcConfig should return corresponding result when argument was past', () => {
+		const CONFIG_CONTENT = '{"test": "test"}';
+		const MOCK_PATH = './fakepath/.suitestrc';
+
+		mock({
+			[MOCK_PATH]: CONFIG_CONTENT,
+		});
+
+		try {
+			assert.deepEqual(
+				readRcConfig(MOCK_PATH),
+				{
+					test: 'test',
+					configs: [MOCK_PATH],
+					config: MOCK_PATH,
+				},
+			);
+		} finally {
+			mock.restore();
+		}
+	});
+
+	it('readRcConfig should return corresponding result without any arguments', () => {
+		const CONFIG_CONTENT = '{"test": "test"}';
+		const MOCK_PATH = `${process.cwd()}\\.suitestrc`;
+
+		mock({
+			[MOCK_PATH]: CONFIG_CONTENT,
+		});
+
+		try {
+			assert.deepEqual(
+				readRcConfig(),
+				{
+					test: 'test',
+					configs: [MOCK_PATH],
+					config: MOCK_PATH,
+				},
+			);
+		} finally {
+			mock.restore();
+		}
+	});
+
+	it('readRcConfig should return empty object', () => {
+		try {
+			assert.deepEqual(readRcConfig(), {});
+		} finally {
+			mock.restore();
 		}
 	});
 });
