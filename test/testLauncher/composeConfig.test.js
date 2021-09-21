@@ -40,20 +40,20 @@ describe('testLauncher readUserConfig', () => {
 	});
 
 	it('readRcConfig should return corresponding result when argument was past', () => {
-		const CONFIG_CONTENT = '{"test": "test"}';
-		const MOCK_PATH = './fakepath/.suitestrc';
+		const configContent = '{"test": "test"}';
+		const mockPath = './fakepath/.suitestrc';
 
 		mock({
-			[MOCK_PATH]: CONFIG_CONTENT,
+			[mockPath]: configContent,
 		});
 
 		try {
 			assert.deepEqual(
-				readRcConfig(MOCK_PATH),
+				readRcConfig(mockPath),
 				{
 					test: 'test',
-					configs: [MOCK_PATH],
-					config: MOCK_PATH,
+					configs: [mockPath],
+					config: mockPath,
 				},
 			);
 		} finally {
@@ -62,11 +62,11 @@ describe('testLauncher readUserConfig', () => {
 	});
 
 	it('readRcConfig should return corresponding result without any arguments', () => {
-		const CONFIG_CONTENT = '{"test": "test"}';
-		const MOCK_PATH = `${process.cwd()}\\.suitestrc`;
+		const configContent = '{"test": "test"}';
+		const mockPath = `${process.cwd()}\\.suitestrc`;
 
 		mock({
-			[MOCK_PATH]: CONFIG_CONTENT,
+			[mockPath]: configContent,
 		});
 
 		try {
@@ -74,8 +74,8 @@ describe('testLauncher readUserConfig', () => {
 				readRcConfig(),
 				{
 					test: 'test',
-					configs: [MOCK_PATH],
-					config: MOCK_PATH,
+					configs: [mockPath],
+					config: mockPath,
 				},
 			);
 		} finally {
