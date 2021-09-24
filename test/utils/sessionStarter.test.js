@@ -7,7 +7,6 @@ const webSockets = require('../../lib/api/webSockets');
 const SuitestApi = require('../../suitest');
 const sessionStarter = require('../../lib/utils/sessionStarter');
 const stubDeviceInfoFeed = require('../../lib/utils/testHelpers/mockDeviceInfo');
-const modes = require('../../lib/constants/modes');
 const sessionTypes = require('../../lib/constants/modes');
 
 const suitest = new SuitestApi();
@@ -17,6 +16,8 @@ const {pairedDeviceContext, authContext, appContext, logger} = suitest;
 const deviceId = uuid();
 
 describe('sessionStarter util', () => {
+	const suitestConfig = suitest.config;
+
 	before(async() => {
 		sinon.stub(logger, 'log');
 		sinon.stub(console, 'error');
@@ -32,6 +33,10 @@ describe('sessionStarter util', () => {
 		pairedDeviceContext.clear();
 		authContext.clear();
 		appContext.clear();
+		suitest.config = {
+			...suitestConfig,
+			sessionType: sessionTypes.TOKEN,
+		};
 	});
 
 	after(async() => {
@@ -49,30 +54,30 @@ describe('sessionStarter util', () => {
 
 	afterEach(() => {
 		logger.error.restore();
+		suitest.config = suitestConfig;
 		process.exit.restore();
 	});
 
 	it('should throw with invalid config', async() => {
-		await bootstrapSession(deviceId, {sessionType: modes.TOKEN});
+		await bootstrapSession(deviceId, {sessionType: sessionTypes.TOKEN});
 		assert(process.exit.calledWith(1));
 		assert(logger.error.called);
 	});
 
 	it('should bootstrap session with preset', async() => {
-		await bootstrapSession(
-			{deviceId: 'device1', configId: 'config1', presetName: 'firstPreset'},
-			{
-				sessionType: sessionTypes.TOKEN,
-				tokenId: 'token-id',
-				tokenPassword: 'token-password',
-				presets: {
-					firstPreset: {
-						device: 'deviceId',
-						config: 'configId',
-					},
+		suitest.config = {
+			...suitest.config,
+			sessionType: sessionTypes.TOKEN,
+			tokenId: 'token-id',
+			tokenPassword: 'token-password',
+			presets: {
+				firstPreset: {
+					device: 'deviceId',
+					config: 'configId',
 				},
 			},
-		);
+		};
+		await bootstrapSession({deviceId: 'device1', configId: 'config1', presetName: 'firstPreset'});
 		assert.deepStrictEqual(
 			suitest.appContext.context,
 			{
@@ -85,24 +90,24 @@ describe('sessionStarter util', () => {
 	});
 
 	it('should bootstrap session with preset and config override', async() => {
-		await bootstrapSession(
-			{deviceId: 'device1', configId: 'config1', presetName: 'firstPreset'},
-			{
-				sessionType: sessionTypes.TOKEN,
-				tokenId: 'token-id',
-				tokenPassword: 'token-password',
-				presets: {
-					firstPreset: {
-						device: 'deviceId',
-						config: {
-							configId: 'configId',
-							url: 'new url',
-							suitestify: false,
-						},
+		suitest.config = {
+			...suitest.config,
+			sessionType: sessionTypes.TOKEN,
+			tokenId: 'token-id',
+			tokenPassword: 'token-password',
+			presets: {
+				firstPreset: {
+					device: 'deviceId',
+					config: {
+						configId: 'configId',
+						url: 'new url',
+						suitestify: false,
 					},
 				},
 			},
-		);
+		};
+
+		await bootstrapSession({deviceId: 'device1', configId: 'config1', presetName: 'firstPreset'});
 		assert.deepStrictEqual(
 			suitest.appContext.context,
 			{

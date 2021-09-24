@@ -71,7 +71,7 @@ describe('logger util', () => {
 	it('should display the name of the device in the left rail', () => {
 		const device = {
 			deviceId: 'abcde',
-			customName: 'MyDevice',
+			shortDisplayName: 'MyDevice',
 			model: 'Model',
 			manufacturer: 'Manufacturer',
 		};

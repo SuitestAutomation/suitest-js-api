@@ -52,7 +52,7 @@ declare namespace suitest {
 		setAppConfig(configId: string, options?: ConfigOverride): Promise<void|SuitestError>;
 		pairDevice(deviceId: string): Promise<DeviceData|SuitestError>;
 		releaseDevice(): Promise<void|SuitestError>;
-		interactive(options: ReplOptions): Promise<void>;
+		interactive(options?: ReplOptions): Promise<void>;
 
 		// config
 		getConfig(): ConfigureOptions;
@@ -131,6 +131,8 @@ declare namespace suitest {
 			customName?: string,
 			inactivityTimeout?: number,
 			status: string,
+			displayName?: string,
+			shortDisplayName?: string,
 		}
 
 		// constants
