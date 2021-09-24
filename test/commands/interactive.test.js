@@ -1,27 +1,30 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const path = require('path');
-const suitest = require('../../index');
-
 const repl = require('../../lib/testLauncher/repl');
 const texts = require('../../lib/texts');
-const {authContext, logger} = suitest;
-const interactive = require('../../lib/commands/interactive')
-
-const stubbed = {};
+const suitest = require('../../index');
+const {logger} = suitest;
+const interactive = require('../../lib/commands/interactive');
 
 describe('interactive command', () => {
+	let suitestConfig;
+
 	before(() => {
 		process.env.REPL_IPC_PORT = 'fake';
 	});
 
 	beforeEach(() => {
 		sinon.stub(logger);
-		stubbed.authContext = sinon.stub(authContext, 'isInteractiveSession').returns(true);
+		suitestConfig = suitest.config;
+		suitest.config = {
+			...suitestConfig,
+			runsOnSingleDevice: true,
+		};
 	});
 	afterEach(() => {
 		sinon.restore();
-		stubbed.authContext.restore();
+		suitest.conifg = suitestConfig;
 	});
 	it('should not start another repl instance if one is already running', async() => {
 		const replSessionEnded = sinon.stub(texts, 'replSessionEnded');
@@ -50,16 +53,15 @@ describe('interactive command', () => {
 		});
 	});
 
-	it('should not give warning in interactive mode and give warning in automated mode', async() => {
+	it('should not give warning for single device and give warning for several devices', async() => {
 		const replWarnInteractive = sinon.stub(texts, 'replWarnInteractive');
 		const startRepl = sinon.stub(repl, 'startRepl').resolves(1);
 
 		await interactive();
-		assert.ok(!replWarnInteractive.called, 'Warning not displayed in interactive mode');
-		stubbed.authContext.restore();
-		stubbed.authContext = sinon.stub(authContext, 'isInteractiveSession').returns(false);
+		assert.ok(!replWarnInteractive.called, 'Warning not displayed when runsOnSingleDevice is true');
+		suitest.config.runsOnSingleDevice = false;
 		await interactive();
-		assert.ok(replWarnInteractive.called, 'Warning displayed in automated mode');
+		assert.ok(replWarnInteractive.called, 'Warning displayed when runsOnSingleDevice is false');
 
 		startRepl.restore();
 		replWarnInteractive.restore();

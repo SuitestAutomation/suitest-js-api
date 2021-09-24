@@ -51,8 +51,7 @@ describe('pairDevice', () => {
 			assert.strictEqual(error.code, SuitestError.AUTH_NOT_ALLOWED, 'error code');
 		}
 
-		authContext.setContext(sessionConstants.ACCESS_TOKEN, 'tokenId', 'tokenPass');
-		stubDeviceInfoFeed(deviceId);
+		authContext.setContext(sessionConstants.GUEST, 'tokenId', 'tokenPass');
 
 		try {
 			await pairDevice(deviceId);
@@ -62,7 +61,7 @@ describe('pairDevice', () => {
 		}
 	});
 
-	it('should allow pairDevice in automated and interactive session context, set correct device context', async() => {
+	it('should allow pairDevice in token session context, set correct device context', async() => {
 		const deviceId = uuid();
 
 		stubDeviceInfoFeed(deviceId);
