@@ -24,16 +24,16 @@ const overridableFields = [
 
 const configurableFields = ['logLevel', 'disallowCrashReports', 'defaultTimeout'];
 
-const serverPrefix = process.env[envVars.BE_SERVER] || 'the';
+const serverAdress = process.env[envVars.SUITEST_BE_SERVER] || 'the.suite.st';
 
 const main = Object.freeze({
-	apiUrl: `https://${serverPrefix}.suite.st/api/public/v4`,
+	apiUrl: `https://${serverAdress}/api/public/v4`,
 	disallowCrashReports: false,
 	logLevel: logLevels.normal,
 	sentryDsn,
 	timestamp: timestamp.default,
 	defaultTimeout: DEFAULT_TIMEOUT,
-	wsUrl: `wss://${serverPrefix}.suite.st/api/public/v4/socket`,
+	wsUrl: `wss://${serverAdress}/api/public/v4/socket`,
 });
 
 const test = Object.freeze({
