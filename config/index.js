@@ -11,6 +11,7 @@ const timestamp = require('../lib/constants/timestamp');
 const {validate, validators} = require('../lib/validation');
 const {invalidConfigObj} = require('../lib/texts');
 const {pickNonNil} = require('../lib/utils/common');
+const envVars = require('../lib/constants/enviroment');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
 const DEFAULT_TIMEOUT = 2000;
@@ -23,14 +24,16 @@ const overridableFields = [
 
 const configurableFields = ['logLevel', 'disallowCrashReports', 'defaultTimeout'];
 
+const serverPrefix = process.env[envVars.BE_SERVER] || 'the';
+
 const main = Object.freeze({
-	apiUrl: 'https://the.suite.st/api/public/v4',
+	apiUrl: `https://${serverPrefix}.suite.st/api/public/v4`,
 	disallowCrashReports: false,
 	logLevel: logLevels.normal,
 	sentryDsn,
 	timestamp: timestamp.default,
 	defaultTimeout: DEFAULT_TIMEOUT,
-	wsUrl: 'wss://the.suite.st/api/public/v4/socket',
+	wsUrl: `wss://${serverPrefix}.suite.st/api/public/v4/socket`,
 });
 
 const test = Object.freeze({
