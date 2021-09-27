@@ -28,6 +28,12 @@ describe('Move To composer', () => {
 
 		chain.moveTo();
 
-		assert.deepStrictEqual(makeChain.firstCall.args[0], {isMoveTo: true, x: undefined, y: undefined});
+		assert.deepStrictEqual(makeChain.firstCall.args[0], {
+			isMoveTo: true,
+			coordinates: {
+				x: undefined,
+				y: undefined,
+			},
+		});
 	});
 });
