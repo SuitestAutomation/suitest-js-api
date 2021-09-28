@@ -4,7 +4,12 @@ const sinon = require('sinon');
 const mock = require('mock-fs');
 
 const SuitestError = require('../../lib/utils/SuitestError');
-const {readUserConfig, readRcConfig} = require('../../lib/testLauncher/composeConfig');
+const {
+	readUserConfig,
+	readRcConfig,
+	findExtendConfigs,
+	readConfigFile,
+} = require('../../lib/testLauncher/composeConfig');
 
 describe('testLauncher readUserConfig', () => {
 	it('readUserConfig method should process config file correctly', () => {
@@ -86,6 +91,36 @@ describe('testLauncher readUserConfig', () => {
 	it('readRcConfig should return empty object', () => {
 		try {
 			assert.deepEqual(readRcConfig(), {});
+		} finally {
+			mock.restore();
+		}
+	});
+
+	it('findExtendConfigs should process correctly', () => {
+		const configContentMain = '{"test": "test1"}';
+		const mockPathMain = `${process.cwd()}\\.suitestrc.json5`;
+		const configContentExtended = '{"testExtends": "testExtends"}';
+		const mockPathExtended = './fakepath/.suitestrc.yaml';
+
+		mock({
+			[mockPathMain]: configContentMain,
+			[mockPathExtended]: configContentExtended,
+		});
+
+		try {
+			const configFile = readConfigFile(mockPathMain);
+
+			assert.deepEqual(
+				findExtendConfigs(
+					configFile,
+					mockPathExtended,
+					mockPathMain,
+					[mockPathMain],
+				),
+				{
+					testExtends: 'testExtends',
+					test: 'test1',
+				});
 		} finally {
 			mock.restore();
 		}
