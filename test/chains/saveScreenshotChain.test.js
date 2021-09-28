@@ -101,15 +101,12 @@ describe('Save screenshot chain', () => {
 		});
 
 		it('getPlaceholdersValues function', () => {
-			assert.deepStrictEqual(
-				getPlaceholdersValues(),
-				{
-					screenshotDir: path.join(process.cwd(), 'screenshots'),
-					dateTime: formattedDateTime,
-					currentFile: 'saveScreenshotChain.test.js',
-					currentLine: 105,
-				},
-			);
+			const placeholderValues = getPlaceholdersValues();
+
+			assert.strictEqual(placeholderValues.dateTime, formattedDateTime);
+			assert.strictEqual(placeholderValues.screenshotDir, path.join(process.cwd(), 'screenshots'));
+			assert.strictEqual(typeof placeholderValues.currentFile, 'string');
+			assert.ok(placeholderValues.currentLine > 0, 'current line should be greeter then 0');
 		});
 
 		after(() => {
