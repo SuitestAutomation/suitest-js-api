@@ -125,7 +125,7 @@ describe('repl', () => {
 			}, false);
 
 			await new Promise(resolve => {
-				setInterval(() => chDir.called && resolve(), 10);
+				setInterval(() => chDir.notCalled && resolve(), 10);
 			});
 
 			await new Promise(resolve => {
