@@ -19,9 +19,18 @@ const overridableFields = [
 	'tokenKey', 'tokenId', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
 	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
 	'logLevel', 'logDir', 'timestamp', 'configFile', 'disallowCrashReports', 'defaultTimeout', // launcher common
+	'testLines', 'testErrors', 'networkLogs', 'consoleLogs', // launcher common extra log options
 ];
 
-const configurableFields = ['logLevel', 'disallowCrashReports', 'defaultTimeout'];
+const configurableFields = [
+	'logLevel',
+	'testLines',
+	'testErrors',
+	'networkLogs',
+	'consoleLogs',
+	'disallowCrashReports',
+	'defaultTimeout',
+];
 
 const main = Object.freeze({
 	apiUrl: 'https://the.suite.st/api/public/v3',
