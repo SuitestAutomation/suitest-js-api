@@ -96,7 +96,7 @@ describe('socket chain helpers', () => {
 					},
 					val: 'set text value',
 				},
-			})
+			}),
 		);
 
 		assert.throws(
@@ -143,7 +143,7 @@ describe('socket chain helpers', () => {
 					timeout: 2000,
 				},
 			}),
-			err => err instanceof assert.AssertionError
+			err => err instanceof assert.AssertionError,
 		);
 
 		assert.throws(
@@ -158,7 +158,7 @@ describe('socket chain helpers', () => {
 				{stack: ''},
 				chain,
 			),
-			err => err instanceof assert.AssertionError
+			err => err instanceof assert.AssertionError,
 		);
 
 		assert.throws(
@@ -299,7 +299,7 @@ describe('socket chain helpers', () => {
 					},
 				},
 			),
-			err => err instanceof assert.AssertionError
+			err => err instanceof assert.AssertionError,
 		);
 
 		assert.throws(
@@ -357,7 +357,7 @@ describe('socket chain helpers', () => {
 					},
 				},
 			),
-			err => err instanceof assert.AssertionError
+			err => err instanceof assert.AssertionError,
 		);
 
 		sinon.stub(logger, 'warn');
@@ -378,7 +378,7 @@ describe('socket chain helpers', () => {
 		it('should return testLine type', () => {
 			assert.strictEqual(
 				helpers.getRequestType({isAssert: true}),
-				'testLine'
+				'testLine',
 			);
 			assert.strictEqual(
 				helpers.getRequestType({
@@ -389,7 +389,7 @@ describe('socket chain helpers', () => {
 					setText: '',
 					sendText: 'text',
 				}),
-				'testLine'
+				'testLine',
 			);
 		});
 
@@ -428,14 +428,14 @@ describe('socket chain helpers', () => {
 			assert.strictEqual(res, undefined);
 			assert.deepStrictEqual(
 				writeFileStub.firstCall.args,
-				['/path/to/file.png', Buffer.from([1, 2, 3])]
+				['/path/to/file.png', Buffer.from([1, 2, 3])],
 			);
 		} finally {
 			writeFileStub.restore();
 		}
 	});
 
-	describe('handle errors for takeScreenshotLine', async () => {
+	describe('handle errors for takeScreenshotLine', async() => {
 		const processTakeScreenshotResponse = processServerResponse({error: sinon.fake()});
 
 		[
@@ -443,6 +443,7 @@ describe('socket chain helpers', () => {
 			['notSupportedIL', 'Screenshots are not supported with this instrumentation library version.'],
 			['timeout', 'Failed to take a screenshot due to timeout.'],
 			['generalError', 'Failed to take a screenshot.'],
+			['notSupportedDriver', 'Screenshots are not supported on this driver'],
 		].forEach(([errorType, expectedMessage]) => {
 			it(`for "${errorType}" expected message: "${expectedMessage}"`, () => {
 				assert.throws(
@@ -458,7 +459,7 @@ describe('socket chain helpers', () => {
 					}),
 					err => err instanceof SuitestError &&
 						err.code === SuitestError.EVALUATION_ERROR &&
-						err.message.includes(expectedMessage)
+						err.message.includes(expectedMessage),
 				);
 			});
 		});
