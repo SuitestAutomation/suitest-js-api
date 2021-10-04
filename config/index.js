@@ -22,18 +22,16 @@ const overridableFields = [
 	'includeChangelist',
 ];
 
-const configurableFields = ['logLevel', 'disallowCrashReports', 'defaultTimeout'];
-
-const serverAdress = process.env[envVars.SUITEST_BE_SERVER] || 'the.suite.st';
+const serverAddress = process.env[envVars.SUITEST_BE_SERVER] || 'the.suite.st';
 
 const main = Object.freeze({
-	apiUrl: `https://${serverAdress}/api/public/v4`,
+	apiUrl: `https://${serverAddress}/api/public/v4`,
 	disallowCrashReports: false,
 	logLevel: logLevels.normal,
 	sentryDsn,
 	timestamp: timestamp.default,
 	defaultTimeout: DEFAULT_TIMEOUT,
-	wsUrl: `wss://${serverAdress}/api/public/v4/socket`,
+	wsUrl: `wss://${serverAddress}/api/public/v4/socket`,
 });
 
 const test = Object.freeze({
@@ -72,7 +70,6 @@ const configFactory = () => {
 	return {
 		config,
 		overridableFields,
-		configurableFields,
 		extend,
 		override,
 	};

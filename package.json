@@ -24,7 +24,7 @@
   "homepage": "https://suite.st/",
   "license": "MIT",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=14.0.0"
   },
   "bin": {
     "suitest": "bin/suitest"

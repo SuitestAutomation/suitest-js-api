@@ -26,7 +26,7 @@ describe('suitest test launcher', function() {
 			processExecPath(process.execPath),
 			[
 				testLauncherTest, 'run', '--token-id', 'id', '--token-password', 'password',
-				'--device-id', 'deviceid', '--app-config-id', 'configid', 'npm', 'version',
+				'--device-id', 'deviceId', '--app-config-id', 'configid', 'npm', 'version',
 			],
 			{shell: true},
 		).once('exit', (exitCode) => {

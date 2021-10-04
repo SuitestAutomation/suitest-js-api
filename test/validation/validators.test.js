@@ -50,7 +50,71 @@ describe('validators', () => {
 				name: 'string',
 			}],
 		}], {
-			message: 'Invalid input should have required property \'key\'',
+			message: 'Invalid input .configVariables[0] should have required property \'key\'',
 		}, 'invalid configOverride object');
+	});
+
+	it('should validate configuration presets', () => {
+		const baseArg = {
+			tokenId: '1',
+			tokenPassword: '1',
+			preset: ['preset1'],
+		};
+
+		assert.throws(
+			() => validate(
+				validators.TEST_LAUNCHER_TOKEN,
+				{
+					...baseArg,
+					presets: {
+						preset1: {config: false, device: null},
+					},
+				},
+			),
+			/^SuitestError: Invalid input/,
+			'Should validate preset config and device',
+		);
+		assert.throws(
+			() => validate(
+				validators.TEST_LAUNCHER_TOKEN,
+				{
+					...baseArg,
+					presets: {
+						preset1: {
+							config: {
+								configId: false,
+							},
+							device: {
+								deviceId: 123,
+							},
+						},
+					},
+				},
+			),
+			/^SuitestError: Invalid input/,
+			'Should validate preset config.configId and device.deviceId',
+		);
+		assert.throws(
+			() => validate(
+				validators.TEST_LAUNCHER_TOKEN,
+				{
+					...baseArg,
+					presets: {
+						preset1: {
+							config: {
+								configId: 'config-id1',
+								notAllowedProp: 'some val',
+							},
+							device: {
+								deviceId: 'device-id1',
+								anotherNotAllowedProp: 'some val',
+							},
+						},
+					},
+				},
+			),
+			/^SuitestError: Invalid input/,
+			'Should not additional fields to preset config and device if they are objects',
+		);
 	});
 });

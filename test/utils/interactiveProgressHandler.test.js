@@ -1,10 +1,10 @@
 const Raven = require('raven');
 const assert = require('assert');
-const {handleProgress} = require('../../lib/utils/interactiveProgressHandler');
+const {handleProgress} = require('../../lib/utils/progressHandler');
 const translate = require('../../lib/utils/translateResults');
 const sinon = require('sinon');
 
-describe('interactiveProgressHandler', () => {
+describe('progressHandler', () => {
 	let translateProgress = () => null;
 
 	beforeEach(() => {

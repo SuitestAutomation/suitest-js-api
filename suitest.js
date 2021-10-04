@@ -1,6 +1,5 @@
 require('./lib/utils/sentry/Raven');
-const util = require('util');
-const texts = require('./lib/texts');
+const {clone} = require('ramda');
 
 // Commands
 const {openSession} = require('./lib/commands/openSession');
@@ -83,11 +82,10 @@ class SUITEST_API extends EventEmitter {
 		this.getPairedDevice = () => this.pairedDeviceContext.context;
 		this.configuration = configFactory();
 		this.config = this.configuration.config;
-		// TODO: remove and update UT.
-		this.configure = util.deprecate(this.configuration.override, texts.warnConfigureDeprecation());
-		this.configuration.configurableFields.map(fieldName => {
-			this[`set${fieldName[0].toUpperCase()}${fieldName.slice(1)}`] = (val) => this.configuration.override({[fieldName]: val});
-		});
+		this.setDefaultTimeout = (defaultTimeout) => this.configuration.override({defaultTimeout});
+		this.setContinueOnFatalError = (continueOnFatalError) => this.configuration.override({continueOnFatalError});
+		this.setDisallowCrashReports = (disallowCrashReports) => this.configuration.override({disallowCrashReports});
+		this.setLogLevel = (logLevel) => this.configuration.override({logLevel});
 
 		// creating methods based on instance dependencies
 		this.logger = createLogger(this.configuration.config, this.pairedDeviceContext);
@@ -117,7 +115,7 @@ class SUITEST_API extends EventEmitter {
 		const {jsExpression, jsExpressionAssert} = jsExpressionFactory(this);
 		const {networkRequest, networkRequestAssert} = networkRequestFactory(this);
 		const {video, videoAssert} = videoFactory(this);
-		const {element, elementAssert} = elementFactory(this, video);
+		const {element, elementAssert} = elementFactory(this);
 		const {playstationVideo, playstationVideoAssert} = playstationVideoFactory(this);
 		const {pollUrl, pollUrlAssert} = pollUrlFactory(this);
 		const {runTestAssert} = runTestFactory(this);
@@ -250,7 +248,7 @@ class SUITEST_API extends EventEmitter {
 	}
 
 	getConfig() {
-		return {...this.configuration.config};
+		return clone(this.configuration.config);
 	}
 }
 

@@ -52,16 +52,10 @@ declare namespace suitest {
 		setAppConfig(configId: string, options?: ConfigOverride): Promise<void|SuitestError>;
 		pairDevice(deviceId: string): Promise<DeviceData|SuitestError>;
 		releaseDevice(): Promise<void|SuitestError>;
-		interactive(options?: ReplOptions): Promise<void>;
+		startREPL(options?: ReplOptions): Promise<void>;
 
 		// config
 		getConfig(): ConfigureOptions;
-
-		// TODO: remove it and update UT
-		/**
-		 * @deprecated use separate methods for changing configuration properties
-		 */
-		configure(config: Partial<ConfigureOptions>): void;
 		setDefaultTimeout(timeout: ConfigureOptions['defaultTimeout']): void;
 		setContinueOnFatalError(continueOnFatalError: ConfigureOptions['continueOnFatalError']): void;
 		setDisallowCrashReports(disallowCrashReports: ConfigureOptions['disallowCrashReports']): void;
@@ -281,10 +275,6 @@ declare namespace suitest {
 		defaultTimeout: number;
 	}
 
-	interface ResponseError {
-		errorType: string;
-	}
-
 	interface Context {
 		context: unknown;
 		setContext(context: unknown): void;
@@ -320,8 +310,6 @@ declare namespace suitest {
 		size?: string,
 		color?: string,
 		index?: number,
-		video?: true,
-		psVideo?: true,
 	}
 
 	type ScreenOrientationValues =

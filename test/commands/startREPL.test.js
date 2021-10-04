@@ -5,9 +5,9 @@ const repl = require('../../lib/testLauncher/repl');
 const texts = require('../../lib/texts');
 const suitest = require('../../index');
 const {logger} = suitest;
-const interactive = require('../../lib/commands/interactive');
+const startREPL = require('../../lib/commands/startREPL');
 
-describe('interactive command', () => {
+describe('startREPL command', () => {
 	let suitestConfig;
 
 	before(() => {
@@ -35,18 +35,22 @@ describe('interactive command', () => {
 		// eslint-disable-next-line no-async-promise-executor
 		return new Promise(async resolve => {
 			startRepl = sinon.stub(repl, 'startRepl').callsFake(async() => {
-				await interactive();
+				await startREPL();
 				++replCalls;
-				assert.equal(replCalls, 1, 'Second call is ignored');
+				assert.strictEqual(replCalls, 1, 'Second call is ignored');
 				process.nextTick(resolve);
 			});
-			await interactive();
+			await startREPL();
 		}).then(async() => {
 			startRepl.restore();
 			startRepl = sinon.stub(repl, 'startRepl').returns(Promise.resolve());
 
-			await interactive();
-			assert.equal(replSessionEnded.callCount, 2, 'Repl went through exactly 2x although 3 attempts where made');
+			await startREPL();
+			assert.strictEqual(
+				replSessionEnded.callCount,
+				2,
+				'Repl went through exactly 2x although 3 attempts where made',
+			);
 		}).then(() => {
 			startRepl.restore();
 			replSessionEnded.restore();
@@ -54,17 +58,17 @@ describe('interactive command', () => {
 	});
 
 	it('should not give warning for single device and give warning for several devices', async() => {
-		const replWarnInteractive = sinon.stub(texts, 'replWarnInteractive');
+		const replWarn = sinon.stub(texts, 'replWarn');
 		const startRepl = sinon.stub(repl, 'startRepl').resolves(1);
 
-		await interactive();
-		assert.ok(!replWarnInteractive.called, 'Warning not displayed when runsOnSingleDevice is true');
+		await startREPL();
+		assert.ok(!replWarn.called, 'Warning not displayed when runsOnSingleDevice is true');
 		suitest.config.runsOnSingleDevice = false;
-		await interactive();
-		assert.ok(replWarnInteractive.called, 'Warning displayed when runsOnSingleDevice is false');
+		await startREPL();
+		assert.ok(replWarn.called, 'Warning displayed when runsOnSingleDevice is false');
 
 		startRepl.restore();
-		replWarnInteractive.restore();
+		replWarn.restore();
 	});
 
 	it('should print the welcome message describing all launch settings', async() => {
@@ -74,9 +78,9 @@ describe('interactive command', () => {
 		// eslint-disable-next-line max-len
 		const expected = 'Test execution has been paused for the interactive session\nNow you can:\n\n  1. Edit watched files - Suitest will reload them and execute the repeater\n     function every time they change on disk.\n  2. Use the prompt below to execute any JavaScript in real time.\n\nHere is your environment:\n\n  Current working dir: \u001b[37m' + __dirname + '\u001b[39m\n  Repeater function: \u001b[37mnone\u001b[39m\n  Available local variables: \u001b[37msuitest\u001b[39m\n  Watched files (relative to your working dir):\n    - \u001b[37m'+ path.join(__dirname, '/**/*.js') + '\u001b[39m\n\n';
 
-		await interactive();
+		await startREPL();
 
-		assert.equal(replWelcomeMessage.firstCall.returnValue, expected, 'Message is correct');
+		assert.strictEqual(replWelcomeMessage.firstCall.returnValue, expected, 'Message is correct');
 		startRepl.restore();
 		replWelcomeMessage.restore();
 	});
@@ -84,12 +88,12 @@ describe('interactive command', () => {
 	it('should set default parameters', async() => {
 		const startRepl = sinon.stub(repl, 'startRepl').resolves(1);
 
-		await interactive();
+		await startREPL();
 		const args = startRepl.firstCall.args[0];
 
-		assert.equal(args.cwd, __dirname, 'CWD set');
+		assert.strictEqual(args.cwd, __dirname, 'CWD set');
 		assert.ok(args.vars.suitest, 'Suitest var set');
-		assert.equal(args.watch, path.join(__dirname, '**/*.js'), 'Watch folder set');
+		assert.deepStrictEqual(args.watch, [path.join(__dirname, '**/*.js')], 'Watch folder set');
 		assert.ok(!args.repeater, 'Repeater not present');
 
 		startRepl.restore();
@@ -101,7 +105,7 @@ describe('interactive command', () => {
 		const fakeVar = {a: 1};
 		const repeater = a => a;
 
-		await interactive({
+		await startREPL({
 			watch: 'bububu',
 			vars: {fakeVar},
 			repeater,
@@ -109,10 +113,10 @@ describe('interactive command', () => {
 
 		const args = startRepl.firstCall.args[0];
 
-		assert.equal(args.cwd, __dirname, 'CWD set correctly');
-		assert.deepEqual(args.vars.fakeVar, fakeVar, 'User var set correctly');
-		assert.equal(args.watch, 'bububu', 'Watch parameter set correctly');
-		assert.equal(args.repeater, repeater, 'Repeater set correctly');
+		assert.strictEqual(args.cwd, __dirname, 'CWD set correctly');
+		assert.deepStrictEqual(args.vars.fakeVar, fakeVar, 'User var set correctly');
+		assert.deepStrictEqual(args.watch, ['bububu'], 'Watch parameter set correctly');
+		assert.strictEqual(args.repeater, repeater, 'Repeater set correctly');
 
 		startRepl.restore();
 	});
