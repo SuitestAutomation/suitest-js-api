@@ -30,6 +30,10 @@ describe('SuitestLauncher', () => {
 		await testServer.restart();
 	});
 
+	afterEach(() => {
+		logger.error.resetHistory();
+	});
+
 	after(async() => {
 		mockSpawn.restore();
 		await testServer.stop();
@@ -147,5 +151,51 @@ describe('SuitestLauncher', () => {
 		assert(process.exit.calledWith(1));
 		assert(logger.error.called);
 		sinon.assert.calledWith(logger.error, 'Presets thirdPreset, fourthPreset were not found in your configuration');
+	});
+
+	it('should exit runTokenSession when presets have invalid format', async() => {
+		const suitestLauncher = new TestLauncher({
+			tokenId: '1',
+			tokenPassword: '1',
+			preset: ['preset1'],
+			presets: {
+				preset1: {config: false, device: null},
+				preset2: {
+					device: 'device-id1',
+					config: 'config-id2',
+				},
+			},
+		}, ['npm', '--version']);
+
+		await suitestLauncher.runTokenSession();
+
+		assert(process.exit.calledWith(1));
+		assert.match(
+			logger.error.firstCall.firstArg.toString(),
+			/SuitestError: Invalid input provided for 'suitest token' command/,
+		);
+	});
+
+	it('should fail with error when provided device id not exists (devices response is empty)', async() => {
+		const devicesDetailsNock = nock(config.apiUrl)
+			.get(makeUrlFromArray([endpoints.devices, null, {limit: 100}]))
+			.reply(200, {
+				values: [],
+			});
+		const suitestLauncher = new TestLauncher({
+			tokenId: '1',
+			tokenPassword: '1',
+			deviceId: 'unknown-id1',
+			appConfigId: 'config-id1',
+		}, ['npm', '--version']);
+
+		await suitestLauncher.runTokenSession();
+
+		assert.ok(devicesDetailsNock.isDone(), 'device details request');
+		assert(process.exit.calledWith(1));
+		assert.match(
+			logger.error.firstCall.firstArg.toString(),
+			/SuitestError: There no devices associated with current configuration/,
+		);
 	});
 });
