@@ -195,7 +195,7 @@ describe('SuitestLauncher', () => {
 		assert(process.exit.calledWith(1));
 		assert.match(
 			logger.error.firstCall.firstArg.toString(),
-			/SuitestError: There no devices associated with current configuration/,
+			/SuitestError: There are no devices associated with current configuration/,
 		);
 	});
 });
