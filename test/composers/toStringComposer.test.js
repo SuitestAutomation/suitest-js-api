@@ -19,4 +19,29 @@ describe('toString Composer', () => {
 		assert.strictEqual(toStringDescriptor.writable, false);
 		assert.strictEqual(toStringDescriptor.configurable, false);
 	});
+
+	it('should call underlying callback and return the result', () => {
+		const data = {};
+		const json = {
+			type: 'eval',
+			request: {
+				type: 'assert',
+				condition: {
+					subject: {
+						type: 'element',
+						apiId: 'apiId',
+					},
+					type: '!exists',
+				},
+				timeout: 2000,
+			},
+		};
+		const chain = {};
+		const callback = sinon.spy(() => json);
+
+		Object.defineProperties(chain, makeToStringComposer(callback)(suitest, data, chain));
+
+		// just check that string returned for avoid test failing if @suitest/translate will update translations
+		assert.deepStrictEqual(typeof chain.toString(), 'string');
+	});
 });

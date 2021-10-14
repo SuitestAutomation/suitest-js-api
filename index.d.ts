@@ -76,7 +76,7 @@ declare namespace suitest {
 		application(): ApplicationChain;
 		clearAppData(): ClearAppDataChain;
 		cookie(cookieName: string): CookieChain;
-		element(elementSelector: ElementSelector | string): ElementChain;
+		element(elementSelector: ElementSelector[] | ElementSelector | string): ElementChain;
 		video(): VideoChain;
 		psVideo(): PlayStationVideoChain;
 		executeCommand(jsCode: string): ExecuteCommandChain;
@@ -173,7 +173,7 @@ declare namespace suitest {
 		application(): ApplicationChain;
 		clearAppData(): ClearAppDataChain;
 		cookie(cookieName: string): CookieChain;
-		element(elementSelector: ElementSelector | string): ElementChain;
+		element(elementSelector: ElementSelector[] | ElementSelector | string): Omit<ElementChain, 'getCssProperties' | 'handle' | 'getAttributes'>;
 		video(): VideoChain;
 		psVideo(): PlayStationVideoChain;
 		executeCommand(jsCode: string): ExecuteCommandChain;
@@ -354,12 +354,16 @@ declare namespace suitest {
 		apiId?: string;
 		css?: string,
 		xpath?: string,
+		handle?: string,
 		attributes?: string,
 		text?: string,
+		linkText?: string,
+		partialLinkText?: string,
 		position?: string,
 		size?: string,
 		color?: string,
 		index?: number,
+		active?: true,
 		video?: true,
 		psVideo?: true,
 	}

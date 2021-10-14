@@ -1,17 +1,14 @@
 const assert = require('assert');
 const suitest = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
-const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const {
 	element,
 	elementAssert,
 	toJSON,
-	beforeSendMsg,
 } = require('../../lib/chains/elementChain')(suitest, suitest.video);
 const {VALUE, ELEMENT_PROP} = require('../../lib/constants/element');
 const VISIBILITY_STATE = require('../../lib/constants/visibilityState');
 const {PROP_COMPARATOR, SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
-const sinon = require('sinon');
 
 describe('Element chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -337,6 +334,48 @@ describe('Element chain', () => {
 		assert.strictEqual(typeof chain.doesNot, 'undefined');
 		assert.strictEqual(typeof chain.isNot, 'undefined');
 		assert.strictEqual(typeof chain.visible, 'function');
+	});
+
+	it('should generate correct selectors', () => {
+		assert.deepStrictEqual(
+			element([{css: '#app'}, {css: 'div'}, {css: 'span'}]).toJSON(),
+			{
+				subject: {
+					selector: [
+						{css: '#app'},
+						{css: 'div'},
+						{css: 'span'},
+					],
+					type: 'elementProps',
+				},
+				type: 'query',
+			},
+			'should generate array of selectors',
+		);
+
+		assert.deepStrictEqual(
+			element({css: 'body'}).toJSON(),
+			{
+				subject: {
+					selector: {css: 'body'},
+					type: 'elementProps',
+				},
+				type: 'query',
+			},
+			'should generate css selector',
+		);
+
+		assert.deepStrictEqual(
+			element('element-id').toJSON(),
+			{
+				subject: {
+					selector: {apiId: 'element-id'},
+					type: 'elementProps',
+				},
+				type: 'query',
+			},
+			'should generate apiId selector',
+		);
 	});
 
 	it('should generate correct socket message based on data', () => {
@@ -793,9 +832,85 @@ describe('Element chain', () => {
 		}, 'element has props js testLine');
 	});
 
+	it('generate correct ws message for requesting element handle', () => {
+		assert.deepStrictEqual(toJSON({
+			handle: {multiple: false},
+			selector: {handle: true},
+		}), {
+			subject: {
+				type: 'elementHandle',
+				multiple: false,
+				selector: {
+					handle: true,
+				},
+			},
+			type: 'query',
+		}, 'get single element handle');
+		assert.deepStrictEqual(toJSON({
+			handle: {multiple: true},
+			selector: {css: 'div'},
+		}), {
+			subject: {
+				type: 'elementHandle',
+				multiple: true,
+				selector: {
+					css: 'div',
+				},
+			},
+			type: 'query',
+		}, 'get multiple element handle');
+	});
+
+	it('generate correct ws message for requesting element attributes', () => {
+		assert.deepStrictEqual(toJSON({
+			selector: {active: true},
+			attributes: [],
+		}), {
+			subject: {
+				type: 'elementAttributes',
+				attributes: [],
+				selector: {
+					active: true,
+				},
+			},
+			type: 'query',
+		}, 'get all element attributes');
+		assert.deepStrictEqual(toJSON({
+			selector: {active: true},
+			attributes: ['id', 'class'],
+		}), {
+			subject: {
+				type: 'elementAttributes',
+				attributes: ['id', 'class'],
+				selector: {
+					active: true,
+				},
+			},
+			type: 'query',
+		}, 'get several element attributes');
+	});
+
+	it('generate correct ws message for requesting element css properties', () => {
+		assert.deepStrictEqual(toJSON({
+			selector: {active: true},
+			cssProps: ['height', 'width'],
+		}), {
+			subject: {
+				type: 'elementCssProps',
+				elementCssProps: ['height', 'width'],
+				selector: {
+					active: true,
+				},
+			},
+			type: 'query',
+		}, 'get element css properties');
+	});
+
 	it('should throw error in case of invalid input', () => {
 		testInputErrorSync(element, ['']);
 		testInputErrorSync(element, [{'noRequiredSelector': true}]);
+		testInputErrorSync(element, [[{}]]);
+		testInputErrorSync(element, [[{'noRequiredSelector': true}]]);
 	});
 
 	it('should define assert function', () => {
