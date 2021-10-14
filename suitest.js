@@ -1,16 +1,12 @@
 require('./lib/utils/sentry/Raven');
-const util = require('util');
-const texts = require('./lib/texts');
+const {clone} = require('ramda');
 
 // Commands
 const {openSession} = require('./lib/commands/openSession');
 const {closeSession} = require('./lib/commands/closeSession');
-const {startTestPack} = require('./lib/commands/startTestPack');
 const {pairDevice} = require('./lib/commands/pairDevice');
 const releaseDevice = require('./lib/commands/releaseDevice');
 const {setAppConfig} = require('./lib/commands/setAppConfig');
-const startTest = require('./lib/commands/startTest');
-const endTest = require('./lib/commands/endTest');
 
 // Chains
 const openAppFactory = require('./lib/chains/openAppChain');
@@ -84,13 +80,12 @@ class SUITEST_API extends EventEmitter {
 		this.appContext = new Context();
 		this.pairedDeviceContext = new Context();
 		this.getPairedDevice = () => this.pairedDeviceContext.context;
-		this.testContext = new Context();
 		this.configuration = configFactory();
 		this.config = this.configuration.config;
-		this.configure = util.deprecate(this.configuration.override, texts.warnConfigureDeprecation());
-		this.configuration.configurableFields.map(fieldName => {
-			this[`set${fieldName[0].toUpperCase()}${fieldName.slice(1)}`] = (val) => this.configuration.override({[fieldName]: val});
-		});
+		this.setDefaultTimeout = (defaultTimeout) => this.configuration.override({defaultTimeout});
+		this.setContinueOnFatalError = (continueOnFatalError) => this.configuration.override({continueOnFatalError});
+		this.setDisallowCrashReports = (disallowCrashReports) => this.configuration.override({disallowCrashReports});
+		this.setLogLevel = (logLevel) => this.configuration.override({logLevel});
 
 		// creating methods based on instance dependencies
 		this.logger = createLogger(this.configuration.config, this.pairedDeviceContext);
@@ -102,9 +97,6 @@ class SUITEST_API extends EventEmitter {
 		this.pairDevice = (...args) => pairDevice(this, ...args);
 		this.setAppConfig = (...args) => setAppConfig(this, ...args);
 		this.closeSession = (...args) => closeSession(this, ...args);
-		this.startTestPack = (...args) => startTestPack(this, ...args);
-		this.startTest = (...args) => startTest(this, ...args);
-		this.endTest = (...args) => endTest(this, ...args);
 		this.releaseDevice = (...args) => releaseDevice(this, ...args);
 
 		const {openApp, openAppAssert} = openAppFactory(this);
@@ -123,7 +115,7 @@ class SUITEST_API extends EventEmitter {
 		const {jsExpression, jsExpressionAssert} = jsExpressionFactory(this);
 		const {networkRequest, networkRequestAssert} = networkRequestFactory(this);
 		const {video, videoAssert} = videoFactory(this);
-		const {element, elementAssert} = elementFactory(this, video);
+		const {element, elementAssert} = elementFactory(this);
 		const {playstationVideo, playstationVideoAssert} = playstationVideoFactory(this);
 		const {pollUrl, pollUrlAssert} = pollUrlFactory(this);
 		const {runTestAssert} = runTestFactory(this);
@@ -256,7 +248,7 @@ class SUITEST_API extends EventEmitter {
 	}
 
 	getConfig() {
-		return {...this.configuration.config};
+		return clone(this.configuration.config);
 	}
 }
 

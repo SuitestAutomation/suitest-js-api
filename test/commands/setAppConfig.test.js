@@ -59,10 +59,10 @@ describe('setAppConfig', () => {
 			appId: 'appId',
 			versionId: 'versionId',
 		});
-		authContext.setContext(sessionConstants.AUTOMATED, 'deviceId');
+		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
 		await setAppConfig('configId', {url: 'url'});
 
-		assert.deepEqual(appContext.context, {
+		assert.deepStrictEqual(appContext.context, {
 			appId: 'appId',
 			versionId: 'versionId',
 			configId: 'configId',

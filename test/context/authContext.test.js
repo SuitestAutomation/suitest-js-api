@@ -13,36 +13,15 @@ describe('authContext', () => {
 		assert.ok('authorizeWs' in authContext);
 	});
 
-	it('should allow session request for guest user', async() => {
-		authContext.clear();
-		const authedReqObject = await authContext.authorizeHttp(endpoints.session, {method: 'POST'});
-
-		assert.ok(authedReqObject, 'authed');
-	});
-
-	it('should set access token and allow request with proper headers for accesToken context', async() => {
-		authContext.setContext(sessionConstants.ACCESS_TOKEN, 'tokenId', 'tokenPass');
-		const authedReqObject = await authContext.authorizeHttp(endpoints.testPackRunById, {method: 'GET'});
-
-		assert.ok(authedReqObject, 'authed');
-		assert.equal(authedReqObject.headers['X-TokenId'], 'tokenId', 'tokenId header');
-		assert.equal(authedReqObject.headers['X-TokenPassword'], 'tokenPass', 'tokenPass header');
-	});
-
-	it('should set access token and allow request with proper headers for automated session context', async() => {
-		authContext.setContext(sessionConstants.AUTOMATED, 'tokenId');
+	it('should set authorization header and allow request with proper headers for "token" session context', async() => {
+		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
 		const authedReqObject = await authContext.authorizeHttp(endpoints.devices, {method: 'GET'});
 
 		assert.ok(authedReqObject, 'authed');
-		assert.equal(authedReqObject.headers['deviceAccessToken'], 'tokenId', 'tokenId header');
-	});
-
-	it('should set access token and allow request with proper headers for interactive session context', async() => {
-		authContext.setContext(sessionConstants.INTERACTIVE, 'tokenId');
-		const authedReqObject = await authContext.authorizeHttp(endpoints.devices, {method: 'GET'});
-
-		assert.ok(authedReqObject, 'authed');
-		assert.equal(authedReqObject.headers['deviceAccessToken'], 'tokenId', 'tokenId header');
+		assert.strictEqual(
+			authedReqObject.headers['Authorization'],
+			`Basic ${Buffer.from('tokenId:tokenPassword').toString('base64')}`,
+		);
 	});
 
 	it('should not allow auth and throw correct error type for guest context', async() => {
@@ -50,25 +29,25 @@ describe('authContext', () => {
 
 		authContext.setContext(sessionConstants.GUEST);
 		try {
-			authedReqObject = await authContext.authorizeHttp(endpoints.testPackRunById, {method: 'GET'});
+			authedReqObject = await authContext.authorizeHttp(endpoints.testRun, {method: 'GET'});
 		} catch (error) {
 			assert.strictEqual(error.code, SuitestError.AUTH_NOT_ALLOWED, 'error code');
 		}
 
 		try {
 			await authContext.authorizeHttp(
-				endpoints.testPackRunById,
+				endpoints.testRun,
 				{method: 'GET'},
 				{
-					commandName: 'login',
+					commandName: 'testRun',
 					type: SuitestError.AUTH_FAILED,
-				}
+				},
 			);
 		} catch (error) {
 			assert.equal(error.code, SuitestError.AUTH_FAILED, 'error code');
 			assert.equal(
 				error.message,
-				'You\'re not allowed to execute .login function. ' +
+				'You\'re not allowed to execute .testRun function. ' +
 				'Make sure you\'re logged in with the correct credentials.',
 				'error code');
 		}
@@ -78,10 +57,10 @@ describe('authContext', () => {
 	it('should not allow auth when request key is allowed but method type is not', async() => {
 		let authedReqObject;
 
-		authContext.setContext(sessionConstants.GUEST);
+		authContext.setContext(sessionConstants.TOKEN);
 
 		try {
-			authedReqObject = await authContext.authorizeHttp(endpoints.session, {method: 'DELETE'});
+			authedReqObject = await authContext.authorizeHttp(endpoints.apps, {method: 'DELETE'});
 		} catch (error) {
 			assert.equal(error.code, SuitestError.AUTH_NOT_ALLOWED, 'error code');
 		}
