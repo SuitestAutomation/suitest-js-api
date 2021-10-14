@@ -12,13 +12,17 @@ const {
 } = require('../../lib/testLauncher/composeConfig');
 
 describe('testLauncher readUserConfig', () => {
+	afterEach(() => {
+		mock.restore();
+	});
+
 	it('readUserConfig method should process config file correctly', () => {
 		const configObj = {test: true};
 
 		sinon.stub(fs, 'readFileSync').returns(JSON.stringify(configObj));
 
 		try {
-			assert.deepEqual(readUserConfig(''), configObj, 'parsed successfully');
+			assert.deepStrictEqual(readUserConfig(''), configObj, 'parsed successfully');
 		} finally {
 			fs.readFileSync.restore();
 		}
@@ -28,7 +32,7 @@ describe('testLauncher readUserConfig', () => {
 		assert.throws(
 			() => readUserConfig('./__non-such-dir__/__non-such-file__.json'),
 			err => err.type === SuitestError.type,
-			'falied to read file'
+			'falied to read file',
 		);
 
 		sinon.stub(fs, 'readFileSync').returns('invalid json');
@@ -37,7 +41,7 @@ describe('testLauncher readUserConfig', () => {
 			assert.throws(
 				() => readUserConfig(''),
 				err => err.type === SuitestError.type,
-				'falied to parse json'
+				'falied to parse json',
 			);
 		} finally {
 			fs.readFileSync.restore();
@@ -52,18 +56,14 @@ describe('testLauncher readUserConfig', () => {
 			[mockPath]: configContent,
 		});
 
-		try {
-			assert.deepEqual(
-				readRcConfig(mockPath),
-				{
-					test: 'test',
-					configs: [mockPath],
-					config: mockPath,
-				},
-			);
-		} finally {
-			mock.restore();
-		}
+		assert.deepStrictEqual(
+			readRcConfig(mockPath),
+			{
+				test: 'test',
+				configs: [mockPath],
+				config: mockPath,
+			},
+		);
 	});
 
 	it('readRcConfig should return corresponding result without any arguments', () => {
@@ -74,26 +74,18 @@ describe('testLauncher readUserConfig', () => {
 			[mockPath]: configContent,
 		});
 
-		try {
-			assert.deepEqual(
-				readRcConfig(),
-				{
-					test: 'test',
-					configs: [mockPath],
-					config: mockPath,
-				},
-			);
-		} finally {
-			mock.restore();
-		}
+		assert.deepStrictEqual(
+			readRcConfig(),
+			{
+				test: 'test',
+				configs: [mockPath],
+				config: mockPath,
+			},
+		);
 	});
 
 	it('readRcConfig should return empty object', () => {
-		try {
-			assert.deepEqual(readRcConfig(), {});
-		} finally {
-			mock.restore();
-		}
+		assert.deepStrictEqual(readRcConfig(), {});
 	});
 
 	it('findExtendConfigs should process correctly', () => {
@@ -107,23 +99,20 @@ describe('testLauncher readUserConfig', () => {
 			[mockPathExtended]: configContentExtended,
 		});
 
-		try {
-			const configFile = readConfigFile(mockPathMain);
+		const configFile = readConfigFile(mockPathMain);
 
-			assert.deepEqual(
-				findExtendConfigs(
-					configFile,
-					mockPathExtended,
-					mockPathMain,
-					[mockPathMain],
-				),
-				{
-					testExtends: 'testExtends',
-					test: 'test1',
-				});
-		} finally {
-			mock.restore();
-		}
+		assert.deepStrictEqual(
+			findExtendConfigs(
+				configFile,
+				mockPathExtended,
+				mockPathMain,
+				[mockPathMain],
+			),
+			{
+				testExtends: 'testExtends',
+				test: 'test1',
+			},
+		);
 	});
 });
 
