@@ -1,6 +1,6 @@
 {
   "name": "suitest-js-api",
-  "version": "2.4.0",
+  "version": "3.0.0",
   "main": "index.js",
   "repository": "git@github.com:SuitestAutomation/suitest-js-api.git",
   "author": "Suitest <hello@suite.st>",
@@ -24,7 +24,7 @@
   "homepage": "https://suite.st/",
   "license": "MIT",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=14.0.0"
   },
   "bin": {
     "suitest": "bin/suitest"
@@ -74,6 +74,7 @@
     "express": "^4.17.1",
     "husky": "^4.2.5",
     "mocha": "^7.2.0",
+    "mock-fs": "^5.1.0",
     "mock-require": "^3.0.3",
     "mock-socket": "^7.1.0",
     "mock-spawn": "^0.2.6",
@@ -84,7 +85,7 @@
   },
   "dependencies": {
     "@suitest/smst-to-text": "^4.2.2",
-    "@suitest/translate": "^4.3.1",
+    "@suitest/translate": "^4.4.0",
     "@types/node": "^14.0.10",
     "ajv": "^6.12.2",
     "ansi-regex": "^5.0.0",
@@ -92,6 +93,9 @@
     "colors": "^1.4.0",
     "compare-versions": "^3.6.0",
     "escape-string-regexp": "4.0.0",
+    "ini": "^2.0.0",
+    "js-yaml": "^4.1.0",
+    "json5": "^2.2.0",
     "keypress": "^0.2.1",
     "moment": "^2.26.0",
     "node-fetch": "^2.6.0",
@@ -99,8 +103,6 @@
     "prettyjson": "^1.2.1",
     "ramda": "^0.27.0",
     "raven": "^2.6.2",
-    "rc": "^1.2.8",
-    "read": "^1.0.7",
     "semver": "^7.3.2",
     "stack-trace": "^0.0.10",
     "uuid": "8.1.0",

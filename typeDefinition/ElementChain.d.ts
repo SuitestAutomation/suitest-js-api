@@ -15,10 +15,14 @@ import {
 	MoveToModifier,
 	Repeatable,
 	Intervalable,
+	BaseEmptyChain,
 	BaseChain,
 	UntilModifier,
 	VisibleModifier,
 	VideoStateModifiers,
+	GetCssModifiers,
+	HandleModifier,
+	GetAttributesModifier,
 } from './modifiers';
 import {ElementProps} from "./constants/ElementProps";
 
@@ -34,7 +38,10 @@ export interface ElementChain extends
 	ScrollModifier<ElementRepeatIntervalChain>, // scroll
 	SwipeModifier<ElementRepeatIntervalChain>, // swipe
 	MoveToModifier<ElementEmptyChain>, // moveTo
-	VisibleModifier<ElementWithoutEvalChain>
+	VisibleModifier<ElementWithoutEvalChain>,// visible
+	GetCssModifiers<ElementGetPropertiesChain>, // getCssProperties
+	HandleModifier<ElementHandleChain>, // handle
+	GetAttributesModifier<ElementGetAttributesChain> // getAttributes
 {}
 
 // -matchers +timeout +negation
@@ -107,8 +114,30 @@ interface ElementEvalModifiers<T> extends
 	ElementMatchModifiers<T>
 {}
 
+/*
+ * @description represents return value of calling getCssProperties function.
+ */
+interface ElementGetPropertiesChain extends
+	BaseEmptyChain<ElementGetPropertiesChain, Record<string, string>, ElementAbandonedChain>
+{}
+
+/*
+ * @description represents return value of calling "handle" function.
+ */
+interface ElementHandleChain extends
+	BaseEmptyChain<ElementHandleChain, string[], ElementAbandonedChain>
+{}
+
+/*
+ * @description represents return value of calling "getAttributes" function.
+ */
+interface ElementGetAttributesChain extends
+	BaseEmptyChain<ElementGetAttributesChain, Record<string, string>, ElementAbandonedChain>
+{}
+
 interface ElementEvalModifiersWithNegation<T> extends
-	ExistsModifiers<T>
+	ExistsModifiers<T>,
+	VisibleModifier<T>
 {}
 
 interface ElementBaseQueryChain<TSelf> extends

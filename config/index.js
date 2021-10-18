@@ -11,26 +11,27 @@ const timestamp = require('../lib/constants/timestamp');
 const {validate, validators} = require('../lib/validation');
 const {invalidConfigObj} = require('../lib/texts');
 const {pickNonNil} = require('../lib/utils/common');
+const envVars = require('../lib/constants/enviroment');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
 const DEFAULT_TIMEOUT = 2000;
 
 const overridableFields = [
-	'tokenKey', 'tokenPassword', 'testPackId', 'concurrency', // launcher automated
-	'username', 'password', 'orgId', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk', // launcher intaractive
-	'logLevel', 'logDir', 'timestamp', 'configFile', 'disallowCrashReports', 'defaultTimeout', // launcher common
+	'tokenId', 'tokenPassword', 'concurrency', 'preset', 'presets', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk',
+	'logLevel', 'logDir', 'timestamp', 'configFile', 'disallowCrashReports', 'defaultTimeout', 'screenshotDir',
+	'includeChangelist',
 ];
 
-const configurableFields = ['logLevel', 'disallowCrashReports', 'defaultTimeout'];
+const serverAddress = process.env[envVars.SUITEST_BE_SERVER] || 'the.suite.st';
 
 const main = Object.freeze({
-	apiUrl: 'https://the.suite.st/api/public/v3',
+	apiUrl: `https://${serverAddress}/api/public/v4`,
 	disallowCrashReports: false,
 	logLevel: logLevels.normal,
 	sentryDsn,
 	timestamp: timestamp.default,
 	defaultTimeout: DEFAULT_TIMEOUT,
-	wsUrl: 'wss://the.suite.st/api/public/v3/socket',
+	wsUrl: `wss://${serverAddress}/api/public/v4/socket`,
 });
 
 const test = Object.freeze({
@@ -69,7 +70,6 @@ const configFactory = () => {
 	return {
 		config,
 		overridableFields,
-		configurableFields,
 		extend,
 		override,
 	};

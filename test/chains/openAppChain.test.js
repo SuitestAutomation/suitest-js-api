@@ -23,6 +23,7 @@ describe('Open app chain', () => {
 			composers.CLONE,
 			composers.GETTERS,
 			composers.TO_JSON,
+			composers.LAUNCH_MODE,
 		].sort(bySymbol), 'clear state');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
@@ -34,6 +35,7 @@ describe('Open app chain', () => {
 			composers.CLONE,
 			composers.GETTERS,
 			composers.TO_JSON,
+			composers.LAUNCH_MODE,
 		].sort(bySymbol), 'abandoned chain');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
@@ -45,6 +47,7 @@ describe('Open app chain', () => {
 			composers.CLONE,
 			composers.GETTERS,
 			composers.TO_JSON,
+			composers.LAUNCH_MODE,
 		].sort(bySymbol), 'assert chain');
 
 		const chain = openApp();
@@ -71,6 +74,14 @@ describe('Open app chain', () => {
 			},
 		}, 'eval with relative URL');
 
+		assert.deepStrictEqual(toJSON({launchMode: 'restart'}), {
+			type: 'eval',
+			request: {
+				type: 'openApp',
+				launchMode: 'restart',
+			},
+		}, 'eval with launch mode');
+
 		assert.deepStrictEqual(toJSON({isAssert: true}), {
 			type: 'testLine',
 			request: {
@@ -92,5 +103,6 @@ describe('Open app chain', () => {
 		assert.ok('clone' in chain);
 		assert.ok('abandon' in chain);
 		assert.ok('toJSON' in chain);
+		assert.ok('launchMode' in chain);
 	});
 });

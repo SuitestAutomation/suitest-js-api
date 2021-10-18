@@ -9,6 +9,7 @@ function processExecPath(execPath) {
 	return /\s+/.test(execPath) ? `"${execPath}"` : execPath;
 }
 
+// TODO: add tests for covering validation for configs with presets and without(using deviceId and appConfigId)
 describe('suitest test launcher', function() {
 	this.timeout(5000); // increase timeout limit for current test suite
 
@@ -20,82 +21,49 @@ describe('suitest test launcher', function() {
 		authContext.clear();
 	});
 
-	it('"automated" command should exit with exitCode 0', (done) => {
-		spawn(
-			processExecPath(process.execPath),
-			[testLauncherTest, 'automated', '-p', 'a', '-k', 'a', '--testPackId', '10', 'npm', '--version'],
-			{shell: true}
-		).once('exit', (exitCode) => {
-			assert.equal(exitCode, 0, 'should exit without error');
-			done();
-		});
-	});
-
-	it('"automated" command should exit with exitCode 1 if required args not provided', (done) => {
-		spawn(
-			processExecPath(process.execPath),
-			[testLauncherTest, 'automated'],
-			{shell: true}
-		).once('exit', (exitCode) => {
-			assert.equal(exitCode, 1, 'should exit without error');
-			done();
-		});
-	});
-
-	it('"automated" command should exit with exitCode 0 if --version option provided', (done) => {
-		spawn(
-			processExecPath(process.execPath),
-			[testLauncherTest, 'automated', '--version'],
-			{shell: true}
-		).once('exit', (exitCode) => {
-			assert.equal(exitCode, 0, 'should exit without error');
-			done();
-		});
-	});
-
-	it('"automated" command should exit with exitCode 1 if no devices in response', (done) => {
-		spawn(
-			processExecPath(process.execPath),
-			[testLauncherTest, 'automated', '-p', 'a', '-k', 'a', '--testPackId', '20', 'npm', '--version'],
-			{shell: true}
-		).once('exit', (exitCode) => {
-			assert.equal(exitCode, 1, 'should exit without error');
-			done();
-		});
-	});
-
-	it('"interactive" command should exit with exitCode 0', (done) => {
+	it('"run" command should exit with exitCode 0', (done) => {
 		spawn(
 			processExecPath(process.execPath),
 			[
-				testLauncherTest, 'interactive', '-u', 'userEmail', '-p', 'userPass',
-				'-o', 'orgId', '-c', 'configId', '-d', 'deviceId', 'npm', '--version',
+				testLauncherTest, 'run', '--token-id', 'id', '--token-password', 'password',
+				'--device-id', 'deviceId', '--app-config-id', 'configid', 'npm', 'version',
 			],
-			{shell: true}
+			{shell: true},
 		).once('exit', (exitCode) => {
-			assert.equal(exitCode, 0, 'should exit without error');
+			assert.strictEqual(exitCode, 0, 'should exit without error');
 			done();
 		});
 	});
 
-	it('"interactive" command should exit with exitCode 1 if required args not provided', (done) => {
+	it('"run" command should exit with exitCode 1 if required args not provided', (done) => {
 		spawn(
 			processExecPath(process.execPath),
-			[testLauncherTest, 'interactive', '-p', 'pass'],
-			{shell: true}
+			[testLauncherTest, 'run'],
+			{shell: true},
 		).once('exit', (exitCode) => {
-			assert.equal(exitCode, 1, 'should exit without error');
+			assert.strictEqual(exitCode, 1, 'should exit without error');
 			done();
 		});
 	});
 
-	it('"interactive" command should exit with exitCode 0 if calle with --help option', (done) => {
+	it('"run" command should exit with exitCode 0 if --version option provided', (done) => {
 		spawn(
 			processExecPath(process.execPath),
-			[testLauncherTest, 'interactive', '-h'],
-			{shell: true}
+			[testLauncherTest, 'run', '--version'],
+			{shell: true},
 		).once('exit', (exitCode) => {
-			assert.equal(exitCode, 0, 'start should exit without error');
+			assert.strictEqual(exitCode, 0, 'should exit without error');
+			done();
+		});
+	});
+
+	it('"run" command should exit with exitCode 0 if calle with --help option', (done) => {
+		spawn(
+			processExecPath(process.execPath),
+			[testLauncherTest, 'run', '-h'],
+			{shell: true},
+		).once('exit', (exitCode) => {
+			assert.strictEqual(exitCode, 0, 'start should exit without error');
 			done();
 		});
 	});
