@@ -16,7 +16,7 @@ describe('process-args', () => {
 		process.argv = [
 			'/Users/aaa/bin/iojs',
 			'/Users/aaa/bin/suitest.js',
-			'automated',
+			'run',
 			'--k',
 			'key',
 			'--p',
@@ -27,7 +27,7 @@ describe('process-args', () => {
 			'some arg',
 		];
 
-		assert.deepEqual(hideOwnArgs(), ['npm', 'test', '-s', 'some arg'], 'hidden lib arguments');
+		assert.deepStrictEqual(hideOwnArgs(), ['npm', 'test', '-s', 'some arg'], 'hidden lib arguments');
 	});
 
 	it('hideOwnArgs should not unshift execPath', () => {
@@ -35,7 +35,7 @@ describe('process-args', () => {
 		process.argv = [
 			'/Users/aaa/bin/iojs',
 			'/Users/aaa/bin/suitest.js',
-			'automated',
+			'run',
 			'--k',
 			'key',
 			'./testDir',
@@ -43,7 +43,7 @@ describe('process-args', () => {
 			'some arg',
 		];
 
-		assert.deepEqual(
+		assert.deepStrictEqual(
 			hideOwnArgs(),
 			['./testDir', '-s', 'some arg'],
 			'hidden lib arguments',
@@ -54,30 +54,30 @@ describe('process-args', () => {
 		process.argv = [
 			'/Users/aaa/bin/iojs',
 			'/Users/aaa/bin/suitest.js',
-			'automated',
+			'run',
 			'--k',
 			'key',
 			'--p',
 			'password',
 		];
 
-		assert.deepEqual(hideOwnArgs(), [], 'hidden lib arguments');
+		assert.deepStrictEqual(hideOwnArgs(), [], 'hidden lib arguments');
 	});
 
 	it('hideOwnArgs without additional arguments', () => {
 		process.argv = [
 			'/Users/aaa/bin/iojs',
 			'/Users/aaa/bin/suitest.js',
-			'automated',
+			'run',
 			'--k',
 			'key',
 			'--p',
 			'password',
 		];
 
-		assert.deepEqual(
+		assert.deepStrictEqual(
 			getOwnArgs(),
-			['automated', '--k', 'key', '--p', 'password'],
+			['run', '--k', 'key', '--p', 'password'],
 			'hidden lib arguments',
 		);
 	});
@@ -86,7 +86,7 @@ describe('process-args', () => {
 		process.argv = [
 			'/Users/aaa/bin/iojs',
 			'/Users/aaa/bin/suitest.js',
-			'automated',
+			'run',
 			'--k',
 			'key',
 			'--p',
@@ -97,9 +97,9 @@ describe('process-args', () => {
 			'some arg',
 		];
 
-		assert.deepEqual(
+		assert.deepStrictEqual(
 			getOwnArgs(),
-			['automated', '--k', 'key', '--p', 'password'],
+			['run', '--k', 'key', '--p', 'password'],
 			'hidden lib arguments',
 		);
 	});
@@ -108,17 +108,17 @@ describe('process-args', () => {
 		const argv = [
 			'/Users/aaa/bin/iojs',
 			'/Users/aaa/bin/suitest.js',
-			'automated',
+			'run',
 			'--inspect=true',
 		];
 
-		assert.deepEqual(
+		assert.deepStrictEqual(
 			parseOptions(argv),
 			{
 				_: [
 					'/Users/aaa/bin/iojs',
 					'/Users/aaa/bin/suitest.js',
-					'automated',
+					'run',
 				],
 				inspect: true,
 			},
@@ -130,17 +130,17 @@ describe('process-args', () => {
 		const argv = [
 			'/Users/aaa/bin/iojs',
 			'/Users/aaa/bin/suitest.js',
-			'automated',
+			'run',
 			'--inspect=9099',
 		];
 
-		assert.deepEqual(
+		assert.deepStrictEqual(
 			parseOptions(argv),
 			{
 				_: [
 					'/Users/aaa/bin/iojs',
 					'/Users/aaa/bin/suitest.js',
-					'automated',
+					'run',
 				],
 				inspect: 9099,
 			},
@@ -152,18 +152,18 @@ describe('process-args', () => {
 		const argv = [
 			'/Users/aaa/bin/iojs',
 			'/Users/aaa/bin/suitest.js',
-			'automated',
+			'run',
 			'--inspect',
 			'node',
 		];
 
-		assert.deepEqual(
+		assert.deepStrictEqual(
 			parseOptions(argv),
 			{
 				_: [
 					'/Users/aaa/bin/iojs',
 					'/Users/aaa/bin/suitest.js',
-					'automated',
+					'run',
 					'node',
 				],
 				inspect: true,
@@ -176,18 +176,18 @@ describe('process-args', () => {
 		const argv = [
 			'/Users/aaa/bin/iojs',
 			'/Users/aaa/bin/suitest.js',
-			'automated',
+			'run',
 			'--inspect-brk',
 			'node',
 		];
 
-		assert.deepEqual(
+		assert.deepStrictEqual(
 			parseOptions(argv),
 			{
 				_: [
 					'/Users/aaa/bin/iojs',
 					'/Users/aaa/bin/suitest.js',
-					'automated',
+					'run',
 					'node',
 				],
 				inspectBrk: true,

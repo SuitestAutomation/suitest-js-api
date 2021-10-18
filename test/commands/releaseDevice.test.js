@@ -47,21 +47,9 @@ describe('releaseDevice', () => {
 		}
 	});
 
-	it('should allow releaseDevice in automated and interactive session context, clear device context', async() => {
+	it('should allow releaseDevice in "token" session context, clear device context', async() => {
 		pairedDeviceContext.setContext('someContext');
-		authContext.setContext(sessionConstants.AUTOMATED, 'tokenId');
-		assert.strictEqual(pairedDeviceContext.context, 'someContext', 'device context set');
-		try {
-			const res = await releaseDevice();
-
-			assert.ok(!res, 'response void');
-			assert.strictEqual(pairedDeviceContext.context, null, 'device context cleared');
-		} catch (error) {
-			assert.ok(!error, 'error');
-		}
-
-		pairedDeviceContext.setContext('someContext');
-		authContext.setContext(sessionConstants.INTERACTIVE, 'tokenId');
+		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
 		assert.strictEqual(pairedDeviceContext.context, 'someContext', 'device context set');
 		try {
 			const res = await releaseDevice();

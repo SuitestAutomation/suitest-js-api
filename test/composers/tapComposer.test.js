@@ -32,6 +32,18 @@ describe('Tap composer', () => {
 		assert.deepStrictEqual(makeChain.firstCall.args[0], {tap: 'single'});
 	});
 
+	it('should process tap without arguments', () => {
+		const chain = {};
+		const data = {};
+		const makeChain = sinon.spy();
+
+		Object.defineProperties(chain, tapComposer(suitest, data, chain, makeChain));
+
+		chain.tap();
+
+		assert.deepStrictEqual(makeChain.firstCall.args[0], {tap: 'single'});
+	});
+
 	it('should set "long" tap type with duration', () => {
 		const chain = {};
 		const data = {};

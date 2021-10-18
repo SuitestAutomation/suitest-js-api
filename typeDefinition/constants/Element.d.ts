@@ -86,6 +86,8 @@ export type ElementPropTypes = {
 	EXTENDS:                   'extends',
 	UI_ELEMENT_ID:             'uiElementId',
 	INDEX:                     'index',
+	OFFSET_TOP:                'offsetTop',
+	OFFSET_LEFT:               'offsetLeft',
 };
 
 // Element properties comparators

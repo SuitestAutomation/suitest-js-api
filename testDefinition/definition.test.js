@@ -69,7 +69,8 @@ describe('suitest typescripts declarations tests', () => {
 		'pressButtonChain', 'sleepChain', 'windowChain',
 		'videoChain', 'playstationVideoChain', 'indexTest',
 		'runTestChain', 'takeScreenshotChain', 'saveScreenshotChain',
-		'setScreenOrientation', 'lockChain', 'unlockChain',
+		'setScreenOrientation', 'closeAppChain', 'suspendAppChain',
+		'lockChain', 'unlockChain',
 		// 'executeBrightScriptChain', 'brightScriptExpressionChain',
 	].forEach(fileName => {
 		it(`should compile example ${fileName}`, (done) => {

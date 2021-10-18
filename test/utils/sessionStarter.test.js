@@ -1,22 +1,23 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const {v1: uuid} = require('uuid');
-
+const nock = require('nock');
 const testServer = require('../../lib/utils/testServer');
 const webSockets = require('../../lib/api/webSockets');
-const wsContentTypes = require('../../lib/api/wsContentTypes');
 const SuitestApi = require('../../suitest');
-const suitest = new SuitestApi();
-const {pairedDeviceContext, authContext, appContext, testContext, logger} = suitest;
 const sessionStarter = require('../../lib/utils/sessionStarter');
-const bootstrapSession = (...args) => sessionStarter.bootstrapSession({...suitest, webSockets}, ...args);
-const sessionConstants = require('../../lib/constants/session');
-const nock = require('nock');
 const stubDeviceInfoFeed = require('../../lib/utils/testHelpers/mockDeviceInfo');
+const sessionTypes = require('../../lib/constants/modes');
+
+const suitest = new SuitestApi();
+const bootstrapSession = (...args) => sessionStarter.bootstrapSession({...suitest, webSockets}, ...args);
+const {pairedDeviceContext, authContext, appContext, logger} = suitest;
 
 const deviceId = uuid();
 
 describe('sessionStarter util', () => {
+	const suitestConfig = suitest.config;
+
 	before(async() => {
 		sinon.stub(logger, 'log');
 		sinon.stub(console, 'error');
@@ -32,7 +33,10 @@ describe('sessionStarter util', () => {
 		pairedDeviceContext.clear();
 		authContext.clear();
 		appContext.clear();
-		testContext.clear();
+		suitest.config = {
+			...suitestConfig,
+			sessionType: sessionTypes.TOKEN,
+		};
 	});
 
 	after(async() => {
@@ -46,76 +50,75 @@ describe('sessionStarter util', () => {
 		pairedDeviceContext.clear();
 		authContext.clear();
 		appContext.clear();
-		testContext.clear();
 	});
 
 	afterEach(() => {
 		logger.error.restore();
+		suitest.config = suitestConfig;
 		process.exit.restore();
 	});
 
-	it('should launch automated session and pair to device', async() => {
-		const removeResponseMatcher = testServer.mockRespondData(
-			obj => obj.content.type === wsContentTypes.pairDevice,
+	it('should throw with invalid config', async() => {
+		await bootstrapSession(deviceId, {sessionType: sessionTypes.TOKEN});
+		assert(process.exit.calledWith(1));
+		assert(logger.error.called);
+	});
+
+	it('should bootstrap session with preset', async() => {
+		suitest.config = {
+			...suitest.config,
+			sessionType: sessionTypes.TOKEN,
+			tokenId: 'token-id',
+			tokenPassword: 'token-password',
+			presets: {
+				firstPreset: {
+					device: 'deviceId',
+					config: 'configId',
+				},
+			},
+		};
+		await bootstrapSession({deviceId: 'device1', configId: 'config1', presetName: 'firstPreset'});
+		assert.deepStrictEqual(
+			suitest.appContext.context,
 			{
-				result: 'success',
-				appId: 'app-id',
-				versionId: 'version-id',
-				configId: 'config-id',
+				appId: undefined,
+				versionId: undefined,
+				configId: 'config1',
+				configOverride: {},
 			},
 		);
-		const res = await bootstrapSession(deviceId, {
-			sessionType: 'automated',
-			sessionToken: 'token',
-		});
-
-		assert.strictEqual(res, undefined);
-		assert.deepStrictEqual(appContext.context, {
-			appId: 'app-id',
-			versionId: 'version-id',
-			configId: 'config-id',
-		});
-		removeResponseMatcher();
 	});
 
-	it('should launch interactive session, pair to device, set app config', async() => {
-		const res = await bootstrapSession(deviceId, {
-			sessionType: 'interactive',
-			sessionToken: 'token',
-			appConfigId: 'configId',
-		});
+	it('should bootstrap session with preset and config override', async() => {
+		suitest.config = {
+			...suitest.config,
+			sessionType: sessionTypes.TOKEN,
+			tokenId: 'token-id',
+			tokenPassword: 'token-password',
+			presets: {
+				firstPreset: {
+					device: 'deviceId',
+					config: {
+						configId: 'configId',
+						url: 'new url',
+						suitestify: false,
+					},
+				},
+			},
+		};
 
-		assert.strictEqual(res, undefined);
-		assert.strictEqual(authContext.context, sessionConstants.INTERACTIVE);
-		assert.strictEqual(appContext.context.configId, 'configId');
-		assert.ok(Reflect.has(appContext.context, 'versionId'));
-		assert.ok(Reflect.has(appContext.context, 'appId'));
-		assert.strictEqual(pairedDeviceContext.context.deviceId, deviceId);
-	});
-
-	it('should launch interactive session in debug mode and send enableDebugMode ws request', async() => {
-		const res = await bootstrapSession(deviceId, {
-			sessionType: 'interactive',
-			sessionToken: 'token',
-			appConfigId: 'configId',
-			isDebugMode: true,
-		});
-
-		assert.strictEqual(res, undefined);
-		assert.strictEqual(authContext.context, sessionConstants.INTERACTIVE);
-		assert.strictEqual(appContext.context.configId, 'configId');
-		assert.strictEqual(pairedDeviceContext.context.deviceId, deviceId);
-	});
-
-	it('should throw with invalid config in automated mode', async() => {
-		await bootstrapSession(deviceId, {sessionType: 'automated'});
-		assert(process.exit.calledWith(1));
-		assert(logger.error.called);
-	});
-
-	it('should throw with invalid config in interactive mode', async() => {
-		await bootstrapSession(deviceId, {sessionType: 'interactive'});
-		assert(process.exit.calledWith(1));
-		assert(logger.error.called);
+		await bootstrapSession({deviceId: 'device1', configId: 'config1', presetName: 'firstPreset'});
+		assert.deepStrictEqual(
+			suitest.appContext.context,
+			{
+				appId: undefined,
+				versionId: undefined,
+				configId: 'config1',
+				configOverride: {
+					url: 'new url',
+					suitestify: false,
+				},
+			},
+		);
 	});
 });
