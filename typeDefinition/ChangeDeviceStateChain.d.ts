@@ -3,8 +3,8 @@ import {
 	BaseChain
 } from './modifiers';
 
-export interface LockChain extends
-	BaseChain<LockChain, LockSleepEvalResult, LockAbandonedChain>
+export interface ChangeDeviceStateChain extends
+	BaseChain<ChangeDeviceStateChain, LockSleepEvalResult, LockAbandonedChain>
 {}
 
 interface LockAbandonedChain extends AbstractChain {}
