@@ -1,5 +1,6 @@
 const assert = require('assert');
 const fs = require('fs');
+const path = require('path');
 const sinon = require('sinon');
 const mock = require('mock-fs');
 
@@ -68,7 +69,7 @@ describe('testLauncher readUserConfig', () => {
 
 	it('readRcConfig should return corresponding result without any arguments', () => {
 		const configContent = '{"test": "test"}';
-		const mockPath = `${process.cwd()}\\.suitestrc`;
+		const mockPath = path.join(process.cwd(), '.suitestrc');
 
 		mock({
 			[mockPath]: configContent,
@@ -90,7 +91,7 @@ describe('testLauncher readUserConfig', () => {
 
 	it('findExtendConfigs should process correctly', () => {
 		const configContentMain = '{"test": "test1"}';
-		const mockPathMain = `${process.cwd()}\\.suitestrc.json5`;
+		const mockPathMain = path.join(process.cwd(), '.suitestrc.json5');
 		const configContentExtended = '{"testExtends": "testExtends"}';
 		const mockPathExtended = './fakepath/.suitestrc.yaml';
 
