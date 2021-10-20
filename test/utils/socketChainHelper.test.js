@@ -474,7 +474,6 @@ describe('socket chain helpers', () => {
 
 		[
 			['notSupportedPlatform', 'Screenshots are not supported on this device.'],
-			['notSupportedIL', 'Screenshots are not supported with this instrumentation library version.'],
 			['timeout', 'Failed to take a screenshot due to timeout.'],
 			['generalError', 'Failed to take a screenshot.'],
 			['notSupportedDriver', 'Screenshots are not supported on this driver'],
