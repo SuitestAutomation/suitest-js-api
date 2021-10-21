@@ -87,7 +87,7 @@ declare namespace suitest {
 		press(keys: string[]): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		changeDeviceState(action: 'lock'): ChangeDeviceStateChain;
-		changeDeviceState(action: 'unlock', passcode?: number | string): ChangeDeviceStateChain;
+		changeDeviceState(action: 'unlock', passcode?: string): ChangeDeviceStateChain;
 		window(): WindowChain;
 
 		/**
@@ -194,7 +194,7 @@ declare namespace suitest {
 		runTest(testId: string): RunTestChain;
 		sleep(milliseconds: number): SleepChain;
 		changeDeviceState(action: 'lock'): ChangeDeviceStateChain;
-		changeDeviceState(action: 'unlock', passcode?: number | string): ChangeDeviceStateChain;
+		changeDeviceState(action: 'unlock', passcode?: string): ChangeDeviceStateChain;
 		window(): WindowChain;
 		setScreenOrientation(orientation: ScreenOrientationValues): SetScreenOrientationChain;
 	}

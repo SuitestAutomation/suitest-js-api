@@ -18,6 +18,6 @@ async function changeDeviceStateChainTest() {
 
 
 	await suitest.changeDeviceState('lock');
-	await suitest.changeDeviceState('unlock', 111111);
+	await suitest.changeDeviceState('unlock', '111111');
 	await suitest.changeDeviceState('unlock', '<%passcode_from_config%>');
 }

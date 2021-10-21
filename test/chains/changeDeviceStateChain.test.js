@@ -75,14 +75,14 @@ describe('changeDeviceState chain', () => {
 				toJSON({
 					isAssert: true,
 					changeDeviceStateAction: 'unlock',
-					unlockPasscode: 1111,
+					unlockPasscode: '1111',
 				}),
 				{
 					type: 'testLine',
 					request: {
 						type: 'changeDeviceState',
 						action: 'unlock',
-						passcode: 1111,
+						passcode: '1111',
 					},
 				},
 				'type testLine unlock with passcode',
@@ -90,14 +90,14 @@ describe('changeDeviceState chain', () => {
 			assert.deepStrictEqual(
 				toJSON({
 					changeDeviceStateAction: 'unlock',
-					unlockPasscode: 1111,
+					unlockPasscode: '1111',
 				}),
 				{
 					type: 'eval',
 					request: {
 						type: 'changeDeviceState',
 						action: 'unlock',
-						passcode: 1111,
+						passcode: '1111',
 					},
 				},
 				'type eval unlock device with passcode',
@@ -143,6 +143,7 @@ describe('changeDeviceState chain', () => {
 		testInputErrorSync(changeDeviceState, ['lockk']);
 		testInputErrorSync(changeDeviceState, ['unlocckk']);
 		testInputErrorSync(changeDeviceState, ['unlock', '']);
+		testInputErrorSync(changeDeviceState, ['unlock', 123456]);
 		testInputErrorSync(changeDeviceState, ['unlock', null]);
 		testInputErrorSync(changeDeviceState, ['unlock', []]);
 		testInputErrorSync(changeDeviceState, ['unlock', {}]);
