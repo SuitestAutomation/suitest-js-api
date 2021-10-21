@@ -22,7 +22,7 @@ const typescriptCompilerOptions = {
 const getDiagnostics = name => {
 	const program = ts.createProgram(
 		[`./examplesTS/${name}.ts`],
-		typescriptCompilerOptions
+		typescriptCompilerOptions,
 	);
 
 	return ts.getPreEmitDiagnostics(program);
@@ -69,8 +69,8 @@ describe('suitest typescripts declarations tests', () => {
 		'pressButtonChain', 'sleepChain', 'windowChain',
 		'videoChain', 'playstationVideoChain', 'indexTest',
 		'runTestChain', 'takeScreenshotChain', 'saveScreenshotChain',
-		'setScreenOrientation', 'closeAppChain', 'suspendAppChain',
-		'lockChain', 'unlockChain',
+		'setScreenOrientationChain', 'closeAppChain', 'suspendAppChain',
+		'changeDeviceStateChain',
 		// 'executeBrightScriptChain', 'brightScriptExpressionChain',
 	].forEach(fileName => {
 		it(`should compile example ${fileName}`, (done) => {

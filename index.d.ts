@@ -17,8 +17,6 @@ import {PressButtonChain} from './typeDefinition/PressButton';
 import {VrcConstants} from './typeDefinition/constants/Vrc';
 import {RunTestChain} from './typeDefinition/RunTestChain';
 import {SleepChain} from './typeDefinition/SleepChain';
-import {LockChain} from './typeDefinition/LockChain';
-import {UnlockChain} from './typeDefinition/UnlockChain';
 import {VideoChain} from './typeDefinition/VideoChain';
 import {WindowChain} from './typeDefinition/WindowChain';
 import {VideoState} from './typeDefinition/constants/VideoState';
@@ -40,6 +38,7 @@ import {SetScreenOrientationChain} from './typeDefinition/SetScreenOrientationCh
 import {ScreenOrientation} from './typeDefinition/constants/ScreenOrientation';
 import {CloseAppChain} from './typeDefinition/CloseAppChain';
 import {SuspendAppChain} from './typeDefinition/SuspendAppChain';
+import {ChangeDeviceStateChain} from './typeDefinition/ChangeDeviceStateChain';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -87,8 +86,8 @@ declare namespace suitest {
 		press(key: string): PressButtonChain;
 		press(keys: string[]): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
-		lock(): LockChain;
-		unlock(passcode?: number): UnlockChain;
+		changeDeviceState(action: 'lock'): ChangeDeviceStateChain;
+		changeDeviceState(action: 'unlock', passcode?: string): ChangeDeviceStateChain;
 		window(): WindowChain;
 
 		/**
@@ -194,8 +193,8 @@ declare namespace suitest {
 		press(keys: string[]): PressButtonChain;
 		runTest(testId: string): RunTestChain;
 		sleep(milliseconds: number): SleepChain;
-		lock(): LockChain;
-		unlock(passcode: number): UnlockChain;
+		changeDeviceState(action: 'lock'): ChangeDeviceStateChain;
+		changeDeviceState(action: 'unlock', passcode?: string): ChangeDeviceStateChain;
 		window(): WindowChain;
 		setScreenOrientation(orientation: ScreenOrientationValues): SetScreenOrientationChain;
 	}

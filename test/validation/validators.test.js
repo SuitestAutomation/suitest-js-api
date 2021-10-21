@@ -3,6 +3,7 @@ const {
 	validatePositiveNumber,
 	validateNonEmptyStringOrUndefined,
 	validateStVarOrPositiveNumber,
+	validatePasscode,
 } = require('../../lib/validation/validators');
 const {validate, validators} = require('../../lib/validation');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
@@ -35,6 +36,28 @@ describe('validators', () => {
 		assert.throws(() => validateNonEmptyStringOrUndefined(null), /Error/);
 		assert.throws(() => validateNonEmptyStringOrUndefined(1), /Error/);
 		assert.throws(() => validateNonEmptyStringOrUndefined({}), /Error/);
+	});
+
+	it('should validate passcode', () => {
+		const passcodeNotStringError = /SuitestError: Invalid input passcode should be string/;
+
+		assert.throws(() => validatePasscode(123), passcodeNotStringError);
+		assert.throws(() => validatePasscode([]), passcodeNotStringError);
+		assert.throws(() => validatePasscode(null), passcodeNotStringError);
+		assert.throws(() => validatePasscode(undefined), passcodeNotStringError);
+		assert.throws(() => validatePasscode({}), passcodeNotStringError);
+		assert.throws(() => validatePasscode(false), passcodeNotStringError);
+
+		const passcodeWrongFormat = new RegExp(
+			'SuitestError: ' +
+			'Invalid input passcode should have number format or suitest configuration variable',
+		);
+
+		assert.throws(() => validatePasscode('asdfsad'), passcodeWrongFormat);
+		assert.throws(() => validatePasscode('11ds'), passcodeWrongFormat);
+		assert.throws(() => validatePasscode('sdf111'), passcodeWrongFormat);
+		assert.doesNotThrow(() => validatePasscode('11234'));
+		assert.doesNotThrow(() => validatePasscode('<%variable%>'));
 	});
 
 	it('should throw correct error message', () => {
