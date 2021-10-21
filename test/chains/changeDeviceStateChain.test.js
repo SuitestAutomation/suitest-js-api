@@ -142,7 +142,6 @@ describe('changeDeviceState chain', () => {
 		testInputErrorSync(changeDeviceState, ['unlocckk']);
 		testInputErrorSync(changeDeviceState, ['lockk']);
 		testInputErrorSync(changeDeviceState, ['unlocckk']);
-		testInputErrorSync(changeDeviceState, ['unlock', '']);
 		testInputErrorSync(changeDeviceState, ['unlock', 123456]);
 		testInputErrorSync(changeDeviceState, ['unlock', null]);
 		testInputErrorSync(changeDeviceState, ['unlock', []]);
