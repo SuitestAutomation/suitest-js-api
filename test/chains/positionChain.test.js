@@ -5,10 +5,7 @@ const {
 	position,
 	positionAssert,
 	toJSON,
-	beforeSendMsg,
 } = require('../../lib/chains/positionChain')(suitest);
-const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
-const sinon = require('sinon');
 
 describe('Position chain', () => {
 	it('should have all necessary modifiers', () => {

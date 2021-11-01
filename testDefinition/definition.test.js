@@ -22,7 +22,7 @@ const typescriptCompilerOptions = {
 const getDiagnostics = name => {
 	const program = ts.createProgram(
 		[`./examplesTS/${name}.ts`],
-		typescriptCompilerOptions
+		typescriptCompilerOptions,
 	);
 
 	return ts.getPreEmitDiagnostics(program);
@@ -70,6 +70,7 @@ describe('suitest typescripts declarations tests', () => {
 		'videoChain', 'playstationVideoChain', 'indexTest',
 		'runTestChain', 'takeScreenshotChain', 'saveScreenshotChain',
 		'setScreenOrientation', 'closeAppChain', 'suspendAppChain',
+		'relativePositionChain',
 		// 'executeBrightScriptChain', 'brightScriptExpressionChain',
 	].forEach(fileName => {
 		it(`should compile example ${fileName}`, (done) => {
