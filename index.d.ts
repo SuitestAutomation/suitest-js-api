@@ -38,6 +38,7 @@ import {SetScreenOrientationChain} from './typeDefinition/SetScreenOrientationCh
 import {ScreenOrientation} from './typeDefinition/constants/ScreenOrientation';
 import {CloseAppChain} from './typeDefinition/CloseAppChain';
 import {SuspendAppChain} from './typeDefinition/SuspendAppChain';
+import {RelativePosition} from './typeDefinition/RelativePositionChain';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -82,6 +83,7 @@ declare namespace suitest {
 		openUrl(absoluteUrl: string): OpenUrlChain;
 		pollUrl(url: string, response: string): PollUrlChain;
 		position(x: number, y: number): PositionChain;
+		relativePosition(x: number, y: number): RelativePosition;
 		press(key: string): PressButtonChain;
 		press(keys: string[]): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
@@ -186,6 +188,7 @@ declare namespace suitest {
 		openUrl(absoluteUrl: string): OpenUrlChain;
 		pollUrl(url: string, response: string): PollUrlChain;
 		position(x: number, y: number): PositionChain;
+		relativePosition(x: number, y: number): RelativePosition;
 		press(key: string): PressButtonChain;
 		press(keys: string[]): PressButtonChain;
 		runTest(testId: string): RunTestChain;
