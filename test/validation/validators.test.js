@@ -22,6 +22,7 @@ describe('validators', () => {
 	it('should validate number', () => {
 		assert.strictEqual(validateNumber(0), 0);
 		assert.strictEqual(validateNumber(1), 1);
+		assert.strictEqual(validateNumber(-1), -1);
 		assert.throws(
 			() => validateNumber('', 'someNumber'),
 			/SuitestError: Invalid input someNumber should be number/,
