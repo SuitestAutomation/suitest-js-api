@@ -20,6 +20,8 @@ export type VrcConstants = {
 	NUM_7:                   '7',
 	NUM_8:                   '8',
 	NUM_9:                   '9',
+	NEXT:                    'NEXT',
+	PREVIOUS:                'PREVIOUS',
 	FAST_FWD:                'FAST_FWD',
 	REWIND:                  'REWIND',
 	STOP:                    'STOP',
