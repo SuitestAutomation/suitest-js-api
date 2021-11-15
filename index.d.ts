@@ -53,6 +53,7 @@ declare namespace suitest {
 		pairDevice(deviceId: string): Promise<DeviceData|SuitestError>;
 		releaseDevice(): Promise<void|SuitestError>;
 		startREPL(options?: ReplOptions): Promise<void>;
+		getAppConfig(): Promise<AppConfiguration|SuitestError>;
 
 		// config
 		getConfig(): ConfigureOptions;
@@ -266,6 +267,14 @@ declare namespace suitest {
 
 	interface OpenSessionResult {
 		accessToken: string;
+	}
+
+	interface AppConfiguration {
+		name: string;
+		url: string;
+		suitestify: boolean;
+		domainList: string[];
+		variables: Record<string, string>;
 	}
 
 	interface ConfigureOptions {
