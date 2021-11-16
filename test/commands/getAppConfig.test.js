@@ -37,13 +37,14 @@ describe('getAppConfig', () => {
 	});
 
 	it('should return undefined if error occured', async() => {
-		mockWebSocket.mockResponse({result: 'error'});
-		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
-		appContext.setContext(true);
-
-		const result = await getAppConfig();
-
-		assert.strictEqual(result, undefined);
+		try {
+			mockWebSocket.mockResponse({result: 'error'});
+			authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
+			appContext.setContext(true);
+			await getAppConfig();
+		} catch (error) {
+			assert.ok(error, 'error');
+		}
 	});
 
 	it('should get correct app config', async() => {
