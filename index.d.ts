@@ -186,8 +186,8 @@ declare namespace suitest {
 		openUrl(absoluteUrl: string): OpenUrlChain;
 		pollUrl(url: string, response: string): PollUrlChain;
 		position(x: number, y: number): PositionChain;
-		press(key: string): PressButtonChain;
-		press(keys: string[]): PressButtonChain;
+		press(key: string, options: { longPressMs?: string | number }): PressButtonChain;
+		press(keys: string[], options: { longPressMs?: string | number }): PressButtonChain;
 		runTest(testId: string): RunTestChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
