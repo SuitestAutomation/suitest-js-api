@@ -477,6 +477,8 @@ describe('socket chain helpers', () => {
 			['timeout', 'Failed to take a screenshot due to timeout.'],
 			['generalError', 'Failed to take a screenshot.'],
 			['notSupportedDriver', 'Screenshots are not supported on this driver'],
+			// eslint-disable-next-line max-len
+			['screenshotFailed', 'Error while taking screenshot of device. Saved file does not exists or is not readable.'],
 		].forEach(([errorType, expectedMessage]) => {
 			it(`for "${errorType}" expected message: "${expectedMessage}"`, () => {
 				assert.throws(
