@@ -75,6 +75,7 @@ declare namespace suitest {
 		jsExpression(expression: Function): JsExpressionChain;
 		// executeBrightScript(brsCode: string): ExecuteBrightScriptChain;
 		// brightScriptExpression(expression: string): BrightScriptExpressionChain;
+		activeElement(): ElementChain;
 		openApp(relativeUrl?: string): OpenAppChain;
 		closeApp(): CloseAppChain;
 		suspendApp(): SuspendAppChain;

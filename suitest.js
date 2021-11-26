@@ -123,6 +123,7 @@ class SUITEST_API extends EventEmitter {
 		const {saveScreenshot} = saveScreenshotFactory(this);
 		const {setScreenOrientation, setScreenOrientationAssert} = setScreenOrientationFactory(this);
 
+		this.activeElement = () => element({active: true});
 		this.openApp = openApp;
 		this.closeApp = closeApp;
 		this.suspendApp = suspendApp;
