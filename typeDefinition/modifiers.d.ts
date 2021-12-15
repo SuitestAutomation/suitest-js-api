@@ -66,7 +66,7 @@ export interface TapModifier<T> {
 type Direction = 'up' | 'down' | 'left' | 'right';
 
 export interface ScrollModifier<T> {
-	scroll(direction: Direction, distance: number | string): T;
+	scroll(direction: Direction, distance?: number | string): T;
 }
 
 export interface SwipeModifier<T> {
