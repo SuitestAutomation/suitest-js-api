@@ -23,6 +23,7 @@ const cookieFactory = require('./lib/chains/cookieChain');
 const sleepFactory = require('./lib/chains/sleepChain');
 const pressButtonFactory = require('./lib/chains/pressButtonChain');
 const positionFactory = require('./lib/chains/positionChain');
+const relativePositionFactory = require('./lib/chains/relativePositionChain');
 const windowFactory = require('./lib/chains/windowChain');
 const executeCommandFactory = require('./lib/chains/executeCommandChain');
 const runTestFactory = require('./lib/chains/runTestChain');
@@ -112,6 +113,7 @@ class SUITEST_API extends EventEmitter {
 		const {sleep, sleepAssert} = sleepFactory(this);
 		const {pressButton, pressButtonAssert} = pressButtonFactory(this);
 		const {position, positionAssert} = positionFactory(this);
+		const {relativePosition, relativePositionAssert} = relativePositionFactory(this);
 		const {window, windowAssert} = windowFactory(this);
 		const {executeCommand, executeCommandAssert} = executeCommandFactory(this);
 		const {jsExpression, jsExpressionAssert} = jsExpressionFactory(this);
@@ -136,6 +138,7 @@ class SUITEST_API extends EventEmitter {
 		this.sleep = sleep;
 		this.press = pressButton;
 		this.position = position;
+		this.relativePosition = relativePosition;
 		this.window = window;
 		this.executeCommand = executeCommand;
 		// this.executeBrightScript = executeBrightScriptFactory(this).executeBrightScript;
@@ -182,6 +185,7 @@ class SUITEST_API extends EventEmitter {
 			sleep: sleepAssert,
 			press: pressButtonAssert,
 			position: positionAssert,
+			relativePosition: relativePositionAssert,
 			window: windowAssert,
 			executeCommand: executeCommandAssert,
 			// executeBrightScript: executeBrightScriptFactory(this).executeBrightScriptAssert,
