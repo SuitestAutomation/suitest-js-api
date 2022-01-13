@@ -278,6 +278,8 @@ declare namespace suitest {
 		suitestify: boolean;
 		domainList: string[];
 		variables: Record<string, string>;
+		platform: string;
+		isHtmlBased: boolean;
 	}
 
 	interface ConfigureOptions {

@@ -57,6 +57,8 @@ describe('getAppConfig', () => {
 					suitestify: true,
 					domainList: [],
 					variables: {},
+					platform: 'platform',
+					isHtmlBased: false,
 				},
 			},
 		);
@@ -71,6 +73,8 @@ describe('getAppConfig', () => {
 			suitestify: true,
 			domainList: [],
 			variables: {},
+			platform: 'platform',
+			isHtmlBased: false,
 		});
 	});
 });
