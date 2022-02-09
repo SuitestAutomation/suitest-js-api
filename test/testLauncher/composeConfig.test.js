@@ -85,6 +85,24 @@ describe('testLauncher readUserConfig', () => {
 		);
 	});
 
+	it('readRcConfig should return corresponding result if config file is locating in upper directory', () => {
+		const configContent = '{"test": "test"}';
+		const mockPath = path.join(process.cwd(), '../', '.suitestrc');
+
+		mock({
+			[mockPath]: configContent,
+		});
+
+		assert.deepStrictEqual(
+			readRcConfig(),
+			{
+				test: 'test',
+				configs: [mockPath],
+				config: mockPath,
+			},
+		);
+	});
+
 	it('readRcConfig should return empty object', () => {
 		assert.deepStrictEqual(readRcConfig(), {});
 	});
