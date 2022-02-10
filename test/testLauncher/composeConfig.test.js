@@ -100,7 +100,7 @@ describe('testLauncher readUserConfig', () => {
 		);
 	});
 
-	describe('Should find default paths on all platforms', () => {
+	describe('Should find default paths on Windows platforms', () => {
 		before(() => {
 			delete require.cache[require.resolve('../../lib/testLauncher/composeConfig')];
 
@@ -182,6 +182,23 @@ describe('testLauncher readUserConfig', () => {
 			);
 		});
 
+		it('readRcConfig should not search in linux specific directories if the platform is win32', () => {
+			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
+			const configContent = '{"test": "test1"}';
+			const mockPath1 = path.join('/etc', 'suitestrc');
+			const mockPath2 = path.join('/etc', 'suitest', 'config');
+
+			mock({
+				[mockPath1]: configContent,
+				[mockPath2]: configContent,
+			});
+
+			assert.deepStrictEqual(
+				readRcConfig(),
+				{},
+			);
+		});
+
 		after(() => {
 			sinon.restore();
 			process.env.USERPROFILE = this.userEnv;
@@ -192,7 +209,8 @@ describe('testLauncher readUserConfig', () => {
 	describe('Should find default paths on Linux platforms', () => {
 		before(() => {
 			delete require.cache[require.resolve('../../lib/testLauncher/composeConfig')];
-
+			this.homeEnv = process.env.HOME;
+			process.env.HOME = path.join('/home');
 			sinon.stub(process, 'platform').value('LinuxOS');
 		});
 
@@ -232,8 +250,81 @@ describe('testLauncher readUserConfig', () => {
 			);
 		});
 
+		it('readRcConfig should find config in %HOME%\\.config\\suitest\\config', () => {
+			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
+			const configContent = '{"test": "test3"}';
+			const mockPath = path.join(process.env.HOME, '.config', 'suitest', 'config');
+
+			mock({
+				[mockPath]: configContent,
+			});
+
+			assert.deepStrictEqual(
+				readRcConfig(),
+				{
+					test: 'test3',
+					config: mockPath,
+				},
+			);
+		});
+
+		it('readRcConfig should find config in %HOME%\\.config\\suitest', () => {
+			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
+			const configContent = '{"test": "test4"}';
+			const mockPath = path.join(process.env.HOME, '.config', 'suitest');
+
+			mock({
+				[mockPath]: configContent,
+			});
+
+			assert.deepStrictEqual(
+				readRcConfig(),
+				{
+					test: 'test4',
+					config: mockPath,
+				},
+			);
+		});
+
+		it('readRcConfig should find config in %HOME%\\.suitest\\config', () => {
+			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
+			const configContent = '{"test": "test5"}';
+			const mockPath = path.join(process.env.HOME, '.suitest', 'config');
+
+			mock({
+				[mockPath]: configContent,
+			});
+
+			assert.deepStrictEqual(
+				readRcConfig(),
+				{
+					test: 'test5',
+					config: mockPath,
+				},
+			);
+		});
+
+		it('readRcConfig should find config in %HOME%\\.suitestrc', () => {
+			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
+			const configContent = '{"test": "test6"}';
+			const mockPath = path.join(process.env.HOME, '.suitestrc');
+
+			mock({
+				[mockPath]: configContent,
+			});
+
+			assert.deepStrictEqual(
+				readRcConfig(),
+				{
+					test: 'test6',
+					config: mockPath,
+				},
+			);
+		});
+
 		after(() => {
 			sinon.restore();
+			process.env.HOME = this.homeEnv;
 			delete require.cache[require.resolve('../../lib/testLauncher/composeConfig')];
 		});
 	});
