@@ -100,7 +100,7 @@ describe('testLauncher readUserConfig', () => {
 		);
 	});
 
-	describe('Should find default paths on Windows platforms', () => {
+	describe('Should find default paths on all platforms', () => {
 		before(() => {
 			delete require.cache[require.resolve('../../lib/testLauncher/composeConfig')];
 
