@@ -66,7 +66,7 @@ describe('testLauncher readUserConfig', () => {
 		);
 	});
 
-	it('readRcConfig should return corresponding result without any arguments', () => {
+	it('readRcConfig should return corresponding result without any arguments in project dir', () => {
 		const configContent = '{"test": "test"}';
 		const mockPath = path.join(process.cwd(), '.suitestrc');
 
@@ -100,15 +100,105 @@ describe('testLauncher readUserConfig', () => {
 		);
 	});
 
-	describe('Should work on linux platforms', function() {
-		this.beforeAll(function() {
+	describe('Should find defult paths on Windows platforms', () => {
+		before(() => {
 			delete require.cache[require.resolve('../../lib/testLauncher/composeConfig')];
+
+			this.userEnv = process.env.USERPROFILE;
+			process.env.USERPROFILE = 'C:\\Users\\MotherOfDragons';
+
+			sinon.stub(process, 'platform').value('win32');
+		});
+
+		it('readRcConfig should find config in %USERPROFILE%\\.config\\suitest\\config', () => {
+			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
+			const configContent = '{"test": "test1"}';
+			const mockPath = path.join(process.env.USERPROFILE, '.config', 'suitest', 'config');
+
+			mock({
+				[mockPath]: configContent,
+			});
+
+			assert.deepStrictEqual(
+				readRcConfig(),
+				{
+					test: 'test1',
+					config: mockPath,
+				},
+			);
+		});
+
+		it('readRcConfig should find config in %USERPROFILE%\\.config\\suitest', () => {
+			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
+			const configContent = '{"test": "test2"}';
+			const mockPath = path.join(process.env.USERPROFILE, '.config', 'suitest');
+
+			mock({
+				[mockPath]: configContent,
+			});
+
+			assert.deepStrictEqual(
+				readRcConfig(),
+				{
+					test: 'test2',
+					config: mockPath,
+				},
+			);
+		});
+
+		it('readRcConfig should find config in %USERPROFILE%\\.suitest\\config', () => {
+			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
+			const configContent = '{"test": "test3"}';
+			const mockPath = path.join(process.env.USERPROFILE, '.suitest', 'config');
+
+			mock({
+				[mockPath]: configContent,
+			});
+
+			assert.deepStrictEqual(
+				readRcConfig(),
+				{
+					test: 'test3',
+					config: mockPath,
+				},
+			);
+		});
+
+		it('readRcConfig should find config in %USERPROFILE%\\.suitestrc', () => {
+			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
+			const configContent = '{"test": "test4"}';
+			const mockPath = path.join(process.env.USERPROFILE, '.suitestrc');
+
+			mock({
+				[mockPath]: configContent,
+			});
+
+			assert.deepStrictEqual(
+				readRcConfig(),
+				{
+					test: 'test4',
+					config: mockPath,
+				},
+			);
+		});
+
+		after(() => {
+			sinon.restore();
+			process.env.USERPROFILE = this.userEnv;
+			delete require.cache[require.resolve('../../lib/testLauncher/composeConfig')];
+		});
+	});
+
+	describe('Should find defult paths on Linux platforms', () => {
+		before(() => {
+			delete require.cache[require.resolve('../../lib/testLauncher/composeConfig')];
+
 			sinon.stub(process, 'platform').value('LinuxOS');
 		});
 
-		it('readRcConfig should return corresponding result without any arguments on Linux', () => {
+		it('readRcConfig should find config in /etc/suitestrc', () => {
 			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
-			const configContent = '{"test": "test"}';
+			const configContent = '{"test": "test1"}';
 			const mockPath = path.join('/etc', 'suitestrc');
 
 			mock({
@@ -118,13 +208,31 @@ describe('testLauncher readUserConfig', () => {
 			assert.deepStrictEqual(
 				readRcConfig(),
 				{
-					test: 'test',
+					test: 'test1',
 					config: mockPath,
 				},
 			);
 		});
 
-		this.afterAll(function() {
+		it('readRcConfig should find config in /etc/suitest/config', () => {
+			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
+			const configContent = '{"test": "test2"}';
+			const mockPath = path.join('/etc', 'suitest', 'config');
+
+			mock({
+				[mockPath]: configContent,
+			});
+
+			assert.deepStrictEqual(
+				readRcConfig(),
+				{
+					test: 'test2',
+					config: mockPath,
+				},
+			);
+		});
+
+		after(() => {
 			sinon.restore();
 			delete require.cache[require.resolve('../../lib/testLauncher/composeConfig')];
 		});
