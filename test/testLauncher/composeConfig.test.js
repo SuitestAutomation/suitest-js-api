@@ -61,7 +61,6 @@ describe('testLauncher readUserConfig', () => {
 			readRcConfig(mockPath),
 			{
 				test: 'test',
-				configs: [mockPath],
 				config: mockPath,
 			},
 		);
@@ -79,7 +78,6 @@ describe('testLauncher readUserConfig', () => {
 			readRcConfig(),
 			{
 				test: 'test',
-				configs: [mockPath],
 				config: mockPath,
 			},
 		);
@@ -97,10 +95,39 @@ describe('testLauncher readUserConfig', () => {
 			readRcConfig(),
 			{
 				test: 'test',
-				configs: [mockPath],
 				config: mockPath,
 			},
 		);
+	});
+
+	describe('Should work on linux platforms', function() {
+		this.beforeAll(function() {
+			delete require.cache[require.resolve('../../lib/testLauncher/composeConfig')];
+			sinon.stub(process, 'platform').value('LinuxOS');
+		});
+
+		it('readRcConfig should return corresponding result without any arguments on Linux', () => {
+			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
+			const configContent = '{"test": "test"}';
+			const mockPath = path.join('/etc', 'suitestrc');
+
+			mock({
+				[mockPath]: configContent,
+			});
+
+			assert.deepStrictEqual(
+				readRcConfig(),
+				{
+					test: 'test',
+					config: mockPath,
+				},
+			);
+		});
+
+		this.afterAll(function() {
+			sinon.restore();
+			delete require.cache[require.resolve('../../lib/testLauncher/composeConfig')];
+		});
 	});
 
 	it('readRcConfig should return empty object', () => {
@@ -134,4 +161,3 @@ describe('testLauncher readUserConfig', () => {
 		);
 	});
 });
-
