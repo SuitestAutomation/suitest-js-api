@@ -31,7 +31,7 @@ describe('testLauncher readUserConfig', () => {
 
 	it('readUserConfig method should throw correct errors', () => {
 		assert.throws(
-			() => readUserConfig('./__non-such-dir__/__non-such-file__.json'),
+			() => readUserConfig(path.join('.', '__non-such-dir__', '__non-such-file__.json')),
 			err => err.type === SuitestError.type,
 			'falied to read file',
 		);
@@ -51,7 +51,7 @@ describe('testLauncher readUserConfig', () => {
 
 	it('readRcConfig should return corresponding result when argument was past', () => {
 		const configContent = '{"test": "test"}';
-		const mockPath = './fakepath/.suitestrc';
+		const mockPath = path.join('.', 'fakepath', '.suitestrc');
 
 		mock({
 			[mockPath]: configContent,
@@ -100,12 +100,12 @@ describe('testLauncher readUserConfig', () => {
 		);
 	});
 
-	describe('Should find defult paths on Windows platforms', () => {
+	describe('Should find default paths on Windows platforms', () => {
 		before(() => {
 			delete require.cache[require.resolve('../../lib/testLauncher/composeConfig')];
 
 			this.userEnv = process.env.USERPROFILE;
-			process.env.USERPROFILE = 'C:\\Users\\MotherOfDragons';
+			process.env.USERPROFILE = path.join('C:', 'Users', 'MockUserProfile');
 
 			sinon.stub(process, 'platform').value('win32');
 		});
@@ -189,7 +189,7 @@ describe('testLauncher readUserConfig', () => {
 		});
 	});
 
-	describe('Should find defult paths on Linux platforms', () => {
+	describe('Should find default paths on Linux platforms', () => {
 		before(() => {
 			delete require.cache[require.resolve('../../lib/testLauncher/composeConfig')];
 
@@ -246,7 +246,7 @@ describe('testLauncher readUserConfig', () => {
 		const configContentMain = '{"test": "test1"}';
 		const mockPathMain = path.join(process.cwd(), '.suitestrc.json5');
 		const configContentExtended = '{"testExtends": "testExtends"}';
-		const mockPathExtended = './fakepath/.suitestrc.yaml';
+		const mockPathExtended = path.join('.', 'fakepath', 'suitestrc.yaml');
 
 		mock({
 			[mockPathMain]: configContentMain,
