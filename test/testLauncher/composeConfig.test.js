@@ -250,7 +250,7 @@ describe('testLauncher readUserConfig', () => {
 			);
 		});
 
-		it('readRcConfig should find config in %HOME%\\.config\\suitest\\config', () => {
+		it('readRcConfig should find config in ~/.config/suitest/config', () => {
 			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
 			const configContent = '{"test": "test3"}';
 			const mockPath = path.join(process.env.HOME, '.config', 'suitest', 'config');
@@ -268,7 +268,7 @@ describe('testLauncher readUserConfig', () => {
 			);
 		});
 
-		it('readRcConfig should find config in %HOME%\\.config\\suitest', () => {
+		it('readRcConfig should find config in ~/.config/suitest', () => {
 			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
 			const configContent = '{"test": "test4"}';
 			const mockPath = path.join(process.env.HOME, '.config', 'suitest');
@@ -286,7 +286,7 @@ describe('testLauncher readUserConfig', () => {
 			);
 		});
 
-		it('readRcConfig should find config in %HOME%\\.suitest\\config', () => {
+		it('readRcConfig should find config in ~/.suitest/config', () => {
 			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
 			const configContent = '{"test": "test5"}';
 			const mockPath = path.join(process.env.HOME, '.suitest', 'config');
@@ -304,7 +304,7 @@ describe('testLauncher readUserConfig', () => {
 			);
 		});
 
-		it('readRcConfig should find config in %HOME%\\.suitestrc', () => {
+		it('readRcConfig should find config in ~/.suitestrc', () => {
 			const {readRcConfig} = require('../../lib/testLauncher/composeConfig');
 			const configContent = '{"test": "test6"}';
 			const mockPath = path.join(process.env.HOME, '.suitestrc');
