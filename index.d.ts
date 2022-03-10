@@ -85,8 +85,8 @@ declare namespace suitest {
 		pollUrl(url: string, response: string): PollUrlChain;
 		position(x: number, y: number): PositionChain;
 		relativePosition(x: number, y: number): RelativePosition;
-		press(key: string): PressButtonChain;
-		press(keys: string[]): PressButtonChain;
+		press(key: string, options?: { longPressMs?: string | number }): PressButtonChain;
+		press(keys: string[], options?: { longPressMs?: string | number }): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
 
@@ -190,8 +190,8 @@ declare namespace suitest {
 		pollUrl(url: string, response: string): PollUrlChain;
 		position(x: number, y: number): PositionChain;
 		relativePosition(x: number, y: number): RelativePosition;
-		press(key: string): PressButtonChain;
-		press(keys: string[]): PressButtonChain;
+		press(key: string, options?: { longPressMs?: string | number }): PressButtonChain;
+		press(keys: string[], options?: { longPressMs?: string | number }): PressButtonChain;
 		runTest(testId: string): RunTestChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
