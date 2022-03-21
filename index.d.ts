@@ -232,16 +232,7 @@ declare namespace suitest {
 	interface DeviceData {
 		id: string;
 		firmware: string;
-		deviceMeta: {
-			codeName: string;
-			deviceType: string;
-		};
-		status: {
-			type: string;
-			canPair: boolean;
-		};
-		platforms: string[];
-		workingPlatforms: string[];
+		modelId: string;
 	}
 
 	interface ConfigOverride {
