@@ -38,6 +38,7 @@ import {SetScreenOrientationChain} from './typeDefinition/SetScreenOrientationCh
 import {ScreenOrientation} from './typeDefinition/constants/ScreenOrientation';
 import {CloseAppChain} from './typeDefinition/CloseAppChain';
 import {SuspendAppChain} from './typeDefinition/SuspendAppChain';
+import {LaunchMode} from './typeDefinition/constants/LaunchMode';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -150,6 +151,7 @@ declare namespace suitest {
 		TAP_TYPES: TapTypes;
 		DIRECTIONS: Directions;
 		SCREEN_ORIENTATION: ScreenOrientation;
+		LAUNCH_MODE: LaunchMode;
 
 		authContext: AuthContext;
 		appContext: Context;

@@ -1,12 +1,12 @@
 import {
 	AbstractChain,
 	BaseChain,
-	LaunchMode
+	LaunchModeModifier
 } from './modifiers';
 
 export interface OpenAppChain extends
 	BaseChain<OpenAppChain, OpenAppEvalResult, OpenAppAbandonedChain>,
-	LaunchMode<OpenAppChain>
+	LaunchModeModifier<OpenAppChain>
 {}
 
 interface OpenAppAbandonedChain extends AbstractChain {}
