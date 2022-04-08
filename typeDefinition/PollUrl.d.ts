@@ -9,4 +9,4 @@ export interface PollUrlChain extends
 
 interface PollUrlAbandonedChain extends AbstractChain {}
 
-type PollUrlEvalResult = void | boolean;
+type PollUrlEvalResult = undefined | boolean;

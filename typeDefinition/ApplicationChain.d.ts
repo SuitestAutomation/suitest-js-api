@@ -56,4 +56,4 @@ interface ApplicationAbandonedChain extends
 {}
 
 type ApplicationQueryResult = string;
-type ApplicationEvalResult = boolean | void;
+type ApplicationEvalResult = boolean | undefined;
