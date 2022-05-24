@@ -44,6 +44,10 @@ export interface LaunchModeModifier<T> {
 	launchMode(mode: LaunchModeValues): T;
 }
 
+export interface DeepLinkModifier<T> {
+	deepLink(value: string): T;
+}
+
 export interface Abandable<T> {
 	abandon(): T;
 }

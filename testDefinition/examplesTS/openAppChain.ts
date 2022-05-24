@@ -11,6 +11,7 @@ openAppChain.abandon();
 openAppChain.clone();
 openAppChain.toAssert();
 openAppChain.launchMode('resume');
+openAppChain.deepLink('some deep link')
 
 // should have only toString method
 const abandonedOpenApp = openApp().abandon();
