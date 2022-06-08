@@ -1,8 +1,10 @@
 const assert = require('assert');
 const {
 	validatePositiveNumber,
+	validateNumber,
 	validateNonEmptyStringOrUndefined,
 	validateStVarOrPositiveNumber,
+	validateStVarOrNumber,
 } = require('../../lib/validation/validators');
 const {validate, validators} = require('../../lib/validation');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
@@ -17,6 +19,28 @@ describe('validators', () => {
 		assert.throws(() => validatePositiveNumber(NaN), /Error/);
 	});
 
+	it('should validate number', () => {
+		assert.strictEqual(validateNumber(0), 0);
+		assert.strictEqual(validateNumber(1), 1);
+		assert.strictEqual(validateNumber(-1), -1);
+		assert.throws(
+			() => validateNumber('', 'someNumber'),
+			/SuitestError: Invalid input someNumber should be number/,
+		);
+		assert.throws(
+			() => validateNumber(null, 'someNumber'),
+			/SuitestError: Invalid input someNumber should be number/,
+		);
+		assert.throws(
+			() => validateNumber(NaN, 'someNumber'),
+			/SuitestError: Invalid input someNumber should be number/,
+		);
+		assert.throws(
+			() => validateNumber(Infinity, 'someNumber'),
+			/SuitestError: Invalid input someNumber should be number/,
+		);
+	});
+
 	it('should validate vars or positive number', () => {
 		assert.strictEqual(validateStVarOrPositiveNumber(0), 0);
 		assert.strictEqual(validateStVarOrPositiveNumber(1), 1);
@@ -26,6 +50,29 @@ describe('validators', () => {
 		assert.throws(() => validateStVarOrPositiveNumber(null), /Error/);
 		assert.throws(() => validateStVarOrPositiveNumber(NaN), /Error/);
 		assert.throws(() => validateStVarOrPositiveNumber('10'), /Error/);
+	});
+	it('should validate vars or number', () => {
+		assert.strictEqual(validateStVarOrNumber(0), 0);
+		assert.strictEqual(validateStVarOrNumber(1), 1);
+		assert.strictEqual(validateStVarOrNumber('<%any var%>'), '<%any var%>');
+		assert.strictEqual(validateStVarOrNumber(-1), -1);
+
+		assert.throws(
+			() => validateStVarOrNumber('', 'someNumber'),
+			/SuitestError: Invalid input someNumber should be suitest configuration variable/)
+		;
+		assert.throws(
+			() => validateStVarOrNumber(null, 'someNumber'),
+			/SuitestError: Invalid input someNumber should be suitest configuration variable/,
+		);
+		assert.throws(
+			() => validateStVarOrNumber(NaN, 'someNumber'),
+			/SuitestError: Invalid input someNumber should be number/,
+		);
+		assert.throws(
+			() => validateStVarOrNumber('10', 'someNumber'),
+			/SuitestError: Invalid input someNumber should be suitest configuration variable/,
+		);
 	});
 
 	it('should validate non empty string or undefined', () => {
@@ -50,7 +97,71 @@ describe('validators', () => {
 				name: 'string',
 			}],
 		}], {
-			message: 'Invalid input should have required property \'key\'',
+			message: 'Invalid input .configVariables[0] should have required property \'key\'',
 		}, 'invalid configOverride object');
+	});
+
+	it('should validate configuration presets', () => {
+		const baseArg = {
+			tokenId: '1',
+			tokenPassword: '1',
+			preset: ['preset1'],
+		};
+
+		assert.throws(
+			() => validate(
+				validators.TEST_LAUNCHER_TOKEN,
+				{
+					...baseArg,
+					presets: {
+						preset1: {config: false, device: null},
+					},
+				},
+			),
+			/^SuitestError: Invalid input/,
+			'Should validate preset config and device',
+		);
+		assert.throws(
+			() => validate(
+				validators.TEST_LAUNCHER_TOKEN,
+				{
+					...baseArg,
+					presets: {
+						preset1: {
+							config: {
+								configId: false,
+							},
+							device: {
+								deviceId: 123,
+							},
+						},
+					},
+				},
+			),
+			/^SuitestError: Invalid input/,
+			'Should validate preset config.configId and device.deviceId',
+		);
+		assert.throws(
+			() => validate(
+				validators.TEST_LAUNCHER_TOKEN,
+				{
+					...baseArg,
+					presets: {
+						preset1: {
+							config: {
+								configId: 'config-id1',
+								notAllowedProp: 'some val',
+							},
+							device: {
+								deviceId: 'device-id1',
+								anotherNotAllowedProp: 'some val',
+							},
+						},
+					},
+				},
+			),
+			/^SuitestError: Invalid input/,
+			'Should not additional fields to preset config and device if they are objects',
+		);
 	});
 });

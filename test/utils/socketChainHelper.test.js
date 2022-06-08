@@ -96,7 +96,7 @@ describe('socket chain helpers', () => {
 					},
 					val: 'set text value',
 				},
-			})
+			}),
 		);
 
 		assert.throws(
@@ -143,7 +143,7 @@ describe('socket chain helpers', () => {
 					timeout: 2000,
 				},
 			}),
-			err => err instanceof assert.AssertionError
+			err => err instanceof assert.AssertionError,
 		);
 
 		assert.throws(
@@ -158,7 +158,7 @@ describe('socket chain helpers', () => {
 				{stack: ''},
 				chain,
 			),
-			err => err instanceof assert.AssertionError
+			err => err instanceof assert.AssertionError,
 		);
 
 		assert.throws(
@@ -299,7 +299,7 @@ describe('socket chain helpers', () => {
 					},
 				},
 			),
-			err => err instanceof assert.AssertionError
+			err => err instanceof assert.AssertionError,
 		);
 
 		assert.throws(
@@ -357,7 +357,7 @@ describe('socket chain helpers', () => {
 					},
 				},
 			),
-			err => err instanceof assert.AssertionError
+			err => err instanceof assert.AssertionError,
 		);
 
 		sinon.stub(logger, 'warn');
@@ -378,7 +378,7 @@ describe('socket chain helpers', () => {
 		it('should return testLine type', () => {
 			assert.strictEqual(
 				helpers.getRequestType({isAssert: true}),
-				'testLine'
+				'testLine',
 			);
 			assert.strictEqual(
 				helpers.getRequestType({
@@ -389,7 +389,7 @@ describe('socket chain helpers', () => {
 					setText: '',
 					sendText: 'text',
 				}),
-				'testLine'
+				'testLine',
 			);
 		});
 
@@ -409,30 +409,95 @@ describe('socket chain helpers', () => {
 		});
 	});
 
-	it('Handle processed message for saveScreenshot line', async() => {
-		const writeFileStub = sinon.stub(fs.promises, 'writeFile');
+	describe('Handle processed message for saveScreenshot line', () => {
+		let writeFileStub;
+		let accessStub;
+		let mkDirStub;
 
-		const res = await processServerResponse(() => '')({
-			contentType: 'takeScreenshot',
-			result: 'success',
-			buffer: Buffer.from([1, 2, 3]),
-		}, {
-			type: 'takeScreenshot',
-			stack: '',
-			fileName: '/path/to/file.png',
-		}, {
-			type: 'takeScreenshot',
+		beforeEach(() => {
+			writeFileStub = sinon.stub(fs.promises, 'writeFile');
+			accessStub = sinon.stub(fs.promises, 'access');
+			mkDirStub = sinon.stub(fs.promises, 'mkdir');
 		});
 
-		try {
-			assert.strictEqual(res, undefined);
-			assert.deepStrictEqual(
-				writeFileStub.firstCall.args,
-				['/path/to/file.png', Buffer.from([1, 2, 3])]
-			);
-		} finally {
+		afterEach(() => {
 			writeFileStub.restore();
-		}
+			accessStub.restore();
+			mkDirStub.restore();
+		});
+
+		it('when screenshot folder exists', async() => {
+			accessStub.callsFake(() => Promise.resolve());
+
+			const res = await processServerResponse(() => '')({
+				contentType: 'takeScreenshot',
+				result: 'success',
+				buffer: Buffer.from([1, 2, 3]),
+			}, {
+				type: 'takeScreenshot',
+				stack: '',
+				fileName: '/path/to/file.png',
+			}, {
+				type: 'takeScreenshot',
+			});
+
+			assert.strictEqual(res, undefined);
+			sinon.assert.calledWith(accessStub, '/path/to');
+			sinon.assert.calledWith(writeFileStub, '/path/to/file.png', Buffer.from([1, 2, 3]));
+		});
+
+		it('when screenshot folder not exits (should be created)', async() => {
+			accessStub.callsFake(() => Promise.reject());
+			mkDirStub.callsFake(() => Promise.resolve());
+
+			const res = await processServerResponse(() => '')({
+				contentType: 'takeScreenshot',
+				result: 'success',
+				buffer: Buffer.from([1, 2, 3]),
+			}, {
+				type: 'takeScreenshot',
+				stack: '',
+				fileName: '/path/to/file.png',
+			}, {
+				type: 'takeScreenshot',
+			});
+
+			assert.strictEqual(res, undefined);
+			sinon.assert.calledWith(accessStub, '/path/to');
+			sinon.assert.calledWith(mkDirStub, '/path/to');
+			sinon.assert.calledWith(writeFileStub, '/path/to/file.png', Buffer.from([1, 2, 3]));
+		});
+	});
+
+	describe('handle errors for takeScreenshotLine', async() => {
+		const processTakeScreenshotResponse = processServerResponse({error: sinon.fake()});
+
+		[
+			['notSupportedPlatform', 'Screenshots are not supported on this device.'],
+			['timeout', 'Failed to take a screenshot due to timeout.'],
+			['generalError', 'Failed to take a screenshot.'],
+			['notSupportedDriver', 'Screenshots are not supported on this driver'],
+			// eslint-disable-next-line max-len
+			['screenshotFailed', 'Error while taking screenshot of device. Saved file does not exists or is not readable.'],
+		].forEach(([errorType, expectedMessage]) => {
+			it(`for "${errorType}" expected message: "${expectedMessage}"`, () => {
+				assert.throws(
+					() => processTakeScreenshotResponse({
+						contentType: 'takeScreenshot',
+						result: 'error',
+						errorType,
+					}, {
+						type: 'takeScreenshot',
+						stack: '',
+					}, {
+						type: 'takeScreenshot',
+					}),
+					err => err instanceof SuitestError &&
+						err.code === SuitestError.EVALUATION_ERROR &&
+						err.message.includes(expectedMessage),
+				);
+			});
+		});
 	});
 
 	it('Handle aborted message', async() => {

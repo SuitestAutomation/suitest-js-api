@@ -13,7 +13,6 @@ const {
 } = require('../../lib/utils/socketErrorMessages');
 
 describe('Socket error messages', () => {
-
 	it('test response message getters', () => {
 		assert.equal(responseMessageInfo({message: {info: 'test'}}), 'test');
 		assert.equal(responseMessageCode({message: {code: 'test'}}), 'test');
@@ -41,7 +40,7 @@ describe('Socket error messages', () => {
 
 		assert.strictEqual(
 			msg1,
-			'prefix message Test session will now close and all remaining Suitest commands will fail. To allow execution of remaining Suitest commands call suitest.startTest() or fix this error.\n\tat line1',
+			'prefix message\n\tat line1',
 		);
 
 		const msg2 = getInfoErrorMessage('message', 'prefix ', {
@@ -50,7 +49,7 @@ describe('Socket error messages', () => {
 
 		assert.strictEqual(
 			msg2,
-			'prefix message Test session will now close and all remaining Suitest commands will fail. To allow execution of remaining Suitest commands call suitest.startTest() or fix this error.\n\tat line1',
+			'prefix message\n\tat line1',
 		);
 
 		const msg3 = getInfoErrorMessage(

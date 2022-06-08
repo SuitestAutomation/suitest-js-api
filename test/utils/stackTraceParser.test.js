@@ -1,5 +1,6 @@
 const assert = require('assert');
 const stackTraceParser = require('../../lib/utils/stackTraceParser');
+const {getFirstNotSuitestStackItem} = require('../../lib/utils/stackTraceParser');
 
 describe('stackTraceParser util', () => {
 	it('test fetchSource', () => {
@@ -54,5 +55,22 @@ describe('stackTraceParser util', () => {
 		assert.strictEqual(stackTraceParser.isStackLine('\tat something\n'), true);
 		assert.strictEqual(stackTraceParser.isStackLine('something'), false);
 		assert.strictEqual(stackTraceParser.isStackLine('something at something'), false);
+	});
+
+	it('test getFirstNotSuitestStackItem', () => {
+		const error = new Error();
+
+		error.stack =
+			'title1\nat getFirstNotSuitestStackItem (/suitest-js-api/lib/utils/stackTraceParser.js:133:46)' +
+			'\nat test.test (test.js:1:1)\nat test.test (test.js:2:2)';
+		assert.deepStrictEqual(
+			getFirstNotSuitestStackItem(error),
+			{
+				column: 1,
+				line: 1,
+				file: 'test.js',
+				function: 'test.test',
+			},
+		);
 	});
 });

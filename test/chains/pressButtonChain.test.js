@@ -56,6 +56,20 @@ describe('Press button chain', () => {
 			},
 		}, 'type testLine default');
 		assert.deepStrictEqual(toJSON({
+			isAssert: true,
+			ids: [buttonTypes.UP],
+			longPressMs: 1000,
+		}), {
+			type: 'testLine',
+			request: {
+				type: 'button',
+				ids: [VRC[buttonTypes.UP]],
+				longPressMs: 1000,
+				count: 1,
+				delay: 1,
+			},
+		}, 'long press type testLine default');
+		assert.deepStrictEqual(toJSON({
 			ids: [buttonTypes.UP],
 			repeat: 10,
 			interval: 2000,

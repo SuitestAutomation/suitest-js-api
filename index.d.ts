@@ -38,6 +38,8 @@ import {SetScreenOrientationChain} from './typeDefinition/SetScreenOrientationCh
 import {ScreenOrientation} from './typeDefinition/constants/ScreenOrientation';
 import {CloseAppChain} from './typeDefinition/CloseAppChain';
 import {SuspendAppChain} from './typeDefinition/SuspendAppChain';
+import {RelativePosition} from './typeDefinition/RelativePositionChain';
+import {LaunchMode} from './typeDefinition/constants/LaunchMode';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -47,25 +49,16 @@ export = suitest;
 
 declare namespace suitest {
 	export interface ISuitestBase extends NodeJS.EventEmitter {
-		startTestPack(options: StartTestPackOptions): Promise<StartTestPackResult|SuitestError>;
 		openSession(options: OpenSessionOptions): Promise<OpenSessionResult|SuitestError>;
 		closeSession(): Promise<object|SuitestError>;
 		setAppConfig(configId: string, options?: ConfigOverride): Promise<void|SuitestError>;
 		pairDevice(deviceId: string): Promise<DeviceData|SuitestError>;
 		releaseDevice(): Promise<void|SuitestError>;
-		// @deprecated use startTest without arguments
-		startTest(clientTestId: string, options?: StartTestOptions): Promise<void|SuitestError>;
-		startTest(): Promise<void|SuitestError>;
-		endTest(): Promise<void|SuitestError>;
-		interactive(options: ReplOptions): Promise<void>;
+		startREPL(options?: ReplOptions): Promise<void>;
+		getAppConfig(): Promise<AppConfiguration|SuitestError>;
 
 		// config
 		getConfig(): ConfigureOptions;
-
-		/**
-		 * @deprecated use separate methods for changing configuration properties
-		 */
-		configure(config: Partial<ConfigureOptions>): void;
 		setDefaultTimeout(timeout: ConfigureOptions['defaultTimeout']): void;
 		setContinueOnFatalError(continueOnFatalError: ConfigureOptions['continueOnFatalError']): void;
 		setDisallowCrashReports(disallowCrashReports: ConfigureOptions['disallowCrashReports']): void;
@@ -76,7 +69,7 @@ declare namespace suitest {
 		application(): ApplicationChain;
 		clearAppData(): ClearAppDataChain;
 		cookie(cookieName: string): CookieChain;
-		element(elementSelector: ElementSelector | string): ElementChain;
+		element(elementSelector: ElementSelector[] | ElementSelector | string): ElementChain;
 		video(): VideoChain;
 		psVideo(): PlayStationVideoChain;
 		executeCommand(jsCode: string): ExecuteCommandChain;
@@ -92,8 +85,9 @@ declare namespace suitest {
 		openUrl(absoluteUrl: string): OpenUrlChain;
 		pollUrl(url: string, response: string): PollUrlChain;
 		position(x: number, y: number): PositionChain;
-		press(key: string): PressButtonChain;
-		press(keys: string[]): PressButtonChain;
+		relativePosition(x: number, y: number): RelativePosition;
+		press(key: string, options?: { longPressMs?: string | number }): PressButtonChain;
+		press(keys: string[], options?: { longPressMs?: string | number }): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
 
@@ -110,10 +104,18 @@ declare namespace suitest {
 
 		/**
 		 * @description the complete path to the file name where the screenshot should be saved.
+		 *  Can be defined as string with placeholders, for example default path
+		 *  to screenshots folder looks like {screenshotDir}/{dateTime}-{currentFile}-l{currentLine}.png.
+		 *  Available placeholders:
+		 *  - screenshotDir - default value is "screenshots"
+		 *  - dateTime - time when saving screenshot happens in YYYY-MM-DD-HH-mm-ss-SSS format
+		 *  - currentFile - file where saving screenshot requested
+		 *  - currentLine - line of code where saving screenshot requested
 		 * @example
 		 * suitest.saveScreenshot('/path/to/file.png');
+		 * suitest.saveScreenshot('{screenshotDir}/{dateTime}-{currentFile}-l{currentLine}.png');
 		 */
-		saveScreenshot(fileName: string): TakeScreenshotChain<void>;
+		saveScreenshot(fileName?: string): TakeScreenshotChain<void>;
 
 		getPairedDevice(): null | {
 			deviceId: string,
@@ -128,7 +130,7 @@ declare namespace suitest {
 			inactivityTimeout?: number,
 			status: string,
 			displayName?: string,
-			shortDisplayName?: string
+			shortDisplayName?: string,
 		}
 
 		// constants
@@ -150,11 +152,11 @@ declare namespace suitest {
 		TAP_TYPES: TapTypes;
 		DIRECTIONS: Directions;
 		SCREEN_ORIENTATION: ScreenOrientation;
+		LAUNCH_MODE: LaunchMode;
 
 		authContext: AuthContext;
 		appContext: Context;
 		pairedDeviceContext: Context;
-		testContext: Context;
 
 		on(eventName: 'consoleLog', listener: (consoleLog: ConsoleLogEvent) => void): this;
 		on(eventName: 'networkLog', listener: (networkLog: NetworkLogEvent) => void): this;
@@ -173,7 +175,7 @@ declare namespace suitest {
 		application(): ApplicationChain;
 		clearAppData(): ClearAppDataChain;
 		cookie(cookieName: string): CookieChain;
-		element(elementSelector: ElementSelector | string): ElementChain;
+		element(elementSelector: ElementSelector[] | ElementSelector | string): Omit<ElementChain, 'getCssProperties' | 'handle' | 'getAttributes'>;
 		video(): VideoChain;
 		psVideo(): PlayStationVideoChain;
 		executeCommand(jsCode: string): ExecuteCommandChain;
@@ -189,8 +191,9 @@ declare namespace suitest {
 		openUrl(absoluteUrl: string): OpenUrlChain;
 		pollUrl(url: string, response: string): PollUrlChain;
 		position(x: number, y: number): PositionChain;
-		press(key: string): PressButtonChain;
-		press(keys: string[]): PressButtonChain;
+		relativePosition(x: number, y: number): RelativePosition;
+		press(key: string, options?: { longPressMs?: string | number }): PressButtonChain;
+		press(keys: string[], options?: { longPressMs?: string | number }): PressButtonChain;
 		runTest(testId: string): RunTestChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
@@ -231,23 +234,14 @@ declare namespace suitest {
 	interface DeviceData {
 		id: string;
 		firmware: string;
-		deviceMeta: {
-			codeName: string;
-			deviceType: string;
-		};
-		status: {
-			type: string;
-			canPair: boolean;
-		};
-		platforms: string[];
-		workingPlatforms: string[];
+		modelId: string;
 	}
 
 	interface ConfigOverride {
 		url?: string;
 		suitestify?: boolean;
 		domainList?: string[];
-		freezeRules?: Array<{
+		mapRules?: Array<{
 			methods: string[];
 			url: string;
 			type: string;
@@ -262,56 +256,23 @@ declare namespace suitest {
 		[key: string]: any; // user should have ability to pass any property to config object
 	}
 
-	interface StartTestPackOptions {
-		testPackId: number;
-		accessTokenKey: string;
-		accessTokenPassword: string;
-		config?: ConfigOverride;
-		metadata?: {
-			version?: string;
-			hash?: string;
-			link?: string;
-		},
-		commitHash?: string;
-		appVersion?: string;
-		vcsBranch?: string;
-		allowServiceCalls?: boolean;
-		includeChangelist?: boolean;
-	}
-
-	interface StartTestPackResult {
-		deviceAccessToken: string;
-		tokenValidUntil: string;
-		testPackRunId: string;
-		testPack: {
-			name: string;
-			models: Array<{
-				modelId: string;
-				firmware: string;
-			}>,
-			devices: Array<{deviceId: string}>;
-		}
-	}
-
 	type OpenSessionOptions = {
-		username: string;
-		password: string;
-		orgId: string;
-	} | {
-		sessionToken: string;
-	} | {
-		accessTokenKey: string;
-		accessTokenPassword: string;
+		tokenId: string;
+		tokenPassword: string;
 	}
 
 	interface OpenSessionResult {
-		deviceAccessToken: string;
-		tokenValidUntil: string;
+		accessToken: string;
 	}
 
-	interface StartTestOptions {
-		name?: string;
-		description?: string;
+	interface AppConfiguration {
+		name: string;
+		url: string;
+		suitestify: boolean;
+		domainList: string[];
+		variables: Record<string, string>;
+		platform: string;
+		isHtmlBased: boolean;
 	}
 
 	interface ConfigureOptions {
@@ -321,13 +282,9 @@ declare namespace suitest {
 		defaultTimeout: number;
 	}
 
-	interface ResponseError {
-		errorType: string;
-	}
-
 	interface Context {
-		context: any;
-		setContext(context: symbol): void;
+		context: unknown;
+		setContext(context: unknown): void;
 		clear(): void;
 	}
 
@@ -354,14 +311,16 @@ declare namespace suitest {
 		apiId?: string;
 		css?: string,
 		xpath?: string,
+		handle?: string,
 		attributes?: string,
 		text?: string,
+		linkText?: string,
+		partialLinkText?: string,
 		position?: string,
 		size?: string,
 		color?: string,
 		index?: number,
-		video?: true,
-		psVideo?: true,
+		active?: true,
 	}
 
 	type ScreenOrientationValues =
