@@ -2,6 +2,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 const suitest = require('../../index');
 const {moveToComposer} = require('../../lib/composers');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Move To composer', () => {
 	it('should define moveTo method', () => {
@@ -49,5 +50,32 @@ describe('Move To composer', () => {
 				y: 10,
 			},
 		});
+	});
+	it('moveTo should throw an error, if invalid argument was used', () => {
+		const chain = {};
+		const data = {};
+		const makeChain = sinon.spy();
+
+		Object.defineProperties(chain, moveToComposer(suitest, data, chain, makeChain));
+
+		testInputErrorSync(chain.moveTo, [10, 'test']);
+	});
+	it('moveTo should throw an error, if only one argument was used', () => {
+		const chain = {};
+		const data = {};
+		const makeChain = sinon.spy();
+
+		Object.defineProperties(chain, moveToComposer(suitest, data, chain, makeChain));
+
+		testInputErrorSync(chain.moveTo, [10]);
+	});
+	it('moveTo should throw an error, if one of arguments is empty string', () => {
+		const chain = {};
+		const data = {};
+		const makeChain = sinon.spy();
+
+		Object.defineProperties(chain, moveToComposer(suitest, data, chain, makeChain));
+
+		testInputErrorSync(chain.moveTo, [10, '']);
 	});
 });
