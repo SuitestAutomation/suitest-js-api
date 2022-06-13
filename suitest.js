@@ -119,7 +119,7 @@ class SUITEST_API extends EventEmitter {
 		const {jsExpression, jsExpressionAssert} = jsExpressionFactory(this);
 		const {networkRequest, networkRequestAssert} = networkRequestFactory(this);
 		const {video, videoAssert} = videoFactory(this);
-		const {element, elementAssert} = elementFactory(this);
+		const {element, elementAssert, activeElement} = elementFactory(this);
 		const {playstationVideo, playstationVideoAssert} = playstationVideoFactory(this);
 		const {pollUrl, pollUrlAssert} = pollUrlFactory(this);
 		const {runTestAssert} = runTestFactory(this);
@@ -146,6 +146,7 @@ class SUITEST_API extends EventEmitter {
 		// this.brightScriptExpression = brightScriptExpressionFactory(this).brightScriptExpression;
 		this.networkRequest = networkRequest;
 		this.element = element;
+		this.activeElement = activeElement;
 		this.video = video;
 		this.psVideo = playstationVideo;
 		this.pollUrl = pollUrl;
