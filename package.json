@@ -85,7 +85,7 @@
   },
   "dependencies": {
     "@suitest/smst-to-text": "^4.4.3",
-    "@suitest/translate": "^4.4.4",
+    "@suitest/translate": "^4.5.0",
     "@types/node": "^14.0.10",
     "ajv": "^6.12.2",
     "ansi-regex": "^5.0.0",
