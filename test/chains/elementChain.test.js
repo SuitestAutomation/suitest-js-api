@@ -4,6 +4,7 @@ const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError
 const {
 	element,
 	elementAssert,
+	activeElement,
 	toJSON,
 } = require('../../lib/chains/elementChain')(suitest, suitest.video);
 const {VALUE, ELEMENT_PROP} = require('../../lib/constants/element');
@@ -904,6 +905,22 @@ describe('Element chain', () => {
 			},
 			type: 'query',
 		}, 'get element css properties');
+	});
+
+	it('activeElement should work exactly as element({active: true})', () => {
+		const activeElementMockResponse = {
+			subject: {
+				type: 'elementProps',
+				selector: {active: true},
+			},
+			type: 'query',
+		};
+
+		assert.deepStrictEqual(
+			activeElement().toJSON(),
+			activeElementMockResponse,
+			'should correctly process activeElement',
+		);
 	});
 
 	it('should throw error in case of invalid input', () => {
