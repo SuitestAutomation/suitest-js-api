@@ -908,9 +908,17 @@ describe('Element chain', () => {
 	});
 
 	it('activeElement should work exactly as element({active: true})', () => {
+		const activeElementMockResponse = {
+			subject: {
+				type: 'elementProps',
+				selector: {active: true},
+			},
+			type: 'query',
+		};
+
 		assert.deepStrictEqual(
 			activeElement().toJSON(),
-			element({active: true}).toJSON(),
+			activeElementMockResponse,
 			'should correctly process activeElement',
 		);
 	});
