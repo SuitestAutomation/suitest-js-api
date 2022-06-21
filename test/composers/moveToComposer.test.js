@@ -68,7 +68,23 @@ describe('Move To composer', () => {
 			},
 		});
 	});
-	it('moveTo should be able to accept only 1 argument', () => {
+	it('moveTo should be able to accept only 1 argument (x)', () => {
+		const chain = {};
+		const data = {};
+		const makeChain = sinon.spy();
+
+		Object.defineProperties(chain, moveToComposer(suitest, data, chain, makeChain));
+
+		chain.moveTo(0, undefined);
+
+		assert.deepStrictEqual(makeChain.firstCall.args[0], {
+			isMoveTo: true,
+			coordinates: {
+				x: 0,
+			},
+		});
+	});
+	it('moveTo should be able to accept only 1 argument (y)', () => {
 		const chain = {};
 		const data = {};
 		const makeChain = sinon.spy();
@@ -92,14 +108,12 @@ describe('Move To composer', () => {
 		Object.defineProperties(chain, moveToComposer(suitest, data, chain, makeChain));
 
 		testInputErrorSync(chain.moveTo, [10, 'test']);
-	});
-	it('moveTo should throw an error, if one of arguments is empty string', () => {
-		const chain = {};
-		const data = {};
-		const makeChain = sinon.spy();
-
-		Object.defineProperties(chain, moveToComposer(suitest, data, chain, makeChain));
-
 		testInputErrorSync(chain.moveTo, [10, '']);
+		testInputErrorSync(chain.moveTo, ['test', 10]);
+		testInputErrorSync(chain.moveTo, ['', 10]);
+		testInputErrorSync(chain.moveTo, [true, 10]);
+		testInputErrorSync(chain.moveTo, [10, false]);
+		testInputErrorSync(chain.moveTo, [10, {}]);
+		testInputErrorSync(chain.moveTo, [{}, 10]);
 	});
 });
