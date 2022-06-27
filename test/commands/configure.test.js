@@ -1,7 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 
-const {logger, config, configuration, setDefaultTimeout, setLogLevel} = require('../../index');
+const {logger, config, configuration, setDefaultTimeout, setLogLevel, setRecording} = require('../../index');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
 
 const cachedConfig = {...config};
@@ -21,6 +21,8 @@ describe('configure', () => {
 		assert.equal(configuration.config.defaultTimeout, 4000, 'setDefaultTimeout');
 		setLogLevel('debug');
 		assert.equal(configuration.config.logLevel, 'debug', 'setLogLevel');
+		setRecording(true);
+		assert.equal(configuration.config.recording, true, 'setRecording');
 		testInputErrorSync(setLogLevel, ['errror']);
 		testInputErrorSync(setDefaultTimeout, [true]);
 	});

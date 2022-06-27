@@ -88,6 +88,7 @@ class SUITEST_API extends EventEmitter {
 		this.setContinueOnFatalError = (continueOnFatalError) => this.configuration.override({continueOnFatalError});
 		this.setDisallowCrashReports = (disallowCrashReports) => this.configuration.override({disallowCrashReports});
 		this.setLogLevel = (logLevel) => this.configuration.override({logLevel});
+		this.setRecording = (recording) => this.configuration.override({recording});
 
 		// creating methods based on instance dependencies
 		this.logger = createLogger(this.configuration.config, this.pairedDeviceContext);

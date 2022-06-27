@@ -19,7 +19,7 @@ const DEFAULT_TIMEOUT = 2000;
 const overridableFields = [
 	'tokenId', 'tokenPassword', 'concurrency', 'preset', 'presets', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk',
 	'logLevel', 'logDir', 'timestamp', 'configFile', 'disallowCrashReports', 'defaultTimeout', 'screenshotDir',
-	'includeChangelist',
+	'includeChangelist', 'recording',
 ];
 
 const serverAddress = process.env[envVars.SUITEST_BE_SERVER] || 'the.suite.st';
@@ -27,6 +27,7 @@ const serverAddress = process.env[envVars.SUITEST_BE_SERVER] || 'the.suite.st';
 const main = Object.freeze({
 	apiUrl: `https://${serverAddress}/api/public/v4`,
 	disallowCrashReports: false,
+	recording: false,
 	logLevel: logLevels.normal,
 	sentryDsn,
 	timestamp: timestamp.default,
@@ -37,6 +38,7 @@ const main = Object.freeze({
 const test = Object.freeze({
 	apiUrl: 'https://localhost',
 	disallowCrashReports: true,
+	recording: false,
 	logLevel: logLevels.debug,
 	sentryDsn,
 	timestamp: timestamp.default,

@@ -63,6 +63,7 @@ declare namespace suitest {
 		setContinueOnFatalError(continueOnFatalError: ConfigureOptions['continueOnFatalError']): void;
 		setDisallowCrashReports(disallowCrashReports: ConfigureOptions['disallowCrashReports']): void;
 		setLogLevel(logLevel: ConfigureOptions['logLevel']): void;
+		setRecording(recording: ConfigureOptions['recording']): void;
 
 		// subjects
 		location(): LocationChain;
@@ -280,6 +281,7 @@ declare namespace suitest {
 		disallowCrashReports: boolean;
 		continueOnFatalError: boolean;
 		defaultTimeout: number;
+		recording: boolean;
 	}
 
 	interface Context {
