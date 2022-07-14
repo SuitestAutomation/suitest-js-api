@@ -5,13 +5,10 @@ const {
 	openUrl,
 	openUrlAssert,
 	getComposers,
-	toString,
 	toJSON,
-	beforeSendMsg,
 } = require('../../lib/chains/openUrlChain')(suitest);
 const composers = require('../../lib/constants/composer');
-const {bySymbol, getComposerTypes, assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
-const sinon = require('sinon');
+const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 
 describe('Open URL chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -74,6 +71,17 @@ describe('Open URL chain', () => {
 				url: '/test',
 			},
 		}, 'assert');
+	});
+
+	it('should return text representation of openUrl line', () => {
+		assert.strictEqual(
+			openUrl('https://suite.st/').toString(),
+			'|E|Open URL\n  URL = \x1B[4mhttps://suite.st/\x1B[0m',
+		);
+		assert.strictEqual(
+			openUrlAssert('https://suite.st/').toString(),
+			'|A|Open URL\n  URL = \x1B[4mhttps://suite.st/\x1B[0m',
+		);
 	});
 
 	it('should throw error in case of invalid input', () => {
