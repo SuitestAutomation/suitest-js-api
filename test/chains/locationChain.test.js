@@ -169,6 +169,23 @@ describe('Location chain', () => {
 		}, 'chain eval');
 	});
 
+	it('should return text representation of location line', () => {
+		assert.strictEqual(
+			location().toString(),
+			'|E|Retrieve value of current location',
+		);
+		assert.strictEqual(
+			locationAssert().toString(),
+			'|A|Assert: Current location timeout \x1B[4m2s\x1B[0m\n'
+			+ '  current location  [EMPTY STRING]',
+		);
+		assert.strictEqual(
+			locationAssert().equal('https://suite.st/').toString(),
+			'|A|Assert: Current location timeout \x1B[4m2s\x1B[0m\n'
+			+ '  current location = \x1B[4mhttps://suite.st/\x1B[0m',
+		);
+	});
+
 	it('should define assert function', () => {
 		const chain = locationAssert();
 
