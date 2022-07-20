@@ -115,8 +115,8 @@ describe('chainUtils', () => {
 			.reply(404, 'not found');
 
 		await assertThrowsAsync(utils.fetchTestDefinitions({authContext: {authorizeHttp}})
-				.bind(null, 'appId', 'versionId', 'mainTestId', false, 'stack'),
-			err => err instanceof SuitestError &&
+			.bind(null, 'appId', 'versionId', 'mainTestId', false, 'stack'),
+		err => err instanceof SuitestError &&
 				err.code === SuitestError.INVALID_INPUT);
 	});
 
@@ -162,5 +162,61 @@ describe('chainUtils', () => {
 				taps: [{type: 'long', duration: 4000}],
 			},
 		);
+	});
+
+	describe('applyUntilCondition', () => {
+		const until = {
+			subject: {
+				type: 'element',
+				val: {
+					css: 'body',
+				},
+			},
+			type: 'exists',
+		};
+		const condition = {
+			subject: {
+				type: 'element',
+				val: {
+					css: 'body',
+				},
+			},
+			type: 'exists',
+		};
+
+		it('should add condition to line', () => {
+			assert.deepStrictEqual(
+				utils.applyUntilCondition({}, {
+					until,
+				}),
+				{
+					condition,
+				},
+			);
+		});
+
+		it('should add condition to line for "runSnippet"', () => {
+			assert.deepStrictEqual(
+				utils.applyUntilCondition({}, {
+					type: 'runSnippet',
+					until,
+				}),
+				{
+					condition,
+					negateCondition: false,
+				},
+			);
+			assert.deepStrictEqual(
+				utils.applyUntilCondition({}, {
+					type: 'runSnippet',
+					until,
+					repeat: 2,
+				}),
+				{
+					condition,
+					negateCondition: false,
+				},
+			);
+		});
 	});
 });

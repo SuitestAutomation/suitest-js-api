@@ -49,15 +49,25 @@ describe('Until Composer', () => {
 
 		Object.defineProperties(chain, untilComposer(suitest, data, chain, makeChain));
 
-		testInputErrorSync(chain.until, [], {message: 'Until condition expects a chain as an input parameter'});
-		testInputErrorSync(chain.until, [{
-			toJSON: () => ({request: {condition: {subject: {type: 'invalid'}}}}),
-		}], {message: 'Invalid input Until condition chain requires valid modifier and should be one of the following types:\n' +
-			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video()'});
-		testInputErrorSync(chain.until, [{
-			toJSON: () => ({request: {}}),
-		}], {message: 'Invalid input Until condition chain requires valid modifier and should be one of the following types:\n' +
-			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video()'});
+		// eslint-disable-next-line max-len
+		const message = 'Invalid input Until condition chain requires valid modifier and should be one of the following types:\n' +
+			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video() .psVideo()';
+
+		testInputErrorSync(
+			chain.until,
+			[],
+			{message: 'Until condition expects a chain as an input parameter'},
+		);
+		testInputErrorSync(
+			chain.until,
+			[{toJSON: () => ({request: {condition: {subject: {type: 'invalid'}}}})}],
+			{message},
+		);
+		testInputErrorSync(
+			chain.until,
+			[{toJSON: () => ({request: {}})}],
+			{message},
+		);
 
 		// must not throw any error
 		chain.until({

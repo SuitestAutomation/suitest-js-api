@@ -38,6 +38,8 @@ import {SetScreenOrientationChain} from './typeDefinition/SetScreenOrientationCh
 import {ScreenOrientation} from './typeDefinition/constants/ScreenOrientation';
 import {CloseAppChain} from './typeDefinition/CloseAppChain';
 import {SuspendAppChain} from './typeDefinition/SuspendAppChain';
+import {RelativePosition} from './typeDefinition/RelativePositionChain';
+import {LaunchMode} from './typeDefinition/constants/LaunchMode';
 import {ChangeDeviceStateChain} from './typeDefinition/ChangeDeviceStateChain';
 
 // --------------- Suitest Interface ---------------------- //
@@ -54,6 +56,7 @@ declare namespace suitest {
 		pairDevice(deviceId: string): Promise<DeviceData|SuitestError>;
 		releaseDevice(): Promise<void|SuitestError>;
 		startREPL(options?: ReplOptions): Promise<void>;
+		getAppConfig(): Promise<AppConfiguration|SuitestError>;
 
 		// config
 		getConfig(): ConfigureOptions;
@@ -83,8 +86,9 @@ declare namespace suitest {
 		openUrl(absoluteUrl: string): OpenUrlChain;
 		pollUrl(url: string, response: string): PollUrlChain;
 		position(x: number, y: number): PositionChain;
-		press(key: string): PressButtonChain;
-		press(keys: string[]): PressButtonChain;
+		relativePosition(x: number, y: number): RelativePosition;
+		press(key: string, options?: { longPressMs?: string | number }): PressButtonChain;
+		press(keys: string[], options?: { longPressMs?: string | number }): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		changeDeviceState(action: 'lock'): ChangeDeviceStateChain;
 		changeDeviceState(action: 'unlock', passcode?: string): ChangeDeviceStateChain;
@@ -151,6 +155,7 @@ declare namespace suitest {
 		TAP_TYPES: TapTypes;
 		DIRECTIONS: Directions;
 		SCREEN_ORIENTATION: ScreenOrientation;
+		LAUNCH_MODE: LaunchMode;
 
 		authContext: AuthContext;
 		appContext: Context;
@@ -189,8 +194,9 @@ declare namespace suitest {
 		openUrl(absoluteUrl: string): OpenUrlChain;
 		pollUrl(url: string, response: string): PollUrlChain;
 		position(x: number, y: number): PositionChain;
-		press(key: string): PressButtonChain;
-		press(keys: string[]): PressButtonChain;
+		relativePosition(x: number, y: number): RelativePosition;
+		press(key: string, options?: { longPressMs?: string | number }): PressButtonChain;
+		press(keys: string[], options?: { longPressMs?: string | number }): PressButtonChain;
 		runTest(testId: string): RunTestChain;
 		sleep(milliseconds: number): SleepChain;
 		changeDeviceState(action: 'lock'): ChangeDeviceStateChain;
@@ -233,16 +239,7 @@ declare namespace suitest {
 	interface DeviceData {
 		id: string;
 		firmware: string;
-		deviceMeta: {
-			codeName: string;
-			deviceType: string;
-		};
-		status: {
-			type: string;
-			canPair: boolean;
-		};
-		platforms: string[];
-		workingPlatforms: string[];
+		modelId: string;
 	}
 
 	interface ConfigOverride {
@@ -271,6 +268,16 @@ declare namespace suitest {
 
 	interface OpenSessionResult {
 		accessToken: string;
+	}
+
+	interface AppConfiguration {
+		name: string;
+		url: string;
+		suitestify: boolean;
+		domainList: string[];
+		variables: Record<string, string>;
+		platform: string;
+		isHtmlBased: boolean;
 	}
 
 	interface ConfigureOptions {

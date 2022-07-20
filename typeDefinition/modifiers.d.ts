@@ -1,3 +1,5 @@
+import {LaunchModeValues} from './constants/LaunchMode';
+
 export interface Thenable <R> {
 	then <U> (onFulfilled?: (value: R) => U | Thenable<U>, onRejected?: (error: any) => U | Thenable<U>): Thenable<U>;
 	then <U> (onFulfilled?: (value: R) => U | Thenable<U>, onRejected?: (error: any) => void): Thenable<U>;
@@ -38,8 +40,12 @@ export interface Clonable<T> {
 	clone(): T;
 }
 
-export interface LaunchMode<T> {
-	launchMode(mode: 'resume' | 'restart'): T;
+export interface LaunchModeModifier<T> {
+	launchMode(mode: LaunchModeValues): T;
+}
+
+export interface DeepLinkModifier<T> {
+	deepLink(value: string): T;
 }
 
 export interface Abandable<T> {
@@ -66,7 +72,7 @@ export interface TapModifier<T> {
 type Direction = 'up' | 'down' | 'left' | 'right';
 
 export interface ScrollModifier<T> {
-	scroll(direction: Direction, distance: number | string): T;
+	scroll(direction: Direction, distance?: number | string): T;
 }
 
 export interface SwipeModifier<T> {

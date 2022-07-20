@@ -40,7 +40,7 @@ describe('Socket error messages', () => {
 
 		assert.strictEqual(
 			msg1,
-			'prefix message Test session will now close and all remaining Suitest commands will fail.\n\tat line1',
+			'prefix message\n\tat line1',
 		);
 
 		const msg2 = getInfoErrorMessage('message', 'prefix ', {
@@ -49,7 +49,7 @@ describe('Socket error messages', () => {
 
 		assert.strictEqual(
 			msg2,
-			'prefix message Test session will now close and all remaining Suitest commands will fail.\n\tat line1',
+			'prefix message\n\tat line1',
 		);
 
 		const msg3 = getInfoErrorMessage(

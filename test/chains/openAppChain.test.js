@@ -24,6 +24,7 @@ describe('Open app chain', () => {
 			composers.GETTERS,
 			composers.TO_JSON,
 			composers.LAUNCH_MODE,
+			composers.DEEP_LINK,
 		].sort(bySymbol), 'clear state');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
@@ -36,6 +37,7 @@ describe('Open app chain', () => {
 			composers.GETTERS,
 			composers.TO_JSON,
 			composers.LAUNCH_MODE,
+			composers.DEEP_LINK,
 		].sort(bySymbol), 'abandoned chain');
 
 		assert.deepStrictEqual(getComposerTypes(getComposers({
@@ -48,6 +50,7 @@ describe('Open app chain', () => {
 			composers.GETTERS,
 			composers.TO_JSON,
 			composers.LAUNCH_MODE,
+			composers.DEEP_LINK,
 		].sort(bySymbol), 'assert chain');
 
 		const chain = openApp();
@@ -88,6 +91,14 @@ describe('Open app chain', () => {
 				type: 'openApp',
 			},
 		}, 'assert');
+
+		assert.deepStrictEqual(toJSON({deepLink: 'some deep link'}), {
+			type: 'eval',
+			request: {
+				type: 'openApp',
+				deepLink: 'some deep link',
+			},
+		}, 'eval with deep link');
 	});
 
 	it('should throw error in case of invalid input', () => {
@@ -104,5 +115,6 @@ describe('Open app chain', () => {
 		assert.ok('abandon' in chain);
 		assert.ok('toJSON' in chain);
 		assert.ok('launchMode' in chain);
+		assert.ok('deepLink' in chain);
 	});
 });
