@@ -19,7 +19,7 @@ const DEFAULT_TIMEOUT = 2000;
 const overridableFields = [
 	'tokenId', 'tokenPassword', 'concurrency', 'preset', 'presets', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk',
 	'logLevel', 'logDir', 'timestamp', 'configFile', 'disallowCrashReports', 'defaultTimeout', 'screenshotDir',
-	'includeChangelist',
+	'includeChangelist', 'testLines', 'testErrors', 'networkLogs', 'consoleLogs', // launcher common extra log options
 ];
 
 const serverAddress = process.env[envVars.SUITEST_BE_SERVER] || 'the.suite.st';
