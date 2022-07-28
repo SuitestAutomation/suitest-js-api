@@ -1,15 +1,14 @@
 const assert = require('assert');
 const suitest = require('../../index');
-const sinon = require('sinon');
 const {
 	video,
 	videoAssert,
 	toJSON,
-	beforeSendMsg,
 } = require('../../lib/chains/videoChain')(suitest);
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
 const {ELEMENT_PROP} = require('../../lib/constants/element');
-const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
+const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
+const SuitestError = require('../../lib/utils/SuitestError');
 
 describe('Video chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -204,5 +203,28 @@ describe('Video chain', () => {
 				timeout: 2000,
 			},
 		}, 'video mathces bs testLine');
+	});
+
+	it('should return text representation of video line', () => {
+		assert.strictEqual(
+			video().toString(),
+			'|E|Retrieve info of video element',
+		);
+		assert.strictEqual(
+			videoAssert().exists().toString(),
+			'|A|Assert: \x1B[32mvideo\x1B[0m exists timeout \x1B[4m2s\x1B[0m',
+		);
+	});
+
+	it('should throw correct error when video line is malformed', () => {
+		function isSuitestErrorInvalidInput(err) {
+			return err instanceof SuitestError &&
+				err.code === SuitestError.INVALID_INPUT &&
+				err.message.includes('Video line is malformed');
+		}
+		assert.throws(
+			() => videoAssert().toString(),
+			isSuitestErrorInvalidInput,
+		);
 	});
 });

@@ -1,16 +1,14 @@
 const assert = require('assert');
 const suitest = require('../../index');
-const sinon = require('sinon');
 const {
 	playstationVideo,
 	playstationVideoAssert,
-	beforeSendMsg,
 } = require('../../lib/chains/playstationVideoChain')(suitest);
-const {assertBeforeSendMsg} = require('../../lib/utils/testHelpers');
 const {ELEMENT_PROP} = require('../../lib/constants/element');
 const VIDEO_STATE = require('../../lib/constants/videoState');
 const HAD_NO_ERROR = require('../../lib/constants/hadNoError');
 const {PROP_COMPARATOR} = require('../../lib/constants/comparator');
+const SuitestError = require('../../lib/utils/SuitestError');
 
 describe('Playstation video chain', () => {
 	it('should have all necessary modifiers', () => {
@@ -108,13 +106,7 @@ describe('Playstation video chain', () => {
 					},
 					type: 'query',
 				},
-				'generate JSON for initial native video'
-			);
-
-			assert.deepStrictEqual(
-				playstationVideoAssert().toJSON(),
-				{type: 'testLine'},
-				'generate JSON for asserted initial native video'
+				'generate JSON for initial native video',
 			);
 		});
 
@@ -147,7 +139,7 @@ describe('Playstation video chain', () => {
 					},
 					type: 'eval',
 				},
-				'generate JSON for native video .match()'
+				'generate JSON for native video .match()',
 			);
 
 			assert.deepStrictEqual(
@@ -178,7 +170,7 @@ describe('Playstation video chain', () => {
 					},
 					type: 'testLine',
 				},
-				'generate JSON for asserted native video .match()'
+				'generate JSON for asserted native video .match()',
 			);
 		});
 
@@ -201,7 +193,7 @@ describe('Playstation video chain', () => {
 			assert.deepStrictEqual(playstationVideo().hadNoError().toJSON(), hadNoErrorForCurrentUrl);
 			assert.deepStrictEqual(
 				playstationVideo().hadNoError(HAD_NO_ERROR.CURRENT_URL).toJSON(),
-				hadNoErrorForCurrentUrl
+				hadNoErrorForCurrentUrl,
 			);
 
 			assert.deepStrictEqual(
@@ -219,7 +211,7 @@ describe('Playstation video chain', () => {
 						type: 'assert',
 					},
 					type: 'eval',
-				}
+				},
 			);
 		});
 
@@ -235,10 +227,6 @@ describe('Playstation video chain', () => {
 					},
 					type: 'query',
 				},
-			);
-			assert.deepStrictEqual(
-				playstationVideoAssert().timeout(3000).toJSON(),
-				{type: 'testLine'},
 			);
 			assert.deepStrictEqual(
 				playstationVideo().match({
@@ -299,6 +287,29 @@ describe('Playstation video chain', () => {
 				},
 			);
 		});
+	});
+
+	it('should return text representation of playstation video line', () => {
+		assert.strictEqual(
+			playstationVideo().toString(),
+			'|E|Retrieve info of video element',
+		);
+		assert.strictEqual(
+			playstationVideoAssert().hadNoError().toString(),
+			'|A|Assert: PlayStation 4 video had no error for current source timeout \x1B[4m2s\x1B[0m',
+		);
+	});
+
+	it('should throw correct error when video line is malformed', () => {
+		function isSuitestErrorInvalidInput(err) {
+			return err instanceof SuitestError &&
+				err.code === SuitestError.INVALID_INPUT &&
+				err.message.includes('Video line is malformed');
+		}
+		assert.throws(
+			() => playstationVideoAssert().toString(),
+			isSuitestErrorInvalidInput,
+		);
 	});
 
 	it('should define assert function', () => {
