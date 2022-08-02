@@ -114,7 +114,7 @@ declare namespace suitest {
 		 * suitest.saveScreenshot('{screenshotDir}/{dateTime}-{currentFile}-l{currentLine}.png');
 		 */
 		saveScreenshot(fileName?: string): TakeScreenshotChain<void>;
-		openDeepLink(deepLink: string): OpenDeepLinkChain;
+		openDeepLink(deepLink?: string): OpenDeepLinkChain;
 
 		getPairedDevice(): null | {
 			deviceId: string,
@@ -197,7 +197,7 @@ declare namespace suitest {
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
 		setScreenOrientation(orientation: ScreenOrientationValues): SetScreenOrientationChain;
-		openDeepLink(deepLink: string): OpenDeepLinkChain;
+		openDeepLink(deepLink?: string): OpenDeepLinkChain;
 	}
 
 	type NetworkLogEvent = {

@@ -87,9 +87,9 @@ describe('Open Deep Link chain', () => {
 	});
 
 	it('should throw error in case of invalid input', () => {
-		testInputErrorSync(openDeepLink, []);
+		testInputErrorSync(openDeepLink, [null]);
 		testInputErrorSync(openDeepLink, [1]);
-		testInputErrorSync(openDeepLink, ['']);
+		testInputErrorSync(openDeepLink, [0]);
 		testInputErrorSync(openDeepLink, [true]);
 		testInputErrorSync(openDeepLink, [{}]);
 	});
