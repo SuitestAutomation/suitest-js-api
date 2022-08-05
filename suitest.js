@@ -36,6 +36,7 @@ const networkRequestFactory = require('./lib/chains/networkRequestChain');
 const videoFactory = require('./lib/chains/videoChain');
 const playstationVideoFactory = require('./lib/chains/playstationVideoChain');
 const setScreenOrientationFactory = require('./lib/chains/setScreenOrientationChain');
+const openDeepLinkFactory = require('./lib/chains/openDeepLinkChain');
 
 // Constants
 const {ELEMENT_PROP, VALUE} = require('./lib/constants/element');
@@ -126,6 +127,7 @@ class SUITEST_API extends EventEmitter {
 		const {takeScreenshot} = takeScreenshotFactory(this);
 		const {saveScreenshot} = saveScreenshotFactory(this);
 		const {setScreenOrientation, setScreenOrientationAssert} = setScreenOrientationFactory(this);
+		const {openDeepLink, openDeepLinkAssert} = openDeepLinkFactory(this);
 
 		this.openApp = openApp;
 		this.closeApp = closeApp;
@@ -152,6 +154,7 @@ class SUITEST_API extends EventEmitter {
 		this.takeScreenshot = takeScreenshot;
 		this.saveScreenshot = saveScreenshot;
 		this.setScreenOrientation = setScreenOrientation;
+		this.openDeepLink = openDeepLink;
 
 		this.PROP = ELEMENT_PROP;
 		this.COMP = PROP_COMPARATOR;
@@ -198,6 +201,7 @@ class SUITEST_API extends EventEmitter {
 			video: videoAssert,
 			psVideo: playstationVideoAssert,
 			setScreenOrientation: setScreenOrientationAssert,
+			openDeepLink: openDeepLinkAssert,
 		};
 
 		// Listen to process events to trigger websocket termination and dump warnings, if any
