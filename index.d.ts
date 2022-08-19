@@ -40,6 +40,7 @@ import {CloseAppChain} from './typeDefinition/CloseAppChain';
 import {SuspendAppChain} from './typeDefinition/SuspendAppChain';
 import {RelativePosition} from './typeDefinition/RelativePositionChain';
 import {LaunchMode} from './typeDefinition/constants/LaunchMode';
+import {OpenDeepLinkChain} from './typeDefinition/OpenDeepLink';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -94,18 +95,15 @@ declare namespace suitest {
 		press(keys: string[], options?: { longPressMs?: string | number }): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
-
 		/**
 		 * @description return PromiseLike object with Buffer as value
 		 */
 		takeScreenshot(dataFormat?: 'raw'): TakeScreenshotChain<Buffer>;
 		setScreenOrientation(orientation: ScreenOrientationValues): SetScreenOrientationChain;
-
 		/**
 		 * @description return PromiseLike object with base64 string as value
 		 */
 		takeScreenshot(dataFormat: 'base64'): TakeScreenshotChain<string>;
-
 		/**
 		 * @description the complete path to the file name where the screenshot should be saved.
 		 *  Can be defined as string with placeholders, for example default path
@@ -120,6 +118,7 @@ declare namespace suitest {
 		 * suitest.saveScreenshot('{screenshotDir}/{dateTime}-{currentFile}-l{currentLine}.png');
 		 */
 		saveScreenshot(fileName?: string): TakeScreenshotChain<void>;
+		openDeepLink(deepLink?: string): OpenDeepLinkChain;
 
 		getPairedDevice(): null | {
 			deviceId: string,
@@ -202,6 +201,7 @@ declare namespace suitest {
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
 		setScreenOrientation(orientation: ScreenOrientationValues): SetScreenOrientationChain;
+		openDeepLink(deepLink?: string): OpenDeepLinkChain;
 	}
 
 	type NetworkLogEvent = {

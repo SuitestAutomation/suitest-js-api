@@ -1,6 +1,6 @@
 {
   "name": "suitest-js-api",
-  "version": "3.4.3",
+  "version": "3.5.0",
   "main": "index.js",
   "repository": "git@github.com:SuitestAutomation/suitest-js-api.git",
   "author": "Suitest <hello@suite.st>",
@@ -85,7 +85,7 @@
   },
   "dependencies": {
     "@suitest/smst-to-text": "^4.4.3",
-    "@suitest/translate": "^4.5.1",
+    "@suitest/translate": "^4.6.0",
     "@types/node": "^14.0.10",
     "ajv": "^6.12.2",
     "ansi-regex": "^5.0.0",
