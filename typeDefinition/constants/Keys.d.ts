@@ -55,4 +55,6 @@ export type Keys = {
 	SUBTRACT:    '[[Subtract]]',
 	TAB:         '[[Tab]]',
 	UP_ARROW:    '[[Up arrow]]',
+	SEARCH:      '[[Search]]',
+	DONE:        '[[Done]]',
 }
