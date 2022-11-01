@@ -9,4 +9,4 @@ export interface OpenUrlChain extends
 
 interface OpenUrlAbandonedChain extends AbstractChain {}
 
-type OpenUrlEvalResult = void | boolean;
+type OpenUrlEvalResult = undefined | boolean;

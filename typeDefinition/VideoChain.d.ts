@@ -88,5 +88,5 @@ interface VideoBaseEvalChain<TSelf> extends
 
 interface VideoAbandonedChain extends AbstractChain {}
 
-type VideoQueryResult = ElementProps | void;
-type VideoEvalResult = boolean | void;
+type VideoQueryResult = ElementProps | undefined;
+type VideoEvalResult = boolean | undefined;

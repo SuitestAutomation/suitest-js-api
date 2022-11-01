@@ -10,4 +10,4 @@ export interface ClearAppDataChain extends
 
 interface ClearAppDataAbandonedChain extends AbstractChain {}
 
-type ClearAppDataEvalResult = void | boolean;
+type ClearAppDataEvalResult = undefined | boolean;

@@ -9,4 +9,4 @@ export interface ExecuteBrightScriptChain extends
 
 interface ExecuteBrightScriptAbandonedChain extends AbstractChain {}
 
-type ExecuteBrightScriptEvalResult = boolean | void;
+type ExecuteBrightScriptEvalResult = boolean | undefined;

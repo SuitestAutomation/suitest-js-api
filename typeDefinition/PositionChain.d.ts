@@ -52,4 +52,4 @@ interface PositionEmptyChain extends PositionBaseEvalChain<PositionEmptyChain> {
 interface PositionAbandonedChain extends AbstractChain {}
 
 type PositionQueryResult = string;
-type PositionEvalResult = boolean | void;
+type PositionEvalResult = boolean | undefined;
