@@ -69,6 +69,7 @@ declare namespace suitest {
 		location(): LocationChain;
 		application(): ApplicationChain;
 		clearAppData(): ClearAppDataChain;
+		clearGameData(): ClearAppDataChain;
 		cookie(cookieName: string): CookieChain;
 		element(elementSelector: ElementSelector[] | ElementSelector | string): ElementChain;
 		video(): VideoChain;
@@ -173,6 +174,7 @@ declare namespace suitest {
 		location(): LocationChain;
 		application(): ApplicationChain;
 		clearAppData(): ClearAppDataChain;
+		clearGameData(): ClearAppDataChain;
 		cookie(cookieName: string): CookieChain;
 		element(elementSelector: ElementSelector[] | ElementSelector | string): Omit<ElementChain, 'getCssProperties' | 'handle' | 'getAttributes'>;
 		video(): VideoChain;
