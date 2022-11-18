@@ -5,6 +5,7 @@ const {
 	validateNonEmptyStringOrUndefined,
 	validateStVarOrPositiveNumber,
 	validateStVarOrNumber,
+	validateStVarOrPositiveNumberNotNull,
 } = require('../../lib/validation/validators');
 const {validate, validators} = require('../../lib/validation');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
@@ -50,6 +51,16 @@ describe('validators', () => {
 		assert.throws(() => validateStVarOrPositiveNumber(null), /Error/);
 		assert.throws(() => validateStVarOrPositiveNumber(NaN), /Error/);
 		assert.throws(() => validateStVarOrPositiveNumber('10'), /Error/);
+	});
+	it('should validate vars or positive number, but not null', () => {
+		assert.strictEqual(validateStVarOrPositiveNumberNotNull(1), 1);
+		assert.strictEqual(validateStVarOrPositiveNumberNotNull('<%any var%>'), '<%any var%>');
+		assert.throws(() => validateStVarOrPositiveNumberNotNull(0), /Error/);
+		assert.throws(() => validateStVarOrPositiveNumberNotNull(-1), /Error/);
+		assert.throws(() => validateStVarOrPositiveNumberNotNull(''), /Error/);
+		assert.throws(() => validateStVarOrPositiveNumberNotNull(null), /Error/);
+		assert.throws(() => validateStVarOrPositiveNumberNotNull(NaN), /Error/);
+		assert.throws(() => validateStVarOrPositiveNumberNotNull('10'), /Error/);
 	});
 	it('should validate vars or number', () => {
 		assert.strictEqual(validateStVarOrNumber(0), 0);
