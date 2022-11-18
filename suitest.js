@@ -135,6 +135,7 @@ class SUITEST_API extends EventEmitter {
 		this.openUrl = openUrl;
 		this.application = application;
 		this.clearAppData = clearAppData;
+		this.clearGameData = clearAppData;
 		this.location = location;
 		this.cookie = cookie;
 		this.sleep = sleep;
@@ -179,6 +180,7 @@ class SUITEST_API extends EventEmitter {
 		this.assert = {
 			application: applicationAssert,
 			clearAppData: clearAppDataAssert,
+			clearGameData: clearAppDataAssert,
 			openApp: openAppAssert,
 			closeApp: closeAppAssert,
 			suspendApp: suspendAppAssert,
