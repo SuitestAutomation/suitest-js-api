@@ -57,4 +57,9 @@ export type Keys = {
 	UP_ARROW:    '[[Up arrow]]',
 	SEARCH:      '[[Search]]',
 	DONE:        '[[Done]]',
+	UP:          '[[Up]]',
+	DOWN:        '[[Down]]',
+	LEFT:        '[[Left]]',
+	RIGHT:       '[[Right]]',
+	OK:          '[[Ok]]',
 }
