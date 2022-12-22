@@ -2,24 +2,35 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2
+version: 2.1
+
+executors:
+  node-14:
+    docker:
+      - image: cimg/node:14.21
+  node-16:
+    docker:
+      - image: cimg/node:16.18
+  node-18:
+    docker:
+      - image: cimg/node:18.12
+
 jobs:
   build:
     environment:
       CC_TEST_REPORTER_ID: b8382b02e5d130520012123a7fcc97b478a6294991078cdabb721315bd2a9dd9
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:14
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
+    working_directory: ~/suitest-js-api
 
-    working_directory: ~/repo
+    parameters:
+      version:
+        type: string
+    executor: node-<< parameters.version >>
 
     steps:
       - checkout
+
+      - run: node --version
 
       - run:
           name: Install dependencies
@@ -46,3 +57,10 @@ jobs:
           name: Check TypeScript definitions
           command: |
             npm run test-definitions
+workflows:
+  workflow:
+    jobs:
+      - build:
+          matrix:
+            parameters:
+              version: ["14", "16", "18"]
