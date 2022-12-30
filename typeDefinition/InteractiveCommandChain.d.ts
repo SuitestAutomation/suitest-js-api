@@ -1,6 +1,9 @@
+import { REPLServer } from "repl";
+
 export type ReplOptions = {
-    cwd?:string,
+    cwd?: string,
     repeater?: string|Function,
     watch?: string|Array<string>,
-    ignored?:string
+    ignored?: string,
+    vars?: REPLServer["context"],
 }

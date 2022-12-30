@@ -70,6 +70,7 @@ describe('suitest typescripts declarations tests', () => {
 		'videoChain', 'playstationVideoChain', 'indexTest',
 		'runTestChain', 'takeScreenshotChain', 'saveScreenshotChain',
 		'setScreenOrientation', 'closeAppChain', 'suspendAppChain',
+		'interactiveChain',
 		// 'executeBrightScriptChain', 'brightScriptExpressionChain',
 	].forEach(fileName => {
 		it(`should compile example ${fileName}`, (done) => {
@@ -83,7 +84,7 @@ describe('suitest typescripts declarations tests', () => {
 	// should compile files with error
 	[
 		'networkRequestChain.fail', 'elementChain.fail', 'videoChain.fail', 'playstationVideoChain.fail',
-		'runTestChain.fail',
+		'runTestChain.fail', 'interactiveChain.fail',
 	].forEach(fileName => {
 		it(`should not compile example ${fileName} chain`, (done) => {
 			assert.ok(
