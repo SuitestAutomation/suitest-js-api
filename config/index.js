@@ -11,7 +11,7 @@ const timestamp = require('../lib/constants/timestamp');
 const {validate, validators} = require('../lib/validation');
 const {invalidConfigObj} = require('../lib/texts');
 const {pickNonNil} = require('../lib/utils/common');
-const envVars = require('../lib/constants/enviroment');
+const envVars = require('../lib/constants/environment');
 
 const sentryDsn = 'https://1f74b885d0c44549b57f307733d60351:dd736ff3ac994104ab6635da53d9be2e@sentry.io/288812';
 const DEFAULT_TIMEOUT = 2000;
@@ -19,7 +19,7 @@ const DEFAULT_TIMEOUT = 2000;
 const overridableFields = [
 	'tokenId', 'tokenPassword', 'concurrency', 'preset', 'presets', 'deviceId', 'appConfigId', 'inspect', 'inspectBrk',
 	'logLevel', 'logDir', 'timestamp', 'configFile', 'disallowCrashReports', 'defaultTimeout', 'screenshotDir',
-	'includeChangelist',
+	'includeChangeList',
 ];
 
 const serverAddress = process.env[envVars.SUITEST_BE_SERVER] || 'the.suite.st';

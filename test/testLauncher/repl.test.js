@@ -5,7 +5,7 @@ const chokidar = require('chokidar');
 const EventEmitter = require('events');
 
 const logger = require('../../index').logger;
-const envVars = require('../../lib/constants/enviroment');
+const envVars = require('../../lib/constants/environment');
 const suitestRepl = require('../../lib/testLauncher/repl');
 const ipcClient = require('../../lib/testLauncher/ipc/client');
 
@@ -60,11 +60,11 @@ describe('repl', () => {
 
 		process.env[envVars.SUITEST_CHILD_PROCESS] = 'test';
 
-		const replPromsie = suitestRepl.startRepl({});
+		const replPromise = suitestRepl.startRepl({});
 
 		assert.ok(writeStub.calledOnce);
 		assert.ok(addListenerStub.calledOnce);
-		assert.ok(replPromsie instanceof Promise);
+		assert.ok(replPromise instanceof Promise);
 
 		delete process.env[envVars.SUITEST_CHILD_PROCESS];
 	});
@@ -73,11 +73,11 @@ describe('repl', () => {
 		sandbox.stub(process, 'chdir');
 		const writeStub = sandbox.stub(ipcClient, 'write');
 		const addListenerStub = sandbox.stub(ipcClient, 'addListener');
-		const replPromsie = suitestRepl.startRepl({});
+		const replPromise = suitestRepl.startRepl({});
 
 		assert.ok(writeStub.notCalled);
 		assert.ok(addListenerStub.notCalled);
-		assert.ok(replPromsie instanceof Promise);
+		assert.ok(replPromise instanceof Promise);
 	});
 
 	it('stopRepl', () => {
@@ -150,7 +150,7 @@ describe('repl', () => {
 		repeaterFromString(
 			'repl#repeater',
 			path.join(__dirname, '/../../lib/utils/testHelpers/'),
-			''
+			'',
 		)();
 
 		assert(repeater.called, 'Repeater with module spec was correctly resolved');
@@ -163,7 +163,7 @@ describe('repl', () => {
 		repeaterFromString(
 			'repl#nested.repeater',
 			path.join(__dirname, '/../../lib/utils/testHelpers/'),
-			''
+			'',
 		)();
 
 		assert(repeater.called, 'Nested repeater with module spec was correctly resolved');
@@ -171,7 +171,7 @@ describe('repl', () => {
 		repeaterFromString(
 			'nested.repeater',
 			path.join(__dirname, '/../../lib/utils/testHelpers/'),
-			'repl.js'
+			'repl.js',
 		)();
 
 		assert(repeater.secondCall, 'Repeater without module name was correctly resolved');
