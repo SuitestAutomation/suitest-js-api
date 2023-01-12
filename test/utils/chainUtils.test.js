@@ -50,7 +50,7 @@ describe('chainUtils', () => {
 
 		nock(config.apiUrl)
 			.get(makeUrlFromArray([
-				`${endpoints.appTestDefinitionById}?includeChangeList=${false}`,
+				`${endpoints.appTestDefinitionById}?includeChangelist=${false}`,
 				{appId: 'appId', versionId: 'versionId', testId: 'mainTestId'},
 			]))
 			.reply(200, {definition: [{lineId: '1', type: 'sleep', val: 1000}]});
@@ -74,13 +74,13 @@ describe('chainUtils', () => {
 
 		nock(config.apiUrl)
 			.get(makeUrlFromArray([
-				`${endpoints.appTestDefinitionById}?includeChangeList=${false}`,
+				`${endpoints.appTestDefinitionById}?includeChangelist=${false}`,
 				{appId: 'appId', versionId: 'versionId', testId: 'mainTestId'},
 			]))
 			.reply(200, {definition: [{lineId: '1', type: 'runSnippet', val: 'test2'}]});
 		nock(config.apiUrl)
 			.get(makeUrlFromArray([
-				`${endpoints.appTestDefinitionById}?includeChangeList=${false}`,
+				`${endpoints.appTestDefinitionById}?includeChangelist=${false}`,
 				{appId: 'appId', versionId: 'versionId', testId: 'test2'},
 			]))
 			.reply(200, {definition: [{lineId: '1', type: 'sleep', val: 200}]});
@@ -109,7 +109,7 @@ describe('chainUtils', () => {
 
 		nock(config.apiUrl)
 			.get(makeUrlFromArray([
-				`${endpoints.appTestDefinitionById}?includeChangeList=${false}`,
+				`${endpoints.appTestDefinitionById}?includeChangelist=${false}`,
 				{appId: 'appId', versionId: 'versionId', testId: 'mainTestId'},
 			]))
 			.reply(404, 'not found');
@@ -125,13 +125,13 @@ describe('chainUtils', () => {
 
 		nock(config.apiUrl)
 			.get(makeUrlFromArray([
-				`${endpoints.appTestDefinitionById}?includeChangeList=${false}`,
+				`${endpoints.appTestDefinitionById}?includeChangelist=${false}`,
 				{appId: 'appId', versionId: 'versionId', testId: 'mainTestId'},
 			]))
 			.reply(200, {definition: [{lineId: '1', excluded: true, type: 'runSnippet', val: 'test2'}]});
 		nock(config.apiUrl)
 			.get(makeUrlFromArray([
-				`${endpoints.appTestDefinitionById}?includeChangeList=${false}`,
+				`${endpoints.appTestDefinitionById}?includeChangelist=${false}`,
 				{appId: 'appId', versionId: 'versionId', testId: 'test2'},
 			]))
 			.reply(200, {definition: [{lineId: '1', type: 'sleep', val: 200}]});
