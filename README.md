@@ -45,6 +45,7 @@ etc.
 - Locally installed Chrome, Firefox, Safari and Edge
 - Apple tvOS, iOS and iPadOS devices, including simulators 
 - Roku
+- Vizio
 
 Suitest supports automating end-to-end testing of:
 
@@ -52,11 +53,12 @@ Suitest supports automating end-to-end testing of:
 - Samsung Orsay and Tizen apps
 - LG NetCast and webOS apps 
 - HTML apps for other TV's or set-top boxes
-- Android TV apps (including FireTV)
-- tvOS apps
+- Android TV and mobile apps (including FireTV)
+- Apple TV (tvOS), iOS and iPadOS apps
 - Xbox One and Xbox Series S and X apps
 - PlayStation 4 / 5 apps
 - Roku apps
+- Vizio SmartCast
 - Traditional websites and web apps for desktop browsers.
 
 ## Contributing
