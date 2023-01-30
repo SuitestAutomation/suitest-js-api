@@ -8,6 +8,8 @@ const {pairDevice} = require('./lib/commands/pairDevice');
 const releaseDevice = require('./lib/commands/releaseDevice');
 const {setAppConfig} = require('./lib/commands/setAppConfig');
 const {getAppConfig} = require('./lib/commands/getAppConfig');
+const startRecording = require('./lib/commands/startRecording');
+const stopRecording = require('./lib/commands/stopRecording');
 
 // Chains
 const openAppFactory = require('./lib/chains/openAppChain');
@@ -102,6 +104,8 @@ class SUITEST_API extends EventEmitter {
 		this.closeSession = (...args) => closeSession(this, ...args);
 		this.releaseDevice = (...args) => releaseDevice(this, ...args);
 		this.getAppConfig = (...args) => getAppConfig(this, ...args);
+		this.startRecording = (...args) => startRecording(this, ...args);
+		this.stopRecording = (...args) => stopRecording(this, ...args);
 
 		const {openApp, openAppAssert} = openAppFactory(this);
 		const {closeApp, closeAppAssert} = closeAppFactory(this);
