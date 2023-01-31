@@ -83,7 +83,7 @@ describe('pairDevice', () => {
 		stubDeviceInfoFeed(deviceId);
 		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
 		try {
-			const res = await pairDevice(deviceId, 'manualstart');
+			const res = await pairDevice(deviceId, {recording: 'manualstart'});
 
 			assert.ok(res, 'response');
 			assert.equal(res.result, 'success', 'response result');
@@ -99,7 +99,7 @@ describe('pairDevice', () => {
 		stubDeviceInfoFeed(deviceId);
 		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
 		try {
-			const res = await pairDevice(deviceId, 'manualstart', 'https://someUrl');
+			const res = await pairDevice(deviceId, {recording: 'manualstart', webhookUrl: 'https://someUrl'});
 
 			assert.ok(res, 'response');
 			assert.equal(res.result, 'success', 'response result');

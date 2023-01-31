@@ -53,7 +53,7 @@ declare namespace suitest {
 		openSession(options: OpenSessionOptions): Promise<OpenSessionResult|SuitestError>;
 		closeSession(): Promise<object|SuitestError>;
 		setAppConfig(configId: string, options?: ConfigOverride): Promise<void|SuitestError>;
-		pairDevice(deviceId: string, recording?: 'autostart' | 'manualstart' | 'none', webhookUrl?: string): Promise<DeviceData|SuitestError>;
+		pairDevice(deviceId: string, {recording, webhookUrl}: {recording?: 'autostart' | 'manualstart' | 'none', webhookUrl?: string} | undefined): Promise<DeviceData|SuitestError>;
 		releaseDevice(): Promise<void|SuitestError>;
 		startREPL(options?: ReplOptions): Promise<void>;
 		getAppConfig(): Promise<AppConfiguration|SuitestError>;
