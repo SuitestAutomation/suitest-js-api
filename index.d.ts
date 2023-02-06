@@ -57,8 +57,8 @@ declare namespace suitest {
 		releaseDevice(): Promise<void|SuitestError>;
 		startREPL(options?: ReplOptions): Promise<void>;
 		getAppConfig(): Promise<AppConfiguration|SuitestError>;
-		startRecording(webhookUrl?: string): Promise<void|SuitestError>;
-		stopRecording(webhookUrl?: string): Promise<void|SuitestError>;
+		startRecording({webhookUrl}?: {webhookUrl: string}): Promise<void|SuitestError>;
+		stopRecording({webhookUrl}?: {webhookUrl: string}): Promise<void|SuitestError>;
 
 		// config
 		getConfig(): ConfigureOptions;
