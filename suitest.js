@@ -8,6 +8,8 @@ const {pairDevice} = require('./lib/commands/pairDevice');
 const releaseDevice = require('./lib/commands/releaseDevice');
 const {setAppConfig} = require('./lib/commands/setAppConfig');
 const {getAppConfig} = require('./lib/commands/getAppConfig');
+const startRecording = require('./lib/commands/startRecording');
+const stopRecording = require('./lib/commands/stopRecording');
 
 // Chains
 const openAppFactory = require('./lib/chains/openAppChain');
@@ -89,6 +91,8 @@ class SUITEST_API extends EventEmitter {
 		this.setContinueOnFatalError = (continueOnFatalError) => this.configuration.override({continueOnFatalError});
 		this.setDisallowCrashReports = (disallowCrashReports) => this.configuration.override({disallowCrashReports});
 		this.setLogLevel = (logLevel) => this.configuration.override({logLevel});
+		this.setRecordingOption = (recordingOption) => this.configuration.override({recordingOption});
+		this.setWebhookUrl = (webhookUrl) => this.configuration.override({webhookUrl});
 
 		// creating methods based on instance dependencies
 		this.logger = createLogger(this.configuration.config, this.pairedDeviceContext);
@@ -102,6 +106,8 @@ class SUITEST_API extends EventEmitter {
 		this.closeSession = (...args) => closeSession(this, ...args);
 		this.releaseDevice = (...args) => releaseDevice(this, ...args);
 		this.getAppConfig = (...args) => getAppConfig(this, ...args);
+		this.startRecording = (...args) => startRecording(this, ...args);
+		this.stopRecording = (...args) => stopRecording(this, ...args);
 
 		const {openApp, openAppAssert} = openAppFactory(this);
 		const {closeApp, closeAppAssert} = closeAppFactory(this);
