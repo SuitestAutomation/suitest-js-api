@@ -63,7 +63,7 @@ describe('stopRecording', () => {
 		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
 		assert.strictEqual(pairedDeviceContext.context, 'someContext', 'device context set');
 		try {
-			await stopRecording({webhook: 'https://someUrl'});
+			await stopRecording({webhookUrl: 'https://someUrl'});
 		} catch (error) {
 			assert.ok(!error, 'error');
 		}

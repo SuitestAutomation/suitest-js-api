@@ -64,7 +64,7 @@ describe('startRecording', () => {
 		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
 		assert.strictEqual(pairedDeviceContext.context, 'someContext', 'device context set');
 		try {
-			await startRecording({webhook: 'https://someUrl'});
+			await startRecording({webhookUrl: 'https://someUrl'});
 		} catch (error) {
 			assert.ok(!error, 'error');
 		}
