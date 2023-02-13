@@ -58,12 +58,12 @@ describe('stopRecording', () => {
 		}
 	});
 
-	it('should allow stopRecording with webhookUrl', async() => {
+	it('should allow stopRecording with discard option', async() => {
 		pairedDeviceContext.setContext('someContext');
 		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
 		assert.strictEqual(pairedDeviceContext.context, 'someContext', 'device context set');
 		try {
-			await stopRecording({webhookUrl: 'https://someUrl'});
+			await stopRecording({discard: true});
 		} catch (error) {
 			assert.ok(!error, 'error');
 		}
