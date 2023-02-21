@@ -27,6 +27,6 @@ describe('Queue', function() {
 			assert.ok(obj['0'] < obj['3'], 'last should finished latter then 1');
 			assert.ok(obj['1'] > obj['3'], '2 should finished latter then last');
 			done();
-		});
+		}).catch(done);
 	});
 });

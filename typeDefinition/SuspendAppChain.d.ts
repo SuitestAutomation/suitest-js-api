@@ -9,4 +9,4 @@ export interface SuspendAppChain extends
 
 interface SuspendAppAbandonedChain extends AbstractChain {}
 
-type SuspendAppEvalResult = void | boolean;
+type SuspendAppEvalResult = undefined | boolean;

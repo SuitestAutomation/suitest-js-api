@@ -75,4 +75,4 @@ interface BrightScriptExpressionAbandonedChain extends
 {}
 
 type BrightScriptExpressionQueryResult = string;
-type BrightScriptExpressionEvalResult = boolean | void;
+type BrightScriptExpressionEvalResult = boolean | undefined;

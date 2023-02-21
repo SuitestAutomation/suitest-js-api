@@ -29,20 +29,32 @@ describe('testLauncher readUserConfig', () => {
 		}
 	});
 
+	it('readUserConfig method should support other types of config files', () => {
+		// for test simplicity, only single format is used
+		sinon.stub(fs, 'readFileSync').returns('test: true');
+		const expected = {test: true};
+
+		try {
+			assert.deepStrictEqual(readUserConfig('.file.yml'), expected, 'parsed successfully');
+		} finally {
+			fs.readFileSync.restore();
+		}
+	});
+
 	it('readUserConfig method should throw correct errors', () => {
 		assert.throws(
 			() => readUserConfig(path.join('.', '__non-such-dir__', '__non-such-file__.json')),
 			err => err.type === SuitestError.type,
-			'falied to read file',
+			'failed to read file',
 		);
 
 		sinon.stub(fs, 'readFileSync').returns('invalid json');
 
 		try {
 			assert.throws(
-				() => readUserConfig(''),
+				() => readUserConfig('file.json'),
 				err => err.type === SuitestError.type,
-				'falied to parse json',
+				'failed to parse json',
 			);
 		} finally {
 			fs.readFileSync.restore();

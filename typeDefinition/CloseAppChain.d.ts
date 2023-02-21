@@ -9,4 +9,4 @@ export interface CloseAppChain extends
 
 interface CloseAppAbandonedChain extends AbstractChain {}
 
-type CloseAppEvalResult = void | boolean;
+type CloseAppEvalResult = undefined | boolean;

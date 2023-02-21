@@ -47,5 +47,5 @@ interface PlayStationVideoBaseEvalChain<TSelf> extends
 
 interface PlayStationVideoAbandonedChain extends AbstractChain {}
 
-type PlayStationVideoQueryResult = PlayStationVideoProps | void;
-type PlayStationVideoEvalResult = boolean | void;
+type PlayStationVideoQueryResult = PlayStationVideoProps | undefined;
+type PlayStationVideoEvalResult = boolean | undefined;

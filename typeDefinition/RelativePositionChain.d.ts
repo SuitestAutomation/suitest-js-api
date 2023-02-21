@@ -45,4 +45,4 @@ interface RelativePositionEmptyChain extends RelativePositionBaseEvalChain<Relat
 interface RelativePositionAbandonedChain extends AbstractChain {}
 
 type RelativePositionQueryResult = string;
-type RelativePositionEvalResult = boolean | void;
+type RelativePositionEvalResult = boolean | undefined;

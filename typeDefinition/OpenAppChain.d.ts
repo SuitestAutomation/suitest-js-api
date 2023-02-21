@@ -13,4 +13,4 @@ export interface OpenAppChain extends
 
 interface OpenAppAbandonedChain extends AbstractChain {}
 
-type OpenAppEvalResult = void | boolean;
+type OpenAppEvalResult = undefined | boolean;

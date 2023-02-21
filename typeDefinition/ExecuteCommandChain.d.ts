@@ -9,4 +9,4 @@ export interface ExecuteCommandChain extends
 
 interface ExecuteCommandAbandonedChain extends AbstractChain {}
 
-type ExecuteCommandEvalResult = boolean | void;
+type ExecuteCommandEvalResult = boolean | undefined;

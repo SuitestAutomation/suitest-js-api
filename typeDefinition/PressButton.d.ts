@@ -38,4 +38,4 @@ interface PressButtonEmptyChain extends PressButtonBaseEvalChain<PressButtonEmpt
 interface PressButtonAbandonedChain extends AbstractChain {}
 
 type PressButtonQueryResult = string;
-type PressButtonEvalResult = boolean | void;
+type PressButtonEvalResult = boolean | undefined;
