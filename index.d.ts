@@ -53,10 +53,12 @@ declare namespace suitest {
 		openSession(options: OpenSessionOptions): Promise<OpenSessionResult|SuitestError>;
 		closeSession(): Promise<object|SuitestError>;
 		setAppConfig(configId: string, options?: ConfigOverride): Promise<void|SuitestError>;
-		pairDevice(deviceId: string): Promise<DeviceData|SuitestError>;
+		pairDevice(deviceId: string, {recording, webhookUrl}: {recording?: 'autostart' | 'manualstart' | 'none', webhookUrl?: string} | undefined): Promise<DeviceData|SuitestError>;
 		releaseDevice(): Promise<void|SuitestError>;
 		startREPL(options?: ReplOptions): Promise<void>;
 		getAppConfig(): Promise<AppConfiguration|SuitestError>;
+		startRecording({webhookUrl}?: {webhookUrl: string}): Promise<void|SuitestError>;
+		stopRecording({discard}?: {discard: boolean}): Promise<void|SuitestError>;
 
 		// config
 		getConfig(): ConfigureOptions;
@@ -64,6 +66,8 @@ declare namespace suitest {
 		setContinueOnFatalError(continueOnFatalError: ConfigureOptions['continueOnFatalError']): void;
 		setDisallowCrashReports(disallowCrashReports: ConfigureOptions['disallowCrashReports']): void;
 		setLogLevel(logLevel: ConfigureOptions['logLevel']): void;
+		setRecordingOption(recordingOption: ConfigureOptions['recordingOption']): void;
+		setWebhookUrl(webhookUrl: ConfigureOptions['webhookUrl']): void;
 
 		// subjects
 		location(): LocationChain;
@@ -277,6 +281,8 @@ declare namespace suitest {
 
 	interface ConfigureOptions {
 		logLevel: 'silent'|'normal'|'verbose'|'debug'|'silly';
+		recordingOption: 'autostart'|'manualstart'|'none';
+		webhookUrl: string;
 		disallowCrashReports: boolean;
 		continueOnFatalError: boolean;
 		defaultTimeout: number;

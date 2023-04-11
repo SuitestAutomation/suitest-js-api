@@ -76,4 +76,36 @@ describe('pairDevice', () => {
 			assert.ok(!error, 'error');
 		}
 	});
+
+	it('should allow pairDevice with recording option in token session context', async() => {
+		const deviceId = uuid();
+
+		stubDeviceInfoFeed(deviceId);
+		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
+		try {
+			const res = await pairDevice(deviceId, {recording: 'manualstart'});
+
+			assert.ok(res, 'response');
+			assert.equal(res.result, 'success', 'response result');
+			assert.ok(!!pairedDeviceContext, 'device context set');
+		} catch (error) {
+			assert.ok(!error, 'error');
+		}
+	});
+
+	it('should allow pairDevice with recording option with webhookUrl in token session context', async() => {
+		const deviceId = uuid();
+
+		stubDeviceInfoFeed(deviceId);
+		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
+		try {
+			const res = await pairDevice(deviceId, {recording: 'manualstart', webhookUrl: 'https://someUrl'});
+
+			assert.ok(res, 'response');
+			assert.equal(res.result, 'success', 'response result');
+			assert.ok(!!pairedDeviceContext, 'device context set');
+		} catch (error) {
+			assert.ok(!error, 'error');
+		}
+	});
 });
