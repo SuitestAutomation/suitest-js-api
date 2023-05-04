@@ -126,7 +126,6 @@ declare namespace suitest {
 			model: string,
 			owner: string,
 			firmware: string,
-			isShared: boolean,
 			modelId: string,
 			platforms: string[],
 			customName?: string,
