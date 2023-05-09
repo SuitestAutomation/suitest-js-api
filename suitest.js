@@ -58,6 +58,7 @@ const TAP_TYPES = require('./lib/constants/tapTypes');
 const LAUNCH_MODE = require('./lib/constants/launchMode');
 const DIRECTIONS = require('./lib/constants/directions');
 const SCREEN_ORIENTATION = require('./lib/constants/screenOrientation');
+const COOKIE_PROP = require('./lib/constants/cookieProp');
 
 // Network
 const webSocketsFactory = require('./lib/api/webSockets');
@@ -181,6 +182,7 @@ class SUITEST_API extends EventEmitter {
 		this.LAUNCH_MODE = LAUNCH_MODE;
 		this.DIRECTIONS = DIRECTIONS;
 		this.SCREEN_ORIENTATION = SCREEN_ORIENTATION;
+		this.COOKIE_PROP = COOKIE_PROP;
 
 		this.assert = {
 			application: applicationAssert,

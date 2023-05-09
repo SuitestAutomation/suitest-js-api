@@ -41,6 +41,7 @@ import {SuspendAppChain} from './typeDefinition/SuspendAppChain';
 import {RelativePosition} from './typeDefinition/RelativePositionChain';
 import {LaunchMode} from './typeDefinition/constants/LaunchMode';
 import {OpenDeepLinkChain} from './typeDefinition/OpenDeepLink';
+import {CookieProp} from './typeDefinition/constants/CookieProp';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -156,6 +157,7 @@ declare namespace suitest {
 		DIRECTIONS: Directions;
 		SCREEN_ORIENTATION: ScreenOrientation;
 		LAUNCH_MODE: LaunchMode;
+		COOKIE_PROP: CookieProp;
 
 		authContext: AuthContext;
 		appContext: Context;
