@@ -105,14 +105,13 @@ describe('SuitestLauncher', () => {
 	});
 
 	it('should exit runTokenSession when illegal command provided', async() => {
-		const devicesDetailsNock = nock(config.apiUrl).get(makeUrlFromArray([endpoints.devices, null, {limit: 100}]))
-			.reply(200, {
-				values: [{deviceId: 'deviceId'}],
-			});
+		const testingDeviceId = 'deviceId';
+		const devicesDetailsNock = nock(config.apiUrl).get(makeUrlFromArray([endpoints.device, {deviceId: testingDeviceId}]))
+			.reply(200, {});
 		const suitestLauncher = new TestLauncher({
 			tokenId: 'tokenId',
 			tokenPassword: 'tokenPassword',
-			deviceId: 'deviceId',
+			deviceId: testingDeviceId,
 			appConfigId: 'config',
 		}, ['illegalCommand', '--illegalCommand']);
 
@@ -177,15 +176,14 @@ describe('SuitestLauncher', () => {
 	});
 
 	it('should fail with error when provided device id not exists (devices response is empty)', async() => {
+		const testingDeviceId = 'unknown-id1';
 		const devicesDetailsNock = nock(config.apiUrl)
-			.get(makeUrlFromArray([endpoints.devices, null, {limit: 100}]))
-			.reply(200, {
-				values: [],
-			});
+			.get(makeUrlFromArray([endpoints.device, {deviceId: testingDeviceId}]))
+			.reply(404);
 		const suitestLauncher = new TestLauncher({
 			tokenId: '1',
 			tokenPassword: '1',
-			deviceId: 'unknown-id1',
+			deviceId: testingDeviceId,
 			appConfigId: 'config-id1',
 		}, ['npm', '--version']);
 
