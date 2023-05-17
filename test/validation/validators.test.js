@@ -1,6 +1,6 @@
 const assert = require('assert');
 const {
-	validatePositiveNumber,
+	validateNotNegativeNumber,
 	validateNumber,
 	validateNonEmptyStringOrUndefined,
 	validateStVarOrPositiveNumber,
@@ -12,12 +12,12 @@ const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError
 
 describe('validators', () => {
 	it('should validate positive number', () => {
-		assert.strictEqual(validatePositiveNumber(0), 0);
-		assert.strictEqual(validatePositiveNumber(1), 1);
-		assert.throws(() => validatePositiveNumber(-1), /Error/);
-		assert.throws(() => validatePositiveNumber(''), /Error/);
-		assert.throws(() => validatePositiveNumber(null), /Error/);
-		assert.throws(() => validatePositiveNumber(NaN), /Error/);
+		assert.strictEqual(validateNotNegativeNumber(0), 0);
+		assert.strictEqual(validateNotNegativeNumber(1), 1);
+		assert.throws(() => validateNotNegativeNumber(-1), /Error/);
+		assert.throws(() => validateNotNegativeNumber(''), /Error/);
+		assert.throws(() => validateNotNegativeNumber(null), /Error/);
+		assert.throws(() => validateNotNegativeNumber(NaN), /Error/);
 	});
 
 	it('should validate number', () => {
