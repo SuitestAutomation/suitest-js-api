@@ -14,6 +14,9 @@ executors:
   node-18:
     docker:
       - image: cimg/node:18.12
+  node-20:
+    docker:
+      - image: cimg/node:20.0
 
 jobs:
   build:
@@ -63,4 +66,4 @@ workflows:
       - build:
           matrix:
             parameters:
-              version: ["14", "16", "18"]
+              version: ["14", "16", "18", "20"]
