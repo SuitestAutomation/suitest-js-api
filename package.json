@@ -96,7 +96,7 @@
     "escape-string-regexp": "4.0.0",
     "ini": "^2.0.0",
     "js-yaml": "^4.1.0",
-    "json5": "^2.2.0",
+    "json5": "^2.2.3",
     "keypress": "^0.2.1",
     "moment": "^2.29.4",
     "node-fetch": "^2.6.0",
