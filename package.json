@@ -31,7 +31,7 @@
     "suitest": "bin/suitest"
   },
   "scripts": {
-    "test": "mocha --exit --timeout 5000",
+    "test": "mocha --config test/mocha.yml --exit --timeout 5000",
     "test-definitions": "cd ./testDefinition && mocha --no-timeouts definition.test.js",
     "test-watch": "npm run test -- -w",
     "coverage": "nyc --reporter=lcov npm run test",
