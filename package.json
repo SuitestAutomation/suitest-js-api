@@ -74,7 +74,7 @@
     "eslint": "^7.1.0",
     "express": "^4.17.1",
     "husky": "^4.2.5",
-    "mocha": "^7.2.0",
+    "mocha": "^10.2.0",
     "mock-fs": "^5.1.0",
     "mock-require": "^3.0.3",
     "mock-socket": "^7.1.0",
