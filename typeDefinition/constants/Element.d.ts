@@ -90,22 +90,8 @@ export type ElementPropTypes = {
 	OFFSET_LEFT:               'offsetLeft',
 };
 
-// Element properties comparators
-export type PropComparators = {
-	EQUAL:         '=',
-	NOT_EQUAL:     '!=',
-	APPROX:        '+-',
-	CONTAIN:       '~',
-	NOT_CONTAIN:   '!~',
-	GREATER:       '>',
-	EQUAL_GREATER: '>=',
-	LESSER:        '<',
-	EQUAL_LESSER:  '<=',
-	START:         '^',
-	NOT_START:     '!^',
-	END:           '$',
-	NOT_END:       '!$',
-};
+// Needed for keep backward compatibility
+export type PropComparators = import('./PropComparators').PropComparators;
 
 // Element special values
 export type ValueTypes = {REPO: symbol};

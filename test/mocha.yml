@@ -1,0 +1,6 @@
+require:
+  - config/setTestConfig
+  - lib/utils/testHelpers/mockWebSocket.js
+  - lib/utils/testHelpers/mockHelpers.js
+  - lib/utils/testHelpers/mockRaven.js
+recursive: true

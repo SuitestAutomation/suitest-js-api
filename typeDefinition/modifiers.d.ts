@@ -244,6 +244,10 @@ export interface ElementMatchModifiers<T> {
 	matchesRepo(propertyDefinition: PropertyRepoObjectDefinition | MatchesRepoPropertiesItems): T;
 }
 
+export interface WithProperties<TProp, TReturn> {
+	withProperties: (props: TProp[]) => TReturn,
+}
+
 export interface HasExitedModifiers<T> {
 	hasExited(): T;
 }
