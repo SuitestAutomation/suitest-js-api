@@ -1,6 +1,6 @@
 {
   "name": "suitest-js-api",
-  "version": "3.8.1",
+  "version": "3.11.0",
   "main": "index.js",
   "repository": "git@github.com:SuitestAutomation/suitest-js-api.git",
   "author": "Suitest <hello@suite.st>",
@@ -18,6 +18,7 @@
     "Android TV testing",
     "Apple TV testing",
     "Roku testing",
+    "VIDAA testing",
     "Vizio SmartCast testing",
     "Smart TV test automation",
     "Fire TV test automation"
@@ -31,7 +32,7 @@
     "suitest": "bin/suitest"
   },
   "scripts": {
-    "test": "mocha --exit --timeout 5000",
+    "test": "mocha --config test/mocha.yml --exit --timeout 5000",
     "test-definitions": "cd ./testDefinition && mocha --no-timeouts definition.test.js",
     "test-watch": "npm run test -- -w",
     "coverage": "nyc --reporter=lcov npm run test",
@@ -74,7 +75,7 @@
     "eslint": "^7.1.0",
     "express": "^4.17.1",
     "husky": "^4.2.5",
-    "mocha": "^7.2.0",
+    "mocha": "^10.2.0",
     "mock-fs": "^5.1.0",
     "mock-require": "^3.0.3",
     "mock-socket": "^7.1.0",
@@ -82,11 +83,11 @@
     "nock": "^12.0.3",
     "nyc": "15.1.0",
     "sinon": "^9.0.2",
-    "typescript": "^3.9.3"
+    "typescript": "4.9.4"
   },
   "dependencies": {
-    "@suitest/smst-to-text": "^4.4.3",
-    "@suitest/translate": "^4.6.0",
+    "@suitest/smst-to-text": "^4.8.0",
+    "@suitest/translate": "^4.8.0",
     "@types/node": "^14.0.10",
     "ajv": "^6.12.2",
     "ansi-regex": "^5.0.0",
@@ -96,9 +97,9 @@
     "escape-string-regexp": "4.0.0",
     "ini": "^2.0.0",
     "js-yaml": "^4.1.0",
-    "json5": "^2.2.0",
+    "json5": "^2.2.3",
     "keypress": "^0.2.1",
-    "moment": "^2.26.0",
+    "moment": "^2.29.4",
     "node-fetch": "^2.6.0",
     "package-json": "^5.0.0",
     "prettyjson": "^1.2.1",

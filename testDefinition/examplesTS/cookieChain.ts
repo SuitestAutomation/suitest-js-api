@@ -1,6 +1,6 @@
 import * as suitest from '../../index';
 
-const {cookie} = suitest;
+const {cookie, COMP} = suitest;
 
 // should have all necessary modifiers
 const baseCookie = cookie('cookieName');
@@ -96,6 +96,49 @@ cookie('cookieName').timeout(10).not().endsWith('test');
 cookie('cookieName').timeout(10).endWith('test').not();
 cookie('cookieName').timeout(10).endWith('test').not().toAssert();
 cookie('cookieName').timeout('<%variable%>').endWith('test').not().toAssert();
+
+// withProperties example
+const cookieChain = cookie('cookieName');
+cookieChain.withProperties([
+	{
+		property: 'domain',
+		val: 'val',
+		type: '=',
+	},
+]);
+cookieChain.withProperties([
+	{
+		property: 'httpOnly',
+		val: true,
+		type: '=',
+	},
+	{
+		property: 'value',
+		val: 'val 2',
+		type: '~',
+	},
+	{
+		property: 'domain',
+		val: 'some.domain',
+		type: COMP.START,
+	}
+]);
+cookieChain.withProperties([
+	{
+		property: 'value',
+		val: 'some value',
+	}
+])
+
+const cookieChainWithProps = cookieChain.withProperties([]);
+
+cookieChainWithProps.clone();
+cookieChainWithProps.toAssert();
+cookieChainWithProps.abandon();
+cookieChainWithProps.toString();
+cookieChainWithProps.then(res => {
+	const bool: boolean = res;
+});
 
 // getters
 cookie('cookieName').it.should.with.times;

@@ -41,6 +41,7 @@ import {SuspendAppChain} from './typeDefinition/SuspendAppChain';
 import {RelativePosition} from './typeDefinition/RelativePositionChain';
 import {LaunchMode} from './typeDefinition/constants/LaunchMode';
 import {OpenDeepLinkChain} from './typeDefinition/OpenDeepLink';
+import {CookieProp} from './typeDefinition/constants/CookieProp';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -53,7 +54,7 @@ declare namespace suitest {
 		openSession(options: OpenSessionOptions): Promise<OpenSessionResult|SuitestError>;
 		closeSession(): Promise<object|SuitestError>;
 		setAppConfig(configId: string, options?: ConfigOverride): Promise<void|SuitestError>;
-		pairDevice(deviceId: string, {recording, webhookUrl}: {recording?: 'autostart' | 'manualstart' | 'none', webhookUrl?: string} | undefined): Promise<DeviceData|SuitestError>;
+		pairDevice(deviceId: string, recordingSettings?: {recording?: 'autostart' | 'manualstart' | 'none', webhookUrl?: string}): Promise<DeviceData|SuitestError>;
 		releaseDevice(): Promise<void|SuitestError>;
 		startREPL(options?: ReplOptions): Promise<void>;
 		getAppConfig(): Promise<AppConfiguration|SuitestError>;
@@ -126,7 +127,6 @@ declare namespace suitest {
 			model: string,
 			owner: string,
 			firmware: string,
-			isShared: boolean,
 			modelId: string,
 			platforms: string[],
 			customName?: string,
@@ -156,6 +156,7 @@ declare namespace suitest {
 		DIRECTIONS: Directions;
 		SCREEN_ORIENTATION: ScreenOrientation;
 		LAUNCH_MODE: LaunchMode;
+		COOKIE_PROP: CookieProp;
 
 		authContext: AuthContext;
 		appContext: Context;

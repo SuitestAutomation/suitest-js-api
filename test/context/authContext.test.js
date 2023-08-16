@@ -15,7 +15,7 @@ describe('authContext', () => {
 
 	it('should set authorization header and allow request with proper headers for "token" session context', async() => {
 		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
-		const authedReqObject = await authContext.authorizeHttp(endpoints.devices, {method: 'GET'});
+		const authedReqObject = await authContext.authorizeHttp(endpoints.device, {method: 'GET'});
 
 		assert.ok(authedReqObject, 'authed');
 		assert.strictEqual(
