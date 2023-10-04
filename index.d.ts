@@ -240,6 +240,7 @@ declare namespace suitest {
 		id: string;
 		firmware: string;
 		modelId: string;
+		recordingUrl: string;
 	}
 
 	interface ConfigOverride {

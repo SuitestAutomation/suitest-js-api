@@ -5,6 +5,7 @@ const suitest = require('../../index');
 
 const sessionConstants = require('../../lib/constants/session');
 const webSockets = require('../../lib/api/webSockets');
+const mockWebSocket = require('../../lib/utils/testHelpers/mockWebSocket');
 const {authContext, pairedDeviceContext, logger} = suitest;
 const startRecording = () => require('../../lib/commands/startRecording')({...suitest, webSockets});
 const SuitestError = require('../../lib/utils/SuitestError');
@@ -29,6 +30,10 @@ describe('startRecording', () => {
 		pairedDeviceContext.clear();
 		authContext.clear();
 		webSockets.disconnect();
+	});
+
+	afterEach(() => {
+		mockWebSocket.restoreResponse();
 	});
 
 	it('should not allow startRecording command in guest, access token contexts', async() => {
@@ -65,6 +70,20 @@ describe('startRecording', () => {
 		assert.strictEqual(pairedDeviceContext.context, 'someContext', 'device context set');
 		try {
 			await startRecording({webhookUrl: 'https://someUrl'});
+		} catch (error) {
+			assert.ok(!error, 'error');
+		}
+	});
+
+	it('startRecording should return webhookURL information', async() => {
+		pairedDeviceContext.setContext('someContext');
+		mockWebSocket.mockResponse({result: 'success', recordingUrl: 'https://someReturnUrl'});
+		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
+		assert.strictEqual(pairedDeviceContext.context, 'someContext', 'device context set');
+		try {
+			const startRecordingResult = await startRecording({webhookUrl: 'https://someUrl'});
+
+			assert.strictEqual(startRecordingResult, 'https://someReturnUrl');
 		} catch (error) {
 			assert.ok(!error, 'error');
 		}
