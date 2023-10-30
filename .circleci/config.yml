@@ -10,13 +10,13 @@ executors:
       - image: cimg/node:14.21
   node-16:
     docker:
-      - image: cimg/node:16.18
+      - image: cimg/node:16.20
   node-18:
     docker:
-      - image: cimg/node:18.12
+      - image: cimg/node:18.19
   node-20:
     docker:
-      - image: cimg/node:20.0
+      - image: cimg/node:20.4
 
 jobs:
   build:
