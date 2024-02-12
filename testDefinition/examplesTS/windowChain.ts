@@ -12,6 +12,7 @@ async function windowTest() {
 	await window().goForward();
 	await window().dismissModal();
 	await window().acceptModal();
+	await window().acceptModal('');
 	await window().acceptModal('some message here');
 	await window().refresh();
 	await window().setSize(1024, 768);
