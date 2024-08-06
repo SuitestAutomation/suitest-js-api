@@ -13,7 +13,6 @@ const {bySymbol, getComposerTypes} = require('../../lib/utils/testHelpers');
 const {SUBJ_COMPARATOR, PROP_COMPARATOR} = require('../../lib/constants/comparator');
 const COOKIE_PROP = require('../../lib/constants/cookieProp');
 const SuitestError = require('../../lib/utils/SuitestError');
-const {properties} = require('sinon/lib/sinon/util/core/default-config');
 
 const allCookieComposers = [
 	composers.TO_STRING,
