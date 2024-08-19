@@ -8,7 +8,7 @@ const {
 } = require('../../lib/chains/ocrChain')(suitest);
 
 const composers = require('../../lib/constants/composer');
-const {getComposerTypes, bySymbol} = require('../../lib/utils/testHelpers');
+const {getComposerTypes, bySymbol, excludeComposer} = require('../../lib/utils/testHelpers');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {PROP_COMPARATOR} = require('../../lib/constants/comparator');
 
@@ -21,10 +21,6 @@ const allOcrComposers = [
 	composers.TO_JSON,
 	composers.ASSERT,
 ];
-
-const excludeComposer = (composers, toExclude) => {
-	return composers.filter((composer) => composer !== toExclude);
-};
 
 describe('OCR chain', () => {
 	it('should have all necessary modifiers', () => {
