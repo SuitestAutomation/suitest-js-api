@@ -47,6 +47,8 @@ import {OcrReadAs} from './typeDefinition/constants/OcrReadAs';
 import {StringPropComparators} from './typeDefinition/constants/PropComparators';
 import {ValueOf} from './typeDefinition/utils';
 import {OcrColor} from './typeDefinition/constants/OcrColor';
+import {ImageChain} from './typeDefinition/ImageChain';
+import {Accuracy} from './typeDefinition/constants/Accuracy';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -126,6 +128,7 @@ declare namespace suitest {
 		saveScreenshot(fileName?: string): TakeScreenshotChain<void>;
 		openDeepLink(deepLink?: string): OpenDeepLinkChain;
 		ocr(comparators: OcrCommonItem[]): OcrChain;
+		image(imageData: ImageData): ImageChain;
 
 		getPairedDevice(): null | {
 			deviceId: string,
@@ -164,7 +167,8 @@ declare namespace suitest {
 		LAUNCH_MODE: LaunchMode;
 		COOKIE_PROP: CookieProp;
 		OCR_READ_AS: OcrReadAs;
-		OCR_COLOR: OcrColor
+		OCR_COLOR: OcrColor;
+		ACCURACY: Accuracy;
 
 		authContext: AuthContext;
 		appContext: Context;
@@ -212,6 +216,7 @@ declare namespace suitest {
 		setScreenOrientation(orientation: ScreenOrientationValues): SetScreenOrientationChain;
 		openDeepLink(deepLink?: string): OpenDeepLinkChain;
 		ocr(comparators: OcrCommonItem[]): OcrChain;
+		image(imageData: ImageData): ImageChain;
 	}
 
 	type NetworkLogEvent = {
@@ -356,4 +361,22 @@ declare namespace suitest {
 		blacklist?: string,
 		region?: [x: number, y: number, width: number, height: number],
 	}
+
+	type ImageData =
+		| {
+			// image id from suitest image repository
+			imageId: string,
+			accuracy?: ValueOf<Accuracy>,
+		}
+		| {
+			// url to image somewhere in internet
+			url: string,
+			accuracy?: ValueOf<Accuracy>,
+		}
+		| {
+			// os path to image somewhere on a disc
+			filepath: string,
+			accuracy?: ValueOf<Accuracy>,
+		}
+
 }
