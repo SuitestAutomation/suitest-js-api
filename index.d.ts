@@ -42,6 +42,13 @@ import {RelativePosition} from './typeDefinition/RelativePositionChain';
 import {LaunchMode} from './typeDefinition/constants/LaunchMode';
 import {OpenDeepLinkChain} from './typeDefinition/OpenDeepLink';
 import {CookieProp} from './typeDefinition/constants/CookieProp';
+import {OcrChain} from './typeDefinition/OcrChain';
+import {OcrReadAs} from './typeDefinition/constants/OcrReadAs';
+import {StringPropComparators} from './typeDefinition/constants/PropComparators';
+import {ValueOf} from './typeDefinition/utils';
+import {OcrColor} from './typeDefinition/constants/OcrColor';
+import {ImageChain} from './typeDefinition/ImageChain';
+import {Accuracy} from './typeDefinition/constants/Accuracy';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -120,6 +127,8 @@ declare namespace suitest {
 		 */
 		saveScreenshot(fileName?: string): TakeScreenshotChain<void>;
 		openDeepLink(deepLink?: string): OpenDeepLinkChain;
+		ocr(comparators: OcrCommonItem[]): OcrChain;
+		image(imageData: ImageData): ImageChain;
 
 		getPairedDevice(): null | {
 			deviceId: string,
@@ -157,6 +166,9 @@ declare namespace suitest {
 		SCREEN_ORIENTATION: ScreenOrientation;
 		LAUNCH_MODE: LaunchMode;
 		COOKIE_PROP: CookieProp;
+		OCR_READ_AS: OcrReadAs;
+		OCR_COLOR: OcrColor;
+		ACCURACY: Accuracy;
 
 		authContext: AuthContext;
 		appContext: Context;
@@ -203,6 +215,8 @@ declare namespace suitest {
 		window(): WindowChain;
 		setScreenOrientation(orientation: ScreenOrientationValues): SetScreenOrientationChain;
 		openDeepLink(deepLink?: string): OpenDeepLinkChain;
+		ocr(comparators: OcrCommonItem[]): OcrChain;
+		image(imageData: ImageData): ImageChain;
 	}
 
 	type NetworkLogEvent = {
@@ -336,4 +350,33 @@ declare namespace suitest {
 		| 'portraitReversed'
 		| 'landscape'
 		| 'landscapeReversed';
+
+	type OcrCommonItem = {
+		val: string,
+		type?: StringPropComparators,
+		readAs?: ValueOf<OcrReadAs>,
+		align?: boolean,
+		color?: ValueOf<OcrColor>,
+		whitelist?: string,
+		blacklist?: string,
+		region?: [x: number, y: number, width: number, height: number],
+	}
+
+	type ImageData =
+		| {
+			// image id from suitest image repository
+			imageId: string,
+			accuracy?: ValueOf<Accuracy>,
+		}
+		| {
+			// url to image somewhere in internet
+			url: string,
+			accuracy?: ValueOf<Accuracy>,
+		}
+		| {
+			// os path to image somewhere on a disc
+			filepath: string,
+			accuracy?: ValueOf<Accuracy>,
+		}
+
 }

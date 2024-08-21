@@ -1,7 +1,8 @@
 const fs = require('fs');
 const assert = require('assert');
+const {Buffer} = require('buffer');
 const sinon = require('sinon');
-const {processServerResponse} = require('../../lib/utils/socketChainHelper');
+const {processServerResponse, createBufferFromSocketMessage} = require('../../lib/utils/socketChainHelper');
 const {getTimeoutValue} = require('../../lib/utils/chainUtils');
 const suitest = require('../../index');
 const SuitestError = require('../../lib/utils/SuitestError');
@@ -541,5 +542,106 @@ describe('socket chain helpers', () => {
 				err.message === 'Test execution was aborted.',
 		);
 		assert(loggerErrorStub.calledWith('Test execution was aborted.'));
+	});
+
+	describe('createBufferFromSocketMessage using 0x00 protocol number', () => {
+		const protocolNumberOffset = 1;
+		const jsonMessageDataSizeOffset = 4;
+		const headerOffset = protocolNumberOffset + jsonMessageDataSizeOffset;
+
+		it('should translate json message and binary data pair into single binary', () => {
+			const binarySocketMessage = createBufferFromSocketMessage([
+				'some-additional-attachment',
+				Buffer.from('some data'),
+			]);
+
+			const protocolNumber = binarySocketMessage[0];
+
+			assert.strictEqual(protocolNumber, 0);
+
+			const messageSize = binarySocketMessage.readUInt32BE(protocolNumberOffset);
+
+			assert.strictEqual(
+				messageSize,
+				'some-additional-attachment'.length,
+			);
+
+			const message = binarySocketMessage.toString(
+				'utf-8',
+				headerOffset,
+				headerOffset + messageSize,
+			);
+
+			assert.deepStrictEqual(message, 'some-additional-attachment');
+
+			const binaryPartOfMessage = binarySocketMessage.subarray(headerOffset + messageSize);
+
+			assert.deepStrictEqual(
+				binaryPartOfMessage,
+				Buffer.from('some data'),
+			);
+		});
+
+		it('should translate string message and binary data pair into single binary', () => {
+			const binarySocketMessage = createBufferFromSocketMessage([
+				JSON.stringify({
+					messageId: 'message-id',
+					content: {
+						type: 'testLine',
+						request: {
+							type: 'assert',
+						},
+					},
+				}),
+				Buffer.from('some data'),
+			]);
+
+			const protocolNumber = binarySocketMessage[0];
+
+			assert.strictEqual(protocolNumber, 0);
+
+			const jsonSize = binarySocketMessage.readUInt32BE(protocolNumberOffset);
+
+			assert.strictEqual(
+				jsonSize,
+				Buffer.from(
+					JSON.stringify({
+						messageId: 'message-id',
+						content: {
+							type: 'testLine',
+							request: {
+								type: 'assert',
+							},
+						},
+					}),
+				).length,
+			);
+
+			const jsonMessage = binarySocketMessage.toString(
+				'utf-8',
+				headerOffset,
+				headerOffset + jsonSize,
+			);
+
+			assert.strictEqual(
+				jsonMessage,
+				JSON.stringify({
+					messageId: 'message-id',
+					content: {
+						type: 'testLine',
+						request: {
+							type: 'assert',
+						},
+					},
+				}),
+			);
+
+			const binaryPartOfMessage = binarySocketMessage.subarray(headerOffset + jsonSize);
+
+			assert.deepStrictEqual(
+				binaryPartOfMessage,
+				Buffer.from('some data'),
+			);
+		});
 	});
 });

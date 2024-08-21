@@ -55,7 +55,15 @@ module.exports = {
 		'key-spacing': 'warn',
 		'keyword-spacing': 'warn',
 		'linebreak-style': 'warn',
-		'max-len': ['warn', {'code': 120, 'ignoreComments': true, 'ignoreTemplateLiterals': true}],
+		'max-len': [
+			'warn',
+			{
+				'code': 120,
+				'ignoreComments': true,
+				'ignoreTemplateLiterals': true,
+				'ignoreStrings': true,
+			},
+		],
 		'new-cap': 'warn',
 		'newline-after-var': 'warn',
 		'newline-before-return': 'warn',
@@ -79,5 +87,5 @@ module.exports = {
 		'arrow-spacing': 'warn',
 		'template-curly-spacing': 'warn',
 		'yield-star-spacing': 'warn',
-	}
+	},
 };

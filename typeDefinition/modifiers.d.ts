@@ -264,3 +264,7 @@ export interface HandleModifier<T> {
 export interface GetAttributesModifier<T> {
 	getAttributes(attributes?: string[]): T;
 }
+
+export interface InRegionModifier<T> {
+	inRegion: (region: [number, number, number, number]) => T;
+}
