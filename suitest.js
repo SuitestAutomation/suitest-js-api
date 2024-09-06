@@ -39,6 +39,7 @@ const videoFactory = require('./lib/chains/videoChain');
 const playstationVideoFactory = require('./lib/chains/playstationVideoChain');
 const setScreenOrientationFactory = require('./lib/chains/setScreenOrientationChain');
 const openDeepLinkFactory = require('./lib/chains/openDeepLinkChain');
+const ocrFactory = require('./lib/chains/ocrChain');
 
 // Constants
 const {ELEMENT_PROP, VALUE} = require('./lib/constants/element');
@@ -59,6 +60,8 @@ const LAUNCH_MODE = require('./lib/constants/launchMode');
 const DIRECTIONS = require('./lib/constants/directions');
 const SCREEN_ORIENTATION = require('./lib/constants/screenOrientation');
 const COOKIE_PROP = require('./lib/constants/cookieProp');
+const OCR_READ_AS = require('./lib/constants/ocrReadAs');
+const OCR_COLOR = require('./lib/constants/ocrColor');
 
 // Network
 const webSocketsFactory = require('./lib/api/webSockets');
@@ -135,6 +138,7 @@ class SUITEST_API extends EventEmitter {
 		const {saveScreenshot} = saveScreenshotFactory(this);
 		const {setScreenOrientation, setScreenOrientationAssert} = setScreenOrientationFactory(this);
 		const {openDeepLink, openDeepLinkAssert} = openDeepLinkFactory(this);
+		const {ocr, ocrAssert} = ocrFactory(this);
 
 		this.openApp = openApp;
 		this.closeApp = closeApp;
@@ -162,6 +166,7 @@ class SUITEST_API extends EventEmitter {
 		this.saveScreenshot = saveScreenshot;
 		this.setScreenOrientation = setScreenOrientation;
 		this.openDeepLink = openDeepLink;
+		this.ocr = ocr;
 
 		this.PROP = ELEMENT_PROP;
 		this.COMP = PROP_COMPARATOR;
@@ -183,6 +188,8 @@ class SUITEST_API extends EventEmitter {
 		this.DIRECTIONS = DIRECTIONS;
 		this.SCREEN_ORIENTATION = SCREEN_ORIENTATION;
 		this.COOKIE_PROP = COOKIE_PROP;
+		this.OCR_READ_AS = OCR_READ_AS;
+		this.OCR_COLOR = OCR_COLOR;
 
 		this.assert = {
 			application: applicationAssert,
@@ -210,6 +217,7 @@ class SUITEST_API extends EventEmitter {
 			psVideo: playstationVideoAssert,
 			setScreenOrientation: setScreenOrientationAssert,
 			openDeepLink: openDeepLinkAssert,
+			ocr: ocrAssert,
 		};
 
 		// Listen to process events to trigger websocket termination and dump warnings, if any
