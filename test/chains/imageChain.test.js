@@ -75,7 +75,7 @@ describe('Image chain', () => {
 					condition: {
 						subject: {
 							type: 'image',
-							imageId: 'image-id',
+							apiId: 'image-api-id',
 						},
 						type: SUBJ_COMPARATOR.VISIBLE,
 					},
@@ -85,13 +85,13 @@ describe('Image chain', () => {
 
 			assert.deepStrictEqual(
 				toJSON({
-					imageData: {imageId: 'image-id'},
+					imageData: {apiId: 'image-api-id'},
 					comparator: {type: SUBJ_COMPARATOR.VISIBLE},
 				}),
 				socketMessage,
 			);
 			assert.deepStrictEqual(
-				image({imageId: 'image-id'}).visible().toJSON(),
+				image({apiId: 'image-api-id'}).visible().toJSON(),
 				socketMessage,
 			);
 		});
@@ -104,7 +104,7 @@ describe('Image chain', () => {
 					condition: {
 						subject: {
 							type: 'image',
-							imageId: 'image-id',
+							apiId: 'image-api-id',
 						},
 						type: SUBJ_COMPARATOR.VISIBLE,
 					},
@@ -115,13 +115,13 @@ describe('Image chain', () => {
 			assert.deepStrictEqual(
 				toJSON({
 					isAssert: true,
-					imageData: {imageId: 'image-id'},
+					imageData: {apiId: 'image-api-id'},
 					comparator: {type: SUBJ_COMPARATOR.VISIBLE},
 				}),
 				socketMessage,
 			);
 			assert.deepStrictEqual(
-				imageAssert({imageId: 'image-id'}).visible().toJSON(),
+				imageAssert({apiId: 'image-api-id'}).visible().toJSON(),
 				socketMessage,
 			);
 		});
@@ -134,7 +134,7 @@ describe('Image chain', () => {
 					condition: {
 						subject: {
 							type: 'image',
-							imageId: 'image-id',
+							apiId: 'image-api-id',
 						},
 						type: '!' + SUBJ_COMPARATOR.VISIBLE,
 					},
@@ -144,13 +144,13 @@ describe('Image chain', () => {
 
 			assert.deepStrictEqual(
 				toJSON({
-					imageData: {imageId: 'image-id'},
+					imageData: {apiId: 'image-api-id'},
 					comparator: {type: '!' + SUBJ_COMPARATOR.VISIBLE},
 				}),
 				socketMessage,
 			);
 			assert.deepStrictEqual(
-				image({imageId: 'image-id'}).not().visible().toJSON(),
+				image({apiId: 'image-api-id'}).not().visible().toJSON(),
 				socketMessage,
 			);
 		});
@@ -163,7 +163,7 @@ describe('Image chain', () => {
 					condition: {
 						subject: {
 							type: 'image',
-							imageId: 'image-id',
+							apiId: 'image-api-id',
 						},
 						type: '!' + SUBJ_COMPARATOR.VISIBLE,
 					},
@@ -174,13 +174,13 @@ describe('Image chain', () => {
 			assert.deepStrictEqual(
 				toJSON({
 					isAssert: true,
-					imageData: {imageId: 'image-id'},
+					imageData: {apiId: 'image-api-id'},
 					comparator: {type: '!' + SUBJ_COMPARATOR.VISIBLE},
 				}),
 				socketMessage,
 			);
 			assert.deepStrictEqual(
-				imageAssert({imageId: 'image-id'}).not().visible().toJSON(),
+				imageAssert({apiId: 'image-api-id'}).not().visible().toJSON(),
 				socketMessage,
 			);
 		});
@@ -193,7 +193,7 @@ describe('Image chain', () => {
 					condition: {
 						subject: {
 							type: 'image',
-							imageId: 'image-id',
+							apiId: 'image-api-id',
 						},
 						type: SUBJ_COMPARATOR.VISIBLE,
 						region: [20, 20, 20, 20],
@@ -204,14 +204,14 @@ describe('Image chain', () => {
 
 			assert.deepStrictEqual(
 				toJSON({
-					imageData: {imageId: 'image-id'},
+					imageData: {apiId: 'image-api-id'},
 					comparator: {type: SUBJ_COMPARATOR.VISIBLE},
 					region: [20, 20, 20, 20],
 				}),
 				socketMessage,
 			);
 			assert.deepStrictEqual(
-				image({imageId: 'image-id'})
+				image({apiId: 'image-api-id'})
 					.visible()
 					.inRegion([20, 20, 20, 20])
 					.toJSON(),
@@ -227,7 +227,7 @@ describe('Image chain', () => {
 					condition: {
 						subject: {
 							type: 'image',
-							imageId: 'image-id',
+							apiId: 'image-api-id',
 						},
 						type: '!' + SUBJ_COMPARATOR.VISIBLE,
 						region: [20, 20, 20, 20],
@@ -238,14 +238,14 @@ describe('Image chain', () => {
 
 			assert.deepStrictEqual(
 				toJSON({
-					imageData: {imageId: 'image-id'},
+					imageData: {apiId: 'image-api-id'},
 					comparator: {type: '!' + SUBJ_COMPARATOR.VISIBLE},
 					region: [20, 20, 20, 20],
 				}),
 				socketMessage,
 			);
 			assert.deepStrictEqual(
-				image({imageId: 'image-id'})
+				image({apiId: 'image-api-id'})
 					.not()
 					.visible()
 					.inRegion([20, 20, 20, 20])
@@ -262,7 +262,7 @@ describe('Image chain', () => {
 					condition: {
 						subject: {
 							type: 'image',
-							imageId: 'image-id',
+							apiId: 'image-api-id',
 						},
 						type: SUBJ_COMPARATOR.VISIBLE,
 						region: [20, 20, 20, 20],
@@ -274,14 +274,14 @@ describe('Image chain', () => {
 			assert.deepStrictEqual(
 				toJSON({
 					isAssert: true,
-					imageData: {imageId: 'image-id'},
+					imageData: {apiId: 'image-api-id'},
 					comparator: {type: SUBJ_COMPARATOR.VISIBLE},
 					region: [20, 20, 20, 20],
 				}),
 				socketMessage,
 			);
 			assert.deepStrictEqual(
-				imageAssert({imageId: 'image-id'})
+				imageAssert({apiId: 'image-api-id'})
 					.visible()
 					.inRegion([20, 20, 20, 20])
 					.toJSON(),
@@ -297,7 +297,7 @@ describe('Image chain', () => {
 					condition: {
 						subject: {
 							type: 'image',
-							imageId: 'image-id',
+							apiId: 'image-api-id',
 						},
 						type: '!' + SUBJ_COMPARATOR.VISIBLE,
 						region: [20, 20, 20, 20],
@@ -309,14 +309,14 @@ describe('Image chain', () => {
 			assert.deepStrictEqual(
 				toJSON({
 					isAssert: true,
-					imageData: {imageId: 'image-id'},
+					imageData: {apiId: 'image-api-id'},
 					comparator: {type: '!' + SUBJ_COMPARATOR.VISIBLE},
 					region: [20, 20, 20, 20],
 				}),
 				socketMessage,
 			);
 			assert.deepStrictEqual(
-				imageAssert({imageId: 'image-id'})
+				imageAssert({apiId: 'image-api-id'})
 					.not()
 					.visible()
 					.inRegion([20, 20, 20, 20])
@@ -398,18 +398,18 @@ describe('Image chain', () => {
 			assert.throws(() => image(123), imageDataShouldBeObject);
 		});
 
-		it('if image data do not contains any of "url", "filepath", "imageId"', () => {
+		it('if image data do not contains any of "url", "filepath", "apiId"', () => {
 			const anyOfRequiredPropsShouldBeDefinedError = suitestInvalidInputError(
 				`Invalid input provided for .image function. Image data ${EOL}` +
 				`\tshould have required property '.url'${EOL}` +
 				`\tshould have required property '.filepath'${EOL}` +
-				`\tshould have required property '.imageId'${EOL}` +
+				`\tshould have required property '.apiId'${EOL}` +
 				'\tshould match some schema in anyOf',
 			);
 
 			assert.throws(() => image({}), anyOfRequiredPropsShouldBeDefinedError);
 			assert.throws(
-				() => image({url: undefined, filepath: undefined, imageId: undefined}),
+				() => image({url: undefined, filepath: undefined, apiId: undefined}),
 				anyOfRequiredPropsShouldBeDefinedError,
 			);
 		});
@@ -430,12 +430,12 @@ describe('Image chain', () => {
 			assert.throws(() => image({filepath: null}), imageFilepathShouldBeString);
 		});
 
-		it('if image imageId is not a string', () => {
-			const imageIdShouldBeString = suitestInvalidInputError(
-				'Invalid input provided for .image function. Image data .imageId should be string',
+		it('if image apiId is not a string', () => {
+			const apiIdShouldBeString = suitestInvalidInputError(
+				'Invalid input provided for .image function. Image data .apiId should be string',
 			);
 
-			assert.throws(() => image({imageId: null}), imageIdShouldBeString);
+			assert.throws(() => image({apiId: null}), apiIdShouldBeString);
 		});
 
 		it('if accuracy is not "high", "medium" or "low"', () => {
@@ -457,13 +457,13 @@ describe('Image chain', () => {
 			const imageLineIsMalformedError = suitestInvalidInputError('Image line is malformed');
 
 			assert.throws(() => toJSON({}), imageLineIsMalformedError);
-			assert.throws(() => image({imageId: 'some-id'}).toJSON(), imageLineIsMalformedError);
+			assert.throws(() => image({apiId: 'some-id'}).toJSON(), imageLineIsMalformedError);
 			assert.throws(
 				() => toJSON({region: [20, 20, 20, 20]}),
 				imageLineIsMalformedError,
 			);
 			assert.throws(
-				() => image({imageId: 'some-id'})
+				() => image({apiId: 'some-id'})
 					.inRegion([20, 20, 20, 20])
 					.toJSON(),
 				imageLineIsMalformedError,
