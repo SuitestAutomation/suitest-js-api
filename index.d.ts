@@ -364,8 +364,8 @@ declare namespace suitest {
 
 	type ImageData =
 		| {
-			// image id from suitest image repository
-			imageId: string,
+			// image api id from suitest image repository
+			apiId: string,
 			accuracy?: ValueOf<Accuracy>,
 		}
 		| {
