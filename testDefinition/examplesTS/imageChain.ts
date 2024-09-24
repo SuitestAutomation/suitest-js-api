@@ -1,6 +1,6 @@
 import * as suitest from '../../index';
 
-suitest.image({imageId: 'image-id'});
+suitest.image({apiId: 'image-api-id'});
 suitest.image({url: 'https://suite.st'});
 suitest.image({filepath: 'some-image.png'});
 suitest.image({filepath: 'some-image.png', accuracy: suitest.ACCURACY.LOW});
