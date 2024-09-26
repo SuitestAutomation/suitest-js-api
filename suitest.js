@@ -64,6 +64,7 @@ const COOKIE_PROP = require('./lib/constants/cookieProp');
 const OCR_READ_AS = require('./lib/constants/ocrReadAs');
 const OCR_COLOR = require('./lib/constants/ocrColor');
 const ACCURACY = require('./lib/constants/accuracy');
+const LANG = require('./lib/constants/lang');
 
 // Network
 const webSocketsFactory = require('./lib/api/webSockets');
@@ -195,6 +196,7 @@ class SUITEST_API extends EventEmitter {
 		this.OCR_READ_AS = OCR_READ_AS;
 		this.OCR_COLOR = OCR_COLOR;
 		this.ACCURACY = ACCURACY;
+		this.LANG = LANG;
 
 		this.assert = {
 			application: applicationAssert,

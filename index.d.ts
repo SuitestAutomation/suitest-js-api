@@ -49,6 +49,7 @@ import {ValueOf} from './typeDefinition/utils';
 import {OcrColor} from './typeDefinition/constants/OcrColor';
 import {ImageChain} from './typeDefinition/ImageChain';
 import {Accuracy} from './typeDefinition/constants/Accuracy';
+import {Lang} from './typeDefinition/constants/Langs';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -169,6 +170,7 @@ declare namespace suitest {
 		OCR_READ_AS: OcrReadAs;
 		OCR_COLOR: OcrColor;
 		ACCURACY: Accuracy;
+		LANG: Lang;
 
 		authContext: AuthContext;
 		appContext: Context;
