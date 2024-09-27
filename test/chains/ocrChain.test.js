@@ -11,6 +11,7 @@ const composers = require('../../lib/constants/composer');
 const {getComposerTypes, bySymbol, excludeComposer} = require('../../lib/utils/testHelpers');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {PROP_COMPARATOR} = require('../../lib/constants/comparator');
+const LANG = require('../../lib/constants/lang');
 
 const allOcrComposers = [
 	composers.TO_STRING,
@@ -20,6 +21,7 @@ const allOcrComposers = [
 	composers.TIMEOUT,
 	composers.TO_JSON,
 	composers.ASSERT,
+	composers.LANGUAGE,
 ];
 
 describe('OCR chain', () => {
@@ -256,6 +258,40 @@ describe('OCR chain', () => {
 							type: 'ocr',
 						},
 						comparators: [{val: 'text', type: PROP_COMPARATOR.EQUAL, region: [1.0, 2.0, 3.0, 4.0]}],
+					},
+					timeout: 2000,
+				},
+			},
+		);
+	});
+
+	it('should generate correct json when language is specified', () => {
+		assert.deepStrictEqual(
+			ocr([{val: 'text'}]).language(LANG.ENGLISH).toJSON(),
+			{
+				type: 'query',
+				subject: {
+					type: 'ocr',
+					options: [
+						{val: 'text', type: PROP_COMPARATOR.EQUAL},
+					],
+					language: LANG.ENGLISH,
+				},
+			},
+		);
+		assert.deepStrictEqual(
+			ocrAssert([{val: 'text'}]).language(LANG.ENGLISH).toJSON(),
+			{
+				type: 'testLine',
+				request: {
+					type: 'assert',
+					condition: {
+						type: 'ocrComparators',
+						subject: {
+							type: 'ocr',
+						},
+						comparators: [{val: 'text', type: PROP_COMPARATOR.EQUAL}],
+						language: LANG.ENGLISH,
 					},
 					timeout: 2000,
 				},

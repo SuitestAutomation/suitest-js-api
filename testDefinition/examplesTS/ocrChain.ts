@@ -2,8 +2,17 @@ import * as suitest from '../../index';
 
 suitest.ocr([]);
 suitest.ocr([]).timeout(1000);
+suitest.ocr([]).timeout(1000).language(suitest.LANG.ENGLISH);
 suitest.ocr([]).timeout(1000).toAssert();
+suitest.ocr([]).timeout(1000).language(suitest.LANG.ENGLISH).toAssert();
 suitest.ocr([]).timeout(1000).toString();
+suitest.ocr([]).timeout(1000).language(suitest.LANG.ENGLISH).toString();
+suitest.ocr([]).language(suitest.LANG.ENGLISH);
+suitest.ocr([]).language(suitest.LANG.ENGLISH).timeout(1000);
+suitest.ocr([]).language(suitest.LANG.ENGLISH).toAssert();
+suitest.ocr([]).language(suitest.LANG.ENGLISH).timeout(1000).toAssert();
+suitest.ocr([]).language(suitest.LANG.ENGLISH).toString();
+suitest.ocr([]).language(suitest.LANG.ENGLISH).timeout(1000).toString();
 
 suitest.ocr([
 	{

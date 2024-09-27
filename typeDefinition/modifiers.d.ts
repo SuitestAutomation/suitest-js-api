@@ -1,4 +1,6 @@
+import {ValueOf} from './utils';
 import {LaunchModeValues} from './constants/LaunchMode';
+import {Lang} from './constants/Langs';
 
 export interface Thenable <R> {
 	then <U> (onFulfilled?: (value: R) => U | Thenable<U>, onRejected?: (error: any) => U | Thenable<U>): Thenable<U>;
@@ -267,4 +269,8 @@ export interface GetAttributesModifier<T> {
 
 export interface InRegionModifier<T> {
 	inRegion: (region: [number, number, number, number]) => T;
+}
+
+export interface Language<T> {
+	language: (lang: ValueOf<Lang>) => T;
 }
