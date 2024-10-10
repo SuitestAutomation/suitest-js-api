@@ -361,7 +361,7 @@ declare namespace suitest {
 		color?: ValueOf<OcrColor>,
 		whitelist?: string,
 		blacklist?: string,
-		region?: [x: number, y: number, width: number, height: number],
+		region?: [top: number, left: number, width: number, height: number],
 	}
 
 	type ImageData =
