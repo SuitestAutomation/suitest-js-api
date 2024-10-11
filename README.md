@@ -38,7 +38,7 @@ With Suitest you can:
 Suitest currently supports the following types of devices:
 
 - TV's and set-top boxes equipped with an infrared port. This includes most of
-the currently available Smart TV's like Samsung, LG, Hisense, Philips, Panasonic, Sony,
+the currently available Smart TV's like Samsung, LG, Hisense, Philips, Panasonic, Sky, Sony,
 Vizio etc.
 - TV's, set-top boxes and mobile devices running Android (including FireTV)
 - Microsoft Xbox One, Xbox Series S and X and Sony PlayStation 4 / 5 consoles
@@ -57,6 +57,7 @@ Suitest supports automating end-to-end testing of:
 - Xbox One and Xbox Series S and X apps
 - PlayStation 4 / 5 apps
 - Roku apps
+- Sky apps
 - VIDAA apps
 - Vizio SmartCast apps
 - Traditional websites and web apps for desktop browsers.
