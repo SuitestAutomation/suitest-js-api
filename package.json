@@ -21,6 +21,9 @@
     "Sky testing",
     "VIDAA testing",
     "Vizio SmartCast testing",
+    "Xfinity testing",
+    "XClass TV testing",
+    "Xumo testing",
     "Smart TV test automation",
     "Fire TV test automation"
   ],
@@ -88,7 +91,7 @@
   },
   "dependencies": {
     "@suitest/smst-to-text": "^4.13.0",
-    "@suitest/translate": "^4.14.0",
+    "@suitest/translate": "^4.15.0",
     "@types/node": "^14.0.10",
     "ajv": "^6.12.2",
     "ansi-regex": "^5.0.0",
