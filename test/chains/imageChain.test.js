@@ -1,4 +1,5 @@
 const assert = require('assert');
+const {EOL} = require('node:os');
 const suitest = require('../../index');
 const {
 	image,
@@ -10,7 +11,7 @@ const composers = require('../../lib/constants/composer');
 const {getComposerTypes, bySymbol, excludeComposer} = require('../../lib/utils/testHelpers');
 const SuitestError = require('../../lib/utils/SuitestError');
 const {SUBJ_COMPARATOR} = require('../../lib/constants/comparator');
-const {EOL} = require('node:os');
+const ACCURACY = require('../../lib/constants/accuracy');
 
 const suitestInvalidInputError = (message) => {
 	return new SuitestError(message, SuitestError.INVALID_INPUT);
@@ -27,6 +28,7 @@ const allImageComposers = [
 	composers.NOT,
 	composers.VISIBLE,
 	composers.IN_REGION,
+	composers.ACCURACY,
 ];
 
 describe('Image chain', () => {
@@ -58,6 +60,11 @@ describe('Image chain', () => {
 		assert.deepStrictEqual(
 			getComposerTypes(getComposers({region: []})),
 			excludeComposer(allImageComposers, composers.IN_REGION),
+		);
+
+		assert.deepStrictEqual(
+			getComposerTypes(getComposers({accuracy: ACCURACY.LOW})),
+			excludeComposer(allImageComposers, composers.ACCURACY),
 		);
 
 		assert.deepStrictEqual(
@@ -384,6 +391,65 @@ describe('Image chain', () => {
 				messageWIthImageFilepath,
 			);
 		});
+
+		it('with specified accuracy', () => {
+			const socketMessageWith = (accuracy) => ({
+				type: 'eval',
+				request: {
+					type: 'assert',
+					condition: {
+						subject: {
+							apiId: 'some-api-id',
+							type: 'image',
+						},
+						type: 'visible',
+						accuracy,
+					},
+					timeout: 2000,
+				},
+			});
+
+			const socketMessageWithLowAccuracy = image('some-api-id').accuracy(ACCURACY.LOW).visible().toJSON();
+
+			assert.deepStrictEqual(
+				socketMessageWithLowAccuracy,
+				socketMessageWith(ACCURACY.LOW),
+			);
+			const socketMessageWithMediumAccuracy = image('some-api-id').accuracy(ACCURACY.MEDIUM).visible().toJSON();
+
+			assert.deepStrictEqual(
+				socketMessageWithMediumAccuracy,
+				socketMessageWith(ACCURACY.MEDIUM),
+			);
+			const socketMessageWithHighAccuracy = image('some-api-id').accuracy(ACCURACY.HIGH).visible().toJSON();
+
+			assert.deepStrictEqual(
+				socketMessageWithHighAccuracy,
+				socketMessageWith(ACCURACY.HIGH),
+			);
+		});
+	});
+
+	it('image should accept string', () => {
+		const socketMessage = image('some-api-id').visible().toJSON();
+
+		assert.deepStrictEqual(
+			socketMessage,
+			{
+				type: 'eval',
+				request: {
+					type: 'assert',
+					condition: {
+						subject: {
+							apiId: 'some-api-id',
+							type: 'image',
+						},
+						type: 'visible',
+					},
+					timeout: 2000,
+				},
+			},
+		);
 	});
 
 	describe('should throw error', () => {
@@ -392,7 +458,6 @@ describe('Image chain', () => {
 				suitestInvalidInputError('Invalid input provided for .image function. Image data should be object');
 
 			assert.throws(() => image(), imageDataShouldBeObject);
-			assert.throws(() => image(''), imageDataShouldBeObject);
 			assert.throws(() => image([]), imageDataShouldBeObject);
 			assert.throws(() => image(null), imageDataShouldBeObject);
 			assert.throws(() => image(123), imageDataShouldBeObject);
@@ -440,17 +505,17 @@ describe('Image chain', () => {
 
 		it('if accuracy is not "high", "medium" or "low"', () => {
 			const invalidAccuracyError = suitestInvalidInputError(
-				'Invalid input provided for .image function. Image data should be equal to one of the allowed values: "high", "medium", "low"',
+				'Invalid input provided for .accuracy function. Accuracy should be equal to one of the allowed values: "high", "medium", "low"',
 			);
 
 			assert.throws(
-				() => image({accuracy: null}),
+				() => image('').accuracy(null),
 				suitestInvalidInputError(
-					'Invalid input provided for .image function. Image data .accuracy should be string',
+					'Invalid input provided for .accuracy function. Accuracy should be string',
 				),
 			);
-			assert.throws(() => image({accuracy: ''}), invalidAccuracyError);
-			assert.throws(() => image({accuracy: 'loww'}), invalidAccuracyError);
+			assert.throws(() => image('').accuracy(''), invalidAccuracyError);
+			assert.throws(() => image('').accuracy('loww'), invalidAccuracyError);
 		});
 
 		it('if image chain data is malformed', () => {

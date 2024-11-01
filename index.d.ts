@@ -130,6 +130,7 @@ declare namespace suitest {
 		openDeepLink(deepLink?: string): OpenDeepLinkChain;
 		ocr(comparators: OcrCommonItem[]): OcrChain;
 		image(imageData: ImageData): ImageChain;
+		image(apiId: string): ImageChain;
 
 		getPairedDevice(): null | {
 			deviceId: string,
@@ -219,6 +220,7 @@ declare namespace suitest {
 		openDeepLink(deepLink?: string): OpenDeepLinkChain;
 		ocr(comparators: OcrCommonItem[]): OcrChain;
 		image(imageData: ImageData): ImageChain;
+		image(apiId: string): ImageChain;
 	}
 
 	type NetworkLogEvent = {
