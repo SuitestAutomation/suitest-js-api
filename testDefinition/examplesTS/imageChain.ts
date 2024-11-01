@@ -1,5 +1,6 @@
 import * as suitest from '../../index';
 
+suitest.image('image-api-id');
 suitest.image({apiId: 'image-api-id'});
 suitest.image({url: 'https://suite.st'});
 suitest.image({filepath: 'some-image.png'});
@@ -41,7 +42,7 @@ async function testImageChain() {
 		.not()
 		.visible()
 		.inRegion([10, 10, 10, 10])
-		.toAssert();
+		.toAssert()
 	await suitest.image({url: 'https://suite.st'})
 		.not()
 		.visible()
@@ -52,5 +53,32 @@ async function testImageChain() {
 		.timeout(3000)
 		.isNot()
 		.visible();
+	await suitest.image('image-api-id')
+		.accuracy(suitest.ACCURACY.LOW);
+	await suitest.image('image-api-id')
+		.accuracy(suitest.ACCURACY.MEDIUM);
+	await suitest.image('image-api-id')
+		.accuracy(suitest.ACCURACY.HIGH);
+	await suitest.image('image-api-id')
+		.accuracy(suitest.ACCURACY.HIGH)
+		.visible();
+	await suitest.image('image-api-id')
+		.accuracy(suitest.ACCURACY.HIGH)
+		.visible()
+		.timeout(3000);
+	await suitest.image('image-api-id')
+		.accuracy(suitest.ACCURACY.HIGH)
+		.not()
+		.visible();
+	await suitest.image('image-api-id')
+		.accuracy(suitest.ACCURACY.HIGH)
+		.not()
+		.visible()
+		.timeout(3000);
+
+	suitest.image('image-api-id').abandon();
+	suitest.image('image-api-id').clone();
+	suitest.image('image-api-id').visible().then();
+	suitest.image('image-api-id').toString();
 }
 

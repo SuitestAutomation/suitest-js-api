@@ -3,96 +3,45 @@ import {
 	Timeout,
 	InRegionModifier,
 	VisibleModifier,
-	Negatable, BaseEmptyChain, Assertable,
+	AccuracyModifier,
+	Negatable,
+	Assertable,
+	BaseEmptyChain,
 } from './modifiers';
+import {
+	AccuracyModifierNames,
+	AssertableMethodsNames,
+	InRegionMethodsNames,
+	NegatableMethodsNames,
+	TimeoutMethodsNames,
+	VisibleMethodsNames,
+	Chainable,
+	ChainWithoutMethods,
+} from './utils';
 
-// +negation +timeout +visible +inRegion
-export interface ImageChain extends
-	Negatable<ImageWithoutNegationChain>,
-	Timeout<ImageWithoutTimeoutChain>,
-	VisibleModifier<ImageWithoutVisibleChain>,
-	InRegionModifier<ImageWithoutRegionChain>,
-	ImageBaseEvalChain<ImageChain>
+interface ImageBase extends
+	// not(), doesNot(), isNot()
+	Negatable<ChainWithoutMethods<ImageBase, NegatableMethodsNames>>,
+	// timeout(...)
+	Timeout<ChainWithoutMethods<ImageBase, TimeoutMethodsNames>>,
+	// visible()
+	VisibleModifier<ChainWithoutMethods<ImageBase, VisibleMethodsNames>>,
+	// inRegion(...)
+	InRegionModifier<ChainWithoutMethods<ImageBase, InRegionMethodsNames>>,
+	// accuracy(...)
+	AccuracyModifier<ChainWithoutMethods<ImageBase, AccuracyModifierNames>>,
+	// toAssert(...)
+	Assertable<ChainWithoutMethods<ImageBase, AssertableMethodsNames>>,
+	// toString(), then(), abandon(), clone()
+	ImageBaseEvalChain<ImageBase>
 {}
 
-// -negation +timeout +visible +inRegion
-export interface ImageWithoutNegationChain extends
-	Timeout<ImageVisibleInRegionChain>,
-	VisibleModifier<ImageTimeoutInRegionChain>,
-	InRegionModifier<ImageVisibleTimeoutChain>,
-	ImageBaseEvalChain<ImageWithoutNegationChain>
-{}
-
-// +negation -timeout +visible +inRegion
-export interface ImageWithoutTimeoutChain extends
-	Negatable<ImageWithoutNegationChain>,
-	VisibleModifier<ImageTimeoutInRegionChain>,
-	InRegionModifier<ImageVisibleTimeoutChain>,
-	ImageBaseEvalChain<ImageWithoutTimeoutChain>
-{}
-
-// +negation +timeout -visible +inRegion
-export interface ImageWithoutVisibleChain extends
-	Negatable<ImageWithoutNegationChain>,
-	Timeout<ImageWithoutTimeoutChain>,
-	InRegionModifier<ImageWithoutRegionChain>,
-	ImageBaseEvalChain<ImageWithoutVisibleChain>
-{}
-
-// +negation +timeout +visible -inRegion
-export interface ImageWithoutRegionChain extends
-	Negatable<ImageWithoutNegationChain>,
-	Timeout<ImageWithoutTimeoutChain>,
-	VisibleModifier<ImageWithoutVisibleChain>,
-	ImageBaseEvalChain<ImageWithoutRegionChain>
-{}
-
-// +visible +inRegion
-interface ImageVisibleInRegionChain extends
-	VisibleModifier<ImageInRegionChain>,
-	InRegionModifier<ImageVisibleChain>,
-	ImageBaseEvalChain<ImageVisibleInRegionChain>
-{}
-
-// + timeout +region
-interface ImageTimeoutInRegionChain extends
-	Timeout<ImageInRegionChain>,
-	InRegionModifier<ImageTimeoutChain>,
-	ImageBaseEvalChain<ImageTimeoutInRegionChain>
-{}
-
-interface ImageVisibleTimeoutChain extends
-	Timeout<ImageVisibleChain>,
-	VisibleModifier<ImageTimeoutChain>,
-	ImageBaseEvalChain<ImageVisibleTimeoutChain>
-{}
-
-// +region
-interface ImageInRegionChain extends
-	InRegionModifier<ImageEmptyChain>,
-	ImageBaseEvalChain<ImageInRegionChain>
-{}
-
-// +visible
-interface ImageVisibleChain extends
-	VisibleModifier<ImageEmptyChain>,
-	ImageBaseEvalChain<ImageVisibleChain>
-{}
-
-// +timeout
-interface ImageTimeoutChain extends
-	Timeout<ImageEmptyChain>,
-	ImageBaseEvalChain<ImageTimeoutChain>
-{}
-
-interface ImageEmptyChain extends
-	ImageBaseEvalChain<ImageEmptyChain>
-{}
+type ImageChain = Chainable<ImageBase>;
 
 interface ImageBaseEvalChain<TSelf> extends
-	BaseEmptyChain<TSelf, ImageEvalResult, ImageAbandonedChain>,
-	Assertable<TSelf>
+	BaseEmptyChain<TSelf, ImageEvalResult, ImageAbandonedChain>
 {}
+
 interface ImageAbandonedChain extends AbstractChain {}
 
 type ImageEvalResult = boolean;
