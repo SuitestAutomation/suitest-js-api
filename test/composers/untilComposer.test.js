@@ -2,7 +2,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 const suitest = require('../../index');
 const {untilComposer} = require('../../lib/composers');
-const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
+const {suitestInvalidInputError} = require('../../lib/utils/testHelpers/testInputError');
 
 describe('Until Composer', () => {
 	it('should provide .until method', () => {
@@ -51,22 +51,20 @@ describe('Until Composer', () => {
 
 		// eslint-disable-next-line max-len
 		const message = 'Invalid input Until condition chain requires valid modifier and should be one of the following types:\n' +
-			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video() .psVideo()';
+			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video() .psVideo() .image() .ocr()';
 
-		testInputErrorSync(
-			chain.until,
-			[],
-			{message: 'Until condition expects a chain as an input parameter'},
+		assert.throws(
+			() => chain.until(),
+			suitestInvalidInputError('Until condition expects a chain as an input parameter'),
 		);
-		testInputErrorSync(
-			chain.until,
-			[{toJSON: () => ({request: {condition: {subject: {type: 'invalid'}}}})}],
-			{message},
+		assert.throws(
+			() => chain.until({toJSON: () => ({request: {condition: {subject: {type: 'invalid'}}}})}),
+			suitestInvalidInputError(message),
 		);
-		testInputErrorSync(
-			chain.until,
-			[{toJSON: () => ({request: {}})}],
-			{message},
+
+		assert.throws(
+			() => chain.until({toJSON: () => ({request: {}})}),
+			suitestInvalidInputError(message),
 		);
 
 		// must not throw any error
