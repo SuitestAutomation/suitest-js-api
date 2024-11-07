@@ -51,7 +51,7 @@ describe('Until Composer', () => {
 
 		// eslint-disable-next-line max-len
 		const message = 'Invalid input Until condition chain requires valid modifier and should be one of the following types:\n' +
-			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video() .psVideo() .image() .ocr()';
+			'.application() .cookie() .element() .jsExpression() .location() .networkRequest() .video() .psVideo() .image()';
 
 		assert.throws(
 			() => chain.until(),
