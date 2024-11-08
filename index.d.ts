@@ -370,17 +370,14 @@ declare namespace suitest {
 		| {
 			// image api id from suitest image repository
 			apiId: string,
-			accuracy?: ValueOf<Accuracy>,
 		}
 		| {
 			// url to image somewhere in internet
 			url: string,
-			accuracy?: ValueOf<Accuracy>,
 		}
 		| {
 			// os path to image somewhere on a disc
 			filepath: string,
-			accuracy?: ValueOf<Accuracy>,
 		}
 
 }
