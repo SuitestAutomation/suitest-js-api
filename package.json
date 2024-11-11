@@ -25,7 +25,10 @@
     "XClass TV testing",
     "Xumo testing",
     "Smart TV test automation",
-    "Fire TV test automation"
+    "Fire TV test automation",
+    "visual testing",
+    "image template matching",
+    "ocr"
   ],
   "homepage": "https://suite.st/",
   "license": "MIT",
