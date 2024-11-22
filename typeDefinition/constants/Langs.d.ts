@@ -5,4 +5,5 @@ export type Lang = {
 	ITALIAN: 'ita',
 	DUTCH: 'nld',
 	SPANISH: 'spa',
+	POLISH: 'pol',
 };
