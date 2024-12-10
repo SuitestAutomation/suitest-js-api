@@ -6,4 +6,5 @@ export type Lang = {
 	DUTCH: 'nld',
 	SPANISH: 'spa',
 	POLISH: 'pol',
+	BULGARIAN: 'bul',
 };
