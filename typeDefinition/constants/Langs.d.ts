@@ -7,4 +7,8 @@ export type Lang = {
 	SPANISH: 'spa',
 	POLISH: 'pol',
 	BULGARIAN: 'bul',
+	RUSSIAN: 'rus',
+	UKRAINIAN: 'ukr',
+	ARABIC: 'ara',
+	HEBREW: 'heb',
 };
