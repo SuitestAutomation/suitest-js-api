@@ -50,6 +50,7 @@ import {OcrColor} from './typeDefinition/constants/OcrColor';
 import {ImageChain} from './typeDefinition/ImageChain';
 import {Accuracy} from './typeDefinition/constants/Accuracy';
 import {Lang} from './typeDefinition/constants/Langs';
+import {GetLastVTScreenshotChain} from './typeDefinition/GetLastVTScreenshotChain';
 
 // --------------- Suitest Interface ---------------------- //
 
@@ -104,13 +105,13 @@ declare namespace suitest {
 		press(keys: string[], options?: { longPressMs?: string | number }): PressButtonChain;
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
-		/**
-		 * @description return PromiseLike object with Buffer as value
-		 */
-		takeScreenshot(dataFormat?: 'raw'): TakeScreenshotChain<Buffer>;
 		setScreenOrientation(orientation: ScreenOrientationValues): SetScreenOrientationChain;
 		/**
-		 * @description return PromiseLike object with base64 string as value
+		 * @description return PromiseLike object with Buffer as value which represents latest screenshot made for visual testing/assertions
+		 */
+		takeScreenshot(dataFormat?: 'raw'): TakeScreenshotChain<Buffer>;
+		/**
+		 * @description return PromiseLike object with base64 string as value which represents latest screenshot made for visual testing/assertions
 		 */
 		takeScreenshot(dataFormat: 'base64'): TakeScreenshotChain<string>;
 		/**
@@ -127,6 +128,14 @@ declare namespace suitest {
 		 * suitest.saveScreenshot('{screenshotDir}/{dateTime}-{currentFile}-l{currentLine}.png');
 		 */
 		saveScreenshot(fileName?: string): TakeScreenshotChain<void>;
+		/**
+		 * @description returns a screenshot taken with a previous visual testing assertion (OCR or image assertions). Screenshot data will be provided as a Buffer.
+		 */
+		getLastVTScreenshot(dataFormat?: 'raw'): GetLastVTScreenshotChain<Buffer>;
+		/**
+		 * @description returns a screenshot taken with a previous visual testing assertion (OCR or image assertions). Screenshot data will be provided as a base64 encoded string.
+		 */
+		getLastVTScreenshot(dataFormat: 'base64'): GetLastVTScreenshotChain<string>;
 		openDeepLink(deepLink?: string): OpenDeepLinkChain;
 		ocr(comparators: OcrCommonItem[]): OcrChain;
 		image(imageData: ImageData): ImageChain;
