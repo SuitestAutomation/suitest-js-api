@@ -125,7 +125,7 @@ interface ElementGetPropertiesChain extends
  * @description represents return value of calling "handle" function.
  */
 interface ElementHandleChain extends
-	BaseEmptyChain<ElementHandleChain, string[], ElementAbandonedChain>
+	BaseEmptyChain<ElementHandleChain, string, ElementAbandonedChain>
 {}
 
 /*
