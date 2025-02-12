@@ -260,8 +260,12 @@ export interface GetCssModifiers<T> {
 }
 
 export interface HandleModifier<T> {
-	handle(multiple?: boolean): T;
-	handle(opts?: {multiple?: boolean}): T;
+	handle(): T;
+	handle(multiple: false): T;
+	handle(multiple: true): T[];
+	handle(opts: {}): T;
+	handle(opts: {multiple: false}): T;
+	handle(opts: {multiple: true}): T[];
 }
 
 export interface GetAttributesModifier<T> {
