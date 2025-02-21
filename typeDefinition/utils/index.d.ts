@@ -1,4 +1,4 @@
-import {AccuracyModifier, Assertable, InRegionModifier, Negatable, Timeout, VisibleModifier} from '../modifiers';
+import {AccuracyModifier, Assertable, InRegionModifier, Negatable, Timeout, VisibleModifier, OnScreenModifier} from '../modifiers';
 
 export type ValueOf<T> = T[keyof T];
 
@@ -54,3 +54,4 @@ export type VisibleMethodsNames = keyof VisibleModifier<any>;
 export type InRegionMethodsNames = keyof InRegionModifier<any>;
 export type AssertableMethodsNames = keyof Assertable<any>;
 export type AccuracyModifierNames = keyof AccuracyModifier<any>;
+export type OnScreenModifierNames = keyof OnScreenModifier<any>;
