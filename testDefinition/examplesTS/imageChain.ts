@@ -76,6 +76,29 @@ async function testImageChain() {
 		.visible()
 		.timeout(3000);
 
+	await suitest.image({url: 'https://suite.st'})
+		.visible()
+		.onScreen();
+	await suitest.image({url: 'https://suite.st'})
+		.visible()
+		.onScreen()
+		.timeout(3000);
+	await suitest.image({url: 'https://suite.st'})
+		.not()
+		.visible()
+		.onScreen();
+	await suitest.image({url: 'https://suite.st'})
+		.not()
+		.visible()
+		.onScreen()
+		.toAssert()
+	await suitest.image({url: 'https://suite.st'})
+		.not()
+		.visible()
+		.onScreen()
+		.toAssert()
+		.timeout(3000);
+
 	suitest.image('image-api-id').abandon();
 	suitest.image('image-api-id').clone();
 	suitest.image('image-api-id').visible().then();
