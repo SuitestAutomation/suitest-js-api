@@ -11,4 +11,5 @@ export type Lang = {
 	UKRAINIAN: 'ukr',
 	ARABIC: 'ara',
 	HEBREW: 'heb',
+	PORTUGUESE: 'por',
 };
