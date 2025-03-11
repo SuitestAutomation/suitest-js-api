@@ -40,7 +40,7 @@ export interface ElementChain extends
 	MoveToModifier<ElementEmptyChain>, // moveTo
 	VisibleModifier<ElementWithoutEvalChain>,// visible
 	GetCssModifiers<ElementGetPropertiesChain>, // getCssProperties
-	HandleModifier<ElementHandleChain>, // handle
+	HandleModifier<ElementHandleChain, ElementHandleMultipleChain>, // handle
 	GetAttributesModifier<ElementGetAttributesChain> // getAttributes
 {}
 
@@ -125,7 +125,14 @@ interface ElementGetPropertiesChain extends
  * @description represents return value of calling "handle" function.
  */
 interface ElementHandleChain extends
-	BaseEmptyChain<ElementHandleChain, string[], ElementAbandonedChain>
+	BaseEmptyChain<ElementHandleChain, string, ElementAbandonedChain>
+{}
+
+/*
+ * @description represents return value of calling "handle" when multiple handles should be returned.
+ */
+interface ElementHandleMultipleChain extends
+	BaseEmptyChain<ElementHandleMultipleChain, string[], ElementAbandonedChain>
 {}
 
 /*
