@@ -2,7 +2,7 @@ const fs = require('fs');
 const assert = require('assert');
 const {Buffer} = require('buffer');
 const sinon = require('sinon');
-const {processServerResponse, createBufferFromSocketMessage} = require('../../lib/utils/socketChainHelper');
+const {processServerResponse, createBufferFromSocketMessage, parseBinarySocketMessage} = require('../../lib/utils/socketChainHelper');
 const {getTimeoutValue} = require('../../lib/utils/chainUtils');
 const suitest = require('../../index');
 const SuitestError = require('../../lib/utils/SuitestError');
@@ -642,6 +642,20 @@ describe('socket chain helpers', () => {
 				binaryPartOfMessage,
 				Buffer.from('some data'),
 			);
+		});
+	});
+
+	describe('parseBinarySocketMessage using 0x00 protocol number', () => {
+		it('should parse string message and binary data pair into single binary', () => {
+			const binarySocketMessage = createBufferFromSocketMessage([
+				'some-additional-attachment',
+				Buffer.from('some data'),
+			]);
+
+			const [parsedText, parsedBuffer] = parseBinarySocketMessage(binarySocketMessage);
+
+			assert.deepStrictEqual(parsedText, 'some-additional-attachment');
+			assert.deepStrictEqual(parsedBuffer, Buffer.from('some data'));
 		});
 	});
 });
