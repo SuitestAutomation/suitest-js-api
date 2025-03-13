@@ -47,10 +47,7 @@ to our repository's `master` branch.
 There are some automated checks set-up for all pull requests, as well as a code review process.
 The following conditions must be met before any pull request can be merged to Suitest JS API:
 * There are no merge conflicts in the pull request.
-* Build on CircleCI passes. We run eslint, unit tests and check test coverage (must be >95%) there.
-* All CodeClimate checks pass. CodeClimate checks how test coverage and code maintainability
-  of the project would change if we would merge the pull requests. Both test coverage and
-  code maintainability must not decrease after pull request merge.
+* GitHub Actions workflow passes. We run eslint, unit tests and check test coverage (must be >95%) there.
 * At least 2 members of Suitest Core team approved the pull request.
 
 [code of conduct]: https://github.com/SuitestAutomation/suitest-js-api/blob/master/CODE_OF_CONDUCT.md

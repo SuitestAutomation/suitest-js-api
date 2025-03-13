@@ -3,8 +3,6 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/SuitestAutomation/suitest-js-api/blob/master/LICENSE)
 [![npm version](https://img.shields.io/npm/v/suitest-js-api.svg?style=flat)](https://www.npmjs.com/package/suitest-js-api)
 ![tests](https://github.com/SuitestAutomation/suitest-js-api/actions/workflows/tests.yml/badge.svg)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/02661808dc132b86710d/test_coverage)](https://codeclimate.com/github/SuitestAutomation/suitest-js-api/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/02661808dc132b86710d/maintainability)](https://codeclimate.com/github/SuitestAutomation/suitest-js-api/maintainability)
 
 [Suitest](https://suite.st) is a test automation and device manipulation tool
 for living room devices and web browsers. 
