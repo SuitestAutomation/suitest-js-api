@@ -1,0 +1,34 @@
+name: Unit tests
+
+on:
+  push:
+  pull_request:
+
+env:
+  # colors are expected in the unit tests and outdated colors library does not support github actions
+  FORCE_COLOR: 1
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x, 20.x, 22.x]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: node --version
+      - run: npm ci
+      - name: Run Unit Tests
+        run: |
+          npm run lint
+          npm run coverage
+      - name: Check TypeScript definitions
+        run: npm run test-definitions
