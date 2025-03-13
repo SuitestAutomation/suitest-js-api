@@ -29,6 +29,7 @@ const allImageComposers = [
 	composers.VISIBLE,
 	composers.IN_REGION,
 	composers.ACCURACY,
+	composers.ON_SCREEN,
 ];
 
 describe('Image chain', () => {
@@ -224,6 +225,30 @@ describe('Image chain', () => {
 					.toJSON(),
 				socketMessage,
 			);
+		});
+
+		it('generate image in regions with null values', () => {
+			assert.deepStrictEqual(
+				toJSON({
+					imageData: {apiId: 'image-api-id'},
+					comparator: {type: SUBJ_COMPARATOR.VISIBLE},
+					region: [null, null, null, null],
+				}),
+				{
+					type: 'eval',
+					request: {
+						type: 'assert',
+						condition: {
+							subject: {
+								type: 'image',
+								apiId: 'image-api-id',
+							},
+							type: SUBJ_COMPARATOR.VISIBLE,
+							region: [null, null, null, null],
+						},
+						timeout: 2000,
+					},
+				});
 		});
 
 		it('evaluate image is not visible in region', () => {
