@@ -259,9 +259,13 @@ export interface GetCssModifiers<T> {
 	getCssProperties(properties: string[]): T;
 }
 
-export interface HandleModifier<T> {
-	handle(multiple?: boolean): T;
-	handle(opts?: {multiple?: boolean}): T;
+export interface HandleModifier<TSingleHandle, TMultipleHandle> {
+	handle(): TSingleHandle;
+	handle(multiple: false): TSingleHandle;
+	handle(multiple: true): TMultipleHandle;
+	handle(opts: {}): TSingleHandle;
+	handle(opts: {multiple: false}): TSingleHandle;
+	handle(opts: {multiple: true}): TMultipleHandle;
 }
 
 export interface GetAttributesModifier<T> {

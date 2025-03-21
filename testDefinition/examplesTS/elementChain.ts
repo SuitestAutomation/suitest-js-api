@@ -219,4 +219,20 @@ async () => {
 	await flickPos.repeat(1);
 	await flickPos.repeat(5).interval(300);
 
+
+	// handle() should return string
+	let singleHandle: string = await suitest.element({active: true}).handle();
+	await suitest.assert.element({ handle: singleHandle });
+	// handle(false) should return string
+	singleHandle = await suitest.element({active: true}).handle(false);
+	await suitest.assert.element({ handle: singleHandle });
+	// handle({multiple: false}) should return string
+	singleHandle = await suitest.element({active: true}).handle({multiple: false});
+	await suitest.assert.element({ handle: singleHandle });
+	// handle({multiple: true}) should return array of strings
+	let multiplaHanlde: string[] = await suitest.element({active: true}).handle({multiple: true});
+	await suitest.assert.element({ handle: multiplaHanlde[0] });
+	// handle(true) should return array of strings
+	multiplaHanlde = await suitest.element({active: true}).handle(true);
+	await suitest.assert.element({ handle: multiplaHanlde[0] });
 }
