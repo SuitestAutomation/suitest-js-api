@@ -17,6 +17,7 @@ const closeAppFactory = require('./lib/chains/closeAppChain');
 const suspendAppFactory = require('./lib/chains/suspendAppChain');
 const takeScreenshotFactory = require('./lib/chains/takeScreenshotChain');
 const saveScreenshotFactory = require('./lib/chains/saveScreenshotChain');
+const getLastVTScreenshotFactory = require('./lib/chains/getLastVTScreenshotChain');
 const openUrlFactory = require('./lib/chains/openUrlChain');
 const locationFactory = require('./lib/chains/locationChain');
 const applicationFactory = require('./lib/chains/applicationChain');
@@ -139,6 +140,7 @@ class SUITEST_API extends EventEmitter {
 		const {runTestAssert} = runTestFactory(this);
 		const {takeScreenshot} = takeScreenshotFactory(this);
 		const {saveScreenshot} = saveScreenshotFactory(this);
+		const {getLastVTScreenshot} = getLastVTScreenshotFactory(this);
 		const {setScreenOrientation, setScreenOrientationAssert} = setScreenOrientationFactory(this);
 		const {openDeepLink, openDeepLinkAssert} = openDeepLinkFactory(this);
 		const {ocr, ocrAssert} = ocrFactory(this);
@@ -168,6 +170,7 @@ class SUITEST_API extends EventEmitter {
 		this.pollUrl = pollUrl;
 		this.takeScreenshot = takeScreenshot;
 		this.saveScreenshot = saveScreenshot;
+		this.getLastVTScreenshot = getLastVTScreenshot;
 		this.setScreenOrientation = setScreenOrientation;
 		this.openDeepLink = openDeepLink;
 		this.ocr = ocr;
