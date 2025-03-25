@@ -273,7 +273,7 @@ export interface GetAttributesModifier<T> {
 }
 
 export interface InRegionModifier<T> {
-	inRegion(region: [number, number, number, number]): T;
+	inRegion(region: [number | null, number | null, number | null, number | null]): T;
 }
 
 export interface Language<T> {
@@ -282,4 +282,8 @@ export interface Language<T> {
 
 export interface AccuracyModifier<T> {
 	accuracy(accuracy: ValueOf<Accuracy>): T;
+}
+
+export interface OnScreenModifier<T> {
+	onScreen(): T;
 }
