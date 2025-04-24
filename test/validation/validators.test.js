@@ -6,6 +6,7 @@ const {
 	validateStVarOrPositiveNumber,
 	validateStVarOrNumber,
 	validateStVarOrPositiveNumberNotZero,
+	validateStVarMsDuration,
 } = require('../../lib/validation/validators');
 const {validate, validators} = require('../../lib/validation');
 const {testInputErrorSync} = require('../../lib/utils/testHelpers/testInputError');
@@ -83,6 +84,15 @@ describe('validators', () => {
 		assert.throws(
 			() => validateStVarOrNumber('10', 'someNumber'),
 			/SuitestError: Invalid input someNumber should be suitest configuration variable/,
+		);
+	});
+
+	it('should validate vars or max ms time', () => {
+		assert.strictEqual(validateStVarMsDuration(300), 300);
+		assert.throws(() => validateStVarMsDuration(400000), /Error/);
+		assert.throws(
+			() => validateStVarMsDuration(400000, 'someNumber'),
+			'SuitestError: Invalid input someNumber maximum duration (30s) exceeded',
 		);
 	});
 
