@@ -7,6 +7,7 @@ import {
 	Negatable,
 	Assertable,
 	BaseEmptyChain,
+	OnScreenModifier,
 } from './modifiers';
 import {
 	AccuracyModifierNames,
@@ -17,6 +18,7 @@ import {
 	VisibleMethodsNames,
 	Chainable,
 	ChainWithoutMethods,
+	OnScreenModifierNames,
 } from './utils';
 
 interface ImageBase extends
@@ -28,6 +30,8 @@ interface ImageBase extends
 	VisibleModifier<ChainWithoutMethods<ImageBase, VisibleMethodsNames>>,
 	// inRegion(...)
 	InRegionModifier<ChainWithoutMethods<ImageBase, InRegionMethodsNames>>,
+	// onScreen()
+	OnScreenModifier<ChainWithoutMethods<ImageBase, OnScreenModifierNames>>,
 	// accuracy(...)
 	AccuracyModifier<ChainWithoutMethods<ImageBase, AccuracyModifierNames>>,
 	// toAssert(...)
