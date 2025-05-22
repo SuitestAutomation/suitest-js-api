@@ -60,15 +60,39 @@ export = suitest;
 
 declare namespace suitest {
 	export interface ISuitestBase extends NodeJS.EventEmitter {
-		openSession(options: OpenSessionOptions): Promise<OpenSessionResult|SuitestError>;
-		closeSession(): Promise<object|SuitestError>;
-		setAppConfig(configId: string, options?: ConfigOverride): Promise<void|SuitestError>;
-		pairDevice(deviceId: string, recordingSettings?: {recording?: 'autostart' | 'manualstart' | 'none', webhookUrl?: string}): Promise<DeviceData|SuitestError>;
-		releaseDevice(): Promise<void|SuitestError>;
+		/**
+		 * @throws {SuitestError}
+		 */
+		openSession(options: OpenSessionOptions): Promise<OpenSessionResult>;
+		/**
+		 * @throws {SuitestError}
+		 */
+		closeSession(): Promise<void>;
+		/**
+		 * @throws {SuitestError}
+		 */
+		setAppConfig(configId: string, options?: ConfigOverride): Promise<void>;
+		/**
+		 * @throws {SuitestError}
+		 */
+		pairDevice(deviceId: string, recordingSettings?: {recording?: 'autostart' | 'manualstart' | 'none', webhookUrl?: string}): Promise<DeviceData>;
+		/**
+		 * @throws {SuitestError}
+		 */
+		releaseDevice(): Promise<void>;
 		startREPL(options?: ReplOptions): Promise<void>;
-		getAppConfig(): Promise<AppConfiguration|SuitestError>;
-		startRecording({webhookUrl}?: {webhookUrl: string}): Promise<string|SuitestError>;
-		stopRecording({discard}?: {discard: boolean}): Promise<void|SuitestError>;
+		/**
+		 * @throws {SuitestError}
+		 */
+		getAppConfig(): Promise<AppConfiguration>;
+		/**
+		 * @throws {SuitestError}
+		 */
+		startRecording({webhookUrl}?: {webhookUrl: string}): Promise<string | undefined>;
+		/**
+		 * @throws {SuitestError}
+		 */
+		stopRecording({discard}?: {discard: boolean}): Promise<void>;
 
 		// config
 		getConfig(): ConfigureOptions;
@@ -267,7 +291,7 @@ declare namespace suitest {
 		id: string;
 		firmware: string;
 		modelId: string;
-		recordingUrl: string;
+		recordingUrl?: string;
 	}
 
 	interface ConfigOverride {
@@ -324,15 +348,29 @@ declare namespace suitest {
 	}
 
 	interface AuthContext {
-		headers: object;
+		headers: Record<string, string>;
 		tokenKey: string;
 
 		setContext(newContext: symbol, tokenId: string|undefined, tokenPassword: string|undefined): void;
 		clear(): void;
-		authorizeHttp(requestKey: string, requestObject: object, errorOptions: SuitestErrorOptions): Promise<SuitestError|object>;
-		authorizeWs(contentObject: object, commandName: string): Promise<SuitestError|object>;
-		authorizeWsConnection(connectObject: object, commandName: string): Promise<SuitestError|object>;
+
+		/**
+		 * @throws {SuitestError}
+		 */
+		authorizeHttp<T extends object>(requestkey: string, requestObject: T, errorOptions?: SuitestErrorOptions): Promise<WithHeaders<T>>;
+		/**
+		 * @throws {SuitestError}
+		 */
+		authorizeWs<T extends object>(contentObject: T, commandName: string): Promise<T>;
+		/**
+		 * @throws {SuitestError}
+		 */
+		authorizeWsConnection<T extends object>(connectObject: T, commandName: string): Promise<WithHeaders<T>>;
 		getToken(): string;
+	}
+
+	type WithHeaders<T extends object> = T & {
+		headers: Record<string, string>
 	}
 
 	interface SuitestErrorOptions {
