@@ -108,7 +108,7 @@
     "keypress": "^0.2.1",
     "moment": "^2.29.4",
     "node-fetch": "^2.6.0",
-    "package-json": "^7.0.0",
+    "package-json": "^10.0.1",
     "prettyjson": "^1.2.1",
     "ramda": "^0.27.0",
     "raven": "^2.6.2",
