@@ -148,6 +148,42 @@ describe('validators', () => {
 				{
 					...baseArg,
 					presets: {
+						preset1: {},
+					},
+				},
+			),
+			/SuitestError: Invalid input .presets\['preset1'] should have required property 'device'/,
+		);
+		assert.throws(
+			() => validate(
+				validators.TEST_LAUNCHER_TOKEN,
+				{
+					...baseArg,
+					presets: {
+						preset1: {config: 'config-id', device: undefined},
+					},
+				},
+			),
+			/SuitestError: Invalid input .presets\['preset1'] should have required property 'device'/,
+		);
+		assert.throws(
+			() => validate(
+				validators.TEST_LAUNCHER_TOKEN,
+				{
+					...baseArg,
+					presets: {
+						preset1: {config: undefined, device: 'device-id'},
+					},
+				},
+			),
+			/SuitestError: Invalid input .presets\['preset1'] should have required property 'config'/,
+		);
+		assert.throws(
+			() => validate(
+				validators.TEST_LAUNCHER_TOKEN,
+				{
+					...baseArg,
+					presets: {
 						preset1: {
 							config: {
 								configId: false,
