@@ -54,7 +54,7 @@ describe('testLauncherHelper util', () => {
 		testLauncherHelper.validateInput('TOKEN', {});
 		assert.equal(validation.validate.firstCall.args[0], validation.validators.TEST_LAUNCHER_TOKEN);
 		assert.deepEqual(validation.validate.firstCall.args[1], {});
-		assert.equal(validation.validate.firstCall.args[2], 'provided for \'suitest token\' command. It');
+		assert.equal(validation.validate.firstCall.args[2], 'provided for suitest-js-api running options. It');
 		assert.ok(!process.exit.called, 'exit not called');
 		validate.restore();
 		testLauncherHelper.validateInput('TOKEN', {});
