@@ -171,7 +171,7 @@ describe('SuitestLauncher', () => {
 		assert(process.exit.calledWith(1));
 		assert.match(
 			logger.error.firstCall.firstArg.toString(),
-			/SuitestError: Invalid input provided for 'suitest token' command/,
+			/SuitestError: Invalid input provided for suitest-js-api running options/,
 		);
 	});
 
