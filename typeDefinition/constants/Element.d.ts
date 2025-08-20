@@ -36,7 +36,7 @@ export type ElementPropTypes = {
 	IS_ENABLED: 'isEnabled',
 	IS_ENABLED_ANDROID_OTTIUM: 'enabled',
 	IS_FOCUSABLE: 'isFocusable',
-	IS_FOCUSABLED_ANDROID_OTTIUM: 'focusable',
+	IS_FOCUSABLE_ANDROID_OTTIUM: 'focusable',
 	IS_SELECTED: 'isSelected',
 	IS_SELECTED_ANDROID_OTTIUM: 'selected',
 	IS_TOUCHABLE: 'isTouchable',
