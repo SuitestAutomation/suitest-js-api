@@ -171,13 +171,29 @@ declare namespace suitest {
 			model: string,
 			owner: string,
 			firmware: string,
+			osVersion?: string,
 			modelId: string,
 			platforms: string[],
-			customName?: string,
+			customName: string,
+			ipAddress: string,
+			controlUnitIds: string[],
 			inactivityTimeout?: number,
 			status: string,
 			displayName?: string,
 			shortDisplayName?: string,
+			customUserInfo?: {
+				location?: string,
+				team?: string,
+				responsibleUser?: string,
+				osInfo?: string,
+				otherInfo?: string,
+			},
+			inUseBy?: {
+				description?: string,
+				email?: string,
+				orgName?: string,
+				tokenName?: string,
+			},
 		}
 
 		// constants
