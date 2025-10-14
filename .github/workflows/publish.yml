@@ -1,0 +1,27 @@
+name: Publish
+
+on: workflow_dispatch
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: publish
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Ensure npm 11.5.1 or later is installed (node 24.7 and higher)
+          node-version: '24.x'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run coverage
+      - run: npm run test-definitions
+      - run: npm publish
