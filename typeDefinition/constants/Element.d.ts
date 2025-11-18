@@ -100,6 +100,10 @@ export type ElementPropTypes = {
 	IS_LONG_CLICKABLE_ANDROID_OTTIUM: 'long-clickable',
 	IS_SCROLLABLE_ANDROID_OTTIUM: 'scrollable',
 	BOUNDS: 'bounds',
+	ROLE: 'role',
+	DESCRIPTION: 'description',
+	ORIENTATION_TEXT: 'orientationText',
+	TEST_ID: 'testId',
 };
 
 // Needed for keep backward compatibility
