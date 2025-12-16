@@ -99,7 +99,7 @@
   },
   "dependencies": {
     "@suitest/smst-to-text": "^4.13.0",
-    "@suitest/translate": "^4.28.1",
+    "@suitest/translate": "^4.28.3",
     "@types/node": "^14.0.10",
     "ajv": "^6.12.2",
     "ansi-regex": "^5.0.0",
