@@ -1,6 +1,6 @@
 {
   "name": "suitest-js-api",
-  "version": "4.0.5",
+  "version": "4.0.6",
   "main": "index.js",
   "repository": "github:SuitestAutomation/suitest-js-api",
   "author": "Suitest <hello@suite.st>",
