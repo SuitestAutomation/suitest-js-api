@@ -16,8 +16,28 @@ video().timeout(10).then(videoProps => {
 	}
 });
 video().abandon();
+
+// matchJS/matchesJS
+// 1. Synchronous comparison
 video().matchesJS(() => true);
 video().matchJS('() => true');
+video().matchJS((vid: any) => vid.videoLength > 0);
+
+// 2. Callback function
+video().matchJS((testSubject: any, callback: (error: Error | null, result: boolean) => void) => {
+	callback(null, testSubject.videoLength > 0);
+});
+
+// 3. Promise-returning function
+video().matchesJS((testSubject: any): Promise<boolean> => {
+	return Promise.resolve(testSubject.videoLength > 0);
+});
+
+// 4. Async/await syntax
+video().matchJS(async (testSubject: any): Promise<boolean> => {
+	return testSubject.videoLength > 0;
+});
+
 video().not();
 video().doesNot();
 video().isNot();
