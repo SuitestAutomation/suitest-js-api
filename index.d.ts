@@ -35,7 +35,9 @@ import {PlayStationVideoChain} from './typeDefinition/PlayStationVideoChain';
 import {HadNoError} from './typeDefinition/constants/HadNoError';
 import {TakeScreenshotChain} from './typeDefinition/TakeScreenshotChain';
 import {SetScreenOrientationChain} from './typeDefinition/SetScreenOrientationChain';
+import {SwitchContextChain} from './typeDefinition/SwitchContextChain';
 import {ScreenOrientation} from './typeDefinition/constants/ScreenOrientation';
+import {Context} from './typeDefinition/constants/Context';
 import {CloseAppChain} from './typeDefinition/CloseAppChain';
 import {SuspendAppChain} from './typeDefinition/SuspendAppChain';
 import {RelativePosition} from './typeDefinition/RelativePositionChain';
@@ -130,6 +132,7 @@ declare namespace suitest {
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
 		setScreenOrientation(orientation: ScreenOrientationValues): SetScreenOrientationChain;
+		switchContext(context: ContextValues): SwitchContextChain;
 		/**
 		 * @description return PromiseLike object with Buffer as value which represents latest screenshot made for visual testing/assertions
 		 */
@@ -215,6 +218,7 @@ declare namespace suitest {
 		TAP_TYPES: TapTypes;
 		DIRECTIONS: Directions;
 		SCREEN_ORIENTATION: ScreenOrientation;
+		CONTEXT: Context;
 		LAUNCH_MODE: LaunchMode;
 		COOKIE_PROP: CookieProp;
 		OCR_READ_AS: OcrReadAs;
@@ -266,6 +270,7 @@ declare namespace suitest {
 		sleep(milliseconds: number): SleepChain;
 		window(): WindowChain;
 		setScreenOrientation(orientation: ScreenOrientationValues): SetScreenOrientationChain;
+		switchContext(context: ContextValues): SwitchContextChain;
 		openDeepLink(deepLink?: string): OpenDeepLinkChain;
 		ocr(comparators: OcrCommonItem[]): OcrChain;
 		image(imageData: ImageData): ImageChain;
@@ -417,6 +422,10 @@ declare namespace suitest {
 		| 'portraitReversed'
 		| 'landscape'
 		| 'landscapeReversed';
+
+	type ContextValues =
+		| 'native'
+		| 'webview';
 
 	type OcrCommonItem = {
 		val: string,
