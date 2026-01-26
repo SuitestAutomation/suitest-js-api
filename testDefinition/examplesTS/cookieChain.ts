@@ -13,8 +13,28 @@ baseCookie.doesNot();
 baseCookie.isNot();
 baseCookie.exist();
 baseCookie.exists();
+
+// matchJS/matchesJS
+// 1. Synchronous comparison
 baseCookie.matchJS(jsFunc);
 baseCookie.matchesJS(jsFuncStr);
+baseCookie.matchJS((cookie: any) => cookie.value.length > 0);
+
+// 2. Callback function
+baseCookie.matchJS((testSubject: any, callback: (error: Error | null, result: boolean) => void) => {
+	callback(null, testSubject.value.length > 0);
+});
+
+// 3. Promise-returning function
+baseCookie.matchesJS((testSubject: any): Promise<boolean> => {
+	return Promise.resolve(testSubject.value.length > 0);
+});
+
+// 4. Async/await syntax
+baseCookie.matchJS(async (testSubject: any): Promise<boolean> => {
+	return testSubject.value.length > 0;
+});
+
 baseCookie.equal('');
 baseCookie.equals('');
 baseCookie.contain('');

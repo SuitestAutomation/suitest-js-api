@@ -33,8 +33,40 @@ el.doesNot().exist().timeout(1);
 // el.matchesBrightScript('');
 // el.matchBrightScript(brsCodeExample);
 el.abandon();
+
+// matchJS/matchesJS
+// 1. Synchronous comparison
 el.matchesJS(() => true);
+el.matchJS((img: any) => img.offsetWidth / img.offsetHeight === 16 / 9);
+
+// 2. Callback function
+el.matchJS((testSubject: any, callback: (error: Error | null, result: boolean) => void) => {
+	callback(null, true);
+});
+el.matchesJS(function(testSubject: any, callback: (error: Error | null, result: boolean) => void) {
+	callback(null, testSubject.innerText === 'expected');
+});
+
+// 3. Promise-returning function
+el.matchJS((testSubject: any): Promise<boolean> => {
+	return Promise.resolve(true);
+});
+el.matchesJS(function(testSubject: any): Promise<boolean> {
+	return Promise.resolve(testSubject.innerText === 'expected');
+});
+
+// 4. Async/await syntax
+el.matchJS(async (testSubject: any): Promise<boolean> => {
+	return true;
+});
+el.matchesJS(async function(testSubject: any): Promise<boolean> {
+	return testSubject.innerText === 'expected';
+});
+
+// 5. String form
 el.matchJS('() => true');
+el.matchJS("function(img) { return img.offsetWidth / img.offsetHeight === 16 / 9 }");
+
 el.not();
 el.isNot();
 el.then();

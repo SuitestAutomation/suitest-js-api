@@ -122,7 +122,12 @@ export interface StringModifiers<T> extends Equalable<T>, Containable<T> {
 	endsWith(value: string): T;
 }
 
-export type JSExpression = ((value: any) => boolean) | string;
+export type JSExpression =
+	| ((value: any) => boolean) // Synchronous comparison
+	| ((value: any, callback: (error: Error | null, result: boolean) => void) => void) // Callback function
+	| ((value: any) => Promise<boolean>) // Promise (includes async/await)
+	| string; // String form
+
 export interface MatchJSModifiers<T> {
 	matchJS(value: JSExpression): T;
 	matchesJS(value: JSExpression): T;
