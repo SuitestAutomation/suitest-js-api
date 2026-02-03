@@ -16,8 +16,28 @@ baseLocation.equal('');
 baseLocation.equals('');
 baseLocation.contain('');
 baseLocation.contains('');
+
+// matchJS/matchesJS
+// 1. Synchronous comparison
 baseLocation.matchJS(jsFunc);
 baseLocation.matchesJS(jsFuncStr);
+baseLocation.matchJS((loc: any) => loc.href.includes('test'));
+
+// 2. Callback function
+baseLocation.matchJS((testSubject: any, callback: (error: Error | null, result: boolean) => void) => {
+	callback(null, testSubject.href.includes('test'));
+});
+
+// 3. Promise-returning function
+baseLocation.matchesJS((testSubject: any): Promise<boolean> => {
+	return Promise.resolve(testSubject.href.includes('test'));
+});
+
+// 4. Async/await syntax
+baseLocation.matchJS(async (testSubject: any): Promise<boolean> => {
+	return testSubject.href.includes('test');
+});
+
 baseLocation.startWith('');
 baseLocation.startsWith('');
 baseLocation.endWith('');
