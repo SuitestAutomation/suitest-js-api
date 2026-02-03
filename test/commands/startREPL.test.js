@@ -24,7 +24,7 @@ describe('startREPL command', () => {
 	});
 	afterEach(() => {
 		sinon.restore();
-		suitest.conifg = suitestConfig;
+		suitest.config = suitestConfig;
 	});
 	it('should not start another repl instance if one is already running', async() => {
 		const replSessionEnded = sinon.stub(texts, 'replSessionEnded');
@@ -75,8 +75,9 @@ describe('startREPL command', () => {
 		const startRepl = sinon.stub(repl, 'startRepl').resolves(1);
 		const replWelcomeMessage = sinon.spy(texts, 'replWelcomeMessage');
 
+		const suitColor = logger.colors.suit;
 		// eslint-disable-next-line max-len
-		const expected = 'Test execution has been paused for the interactive session\nNow you can:\n\n  1. Edit watched files - Suitest will reload them and execute the repeater\n     function every time they change on disk.\n  2. Use the prompt below to execute any JavaScript in real time.\n\nHere is your environment:\n\n  Current working dir: \u001b[37m' + __dirname + '\u001b[39m\n  Repeater function: \u001b[37mnone\u001b[39m\n  Available local variables: \u001b[37msuitest\u001b[39m\n  Watched files (relative to your working dir):\n    - \u001b[37m'+ path.join(__dirname, '/**/*.js') + '\u001b[39m\n\n';
+		const expected = 'Test execution has been paused for the interactive session\nNow you can:\n\n  1. Edit watched files - Suitest will reload them and execute the repeater\n     function every time they change on disk.\n  2. Use the prompt below to execute any JavaScript in real time.\n\nHere is your environment:\n\n  Current working dir: ' + suitColor(__dirname) + '\n  Repeater function: ' + suitColor('none') + '\n  Available local variables: ' + suitColor('suitest') + '\n  Watched files (relative to your working dir):\n    - ' + suitColor(path.join(__dirname, '/**/*.js')) + '\n\n';
 
 		await startREPL();
 
