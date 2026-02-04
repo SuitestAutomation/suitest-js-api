@@ -55,12 +55,15 @@ describe('logger util', () => {
 		sinon.stub(timestamp, 'formatDate').returns(() => 'timestamp');
 
 		try {
+			const gray = logger.colors.gray;
+			const bold = logger.colors.bold;
+			const suit = logger.colors.suit;
+
 			logger.log('|A|', 'operation');
 
 			assert.equal(
 				log.firstCall.args[0],
-				'\u001b[90mtimestamp Launcher \u001b[39m\u001b[36m\u001b[1mA' +
-				'\u001b[22m\u001b[39m \u001b[37moperation\u001b[39m',
+				`${gray('timestamp Launcher ')}${bold('A')} ${suit('operation')}`,
 				'In plain mode opType should be merged with line',
 			);
 		} finally {
