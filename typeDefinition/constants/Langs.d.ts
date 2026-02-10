@@ -12,4 +12,9 @@ export type Lang = {
 	ARABIC: 'ara',
 	HEBREW: 'heb',
 	PORTUGUESE: 'por',
+	NORWEGIAN: 'nor',
+	SWEDISH: 'swe',
+	FINNISH: 'fin',
+	DANISH: 'dan',
+	HUNGARIAN: 'hun',
 };
