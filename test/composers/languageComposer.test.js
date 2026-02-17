@@ -51,7 +51,7 @@ describe('Language Composer', () => {
 		assert.throws(() => chain.language([]), languageShouldBeString);
 
 		const languageShouldBeOneOfValues =
-			suitestInvalidInputError('Invalid input provided for .language function. Language should be equal to one of the allowed values: "eng", "deu", "fra", "ita", "nld", "spa", "pol", "bul", "rus", "ukr", "ara", "heb", "por"');
+			suitestInvalidInputError('Invalid input provided for .language function. Language should be equal to one of the allowed values: "eng", "deu", "fra", "ita", "nld", "spa", "pol", "bul", "rus", "ukr", "ara", "heb", "por", "nor", "swe", "fin", "dan", "hun"');
 
 		assert.throws(() => chain.language(''), languageShouldBeOneOfValues);
 		assert.throws(() => chain.language('unknown'), languageShouldBeOneOfValues);
