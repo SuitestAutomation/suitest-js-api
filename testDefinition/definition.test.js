@@ -1,6 +1,7 @@
 const ts = require('typescript');
 const assert = require('assert').strict;
 const {prop} = require('ramda');
+const path = require('path');
 
 const typescriptCompilerOptions = {
 	'module': ts.ModuleKind.System,
@@ -9,6 +10,7 @@ const typescriptCompilerOptions = {
 	'diagnostics': true,
 	'target': ts.ScriptTarget.ES2015,
 	'noImplicitAny': true,
+	'skipLibCheck': true,
 	'allowSyntheticDefaultImports': false,
 	'moduleResolution': ts.ModuleResolutionKind.NodeJs,
 	'lib': [
@@ -19,20 +21,60 @@ const typescriptCompilerOptions = {
 	],
 };
 
-const getDiagnostics = name => {
-	const program = ts.createProgram(
-		[`./examplesTS/${name}.ts`],
-		typescriptCompilerOptions,
-	);
-
-	return ts.getPreEmitDiagnostics(program);
-};
-
 const getDiagnosticResultsMessages = (diagnosticResults = []) => {
 	return diagnosticResults.map(prop('messageText'));
 };
 
 describe('suitest typescripts declarations tests', () => {
+	const shouldCompile = [
+		'elementChain', 'networkRequestChain', 'javascriptExpressionChain',
+		'locationChain', 'cookieChain', 'applicationChain',
+		'clearAppDataChain', 'executeCommandChain', 'openAppChain',
+		'openUrlChain', 'pollUrlChain', 'positionChain',
+		'pressButtonChain', 'sleepChain', 'windowChain',
+		'videoChain', 'playstationVideoChain', 'indexTest',
+		'runTestChain', 'takeScreenshotChain', 'saveScreenshotChain',
+		'setScreenOrientation', 'closeAppChain', 'suspendAppChain',
+		'relativePositionChain', 'ocrChain', 'imageChain', 'getLastVTScreenshotChain',
+		'launcherConfig',
+		// 'executeBrightScriptChain', 'brightScriptExpressionChain',
+	];
+
+	const shouldFail = [
+		'networkRequestChain.fail', 'elementChain.fail', 'videoChain.fail', 'playstationVideoChain.fail',
+		'runTestChain.fail', 'cookieChain.fail',
+	];
+
+	const examplesDir = path.join(__dirname, 'examplesTS');
+	const allExamplePaths = [...new Set([...shouldCompile, ...shouldFail])]
+		.map(name => path.join(examplesDir, `${name}.ts`));
+
+	const program = ts.createProgram(allExamplePaths, typescriptCompilerOptions);
+	const diagnostics = ts.getPreEmitDiagnostics(program);
+	const globalDiagnostics = diagnostics.filter(diagnostic => !diagnostic.file);
+	const diagnosticsByFile = diagnostics.reduce((acc, diagnostic) => {
+		if (!diagnostic.file) {
+			return acc;
+		}
+		const fileName = path.resolve(diagnostic.file.fileName);
+		const existing = acc.get(fileName);
+
+		if (existing) {
+			existing.push(diagnostic);
+		} else {
+			acc.set(fileName, [diagnostic]);
+		}
+
+		return acc;
+	}, new Map());
+
+	const getDiagnostics = name => {
+		const fileName = path.resolve(path.join(examplesDir, `${name}.ts`));
+		const fileDiagnostics = diagnosticsByFile.get(fileName) || [];
+
+		return [...globalDiagnostics, ...fileDiagnostics];
+	};
+
 	(() => {
 		const messages = getDiagnosticResultsMessages(getDiagnostics('elementChain.fail'));
 		const expectedErrors = [
@@ -61,18 +103,7 @@ describe('suitest typescripts declarations tests', () => {
 	})();
 
 	// should compile files without error
-	[
-		'elementChain', 'networkRequestChain', 'javascriptExpressionChain',
-		'locationChain', 'cookieChain', 'applicationChain',
-		'clearAppDataChain', 'executeCommandChain', 'openAppChain',
-		'openUrlChain', 'pollUrlChain', 'positionChain',
-		'pressButtonChain', 'sleepChain', 'windowChain',
-		'videoChain', 'playstationVideoChain', 'indexTest',
-		'runTestChain', 'takeScreenshotChain', 'saveScreenshotChain',
-		'setScreenOrientation', 'closeAppChain', 'suspendAppChain',
-		'relativePositionChain', 'ocrChain', 'imageChain', 'getLastVTScreenshotChain',
-		// 'executeBrightScriptChain', 'brightScriptExpressionChain',
-	].forEach(fileName => {
+	shouldCompile.forEach(fileName => {
 		it(`should compile example ${fileName}`, (done) => {
 			const messages = getDiagnosticResultsMessages(getDiagnostics(fileName));
 
@@ -82,10 +113,7 @@ describe('suitest typescripts declarations tests', () => {
 	});
 
 	// should compile files with error
-	[
-		'networkRequestChain.fail', 'elementChain.fail', 'videoChain.fail', 'playstationVideoChain.fail',
-		'runTestChain.fail', 'cookieChain.fail',
-	].forEach(fileName => {
+	shouldFail.forEach(fileName => {
 		it(`should not compile example ${fileName} chain`, (done) => {
 			assert.ok(
 				getDiagnostics(fileName).length > 0,
