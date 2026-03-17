@@ -10,6 +10,7 @@ const config = require('../../config');
 const {snippets} = require('../../lib/testLauncher/launcherLogger');
 const mockSpawn = require('../../lib/utils/testHelpers/mockSpawn');
 const webSockets = require('../../lib/api/webSockets');
+const ipcServer = require('../../lib/testLauncher/ipc/server');
 const suitest = require('../../index');
 
 describe('SuitestLauncher', () => {
@@ -28,10 +29,12 @@ describe('SuitestLauncher', () => {
 		nock.cleanAll();
 		authContext.clear();
 		await testServer.restart();
+		sinon.stub(ipcServer, 'start').resolves(12345);
 	});
 
 	afterEach(() => {
 		logger.error.resetHistory();
+		ipcServer.start.restore();
 	});
 
 	after(async() => {
