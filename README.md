@@ -57,6 +57,7 @@ Suitest supports automating end-to-end testing of:
 - PlayStation 4 / 5 apps
 - Roku apps
 - Sky apps
+- Vega OS apps
 - VIDAA apps
 - Vizio SmartCast apps
 - Xfinity / XClass TV / Xumo TV apps

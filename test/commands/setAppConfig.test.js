@@ -69,4 +69,36 @@ describe('setAppConfig', () => {
 			configOverride: {url: 'url'},
 		});
 	});
+
+	it('should pass includeChangelist in selectConfiguration message', async() => {
+		let capturedIncludeChangelist = null;
+		const initialIncludeChangelist = suitest.config.includeChangelist;
+
+		const restoreMock = testServer.mockRespondData(
+			(msg) => {
+				if (msg.content && msg.content.type === 'selectConfiguration') {
+					capturedIncludeChangelist = msg.content.includeChangelist;
+
+					return true;
+				}
+
+				return false;
+			},
+			{result: 'success', appId: 'appId', versionId: 'versionId'},
+		);
+
+		try {
+			authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
+			suitest.configuration.override({includeChangelist: true});
+			await setAppConfig('configId', {url: 'url'});
+			assert.strictEqual(capturedIncludeChangelist, true);
+		} finally {
+			if (initialIncludeChangelist === undefined) {
+				delete suitest.config.includeChangelist;
+			} else {
+				suitest.configuration.override({includeChangelist: initialIncludeChangelist});
+			}
+			restoreMock();
+		}
+	});
 });
