@@ -348,6 +348,45 @@ declare namespace suitest {
 		isHtmlBased: boolean;
 	}
 
+	type DeviceId = string;
+	type PresetDevice = DeviceId | {
+		deviceId: DeviceId;
+	};
+
+	type ConfigId = string;
+	type PresetConfig = ConfigId | (ConfigOverride & {
+		configId: ConfigId;
+	});
+
+	type PresetsMap = Record<string, {
+		device: PresetDevice;
+		config: PresetConfig;
+	}>;
+
+	interface SuitestLauncherConfiguration {
+		extends?: string;
+		tokenId?: string;
+		tokenPassword?: string;
+		concurrency?: number;
+		preset?: string[];
+		presets?: PresetsMap;
+		deviceId?: string;
+		appConfigId?: string;
+		inspect?: number | boolean | string;
+		inspectBrk?: number | boolean | string;
+		logLevel?: ConfigureOptions['logLevel'];
+		logDir?: string;
+		timestamp?: string;
+		configFile?: string;
+		overrideConfigFile?: string;
+		disallowCrashReports?: boolean;
+		defaultTimeout?: number;
+		screenshotDir?: string;
+		includeChangelist?: boolean;
+		recordingOption?: ConfigureOptions['recordingOption'];
+		webhookUrl?: string;
+	}
+
 	interface ConfigureOptions {
 		logLevel: 'silent'|'normal'|'verbose'|'debug'|'silly';
 		recordingOption: 'autostart'|'manualstart'|'none';
