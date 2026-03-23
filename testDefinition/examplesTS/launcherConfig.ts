@@ -1,6 +1,6 @@
 import * as suitest from '../../index';
 
-const config: suitest.SuitestLauncherConfigurationFile = {
+const config: suitest.SuitestLauncherConfiguration = {
 	tokenId: 'token-id',
 	tokenPassword: '<PASSWORD>',
 	deviceId: 'device-id',

@@ -363,7 +363,7 @@ declare namespace suitest {
 		config: PresetConfig;
 	}>;
 
-	interface SuitestLauncherConfigurationFile {
+	interface SuitestLauncherConfiguration {
 		extends?: string;
 		tokenId?: string;
 		tokenPassword?: string;
