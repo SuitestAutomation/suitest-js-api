@@ -522,7 +522,7 @@ describe('socket chain helpers', () => {
 					milliseconds: 100000,
 					stack: 'Error\n' +
 						'    at /suitest-js-api/lib/utils/makeChain.js:10:23\n' +
-						'    at /suitest-js-api/lib/utils/sentry/Raven.js:61:19\n' +
+						'    at /suitest-js-api/lib/utils/sentry/Sentry.js:61:19\n' +
 						'    at Object.value [as toAssert] (/suitest-js-api/lib/utils/makeComposer.js:24:23)\n' +
 						'    at Object.sleepAssert [as sleep] (/suitest-js-api/lib/chains/sleepChain.js:81:57)\n' +
 						'    at Context.<anonymous> (/suitest-js-api-mocha-demo/test/dummy.test.js:12:16)\n' +

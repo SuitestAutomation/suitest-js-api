@@ -1,4 +1,4 @@
-require('./lib/utils/sentry/Raven');
+require('./lib/utils/sentry/Sentry');
 const {clone} = require('ramda');
 
 // Commands
@@ -77,7 +77,7 @@ const ipcServer = require('./lib/testLauncher/ipc/server');
 const Context = require('./lib/utils/Context');
 const AuthContext = require('./lib/utils/AuthContext');
 const {configFactory} = require('./config');
-const {setUpSentry} = require('./lib/utils/sentry/Raven');
+const {setUpSentry} = require('./lib/utils/sentry/Sentry');
 const {warnLauncherAndLibHasDiffVersions} = require('./lib/utils/packageMetadataHelper');
 const {createLogger} = require('./lib/utils/logger');
 

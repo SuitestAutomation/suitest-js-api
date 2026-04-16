@@ -1,6 +1,6 @@
 const assert = require('assert');
 const {handleProgress} = require('../../lib/utils/progressHandler');
-const sentry = require('../../lib/utils/sentry/Raven');
+const sentry = require('../../lib/utils/sentry/Sentry');
 const translate = require('../../lib/utils/translateResults');
 const sinon = require('sinon');
 
