@@ -99,6 +99,7 @@
   },
   "dependencies": {
     "@suitest/smst-to-text": "^4.28.5",
+    "@sentry/node": "^7.120.3",
     "@suitest/translate": "^4.31.0",
     "@types/node": "^14.0.10",
     "ajv": "^6.12.2",
@@ -116,7 +117,6 @@
     "package-json": "^7.0.0",
     "prettyjson": "^1.2.1",
     "ramda": "^0.27.0",
-    "raven": "^2.6.2",
     "semver": "^7.3.2",
     "stack-trace": "^0.0.10",
     "uuid": "8.1.0",
