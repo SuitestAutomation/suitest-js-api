@@ -1,4 +1,4 @@
-require('./lib/utils/sentry/Raven');
+require('./lib/utils/sentry/Sentry');
 const {clone} = require('ramda');
 
 // Commands
@@ -77,7 +77,7 @@ const ipcServer = require('./lib/testLauncher/ipc/server');
 const Context = require('./lib/utils/Context');
 const AuthContext = require('./lib/utils/AuthContext');
 const {configFactory} = require('./config');
-const {setUpRaven} = require('./lib/utils/sentry/Raven');
+const {setUpSentry} = require('./lib/utils/sentry/Sentry');
 const {warnLauncherAndLibHasDiffVersions} = require('./lib/utils/packageMetadataHelper');
 const {createLogger} = require('./lib/utils/logger');
 
@@ -106,7 +106,7 @@ class SUITEST_API extends EventEmitter {
 		this.logger = createLogger(this.configuration.config, this.pairedDeviceContext);
 		this.unusedExpressionWatchers = unusedExpressionWatchersFactory(this);
 		this.webSockets = webSocketsFactory(this);
-		setUpRaven(this.configuration.config, this.authContext);
+		setUpSentry(this.configuration.config, this.authContext);
 
 		this.openSession = (...args) => openSession(this, ...args);
 		this.pairDevice = (...args) => pairDevice(this, ...args);

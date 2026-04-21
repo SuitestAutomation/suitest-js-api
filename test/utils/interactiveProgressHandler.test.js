@@ -1,6 +1,6 @@
-const Raven = require('raven');
 const assert = require('assert');
 const {handleProgress} = require('../../lib/utils/progressHandler');
+const sentry = require('../../lib/utils/sentry/Sentry');
 const translate = require('../../lib/utils/translateResults');
 const sinon = require('sinon');
 
@@ -8,13 +8,13 @@ describe('progressHandler', () => {
 	let translateProgress = () => null;
 
 	beforeEach(() => {
-		sinon.stub(Raven, 'captureException');
+		sinon.stub(sentry, 'captureException').resolves();
 		translateProgress = sinon.stub(translate, 'translateProgress');
 	});
 
 	afterEach(() => {
-		Raven.captureException.restore();
-		translate.translateProgress.restore();
+		sentry.captureException.restore();
+		translateProgress.restore();
 	});
 
 	it('Should handle positive scenario', () => {
@@ -41,6 +41,6 @@ describe('progressHandler', () => {
 		translateProgress.throws(error);
 		handleProgress(logger, {status: 1, code: 'A'});
 		assert.strictEqual(logger.log.firstCall, null);
-		assert.strictEqual(Raven.captureException.firstCall.args[0], error);
+		assert.strictEqual(sentry.captureException.firstCall.args[0], error);
 	});
 });
