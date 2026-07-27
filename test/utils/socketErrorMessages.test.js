@@ -81,6 +81,26 @@ describe('Socket error messages', () => {
 		assert.deepStrictEqual(getSnippetLogs(payload, translateFn), expectedOutput);
 	});
 
+	it('getSnippetLogs should pass app config to translation function', () => {
+		const translateFn = sinon.stub().returns('translated line');
+		const appConfig = {
+			configVariables: [{key: 'variable', value: 'value'}],
+		};
+
+		getSnippetLogs({
+			verbosity: 'debug',
+			definitions: {
+				testId: [{lineId: 'lineId', type: 'sleep', timeout: 2000}],
+			},
+			results: [],
+			testId: 'testId',
+			level: 1,
+			appConfig,
+		}, translateFn);
+
+		assert.strictEqual(translateFn.firstCall.args[3], appConfig);
+	});
+
 	it('getSnippetLogs Should produce correct output with snippet', () => {
 		const translateFn = (...args) => JSON.stringify(...args);
 		const payload = {'verbosity': 'debug', 'definitions': {'424489ab-240a-4524-ae42-be1cd41a4912': [{'type': 'openApp', 'lineId': '0c54e7ec-78e5-411f-925c-d0dac9636e28'}, {'lineId': '504d5ab6-2d4d-44f8-ad65-07191ef1316a', 'type': 'runSnippet', 'excluded': false, 'val': '20330172-c45d-4917-9af6-c49b971c0d32', 'tasks': [{'type': 'openApp', 'lineId': '20b73343-e6ab-4120-80ad-60e8376b9c71'}, {'lineId': '1522d5dd-42ea-4466-bd52-3190026a0624', 'type': 'sleep', 'excluded': false, 'timeout': 2000}], 'definitionVersion': 2, 'count': 1}], '20330172-c45d-4917-9af6-c49b971c0d32': [{'lineId': '1522d5dd-42ea-4466-bd52-3190026a0624', 'type': 'sleep', 'excluded': false, 'timeout': 2000}, {'lineId': '0fbd016f-a7c4-45a9-9a39-0d7f0f3efbfe', 'type': 'wait', 'excluded': false, 'condition': {'subject': {'type': 'element', 'elementId': '1d05e97a-424c-40fa-acbe-1b803db7562e', 'name': 'Folder (All files) focused'}, 'type': 'has', 'expression': [{'property': 'backgroundColor', 'type': '=', 'inherited': true, 'val': 'rgba(0, 0, 0, 0)', 'uid': 'c257ee7a-f920-471a-996f-07360c65ca8f'}, {'property': 'borderColor', 'type': '=', 'inherited': true, 'val': 'rgba(20, 23, 176, 1)', 'uid': '87057927-a5c0-4949-885e-2f4a0ffeb185'}, {'property': 'borderStyle', 'type': '=', 'inherited': true, 'val': 'solid', 'uid': 'fb69b622-dfd7-437b-89ef-eadf8d915ebb'}, {'property': 'borderWidth', 'type': '=', 'inherited': true, 'val': '2px', 'uid': '51193d1f-f242-4633-b7eb-fef060352935'}, {'property': 'class', 'type': '=', 'inherited': true, 'val': 'widget container button item folder folder-main folder-all listitem active focus buttonFocussed', 'uid': 'ad9e2dcb-c40d-4dd9-a605-8784266c45e7'}, {'property': 'height', 'type': '=', 'inherited': true, 'val': 128, 'uid': '1111161d-13b0-41dd-b8e0-16dc62f136da'}, {'property': 'href', 'type': '=', 'inherited': true, 'val': '', 'uid': '5df8cd08-852c-40e1-9ba5-b8f78962e807'}, {'property': 'id', 'type': '=', 'inherited': true, 'val': 'allFolderButton', 'uid': 'b6165dea-c4ce-4cc1-aac2-ff351d82478c'}, {'property': 'image', 'type': '=', 'inherited': true, 'val': '', 'uid': 'ea5f8dfb-13ea-4618-b38e-3872697d0fe4'}, {'property': 'left', 'type': '=', 'inherited': true, 'val': 31, 'uid': 'fee4b83c-84df-4ca7-9491-58d26d087f1d'}, {'property': 'opacity', 'type': '=', 'inherited': true, 'val': 1, 'uid': '3f5bcb54-88c1-46bf-8caa-0cfddc552246'}, {'property': 'color', 'type': '=', 'inherited': true, 'val': 'rgba(255, 255, 255, 1)', 'uid': '77d09dca-12e6-47fe-b00f-5721ee4605a9'}, {'property': 'text', 'type': '=', 'inherited': true, 'val': 'All Files', 'uid': '147f05da-0d4a-4291-84e1-8ac5a2170884'}, {'property': 'top', 'type': '=', 'inherited': true, 'val': 165, 'uid': '230a1bc7-4cda-41c7-be99-323a6c3a55cd'}, {'property': 'width', 'type': '=', 'inherited': true, 'val': 166, 'uid': '957b8967-2c74-4c59-8a35-3a13abb4d371'}, {'property': 'zIndex', 'type': '=', 'inherited': true, 'val': 0, 'uid': '06b335fd-352b-469f-8ee3-096e9d4414fd'}]}, 'then': 'success', 'timeout': 10000}]}, 'results': [{'result': 'fail', 'results': [{'result': 'success', 'lineId': '2-2-1', 'timeStarted': 1603806943812, 'timeFinished': 1603806945812, 'timeHrDiff': [2, 522470], 'timeScreenshotHr': [0, 0]}, {'result': 'fail', 'errorType': 'queryFailed', 'message': {'code': 'missingSubject', 'info': {}}, 'lineId': '2-2-2', 'timeStarted': 1603806945813, 'timeFinished': 1603806955814, 'timeHrDiff': [10, 1639519], 'timeScreenshotHr': [0, 0]}], 'lineId': '2-2', 'timeStarted': 1603806943812, 'timeFinished': 1603806955815, 'timeHrDiff': [12, 2588583], 'timeScreenshotHr': [0, 0]}], 'testId': '424489ab-240a-4524-ae42-be1cd41a4912', 'level': 1};

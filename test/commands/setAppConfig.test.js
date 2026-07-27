@@ -55,19 +55,58 @@ describe('setAppConfig', () => {
 	});
 
 	it('should set correct app config', async() => {
-		mockWebSocket.mockResponse({
-			appId: 'appId',
-			versionId: 'versionId',
-		});
-		authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
-		await setAppConfig('configId', {url: 'url'});
+		const restoreSelectConfigMock = testServer.mockRespondData(
+			(msg) => msg.content && msg.content.type === 'selectConfiguration',
+			{result: 'success', appId: 'appId', versionId: 'versionId'},
+		);
+		const restoreGetConfigMock = testServer.mockRespondData(
+			(msg) => msg.content && msg.content.type === 'getConfiguration',
+			{
+				result: 'success',
+				configuration: {
+					variables: {
+						emptyVariable: '',
+						cloudVariable: 'cloud value',
+						overriddenVariable: 'cloud value',
+					},
+				},
+			},
+		);
 
-		assert.deepStrictEqual(appContext.context, {
-			appId: 'appId',
-			versionId: 'versionId',
-			configId: 'configId',
-			configOverride: {url: 'url'},
-		});
+		try {
+			authContext.setContext(sessionConstants.TOKEN, 'tokenId', 'tokenPassword');
+			await setAppConfig('configId', {
+				url: 'url',
+				configVariables: [
+					{key: 'overriddenVariable', value: 'override value'},
+					{key: 'overrideVariable', value: 'override value'},
+				],
+			});
+
+			assert.deepStrictEqual(appContext.context, {
+				appId: 'appId',
+				versionId: 'versionId',
+				configId: 'configId',
+				configOverride: {
+					url: 'url',
+					configVariables: [
+						{key: 'overriddenVariable', value: 'override value'},
+						{key: 'overrideVariable', value: 'override value'},
+					],
+				},
+				effectiveAppConfig: {
+					configVariables: [
+						{key: 'emptyVariable', value: ''},
+						{key: 'cloudVariable', value: 'cloud value'},
+						{key: 'overriddenVariable', value: 'override value'},
+						{key: 'overrideVariable', value: 'override value'},
+					],
+				},
+			});
+		} finally {
+			restoreSelectConfigMock();
+			restoreGetConfigMock();
+		}
 	});
 
 	it('should pass includeChangelist in selectConfiguration message', async() => {
