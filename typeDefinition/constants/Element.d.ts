@@ -100,6 +100,8 @@ export type ElementPropTypes = {
 	IS_LONG_CLICKABLE_ANDROID_OTTIUM: 'long-clickable',
 	IS_SCROLLABLE_ANDROID_OTTIUM: 'scrollable',
 	BOUNDS: 'bounds',
+	CLASS_CHAIN: 'classChain',
+	PREDICATE_STRING: 'predicateString',
 	ROLE: 'role',
 	DESCRIPTION: 'description',
 	ORIENTATION_TEXT: 'orientationText',
