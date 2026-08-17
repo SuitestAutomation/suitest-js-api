@@ -45,6 +45,31 @@ describe('chainUtils', () => {
 		assert.strictEqual(utils.translateLine({type: 'takeScreenshot'}, 'silly'), '|E|text');
 	});
 
+	it('translateLine should pass app config to translation module', () => {
+		const appConfig = {
+			configVariables: [{key: 'variable', value: 'value'}],
+		};
+
+		utils.translateLine({type: 'testLine', request: {type: 'assert'}}, 'verbose', appConfig);
+
+		assert(translate.translateTestLine.calledWithMatch({appConfig}));
+	});
+
+	it('translateLineResult should pass app config to translation module', () => {
+		const appConfig = {
+			configVariables: [{key: 'variable', value: 'value'}],
+		};
+
+		utils.translateLineResult(
+			{type: 'testLine', request: {type: 'assert'}},
+			'verbose',
+			{result: 'success'},
+			appConfig,
+		);
+
+		assert(translate.translateTestLineResult.calledWithMatch({appConfig}));
+	});
+
 	it('fetchTestDefinitions should fetch and handle line defs', async() => {
 		const authorizeHttp = () => ({});
 

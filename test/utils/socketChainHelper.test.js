@@ -375,6 +375,28 @@ describe('socket chain helpers', () => {
 		}
 	});
 
+	it('should use app config when logging successful snippet', () => {
+		const snippetLogger = {
+			log: sinon.spy(),
+			error: sinon.spy(),
+			warn: sinon.spy(),
+		};
+		const appConfig = {
+			configVariables: [{key: 'delay', value: '1000'}],
+		};
+
+		processServerResponse(snippetLogger, 'verbose', appConfig)(
+			{contentType: 'testLine', result: 'success'},
+			{type: 'runSnippet', stack: ''},
+			{type: 'testLine', request: {type: 'runSnippet', val: 'snippetId'}},
+			{
+				snippetId: [{lineId: 'lineId', type: 'sleep', timeout: '<%delay%>'}],
+			},
+		);
+
+		assert.match(snippetLogger.log.firstCall.firstArg, /1s/);
+	});
+
 	describe('testing getRequestType helper', () => {
 		it('should return testLine type', () => {
 			assert.strictEqual(

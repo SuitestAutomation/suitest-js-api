@@ -85,6 +85,9 @@ describe('sessionStarter util', () => {
 				versionId: undefined,
 				configId: 'config1',
 				configOverride: {},
+				effectiveAppConfig: {
+					configVariables: [],
+				},
 			},
 		);
 	});
@@ -117,6 +120,9 @@ describe('sessionStarter util', () => {
 				configOverride: {
 					url: 'new url',
 					suitestify: false,
+				},
+				effectiveAppConfig: {
+					configVariables: [],
 				},
 			},
 		);

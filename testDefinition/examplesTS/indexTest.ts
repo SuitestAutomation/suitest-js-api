@@ -35,6 +35,17 @@ async function main() {
 	// getAppConfig
 	const config: suitest.AppConfiguration = await suitest.getAppConfig();
 
+	// app context
+	const appContext: suitest.AppContextData | null = suitest.appContext.context;
+	if (appContext) {
+		const appId: string = appContext.appId;
+		const configVariables: suitest.ConfigVariable[] = appContext.effectiveAppConfig.configVariables;
+	}
+
+	// paired device context
+	const pairedDeviceContext: suitest.PairedDevice | null = suitest.pairedDeviceContext.context;
+	const pairedDevice: suitest.PairedDevice | null = suitest.getPairedDevice();
+
 	// startRecording
 	const recordingUrl: string | undefined = await suitest.startRecording();
 	assertExtends<string, typeof recordingUrl>();

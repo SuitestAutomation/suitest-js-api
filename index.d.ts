@@ -165,36 +165,7 @@ declare namespace suitest {
 		image(imageData: ImageData): ImageChain;
 		image(apiId: string): ImageChain;
 
-		getPairedDevice(): null | {
-			deviceId: string,
-			manufacturer: string,
-			model: string,
-			owner: string,
-			firmware: string,
-			osVersion?: string,
-			modelId: string,
-			platforms: string[],
-			customName: string,
-			ipAddress: string,
-			controlUnitIds: string[],
-			inactivityTimeout?: number,
-			status: string,
-			displayName?: string,
-			shortDisplayName?: string,
-			customUserInfo?: {
-				location?: string,
-				team?: string,
-				responsibleUser?: string,
-				osInfo?: string,
-				otherInfo?: string,
-			},
-			inUseBy?: {
-				description?: string,
-				email?: string,
-				orgName?: string,
-				tokenName?: string,
-			},
-		}
+		getPairedDevice(): PairedDevice | null;
 
 		// constants
 		PROP: elementTypes.ElementPropTypes;
@@ -223,8 +194,8 @@ declare namespace suitest {
 		LANG: Lang;
 
 		authContext: AuthContext;
-		appContext: Context;
-		pairedDeviceContext: Context;
+		appContext: Context<AppContextData>;
+		pairedDeviceContext: Context<PairedDevice>;
 
 		on(eventName: 'consoleLog', listener: (consoleLog: ConsoleLogEvent) => void): this;
 		on(eventName: 'networkLog', listener: (networkLog: NetworkLogEvent) => void): this;
@@ -310,6 +281,58 @@ declare namespace suitest {
 		recordingUrl?: string;
 	}
 
+	interface PairedDevice {
+		deviceId: string;
+		manufacturer: string;
+		model: string;
+		owner: string;
+		firmware: string;
+		osVersion?: string;
+		modelId: string;
+		platforms: string[];
+		customName: string;
+		ipAddress: string;
+		controlUnitIds: string[];
+		inactivityTimeout?: number;
+		status: string;
+		displayName?: string;
+		shortDisplayName?: string;
+		customUserInfo?: {
+			location?: string;
+			team?: string;
+			responsibleUser?: string;
+			osInfo?: string;
+			otherInfo?: string;
+		};
+		inUseBy?: {
+			description?: string;
+			email?: string;
+			orgName?: string;
+			tokenName?: string;
+		};
+	}
+
+	interface ConfigVariable {
+		key: string;
+		value: string;
+	}
+
+	interface EffectiveAppConfiguration {
+		configVariables: ConfigVariable[];
+	}
+
+	interface AppContextData {
+		appId: string;
+		versionId: string;
+		configId: string;
+		configOverride: ConfigOverride;
+		/**
+		 * The locally available part of the application configuration used by the current test execution.
+		 * It combines values from the selected cloud configuration with local overrides, with override values taking precedence.
+		 */
+		effectiveAppConfig: EffectiveAppConfiguration;
+	}
+
 	interface ConfigOverride {
 		url?: string;
 		suitestify?: boolean;
@@ -321,10 +344,7 @@ declare namespace suitest {
 			toUrl: string;
 		}>;
 		codeOverrides?: object;
-		configVariables?: Array<{
-			key: string;
-			value: string;
-		}>;
+		configVariables?: ConfigVariable[];
 		openAppOverrideTest?: string;
 		[key: string]: any; // user should have ability to pass any property to config object
 	}
@@ -396,9 +416,9 @@ declare namespace suitest {
 		defaultTimeout: number;
 	}
 
-	interface Context {
-		context: unknown;
-		setContext(context: unknown): void;
+	interface Context<T = unknown> {
+		context: T | null;
+		setContext(context: T): void;
 		clear(): void;
 	}
 
