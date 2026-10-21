@@ -81,6 +81,8 @@ export type ElementProps = {
 	extends:                 string,
 	uiElementId:             string,
 	index:                   number,
+	isAccessible:            boolean,
+	label:                   string,
 }
 
 export type PlayStationVideoProps = Pick<ElementProps, 'videoLength' | 'videoPos' | 'videoState' | 'videoUrl'>
