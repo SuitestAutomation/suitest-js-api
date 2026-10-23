@@ -34,7 +34,7 @@ describe('suitest typescripts declarations tests', () => {
 		'pressButtonChain', 'sleepChain', 'windowChain',
 		'videoChain', 'playstationVideoChain', 'indexTest',
 		'runTestChain', 'takeScreenshotChain', 'saveScreenshotChain',
-		'setScreenOrientation', 'closeAppChain', 'suspendAppChain',
+		'setScreenOrientation', 'closeAppChain', 'suspendAppChain', 'executeNetworkCommandChain',
 		'relativePositionChain', 'ocrChain', 'imageChain', 'getLastVTScreenshotChain',
 		'launcherConfig',
 		// 'executeBrightScriptChain', 'brightScriptExpressionChain',

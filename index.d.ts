@@ -41,6 +41,7 @@ import {SuspendAppChain} from './typeDefinition/SuspendAppChain';
 import {RelativePosition} from './typeDefinition/RelativePositionChain';
 import {LaunchMode} from './typeDefinition/constants/LaunchMode';
 import {OpenDeepLinkChain} from './typeDefinition/OpenDeepLink';
+import {ExecuteNetworkCommandChain, NetworkThrottling} from './typeDefinition/ExecuteNetworkCommandChain';
 import {CookieProp} from './typeDefinition/constants/CookieProp';
 import {OcrChain} from './typeDefinition/OcrChain';
 import {OcrReadAs} from './typeDefinition/constants/OcrReadAs';
@@ -161,6 +162,7 @@ declare namespace suitest {
 		 */
 		getLastVTScreenshot(dataFormat: 'base64'): GetLastVTScreenshotChain<string>;
 		openDeepLink(deepLink?: string): OpenDeepLinkChain;
+		executeNetworkCommand(throttling: NetworkThrottling): ExecuteNetworkCommandChain;
 		ocr(comparators: OcrCommonItem[]): OcrChain;
 		image(imageData: ImageData): ImageChain;
 		image(apiId: string): ImageChain;
@@ -238,6 +240,7 @@ declare namespace suitest {
 		window(): WindowChain;
 		setScreenOrientation(orientation: ScreenOrientationValues): SetScreenOrientationChain;
 		openDeepLink(deepLink?: string): OpenDeepLinkChain;
+		executeNetworkCommand(throttling: NetworkThrottling): ExecuteNetworkCommandChain;
 		ocr(comparators: OcrCommonItem[]): OcrChain;
 		image(imageData: ImageData): ImageChain;
 		image(apiId: string): ImageChain;

@@ -40,6 +40,7 @@ const videoFactory = require('./lib/chains/videoChain');
 const playstationVideoFactory = require('./lib/chains/playstationVideoChain');
 const setScreenOrientationFactory = require('./lib/chains/setScreenOrientationChain');
 const openDeepLinkFactory = require('./lib/chains/openDeepLinkChain');
+const executeNetworkCommandFactory = require('./lib/chains/executeNetworkCommandChain');
 const ocrFactory = require('./lib/chains/ocrChain');
 const imageFactory = require('./lib/chains/imageChain');
 
@@ -143,6 +144,7 @@ class SUITEST_API extends EventEmitter {
 		const {getLastVTScreenshot} = getLastVTScreenshotFactory(this);
 		const {setScreenOrientation, setScreenOrientationAssert} = setScreenOrientationFactory(this);
 		const {openDeepLink, openDeepLinkAssert} = openDeepLinkFactory(this);
+		const {executeNetworkCommand, executeNetworkCommandAssert} = executeNetworkCommandFactory(this);
 		const {ocr, ocrAssert} = ocrFactory(this);
 		const {image, imageAssert} = imageFactory(this);
 
@@ -173,6 +175,7 @@ class SUITEST_API extends EventEmitter {
 		this.getLastVTScreenshot = getLastVTScreenshot;
 		this.setScreenOrientation = setScreenOrientation;
 		this.openDeepLink = openDeepLink;
+		this.executeNetworkCommand = executeNetworkCommand;
 		this.ocr = ocr;
 		this.image = image;
 
@@ -227,6 +230,7 @@ class SUITEST_API extends EventEmitter {
 			psVideo: playstationVideoAssert,
 			setScreenOrientation: setScreenOrientationAssert,
 			openDeepLink: openDeepLinkAssert,
+			executeNetworkCommand: executeNetworkCommandAssert,
 			ocr: ocrAssert,
 			image: imageAssert,
 		};
